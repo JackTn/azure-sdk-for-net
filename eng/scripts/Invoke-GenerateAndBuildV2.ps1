@@ -44,6 +44,7 @@ $autorestConfig = $inputJson.autorestConfig
 $relatedTypeSpecProjectFolder = $inputJson.relatedTypeSpecProjectFolder
 
 $autorestConfigYaml = ""
+Write-Host "[ERROR] test .net generate error "
 if ($autorestConfig) {
     $autorestConfig | Set-Content "config.md"
     $autorestConfigYaml = Get-Content -Path ./config.md
