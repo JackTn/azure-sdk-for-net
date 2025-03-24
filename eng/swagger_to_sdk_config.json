@@ -17,7 +17,11 @@
   "initOptions": {
     "initScript": {
       "path": "pwsh ./eng/scripts/Automation-Sdk-Init.ps1",
-      "logPrefix": ".Net"
+      "logPrefix": ".Net",
+      "stderr": {
+        "showInComment": ".*ERROR.*",
+        "scriptError": "\\[ERROR\\]"
+      }
     }
   },
   "packageOptions": {
