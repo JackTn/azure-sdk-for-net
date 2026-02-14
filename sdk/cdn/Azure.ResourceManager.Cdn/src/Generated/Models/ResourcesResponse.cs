@@ -64,8 +64,10 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> Gets the endpoints. </summary>
+        [WirePath("endpoints")]
         public IReadOnlyList<ResourcesResponseEndpointsItem> Endpoints { get; }
         /// <summary> Gets the custom domains. </summary>
+        [WirePath("customDomains")]
         public IReadOnlyList<ResourcesResponseCustomDomainsItem> CustomDomains { get; }
     }
 }

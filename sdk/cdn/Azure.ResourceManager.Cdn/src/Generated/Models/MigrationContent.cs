@@ -87,6 +87,7 @@ namespace Azure.ResourceManager.Cdn.Models
         /// <summary> Sku for the migration. </summary>
         internal CdnSku Sku { get; }
         /// <summary> Name of the pricing tier. </summary>
+        [WirePath("sku.name")]
         public CdnSkuName? SkuName
         {
             get => Sku?.Name;
@@ -95,14 +96,17 @@ namespace Azure.ResourceManager.Cdn.Models
         /// <summary> Resource reference of the classic cdn profile or classic frontdoor that need to be migrated. </summary>
         internal WritableSubResource ClassicResourceReference { get; }
         /// <summary> Gets or sets Id. </summary>
+        [WirePath("classicResourceReference.id")]
         public ResourceIdentifier ClassicResourceReferenceId
         {
             get => ClassicResourceReference?.Id;
         }
 
         /// <summary> Name of the new profile that need to be created. </summary>
+        [WirePath("profileName")]
         public string ProfileName { get; }
         /// <summary> Waf mapping for the migrated profile. </summary>
+        [WirePath("migrationWebApplicationFirewallMappings")]
         public IList<MigrationWebApplicationFirewallMapping> MigrationWebApplicationFirewallMappings { get; }
     }
 }

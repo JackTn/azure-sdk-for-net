@@ -37,6 +37,7 @@ namespace Azure.ResourceManager.Cdn.Models
         /// <summary> Resource ID. </summary>
         internal WritableSubResource WafPolicy { get; set; }
         /// <summary> Gets or sets Id. </summary>
+        [WirePath("wafPolicy.id")]
         public ResourceIdentifier WafPolicyId
         {
             get => WafPolicy is null ? default : WafPolicy.Id;
@@ -49,6 +50,7 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> Waf associations. </summary>
+        [WirePath("associations")]
         public IList<SecurityPolicyWebApplicationFirewallAssociation> Associations { get; }
     }
 }

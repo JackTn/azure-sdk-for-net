@@ -9,12 +9,25 @@ using System;
 using System.ClientModel.Primitives;
 using System.Text.Json;
 using Azure;
-using Azure.Core;
 
-namespace _Type.Property.Nullable.Models
+namespace _Type.Property.Nullable
 {
     public partial class CollectionsByteProperty : IJsonModel<CollectionsByteProperty>
     {
+        internal CollectionsByteProperty() => throw null;
+
+        protected virtual CollectionsByteProperty PersistableModelCreateCore(BinaryData data, ModelReaderWriterOptions options) => throw null;
+
+        protected virtual BinaryData PersistableModelWriteCore(ModelReaderWriterOptions options) => throw null;
+
+        BinaryData IPersistableModel<CollectionsByteProperty>.Write(ModelReaderWriterOptions options) => throw null;
+
+        CollectionsByteProperty IPersistableModel<CollectionsByteProperty>.Create(BinaryData data, ModelReaderWriterOptions options) => throw null;
+
+        string IPersistableModel<CollectionsByteProperty>.GetFormatFromOptions(ModelReaderWriterOptions options) => throw null;
+
+        public static explicit operator CollectionsByteProperty(Response response) => throw null;
+
         void IJsonModel<CollectionsByteProperty>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options) => throw null;
 
         protected virtual void JsonModelWriteCore(Utf8JsonWriter writer, ModelReaderWriterOptions options) => throw null;
@@ -22,20 +35,5 @@ namespace _Type.Property.Nullable.Models
         CollectionsByteProperty IJsonModel<CollectionsByteProperty>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => throw null;
 
         protected virtual CollectionsByteProperty JsonModelCreateCore(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => throw null;
-
-        BinaryData IPersistableModel<CollectionsByteProperty>.Write(ModelReaderWriterOptions options) => throw null;
-
-        protected virtual BinaryData PersistableModelWriteCore(ModelReaderWriterOptions options) => throw null;
-
-        CollectionsByteProperty IPersistableModel<CollectionsByteProperty>.Create(BinaryData data, ModelReaderWriterOptions options) => throw null;
-
-        protected virtual CollectionsByteProperty PersistableModelCreateCore(BinaryData data, ModelReaderWriterOptions options) => throw null;
-
-        string IPersistableModel<CollectionsByteProperty>.GetFormatFromOptions(ModelReaderWriterOptions options) => throw null;
-
-        /// <param name="collectionsByteProperty"> The <see cref="CollectionsByteProperty"/> to serialize into <see cref="RequestContent"/>. </param>
-        public static implicit operator RequestContent(CollectionsByteProperty collectionsByteProperty) => throw null;
-
-        public static explicit operator CollectionsByteProperty(Response result) => throw null;
     }
 }

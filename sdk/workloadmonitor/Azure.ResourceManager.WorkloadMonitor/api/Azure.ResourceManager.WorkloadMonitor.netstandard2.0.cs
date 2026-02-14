@@ -1,5 +1,11 @@
 namespace Azure.ResourceManager.WorkloadMonitor
 {
+    public partial class AzureResourceManagerWorkloadMonitorContext : System.ClientModel.Primitives.ModelReaderWriterContext
+    {
+        internal AzureResourceManagerWorkloadMonitorContext() { }
+        public static Azure.ResourceManager.WorkloadMonitor.AzureResourceManagerWorkloadMonitorContext Default { get { throw null; } }
+        protected override bool TryGetTypeBuilderCore(System.Type type, out System.ClientModel.Primitives.ModelReaderWriterTypeBuilder builder) { throw null; }
+    }
     public partial class HealthMonitorCollection : Azure.ResourceManager.ArmCollection, System.Collections.Generic.IAsyncEnumerable<Azure.ResourceManager.WorkloadMonitor.HealthMonitorResource>, System.Collections.Generic.IEnumerable<Azure.ResourceManager.WorkloadMonitor.HealthMonitorResource>, System.Collections.IEnumerable
     {
         protected HealthMonitorCollection() { }
@@ -148,9 +154,7 @@ namespace Azure.ResourceManager.WorkloadMonitor.Models
         public static Azure.ResourceManager.WorkloadMonitor.Models.HealthState Unknown { get { throw null; } }
         public static Azure.ResourceManager.WorkloadMonitor.Models.HealthState Warning { get { throw null; } }
         public bool Equals(Azure.ResourceManager.WorkloadMonitor.Models.HealthState other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.WorkloadMonitor.Models.HealthState left, Azure.ResourceManager.WorkloadMonitor.Models.HealthState right) { throw null; }
         public static implicit operator Azure.ResourceManager.WorkloadMonitor.Models.HealthState (string value) { throw null; }

@@ -8,16 +8,18 @@ using System.Threading;
 using System.Threading.Tasks;
 using Azure.Core;
 using Azure.Core.Pipeline;
+using Microsoft.TypeSpec.Generator.Customizations;
 
 namespace Azure.Messaging.EventGrid.Namespaces
 {
     [CodeGenSuppress("EventGridSenderClient", typeof(Uri), typeof(AzureKeyCredential))]
     [CodeGenSuppress("EventGridSenderClient", typeof(Uri), typeof(TokenCredential))]
-    [CodeGenSuppress("EventGridSenderClient", typeof(Uri), typeof(AzureKeyCredential), typeof(AzureMessagingEventGridNamespacesClientOptions))]
-    [CodeGenSuppress("EventGridSenderClient", typeof(Uri), typeof(TokenCredential), typeof(AzureMessagingEventGridNamespacesClientOptions))]
+    [CodeGenSuppress("EventGridSenderClient", typeof(Uri), typeof(AzureKeyCredential), typeof(EventGridNamespacesClientOptions))]
+    [CodeGenSuppress("EventGridSenderClient", typeof(Uri), typeof(TokenCredential), typeof(EventGridNamespacesClientOptions))]
     public partial class EventGridSenderClient
     {
         private readonly string _topicName;
+        private readonly bool _isDistributedTracingEnabled;
 
         /// <summary> Initializes a new instance of EventGridSenderClient. </summary>
         /// <param name="endpoint"> The host name of the namespace, e.g. namespaceName1.westus-1.eventgrid.azure.net. </param>
@@ -62,10 +64,11 @@ namespace Azure.Messaging.EventGrid.Namespaces
 
             ClientDiagnostics = new ClientDiagnostics(options, true);
             _keyCredential = credential;
-            _pipeline = HttpPipelineBuilder.Build(options, Array.Empty<HttpPipelinePolicy>(), new HttpPipelinePolicy[] { new AzureKeyCredentialPolicy(_keyCredential, AuthorizationHeader, AuthorizationApiKeyPrefix) }, new ResponseClassifier());
+            Pipeline = HttpPipelineBuilder.Build(options, Array.Empty<HttpPipelinePolicy>(), new HttpPipelinePolicy[] { new AzureKeyCredentialPolicy(_keyCredential, AuthorizationHeader, AuthorizationApiKeyPrefix) }, new ResponseClassifier());
             _endpoint = endpoint;
             _apiVersion = options.Version;
             _topicName = topicName;
+            _isDistributedTracingEnabled = options.Diagnostics.IsDistributedTracingEnabled;
         }
 
         /// <summary> Initializes a new instance of EventGridSenderClient. </summary>
@@ -89,10 +92,11 @@ namespace Azure.Messaging.EventGrid.Namespaces
 
             ClientDiagnostics = new ClientDiagnostics(options, true);
             _tokenCredential = credential;
-            _pipeline = HttpPipelineBuilder.Build(options, Array.Empty<HttpPipelinePolicy>(), new HttpPipelinePolicy[] { new BearerTokenAuthenticationPolicy(_tokenCredential, AuthorizationScopes) }, new ResponseClassifier());
+            Pipeline = HttpPipelineBuilder.Build(options, Array.Empty<HttpPipelinePolicy>(), new HttpPipelinePolicy[] { new BearerTokenAuthenticationPolicy(_tokenCredential, AuthorizationScopes) }, new ResponseClassifier());
             _endpoint = endpoint;
             _apiVersion = options.Version;
             _topicName = topicName;
+            _isDistributedTracingEnabled = options.Diagnostics.IsDistributedTracingEnabled;
         }
 
         /// <summary> Publish Single Cloud Event to namespace topic. In case of success, the server responds with an HTTP 200 status code with an empty JSON object in response. Otherwise, the server can return various error codes. For example, 401: which indicates authorization failure, 403: which indicates quota exceeded or message is too large, 410: which indicates that specific topic is not found, 400: for bad request, and 500: for internal server error. </summary>
@@ -104,7 +108,7 @@ namespace Azure.Messaging.EventGrid.Namespaces
             Argument.AssertNotNull(cloudEvent, nameof(cloudEvent));
 
             RequestContext context = FromCancellationToken(cancellationToken);
-            return Send(_topicName, RequestContent.Create(cloudEvent), context);
+            return Send(_topicName, new CloudEventRequestContent(cloudEvent, _isDistributedTracingEnabled), context);
         }
 
         /// <summary> Publish Single Cloud Event to namespace topic. In case of success, the server responds with an HTTP 200 status code with an empty JSON object in response. Otherwise, the server can return various error codes. For example, 401: which indicates authorization failure, 403: which indicates quota exceeded or message is too large, 410: which indicates that specific topic is not found, 400: for bad request, and 500: for internal server error. </summary>
@@ -118,7 +122,7 @@ namespace Azure.Messaging.EventGrid.Namespaces
             Argument.AssertNotNull(cloudEvent, nameof(cloudEvent));
 
             RequestContext context = FromCancellationToken(cancellationToken);
-            return await SendAsync(_topicName, RequestContent.Create(cloudEvent), context).ConfigureAwait(false);
+            return await SendAsync(_topicName, new CloudEventRequestContent(cloudEvent, _isDistributedTracingEnabled), context).ConfigureAwait(false);
         }
 
         /// <summary> Publish Batch Cloud Event to namespace topic. In case of success, the server responds with an HTTP 200 status code with an empty JSON object in response. Otherwise, the server can return various error codes. For example, 401: which indicates authorization failure, 403: which indicates quota exceeded or message is too large, 410: which indicates that specific topic is not found, 400: for bad request, and 500: for internal server error. </summary>
@@ -136,7 +140,7 @@ namespace Azure.Messaging.EventGrid.Namespaces
             scope.Start();
             try
             {
-                return await SendEventsAsync(_topicName, RequestContent.Create(cloudEvents), context).ConfigureAwait(false);
+                return await SendEventsAsync(_topicName, new CloudEventsRequestContent(cloudEvents, _isDistributedTracingEnabled), context).ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -160,7 +164,7 @@ namespace Azure.Messaging.EventGrid.Namespaces
             scope.Start();
             try
             {
-                return SendEvents(_topicName, RequestContent.Create(cloudEvents), context);
+                return SendEvents(_topicName, new CloudEventsRequestContent(cloudEvents, _isDistributedTracingEnabled), context);
             }
             catch (Exception e)
             {
@@ -297,6 +301,17 @@ namespace Azure.Messaging.EventGrid.Namespaces
         public virtual Response SendEvents(RequestContent content, RequestContext context = null)
         {
             return SendEvents(_topicName, content, context);
+        }
+
+        private static RequestContext DefaultRequestContext = new RequestContext();
+        internal static RequestContext FromCancellationToken(CancellationToken cancellationToken = default)
+        {
+            if (!cancellationToken.CanBeCanceled)
+            {
+                return DefaultRequestContext;
+            }
+
+            return new RequestContext() { CancellationToken = cancellationToken };
         }
     }
 }

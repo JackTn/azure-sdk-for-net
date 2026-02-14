@@ -7,8 +7,8 @@ This sample demonstrates how to recognize linked entities in one or more documen
 To create a new `TextAnalysisClient`, you will need the service endpoint and credentials of your Language resource. To authenticate, you can use the [`DefaultAzureCredential`][DefaultAzureCredential], which combines credentials commonly used to authenticate when deployed on Azure, with credentials used to authenticate in a development environment. In this sample, however, you will use an `AzureKeyCredential`, which you can create with an API key.
 
 ```C# Snippet:CreateTextAnalysisClientForSpecificApiVersion
-Uri endpoint = new Uri("https://myaccount.cognitiveservices.azure.com");
-AzureKeyCredential credential = new("your apikey");
+Uri endpoint = new Uri("{endpoint}");
+AzureKeyCredential credential = new AzureKeyCredential("{api-key}");
 TextAnalysisClientOptions options = new TextAnalysisClientOptions(TextAnalysisClientOptions.ServiceVersion.V2023_04_01);
 var client = new TextAnalysisClient(endpoint, credential, options);
 ```
@@ -17,7 +17,7 @@ The values of the `endpoint` and `apiKey` variables can be retrieved from enviro
 
 ## Recognizing linked entities in multiple documents
 
-To recognize linked entities in multiple documents, call `AnalyzeText` on an TextEntityLinkingInput.  The results are returned as a `AnalyzeTextEntityLinkingResult`.
+To recognize linked entities in multiple documents, call `AnalyzeTextAsync` on an TextEntityLinkingInput.  The results are returned as a `AnalyzeTextEntityLinkingResult`.
 
 ```C# Snippet:Sample6_AnalyzeTextAsync_RecognizeLinkedEntities
 string textA =

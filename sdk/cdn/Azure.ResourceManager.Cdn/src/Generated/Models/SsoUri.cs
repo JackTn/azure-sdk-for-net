@@ -60,6 +60,7 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> The URI used to login to the supplemental portal. </summary>
+        [WirePath("ssoUriValue")]
         public Uri AvailableSsoUri { get; }
     }
 }

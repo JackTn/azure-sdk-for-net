@@ -40,6 +40,7 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> Defines the parameters for the action. </summary>
+        [WirePath("parameters")]
         public OriginGroupOverrideActionProperties Properties { get; set; }
     }
 }

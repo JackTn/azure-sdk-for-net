@@ -86,7 +86,7 @@ public partial class DomainOwnershipIdentifier : ProvisionableResource
     /// </param>
     /// <param name="resourceVersion">Version of the DomainOwnershipIdentifier.</param>
     public DomainOwnershipIdentifier(string bicepIdentifier, string? resourceVersion = default)
-        : base(bicepIdentifier, "Microsoft.DomainRegistration/domains/domainOwnershipIdentifiers", resourceVersion ?? "2024-04-01")
+        : base(bicepIdentifier, "Microsoft.DomainRegistration/domains/domainOwnershipIdentifiers", resourceVersion ?? "2024-11-01")
     {
     }
 
@@ -95,6 +95,7 @@ public partial class DomainOwnershipIdentifier : ProvisionableResource
     /// </summary>
     protected override void DefineProvisionableProperties()
     {
+        base.DefineProvisionableProperties();
         _name = DefineProperty<string>("Name", ["name"], isRequired: true);
         _kind = DefineProperty<string>("Kind", ["kind"]);
         _ownershipId = DefineProperty<string>("OwnershipId", ["properties", "ownershipId"]);
@@ -108,6 +109,11 @@ public partial class DomainOwnershipIdentifier : ProvisionableResource
     /// </summary>
     public static class ResourceVersions
     {
+        /// <summary>
+        /// 2024-11-01.
+        /// </summary>
+        public static readonly string V2024_11_01 = "2024-11-01";
+
         /// <summary>
         /// 2024-04-01.
         /// </summary>

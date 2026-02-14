@@ -9,12 +9,25 @@ using System;
 using System.ClientModel.Primitives;
 using System.Text.Json;
 using Azure;
-using Azure.Core;
 
-namespace Payload.ContentNegotiation.Models
+namespace Payload.ContentNegotiation._DifferentBody
 {
     public partial class PngImageAsJson : IJsonModel<PngImageAsJson>
     {
+        internal PngImageAsJson() => throw null;
+
+        protected virtual PngImageAsJson PersistableModelCreateCore(BinaryData data, ModelReaderWriterOptions options) => throw null;
+
+        protected virtual BinaryData PersistableModelWriteCore(ModelReaderWriterOptions options) => throw null;
+
+        BinaryData IPersistableModel<PngImageAsJson>.Write(ModelReaderWriterOptions options) => throw null;
+
+        PngImageAsJson IPersistableModel<PngImageAsJson>.Create(BinaryData data, ModelReaderWriterOptions options) => throw null;
+
+        string IPersistableModel<PngImageAsJson>.GetFormatFromOptions(ModelReaderWriterOptions options) => throw null;
+
+        public static explicit operator PngImageAsJson(Response response) => throw null;
+
         void IJsonModel<PngImageAsJson>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options) => throw null;
 
         protected virtual void JsonModelWriteCore(Utf8JsonWriter writer, ModelReaderWriterOptions options) => throw null;
@@ -22,20 +35,5 @@ namespace Payload.ContentNegotiation.Models
         PngImageAsJson IJsonModel<PngImageAsJson>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => throw null;
 
         protected virtual PngImageAsJson JsonModelCreateCore(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => throw null;
-
-        BinaryData IPersistableModel<PngImageAsJson>.Write(ModelReaderWriterOptions options) => throw null;
-
-        protected virtual BinaryData PersistableModelWriteCore(ModelReaderWriterOptions options) => throw null;
-
-        PngImageAsJson IPersistableModel<PngImageAsJson>.Create(BinaryData data, ModelReaderWriterOptions options) => throw null;
-
-        protected virtual PngImageAsJson PersistableModelCreateCore(BinaryData data, ModelReaderWriterOptions options) => throw null;
-
-        string IPersistableModel<PngImageAsJson>.GetFormatFromOptions(ModelReaderWriterOptions options) => throw null;
-
-        /// <param name="pngImageAsJson"> The <see cref="PngImageAsJson"/> to serialize into <see cref="RequestContent"/>. </param>
-        public static implicit operator RequestContent(PngImageAsJson pngImageAsJson) => throw null;
-
-        public static explicit operator PngImageAsJson(Response result) => throw null;
     }
 }

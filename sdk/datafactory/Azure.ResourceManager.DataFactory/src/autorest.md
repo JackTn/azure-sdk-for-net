@@ -8,11 +8,11 @@ azure-arm: true
 csharp: true
 library-name: DataFactory
 namespace: Azure.ResourceManager.DataFactory
-require: https://github.com/Azure/azure-rest-api-specs/blob/87643ba491d34656ed9d08ddce7544d033c349eb/specification/datafactory/resource-manager/readme.md
+require: https://github.com/Azure/azure-rest-api-specs/blob/9cc7633f842575274f715cc02e37c5769ac2742d/specification/datafactory/resource-manager/Microsoft.DataFactory/DataFactory/readme.md
 output-folder: $(this-folder)/Generated
 clear-output-folder: true
 sample-gen:
-  output-folder: $(this-folder)/../samples/Generated
+  output-folder: $(this-folder)/../tests/Generated
   clear-output-folder: true
   skipped-operations:
   - ChangeDataCapture_CreateOrUpdate  # Missing required property
@@ -72,6 +72,7 @@ acronym-mapping:
   VNet: Vnet
   Bw: BW
   SQL: Sql
+  HDInsightOndemand: HDInsightOnDemand
 
 keep-plural-enums:
   - ActivityOnInactiveMarkAs
@@ -136,6 +137,7 @@ rename-mapping:
   ExposureControlBatchResponse.exposureControlResponses: ExposureControlResults
   ExposureControlRequest: ExposureControlContent
   ExposureControlResponse: ExposureControlResult
+  ExpressionV2.value: V2Value;
   Factory: DataFactory
   FactoryListResponse: DataFactoryListResult
   FactoryRepoUpdate: FactoryRepoContent

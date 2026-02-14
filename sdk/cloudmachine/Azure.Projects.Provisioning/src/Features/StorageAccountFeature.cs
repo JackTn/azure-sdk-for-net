@@ -2,15 +2,12 @@
 // Licensed under the MIT License.
 
 using System;
-using System.Linq;
 using Azure.Projects.Core;
-using Azure.Projects.EventGrid;
-using Azure.Projects.ServiceBus;
 using Azure.Provisioning.Expressions;
 using Azure.Provisioning.Resources;
 using Azure.Provisioning.Storage;
 
-namespace Azure.Projects.Storage;
+namespace Azure.Projects;
 
 public class StorageAccountFeature : AzureProjectFeature
 {
@@ -59,7 +56,7 @@ public class StorageAccountFeature : AzureProjectFeature
 public class BlobServiceFeature : AzureProjectFeature
 {
     public BlobServiceFeature()
-    {}
+    { }
 
     public StorageAccountFeature? Account { get; set; }
 
@@ -83,7 +80,7 @@ public class BlobServiceFeature : AzureProjectFeature
         }
         StorageAccount storageAccount = infrastructure.GetConstruct<StorageAccount>(Account.Id);
 
-        BlobService blobService = new("storageBlobService")
+        BlobService blobService = new("storageBlobService", BlobService.ResourceVersions.V2024_01_01)
         {
             Parent = storageAccount
         };
@@ -149,7 +146,7 @@ public class BlobContainerFeature : AzureProjectFeature
         }
 
         BlobService blobService = infrastructure.GetConstruct<BlobService>(Service.Id);
-        BlobContainer blobContainer = new($"storageBlobContainer_{ContainerName}", "2023-01-01")
+        BlobContainer blobContainer = new($"storageBlobContainer_{ContainerName}", BlobContainer.ResourceVersions.V2023_01_01)
         {
             Parent = blobService,
             Name = ContainerName

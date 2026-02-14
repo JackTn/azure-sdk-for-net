@@ -1,12 +1,12 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using Azure.Identity;
 using System;
-using Azure.Storage.Blobs;
 using System.ClientModel.Primitives;
-using Azure.Core;
 using Azure.AI.OpenAI;
+using Azure.Core;
+using Azure.Identity;
+using Azure.Storage.Blobs;
 using OpenAI.Chat;
 
 namespace Azure.Projects;
@@ -19,18 +19,18 @@ public static class BlobExtensions
     /// <summary>
     /// Creates a <see cref="BlobContainerClient"/> for the project.
     /// </summary>
-    /// <param name="project"></param>
+    /// <param name="provider"></param>
     /// <param name="containerName"></param>
     /// <returns></returns>
-    public static  BlobContainerClient GetBlobContainerClient(this ProjectClient project, string containerName = "default")
+    public static BlobContainerClient GetBlobContainerClient(this ClientConnectionProvider provider, string containerName = "default")
     {
-        string id = $"{typeof(BlobContainerClient).FullName}@{containerName}";
-        BlobContainerClient client = project.Subclients.GetClient(() =>
-            CreateClient(project, containerName), id);
+        BlobContainerClientKey blobContainerClientKey = new(containerName);
+        BlobContainerClient client = provider.Subclients.GetClient(blobContainerClientKey, () =>
+            CreateClient(provider, containerName));
         return client;
     }
 
-    private static BlobContainerClient CreateClient(ProjectClient project, string containerName)
+    private static BlobContainerClient CreateClient(ClientConnectionProvider project, string containerName)
     {
         string id = $"{typeof(BlobContainerClient).FullName}@{containerName}";
         ClientConnection connection = project.GetConnection(id);
@@ -40,4 +40,6 @@ public static class BlobExtensions
         }
         throw new InvalidOperationException($"Invalid connection locator for container: {containerName}");
     }
+
+    private record BlobContainerClientKey(string ContainerName);
 }

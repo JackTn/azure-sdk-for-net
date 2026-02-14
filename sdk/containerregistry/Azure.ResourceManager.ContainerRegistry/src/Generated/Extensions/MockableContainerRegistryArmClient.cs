@@ -35,27 +35,27 @@ namespace Azure.ResourceManager.ContainerRegistry.Mocking
         }
 
         /// <summary>
-        /// Gets an object representing a <see cref="ContainerRegistryArchiveResource"/> along with the instance operations that can be performed on it but with no data.
-        /// You can use <see cref="ContainerRegistryArchiveResource.CreateResourceIdentifier" /> to create a <see cref="ContainerRegistryArchiveResource"/> <see cref="ResourceIdentifier"/> from its components.
+        /// Gets an object representing a <see cref="ContainerRegistryResource"/> along with the instance operations that can be performed on it but with no data.
+        /// You can use <see cref="ContainerRegistryResource.CreateResourceIdentifier" /> to create a <see cref="ContainerRegistryResource"/> <see cref="ResourceIdentifier"/> from its components.
         /// </summary>
         /// <param name="id"> The resource ID of the resource to get. </param>
-        /// <returns> Returns a <see cref="ContainerRegistryArchiveResource"/> object. </returns>
-        public virtual ContainerRegistryArchiveResource GetContainerRegistryArchiveResource(ResourceIdentifier id)
+        /// <returns> Returns a <see cref="ContainerRegistryResource"/> object. </returns>
+        public virtual ContainerRegistryResource GetContainerRegistryResource(ResourceIdentifier id)
         {
-            ContainerRegistryArchiveResource.ValidateResourceId(id);
-            return new ContainerRegistryArchiveResource(Client, id);
+            ContainerRegistryResource.ValidateResourceId(id);
+            return new ContainerRegistryResource(Client, id);
         }
 
         /// <summary>
-        /// Gets an object representing a <see cref="ContainerRegistryArchiveVersionResource"/> along with the instance operations that can be performed on it but with no data.
-        /// You can use <see cref="ContainerRegistryArchiveVersionResource.CreateResourceIdentifier" /> to create a <see cref="ContainerRegistryArchiveVersionResource"/> <see cref="ResourceIdentifier"/> from its components.
+        /// Gets an object representing a <see cref="ContainerRegistryPrivateLinkResource"/> along with the instance operations that can be performed on it but with no data.
+        /// You can use <see cref="ContainerRegistryPrivateLinkResource.CreateResourceIdentifier" /> to create a <see cref="ContainerRegistryPrivateLinkResource"/> <see cref="ResourceIdentifier"/> from its components.
         /// </summary>
         /// <param name="id"> The resource ID of the resource to get. </param>
-        /// <returns> Returns a <see cref="ContainerRegistryArchiveVersionResource"/> object. </returns>
-        public virtual ContainerRegistryArchiveVersionResource GetContainerRegistryArchiveVersionResource(ResourceIdentifier id)
+        /// <returns> Returns a <see cref="ContainerRegistryPrivateLinkResource"/> object. </returns>
+        public virtual ContainerRegistryPrivateLinkResource GetContainerRegistryPrivateLinkResource(ResourceIdentifier id)
         {
-            ContainerRegistryArchiveVersionResource.ValidateResourceId(id);
-            return new ContainerRegistryArchiveVersionResource(Client, id);
+            ContainerRegistryPrivateLinkResource.ValidateResourceId(id);
+            return new ContainerRegistryPrivateLinkResource(Client, id);
         }
 
         /// <summary>
@@ -92,66 +92,6 @@ namespace Azure.ResourceManager.ContainerRegistry.Mocking
         {
             ContainerRegistryCredentialSetResource.ValidateResourceId(id);
             return new ContainerRegistryCredentialSetResource(Client, id);
-        }
-
-        /// <summary>
-        /// Gets an object representing a <see cref="ContainerRegistryExportPipelineResource"/> along with the instance operations that can be performed on it but with no data.
-        /// You can use <see cref="ContainerRegistryExportPipelineResource.CreateResourceIdentifier" /> to create a <see cref="ContainerRegistryExportPipelineResource"/> <see cref="ResourceIdentifier"/> from its components.
-        /// </summary>
-        /// <param name="id"> The resource ID of the resource to get. </param>
-        /// <returns> Returns a <see cref="ContainerRegistryExportPipelineResource"/> object. </returns>
-        public virtual ContainerRegistryExportPipelineResource GetContainerRegistryExportPipelineResource(ResourceIdentifier id)
-        {
-            ContainerRegistryExportPipelineResource.ValidateResourceId(id);
-            return new ContainerRegistryExportPipelineResource(Client, id);
-        }
-
-        /// <summary>
-        /// Gets an object representing a <see cref="ContainerRegistryResource"/> along with the instance operations that can be performed on it but with no data.
-        /// You can use <see cref="ContainerRegistryResource.CreateResourceIdentifier" /> to create a <see cref="ContainerRegistryResource"/> <see cref="ResourceIdentifier"/> from its components.
-        /// </summary>
-        /// <param name="id"> The resource ID of the resource to get. </param>
-        /// <returns> Returns a <see cref="ContainerRegistryResource"/> object. </returns>
-        public virtual ContainerRegistryResource GetContainerRegistryResource(ResourceIdentifier id)
-        {
-            ContainerRegistryResource.ValidateResourceId(id);
-            return new ContainerRegistryResource(Client, id);
-        }
-
-        /// <summary>
-        /// Gets an object representing a <see cref="ContainerRegistryPrivateLinkResource"/> along with the instance operations that can be performed on it but with no data.
-        /// You can use <see cref="ContainerRegistryPrivateLinkResource.CreateResourceIdentifier" /> to create a <see cref="ContainerRegistryPrivateLinkResource"/> <see cref="ResourceIdentifier"/> from its components.
-        /// </summary>
-        /// <param name="id"> The resource ID of the resource to get. </param>
-        /// <returns> Returns a <see cref="ContainerRegistryPrivateLinkResource"/> object. </returns>
-        public virtual ContainerRegistryPrivateLinkResource GetContainerRegistryPrivateLinkResource(ResourceIdentifier id)
-        {
-            ContainerRegistryPrivateLinkResource.ValidateResourceId(id);
-            return new ContainerRegistryPrivateLinkResource(Client, id);
-        }
-
-        /// <summary>
-        /// Gets an object representing a <see cref="ContainerRegistryImportPipelineResource"/> along with the instance operations that can be performed on it but with no data.
-        /// You can use <see cref="ContainerRegistryImportPipelineResource.CreateResourceIdentifier" /> to create a <see cref="ContainerRegistryImportPipelineResource"/> <see cref="ResourceIdentifier"/> from its components.
-        /// </summary>
-        /// <param name="id"> The resource ID of the resource to get. </param>
-        /// <returns> Returns a <see cref="ContainerRegistryImportPipelineResource"/> object. </returns>
-        public virtual ContainerRegistryImportPipelineResource GetContainerRegistryImportPipelineResource(ResourceIdentifier id)
-        {
-            ContainerRegistryImportPipelineResource.ValidateResourceId(id);
-            return new ContainerRegistryImportPipelineResource(Client, id);
-        }
-
-        /// <summary>
-        /// Gets an object representing a <see cref="ContainerRegistryPipelineRunResource"/> along with the instance operations that can be performed on it but with no data.
-        /// You can use <see cref="ContainerRegistryPipelineRunResource.CreateResourceIdentifier" /> to create a <see cref="ContainerRegistryPipelineRunResource"/> <see cref="ResourceIdentifier"/> from its components.
-        /// </summary>
-        /// <param name="id"> The resource ID of the resource to get. </param>
-        /// <returns> Returns a <see cref="ContainerRegistryPipelineRunResource"/> object. </returns>
-        public virtual ContainerRegistryPipelineRunResource GetContainerRegistryPipelineRunResource(ResourceIdentifier id)
-        {
-            ContainerRegistryPipelineRunResource.ValidateResourceId(id);
-            return new ContainerRegistryPipelineRunResource(Client, id);
         }
 
         /// <summary>

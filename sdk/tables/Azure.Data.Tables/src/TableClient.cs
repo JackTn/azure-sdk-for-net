@@ -272,10 +272,11 @@ namespace Azure.Data.Tables
             options ??= TableClientOptions.DefaultOptions;
 
             var perCallPolicies = _isCosmosEndpoint ? new[] { new CosmosPatchTransformPolicy() } : Array.Empty<HttpPipelinePolicy>();
-
+            var audienceScope = (options?.Audience ?? TableAudience.AzurePublicCloud)
+                .GetDefaultScope(_isCosmosEndpoint);
             var pipelineOptions = new HttpPipelineOptions(options)
             {
-                PerRetryPolicies = { new TableBearerTokenChallengeAuthorizationPolicy(tokenCredential, _isCosmosEndpoint ? TableConstants.CosmosScope : TableConstants.StorageScope, options.EnableTenantDiscovery) },
+                PerRetryPolicies = { new TableBearerTokenChallengeAuthorizationPolicy(tokenCredential, audienceScope, options.EnableTenantDiscovery) },
                 ResponseClassifier = new ResponseClassifier(),
                 RequestFailedDetailsParser = new TablesRequestFailedDetailsParser()
             };
@@ -1068,17 +1069,7 @@ namespace Azure.Data.Tables
             IEnumerable<string> select = null,
             CancellationToken cancellationToken = default) where T : class, ITableEntity
         {
-            using DiagnosticScope scope = _diagnostics.CreateScope($"{nameof(TableClient)}.{nameof(Query)}");
-            scope.Start();
-            try
-            {
-                return QueryAsync<T>(Bind(filter), maxPerPage, select, cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                scope.Failed(ex);
-                throw;
-            }
+            return QueryAsync<T>(Bind(filter), maxPerPage, select, cancellationToken);
         }
 
         /// <summary>
@@ -1115,17 +1106,7 @@ namespace Azure.Data.Tables
             IEnumerable<string> select = null,
             CancellationToken cancellationToken = default) where T : class, ITableEntity
         {
-            using DiagnosticScope scope = _diagnostics.CreateScope($"{nameof(TableClient)}.{nameof(Query)}");
-            scope.Start();
-            try
-            {
-                return Query<T>(Bind(filter), maxPerPage, select, cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                scope.Failed(ex);
-                throw;
-            }
+            return Query<T>(Bind(filter), maxPerPage, select, cancellationToken);
         }
 
         /// <summary>

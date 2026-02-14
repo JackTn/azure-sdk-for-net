@@ -64,10 +64,13 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> Gets the metric. </summary>
+        [WirePath("metric")]
         public string Metric { get; }
         /// <summary> Gets the value. </summary>
+        [WirePath("value")]
         public long? Value { get; }
         /// <summary> Gets the percentage. </summary>
+        [WirePath("percentage")]
         public double? Percentage { get; }
     }
 }

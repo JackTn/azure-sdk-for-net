@@ -68,12 +68,16 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> Gets the date time begin. </summary>
+        [WirePath("dateTimeBegin")]
         public DateTimeOffset? DateTimeBegin { get; }
         /// <summary> Gets the date time end. </summary>
+        [WirePath("dateTimeEnd")]
         public DateTimeOffset? DateTimeEnd { get; }
         /// <summary> Gets the groups. </summary>
+        [WirePath("groups")]
         public IReadOnlyList<string> Groups { get; }
         /// <summary> Gets the data. </summary>
+        [WirePath("data")]
         public IReadOnlyList<WafRankingsResponseDataItem> Data { get; }
     }
 }

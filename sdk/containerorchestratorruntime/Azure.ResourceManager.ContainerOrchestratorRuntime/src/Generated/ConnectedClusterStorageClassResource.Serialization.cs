@@ -11,16 +11,29 @@ using System.Text.Json;
 
 namespace Azure.ResourceManager.ContainerOrchestratorRuntime
 {
+    /// <summary></summary>
     public partial class ConnectedClusterStorageClassResource : IJsonModel<ConnectedClusterStorageClassData>
     {
+        private static IJsonModel<ConnectedClusterStorageClassData> s_dataDeserializationInstance;
+
+        private static IJsonModel<ConnectedClusterStorageClassData> DataDeserializationInstance => s_dataDeserializationInstance ??= new ConnectedClusterStorageClassData();
+
+        /// <param name="writer"> The writer to serialize the model to. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
         void IJsonModel<ConnectedClusterStorageClassData>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options) => ((IJsonModel<ConnectedClusterStorageClassData>)Data).Write(writer, options);
 
-        ConnectedClusterStorageClassData IJsonModel<ConnectedClusterStorageClassData>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => ((IJsonModel<ConnectedClusterStorageClassData>)Data).Create(ref reader, options);
+        /// <param name="reader"> The reader for deserializing the model. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
+        ConnectedClusterStorageClassData IJsonModel<ConnectedClusterStorageClassData>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => DataDeserializationInstance.Create(ref reader, options);
 
-        BinaryData IPersistableModel<ConnectedClusterStorageClassData>.Write(ModelReaderWriterOptions options) => ModelReaderWriter.Write(Data, options);
+        /// <param name="options"> The client options for reading and writing models. </param>
+        BinaryData IPersistableModel<ConnectedClusterStorageClassData>.Write(ModelReaderWriterOptions options) => ModelReaderWriter.Write<ConnectedClusterStorageClassData>(Data, options, AzureResourceManagerContainerOrchestratorRuntimeContext.Default);
 
-        ConnectedClusterStorageClassData IPersistableModel<ConnectedClusterStorageClassData>.Create(BinaryData data, ModelReaderWriterOptions options) => ModelReaderWriter.Read<ConnectedClusterStorageClassData>(data, options);
+        /// <param name="data"> The binary data to be processed. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
+        ConnectedClusterStorageClassData IPersistableModel<ConnectedClusterStorageClassData>.Create(BinaryData data, ModelReaderWriterOptions options) => ModelReaderWriter.Read<ConnectedClusterStorageClassData>(data, options, AzureResourceManagerContainerOrchestratorRuntimeContext.Default);
 
-        string IPersistableModel<ConnectedClusterStorageClassData>.GetFormatFromOptions(ModelReaderWriterOptions options) => ((IPersistableModel<ConnectedClusterStorageClassData>)Data).GetFormatFromOptions(options);
+        /// <param name="options"> The client options for reading and writing models. </param>
+        string IPersistableModel<ConnectedClusterStorageClassData>.GetFormatFromOptions(ModelReaderWriterOptions options) => DataDeserializationInstance.GetFormatFromOptions(options);
     }
 }

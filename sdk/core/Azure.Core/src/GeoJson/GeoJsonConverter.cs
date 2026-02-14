@@ -121,7 +121,7 @@ namespace Azure.Core.GeoJson
             }
         }
 
-        private static GeoBoundingBox? ReadBoundingBox(in JsonElement element)
+        internal static GeoBoundingBox? ReadBoundingBox(in JsonElement element)
         {
             GeoBoundingBox? bbox = null;
 
@@ -172,7 +172,7 @@ namespace Azure.Core.GeoJson
             return bbox;
         }
 
-        private static IReadOnlyDictionary<string, object?> ReadAdditionalProperties(in JsonElement element, string knownProperty = CoordinatesProperty)
+        internal static IReadOnlyDictionary<string, object?> ReadAdditionalProperties(in JsonElement element, string knownProperty = CoordinatesProperty)
         {
             Dictionary<string, object?>? additionalProperties = null;
             foreach (var property in element.EnumerateObject())
@@ -234,21 +234,21 @@ namespace Azure.Core.GeoJson
             }
         }
 
-        private static IReadOnlyList<GeoPosition> ReadCoordinates(JsonElement coordinatesElement)
+        internal static IReadOnlyList<GeoPosition> ReadCoordinates(JsonElement coordinatesElement)
         {
             GeoPosition[] coordinates = new GeoPosition[coordinatesElement.GetArrayLength()];
 
             int i = 0;
             foreach (JsonElement coordinate in coordinatesElement.EnumerateArray())
             {
-                 coordinates[i] = ReadCoordinate(coordinate);
-                 i++;
+                coordinates[i] = ReadCoordinate(coordinate);
+                i++;
             }
 
             return coordinates;
         }
 
-        private static GeoPosition ReadCoordinate(JsonElement coordinate)
+        internal static GeoPosition ReadCoordinate(JsonElement coordinate)
         {
             var arrayLength = coordinate.GetArrayLength();
             if (arrayLength < 2 || arrayLength > 3)
@@ -415,7 +415,7 @@ namespace Azure.Core.GeoJson
 
             writer.WriteEndObject();
         }
-        private static void WriteAdditionalPropertyValue(Utf8JsonWriter writer, object? value)
+        internal static void WriteAdditionalPropertyValue(Utf8JsonWriter writer, object? value)
         {
             switch (value)
             {
@@ -463,7 +463,7 @@ namespace Azure.Core.GeoJson
             }
         }
 
-        private static JsonElement GetRequiredProperty(JsonElement element, string name)
+        internal static JsonElement GetRequiredProperty(JsonElement element, string name)
         {
             if (!element.TryGetProperty(name, out JsonElement property))
             {

@@ -82,6 +82,17 @@ public partial class ContainerApp : ProvisionableResource
     private ManagedServiceIdentity? _identity;
 
     /// <summary>
+    /// Metadata to represent the container app kind, representing if a
+    /// container app is workflowapp or functionapp.
+    /// </summary>
+    public BicepValue<ContainerAppKind> Kind 
+    {
+        get { Initialize(); return _kind!; }
+        set { Initialize(); _kind!.Assign(value); }
+    }
+    private BicepValue<ContainerAppKind>? _kind;
+
+    /// <summary>
     /// The fully qualified resource ID of the resource that manages this
     /// resource. Indicates if this resource is managed by another Azure
     /// resource. If this is present, complete mode deployment will not delete
@@ -208,6 +219,15 @@ public partial class ContainerApp : ProvisionableResource
     private BicepValue<ContainerAppProvisioningState>? _provisioningState;
 
     /// <summary>
+    /// Running status of the Container App.
+    /// </summary>
+    public BicepValue<ContainerAppRunningStatus> RunningStatus 
+    {
+        get { Initialize(); return _runningStatus!; }
+    }
+    private BicepValue<ContainerAppRunningStatus>? _runningStatus;
+
+    /// <summary>
     /// Gets the SystemData.
     /// </summary>
     public SystemData SystemData 
@@ -227,7 +247,7 @@ public partial class ContainerApp : ProvisionableResource
     /// </param>
     /// <param name="resourceVersion">Version of the ContainerApp.</param>
     public ContainerApp(string bicepIdentifier, string? resourceVersion = default)
-        : base(bicepIdentifier, "Microsoft.App/containerApps", resourceVersion ?? "2024-03-01")
+        : base(bicepIdentifier, "Microsoft.App/containerApps", resourceVersion ?? "2026-01-01")
     {
     }
 
@@ -236,12 +256,14 @@ public partial class ContainerApp : ProvisionableResource
     /// </summary>
     protected override void DefineProvisionableProperties()
     {
+        base.DefineProvisionableProperties();
         _name = DefineProperty<string>("Name", ["name"], isRequired: true);
         _location = DefineProperty<AzureLocation>("Location", ["location"], isRequired: true);
         _configuration = DefineModelProperty<ContainerAppConfiguration>("Configuration", ["properties", "configuration"]);
         _environmentId = DefineProperty<ResourceIdentifier>("EnvironmentId", ["properties", "environmentId"]);
         _extendedLocation = DefineModelProperty<ContainerAppExtendedLocation>("ExtendedLocation", ["extendedLocation"]);
         _identity = DefineModelProperty<ManagedServiceIdentity>("Identity", ["identity"]);
+        _kind = DefineProperty<ContainerAppKind>("Kind", ["kind"]);
         _managedBy = DefineProperty<string>("ManagedBy", ["managedBy"]);
         _managedEnvironmentId = DefineProperty<ResourceIdentifier>("ManagedEnvironmentId", ["properties", "managedEnvironmentId"]);
         _tags = DefineDictionaryProperty<string>("Tags", ["tags"]);
@@ -255,6 +277,7 @@ public partial class ContainerApp : ProvisionableResource
         _latestRevisionName = DefineProperty<string>("LatestRevisionName", ["properties", "latestRevisionName"], isOutput: true);
         _outboundIPAddressList = DefineListProperty<IPAddress>("OutboundIPAddressList", ["properties", "outboundIpAddresses"], isOutput: true);
         _provisioningState = DefineProperty<ContainerAppProvisioningState>("ProvisioningState", ["properties", "provisioningState"], isOutput: true);
+        _runningStatus = DefineProperty<ContainerAppRunningStatus>("RunningStatus", ["properties", "runningStatus"], isOutput: true);
         _systemData = DefineModelProperty<SystemData>("SystemData", ["systemData"], isOutput: true);
     }
 
@@ -263,6 +286,21 @@ public partial class ContainerApp : ProvisionableResource
     /// </summary>
     public static class ResourceVersions
     {
+        /// <summary>
+        /// 2026-01-01.
+        /// </summary>
+        public static readonly string V2026_01_01 = "2026-01-01";
+
+        /// <summary>
+        /// 2025-07-01.
+        /// </summary>
+        public static readonly string V2025_07_01 = "2025-07-01";
+
+        /// <summary>
+        /// 2025-01-01.
+        /// </summary>
+        public static readonly string V2025_01_01 = "2025-01-01";
+
         /// <summary>
         /// 2024-03-01.
         /// </summary>

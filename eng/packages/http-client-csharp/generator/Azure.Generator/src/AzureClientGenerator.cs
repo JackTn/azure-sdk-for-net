@@ -1,15 +1,15 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using Azure.ResourceManager;
+using Azure.Generator.Visitors;
 using Microsoft.CodeAnalysis;
 using Microsoft.TypeSpec.Generator;
 using Microsoft.TypeSpec.Generator.ClientModel;
 using System;
 using System.ComponentModel.Composition;
 using System.IO;
-using System.Linq;
-using Azure.Generator.Primitives;
+using Azure.Core.Expressions.DataFactory;
+using Azure.Generator.Providers;
 
 namespace Azure.Generator;
 
@@ -21,7 +21,7 @@ namespace Azure.Generator;
 public class AzureClientGenerator : ScmCodeModelGenerator
 {
     private static AzureClientGenerator? _instance;
-    internal static AzureClientGenerator Instance => _instance ?? throw new InvalidOperationException("AzureClientGenerator is not loaded.");
+    internal static new AzureClientGenerator Instance => _instance ?? throw new InvalidOperationException("AzureClientGenerator is not loaded.");
 
     /// <inheritdoc/>
     public override AzureTypeFactory TypeFactory { get; }
@@ -30,8 +30,28 @@ public class AzureClientGenerator : ScmCodeModelGenerator
     /// <inheritdoc/>
     public override AzureOutputLibrary OutputLibrary => _azureOutputLibrary ??= new();
 
-    /// <inheritdoc/>
-    public override AzureInputLibrary InputLibrary { get; }
+    internal RawRequestUriBuilderExtensionsDefinition RawRequestUriBuilderExtensionsDefinition { get; } = new();
+
+    internal RequestHeaderExtensionsDefinition RequestHeaderExtensionsDefinition { get; } = new();
+
+    internal bool HasDataFactoryElement => _hasDataFactoryElement ??= BuildHasDataFactoryElement();
+    private bool? _hasDataFactoryElement;
+    internal const string DataFactoryElementIdentity = "Azure.Core.Expressions.DataFactoryElement";
+
+    private bool BuildHasDataFactoryElement()
+    {
+        foreach (var model in InputLibrary.InputNamespace.Models)
+        {
+            foreach (var property in model.Properties)
+            {
+                if (property.Type.External?.Identity == DataFactoryElementIdentity)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     /// <summary>
     /// Constructs the Azure client generator used to generate the Azure client SDK.
@@ -40,7 +60,6 @@ public class AzureClientGenerator : ScmCodeModelGenerator
     [ImportingConstructor]
     public AzureClientGenerator(GeneratorContext context) : base(context)
     {
-        InputLibrary = new AzureInputLibrary(Configuration.OutputDirectory);
         TypeFactory = new AzureTypeFactory();
         _instance = this;
     }
@@ -48,33 +67,33 @@ public class AzureClientGenerator : ScmCodeModelGenerator
     /// <summary>
     /// Customize the generation output for Azure client SDK.
     /// </summary>
-    public override void Configure()
+    protected override void Configure()
     {
         base.Configure();
+
         // Include Azure.Core
         AddMetadataReference(MetadataReference.CreateFromFile(typeof(Response).Assembly.Location));
+        if (HasDataFactoryElement)
+        {
+            AddMetadataReference(MetadataReference.CreateFromFile(typeof(DataFactoryElement<>).Assembly.Location));
+        }
+
         var sharedSourceDirectory = Path.Combine(Path.GetDirectoryName(typeof(AzureClientGenerator).Assembly.Location)!, "Shared", "Core");
         AddSharedSourceDirectory(sharedSourceDirectory);
+
+        // Visitors that do any renaming must be added first so that any visitors relying on custom code view will have the CustomCodeView set.
+        AddVisitor(new ModelFactoryRenamerVisitor());
+
+        // Rest of the visitors can be added in any order.
         AddVisitor(new NamespaceVisitor());
-        if (IsAzureArm.Value)
-        {
-            // Include Azure.ResourceManager
-            AddMetadataReference(MetadataReference.CreateFromFile(typeof(ArmClient).Assembly.Location));
-            AddVisitor(new RestClientVisitor());
-            AddVisitor(new ResourceVisitor());
-        }
+        AddVisitor(new DistributedTracingVisitor());
+        AddVisitor(new PipelinePropertyVisitor());
+        AddVisitor(new LroVisitor());
+        AddVisitor(new MatchConditionsHeadersVisitor());
+        AddVisitor(new ClientRequestIdHeaderVisitor());
+        AddVisitor(new SystemTextJsonConverterVisitor());
+        AddVisitor(new MultiPartFormDataVisitor());
+        AddVisitor(new InvokeDelimitedMethodVisitor());
+        AddVisitor(new XmlSerializableVisitor());
     }
-
-    /// <summary>
-    /// Customize the license string for Azure client SDK.
-    /// </summary>
-    public override string LicenseString => """
-// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License.
-""";
-
-    /// <summary>
-    /// Identify if the input is generated for Azure ARM.
-    /// </summary>
-    internal Lazy<bool> IsAzureArm => new Lazy<bool>(() => InputLibrary.InputNamespace.Clients.Any(c => c.Decorators.Any(d => d.Name.Equals(KnownDecorators.ArmProviderNamespace))));
 }

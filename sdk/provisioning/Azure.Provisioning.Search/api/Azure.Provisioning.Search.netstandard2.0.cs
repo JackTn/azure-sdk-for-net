@@ -24,11 +24,8 @@ namespace Azure.Provisioning.Search
         public static Azure.Provisioning.Search.SearchBuiltInRole SearchIndexDataReader { get { throw null; } }
         public static Azure.Provisioning.Search.SearchBuiltInRole SearchServiceContributor { get { throw null; } }
         public bool Equals(Azure.Provisioning.Search.SearchBuiltInRole other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object? obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public static string GetBuiltInRoleName(Azure.Provisioning.Search.SearchBuiltInRole value) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Provisioning.Search.SearchBuiltInRole left, Azure.Provisioning.Search.SearchBuiltInRole right) { throw null; }
         public static implicit operator Azure.Provisioning.Search.SearchBuiltInRole (string value) { throw null; }
@@ -39,6 +36,7 @@ namespace Azure.Provisioning.Search
     {
         None = 0,
         AzurePortal = 1,
+        AzureServices = 2,
     }
     public enum SearchDisabledDataExfiltrationOption
     {
@@ -93,6 +91,7 @@ namespace Azure.Provisioning.Search
             public static readonly string V2023_11_01;
             public static readonly string V2024_03_01_Preview;
             public static readonly string V2024_06_01_Preview;
+            public static readonly string V2025_02_01_Preview;
         }
     }
     public partial class SearchPrivateEndpointConnectionData : Azure.Provisioning.Primitives.ProvisionableConstruct
@@ -126,14 +125,17 @@ namespace Azure.Provisioning.Search
     {
         public SearchService(string bicepIdentifier, string? resourceVersion = null) : base (default(string), default(Azure.Core.ResourceType), default(string)) { }
         public Azure.Provisioning.Search.SearchAadAuthDataPlaneAuthOptions AuthOptions { get { throw null; } set { } }
+        public Azure.Provisioning.BicepValue<Azure.Provisioning.Search.SearchServiceComputeType> ComputeType { get { throw null; } set { } }
         public Azure.Provisioning.BicepList<Azure.Provisioning.Search.SearchDisabledDataExfiltrationOption> DisabledDataExfiltrationOptions { get { throw null; } set { } }
         public Azure.Provisioning.Search.SearchEncryptionWithCmk EncryptionWithCmk { get { throw null; } set { } }
+        public Azure.Provisioning.BicepValue<System.Uri> Endpoint { get { throw null; } set { } }
         public Azure.Provisioning.BicepValue<Azure.ETag> ETag { get { throw null; } }
         public Azure.Provisioning.BicepValue<Azure.Provisioning.Search.SearchServiceHostingMode> HostingMode { get { throw null; } set { } }
         public Azure.Provisioning.BicepValue<Azure.Core.ResourceIdentifier> Id { get { throw null; } }
         public Azure.Provisioning.Resources.ManagedServiceIdentity Identity { get { throw null; } set { } }
         public Azure.Provisioning.BicepList<Azure.Provisioning.Search.SearchServiceIPRule> IPRules { get { throw null; } set { } }
         public Azure.Provisioning.BicepValue<bool> IsLocalAuthDisabled { get { throw null; } set { } }
+        public Azure.Provisioning.BicepValue<bool> IsUpgradeAvailable { get { throw null; } }
         public Azure.Provisioning.BicepValue<Azure.Core.AzureLocation> Location { get { throw null; } set { } }
         public Azure.Provisioning.BicepValue<string> Name { get { throw null; } set { } }
         public Azure.Provisioning.Search.SearchServiceNetworkRuleSet NetworkRuleSet { get { throw null; } set { } }
@@ -144,6 +146,7 @@ namespace Azure.Provisioning.Search
         public Azure.Provisioning.BicepValue<int> ReplicaCount { get { throw null; } set { } }
         public Azure.Provisioning.BicepValue<Azure.Provisioning.Search.SearchServiceSkuName> SearchSkuName { get { throw null; } set { } }
         public Azure.Provisioning.BicepValue<Azure.Provisioning.Search.SearchSemanticSearch> SemanticSearch { get { throw null; } set { } }
+        public Azure.Provisioning.BicepValue<System.DateTimeOffset> ServiceUpgradeOn { get { throw null; } }
         public Azure.Provisioning.BicepList<Azure.Provisioning.Search.SharedSearchServicePrivateLinkResourceData> SharedPrivateLinkResources { get { throw null; } }
         public Azure.Provisioning.BicepValue<Azure.Provisioning.Search.SearchServiceStatus> Status { get { throw null; } }
         public Azure.Provisioning.BicepValue<string> StatusDetails { get { throw null; } }
@@ -153,7 +156,6 @@ namespace Azure.Provisioning.Search
         public Azure.Provisioning.Authorization.RoleAssignment CreateRoleAssignment(Azure.Provisioning.Search.SearchBuiltInRole role, Azure.Provisioning.Roles.UserAssignedIdentity identity) { throw null; }
         protected override void DefineProvisionableProperties() { }
         public static Azure.Provisioning.Search.SearchService FromExisting(string bicepIdentifier, string? resourceVersion = null) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override Azure.Provisioning.Primitives.ResourceNameRequirements GetResourceNameRequirements() { throw null; }
         public static partial class ResourceVersions
         {
@@ -170,7 +172,15 @@ namespace Azure.Provisioning.Search
             public static readonly string V2023_11_01;
             public static readonly string V2024_03_01_Preview;
             public static readonly string V2024_06_01_Preview;
+            public static readonly string V2025_02_01_Preview;
         }
+    }
+    public enum SearchServiceComputeType
+    {
+        [System.Runtime.Serialization.DataMemberAttribute(Name="default")]
+        Default = 0,
+        [System.Runtime.Serialization.DataMemberAttribute(Name="confidential")]
+        Confidential = 1,
     }
     public enum SearchServiceHostingMode
     {
@@ -301,6 +311,7 @@ namespace Azure.Provisioning.Search
             public static readonly string V2023_11_01;
             public static readonly string V2024_03_01_Preview;
             public static readonly string V2024_06_01_Preview;
+            public static readonly string V2025_02_01_Preview;
         }
     }
     public partial class SharedSearchServicePrivateLinkResourceData : Azure.Provisioning.Primitives.ProvisionableConstruct

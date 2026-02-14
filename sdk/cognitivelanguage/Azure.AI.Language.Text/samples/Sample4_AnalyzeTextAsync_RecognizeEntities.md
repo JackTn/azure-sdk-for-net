@@ -7,8 +7,8 @@ This sample demonstrates how to recognize named entities in one or more document
 To create a new `TextAnalysisClient`, you will need the service endpoint and credentials of your Language resource. To authenticate, you can use the [`DefaultAzureCredential`][DefaultAzureCredential], which combines credentials commonly used to authenticate when deployed on Azure, with credentials used to authenticate in a development environment. In this sample, however, you will use an `AzureKeyCredential`, which you can create with an API key.
 
 ```C# Snippet:CreateTextAnalysisClientForSpecificApiVersion
-Uri endpoint = new Uri("https://myaccount.cognitiveservices.azure.com");
-AzureKeyCredential credential = new("your apikey");
+Uri endpoint = new Uri("{endpoint}");
+AzureKeyCredential credential = new AzureKeyCredential("{api-key}");
 TextAnalysisClientOptions options = new TextAnalysisClientOptions(TextAnalysisClientOptions.ServiceVersion.V2023_04_01);
 var client = new TextAnalysisClient(endpoint, credential, options);
 ```
@@ -17,7 +17,7 @@ The values of the `endpoint` and `apiKey` variables can be retrieved from enviro
 
 ## Recognize entities in multiple documents
 
-To recognize entities in multiple documents, call `AnalyzeText` on the `TextAnalysisClient` by passing the documents as an `AnalyzeTextInput` parameter. This returns a `AnalyzeTextEntitiesResult`.
+To recognize entities in multiple documents, call `AnalyzeTextAsync` on the `TextAnalysisClient` by passing the documents as an `AnalyzeTextInput` parameter. This returns a `AnalyzeTextEntitiesResult`.
 
 ```C# Snippet:Sample4_AnalyzeTextAsync_RecognizeEntities
 string textA =
@@ -102,12 +102,12 @@ For more information on the changes in the preview API version, see [Preview API
 
 To create a new `TextAnalysisClient` with the preview API version, you will need the service endpoint and credentials of your Language resource with the `TextAnalysisClientOptions` pointing to the preview API Version.
 
-To recognize entities in multiple documents, call `AnalyzeText` on the `TextAnalysisClient` by passing the documents and actionContent as an `AnalyzeTextInput` parameter. This returns a `AnalyzeTextEntitiesResult`.
+To recognize entities in multiple documents, call `AnalyzeTextAsync` on the `TextAnalysisClient` by passing the documents and actionContent as an `AnalyzeTextInput` parameter. This returns a `AnalyzeTextEntitiesResult`.
 
 ```C# Snippet:Sample4_AnalyzeTextAsync_RecognizeEntities_Preview
-Uri endpoint = new Uri("https://myaccount.cognitiveservices.azure.com");
-AzureKeyCredential credential = new("your apikey");
-TextAnalysisClientOptions options = new TextAnalysisClientOptions(TextAnalysisClientOptions.ServiceVersion.V2024_11_15_Preview);
+Uri endpoint = TestEnvironment.Endpoint;
+AzureKeyCredential credential = new(TestEnvironment.ApiKey);
+TextAnalysisClientOptions options = new TextAnalysisClientOptions(TextAnalysisClientOptions.ServiceVersion.V2025_11_15_Preview);
 var client = new TextAnalysisClient(endpoint, credential, options);
 
 string textA =

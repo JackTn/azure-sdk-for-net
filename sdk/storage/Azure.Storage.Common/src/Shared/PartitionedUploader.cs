@@ -85,8 +85,7 @@ namespace Azure.Storage
         /// </summary>
         private delegate Task<(Stream PartitionContent, ReadOnlyMemory<byte> PartitionChecksum)> GetNextStreamPartition(
             Stream stream,
-            long minCount,
-            long maxCount,
+            long count,
             long absolutePosition,
             bool async,
             CancellationToken cancellationToken);
@@ -204,6 +203,11 @@ namespace Azure.Storage
         /// </summary>
         private readonly string _operationName;
 
+        /// <summary>
+        /// The default conconcurrency transfer count.
+        /// </summary>
+        private readonly int DefaultConcurrentTransfersCount = Math.Min(Math.Max(Environment.ProcessorCount * 2, 8), 32);
+
         public PartitionedUploader(
             Behaviors behaviors,
             StorageTransferOptions transferOptions,
@@ -236,7 +240,9 @@ namespace Azure.Storage
             }
             else
             {
-                _maxWorkerCount = Constants.Blob.Block.DefaultConcurrentTransfersCount;
+                _maxWorkerCount = CompatSwitches.UseLegacyDefaultConcurrency
+                    ? Constants.Blob.Block.LegacyDefaultConcurrentTransfersCount
+                    : DefaultConcurrentTransfersCount;
             }
 
             // Set _singleUploadThreshold
@@ -373,14 +379,14 @@ namespace Azure.Storage
                     Stream bufferedContent;
                     if (UseMasterCrc && _masterCrcSupplier != default)
                     {
-                        bufferedContent = await PooledMemoryStream.BufferStreamPartitionInternal(
-                            content, length.Value, length.Value, _arrayPool,
-                            maxArrayPoolRentalSize: default, async, cancellationToken).ConfigureAwait(false);
+                        bufferedContent = new PooledMemoryStream(_arrayPool, Constants.MB);
+                        await content.CopyToInternal(bufferedContent, async, cancellationToken).ConfigureAwait(false);
+                        bufferedContent.Position = 0;
                     }
                     else
                     {
                         (bufferedContent, oneshotValidationOptions) = await BufferAndOptionalChecksumStreamInternal(
-                            content, length.Value, length.Value, oneshotValidationOptions, async, cancellationToken)
+                            content, length.Value, oneshotValidationOptions, async, cancellationToken)
                             .ConfigureAwait(false);
                     }
                     bucket.Add(bufferedContent);
@@ -438,11 +444,8 @@ namespace Azure.Storage
         /// <param name="source">
         /// Stream to buffer.
         /// </param>
-        /// <param name="minCount">
-        /// Minimum count to buffer from the stream.
-        /// </param>
-        /// <param name="maxCount">
-        /// Maximum count to buffer from the stream.
+        /// <param name="count">
+        /// Exact count to buffer from the stream.
         /// </param>
         /// <param name="validationOptions">
         /// Validation options for the upload to determine if buffering is needed.
@@ -467,8 +470,7 @@ namespace Azure.Storage
         private async Task<(Stream Stream, UploadTransferValidationOptions ValidationOptions)>
             BufferAndOptionalChecksumStreamInternal(
                 Stream source,
-                long minCount,
-                long maxCount,
+                long? count,
                 UploadTransferValidationOptions validationOptions,
                 bool async,
                 CancellationToken cancellationToken)
@@ -488,14 +490,16 @@ namespace Azure.Storage
                     .SetupChecksumCalculatingReadStream(source, validationOptions.ChecksumAlgorithm);
             }
 
-            PooledMemoryStream bufferedContent = await PooledMemoryStream.BufferStreamPartitionInternal(
-                source,
-                minCount,
-                maxCount,
-                _arrayPool,
-                maxArrayPoolRentalSize: default,
-                async,
-                cancellationToken).ConfigureAwait(false);
+            Stream bufferedContent = new PooledMemoryStream(_arrayPool, Constants.MB);
+            if (count.HasValue)
+            {
+                await source.CopyToExactInternal(bufferedContent, count.Value, async, cancellationToken).ConfigureAwait(false);
+            }
+            else
+            {
+                await source.CopyToInternal(bufferedContent, async, cancellationToken).ConfigureAwait(false);
+            }
+            bufferedContent.Position = 0;
 
             if (usingChecksumStream)
             {
@@ -893,12 +897,6 @@ namespace Azure.Storage
             bool async,
             [EnumeratorCancellation] CancellationToken cancellationToken)
         {
-            // The minimum amount of data we'll accept from a stream before
-            // splitting another block. Code that sets `blockSize` will always
-            // set it to a positive number. Min() only avoids edge case where
-            // user sets their block size to 1.
-            long acceptableBlockSize = Math.Max(1, blockSize / 2);
-
             // if we know the data length, assert boundaries before spending resources uploading beyond service capabilities
             if (streamLength.HasValue)
             {
@@ -910,8 +908,6 @@ namespace Azure.Storage
                 {
                     throw Errors.InsufficientStorageTransferOptions(streamLength.Value, blockSize, minRequiredBlockSize);
                 }
-                // bring min up to our min required by the service
-                acceptableBlockSize = Math.Max(acceptableBlockSize, minRequiredBlockSize);
             }
 
             long read;
@@ -920,7 +916,6 @@ namespace Azure.Storage
             {
                 (Stream partition, ReadOnlyMemory<byte> partitionChecksum) = await getNextPartition(
                     stream,
-                    acceptableBlockSize,
                     blockSize,
                     absolutePosition,
                     async,
@@ -954,11 +949,8 @@ namespace Azure.Storage
         /// <param name="stream">
         /// Stream to buffer a partition from.
         /// </param>
-        /// <param name="minCount">
-        /// Minimum amount of data to wait on before finalizing buffer.
-        /// </param>
-        /// <param name="maxCount">
-        /// Max amount of data to buffer before cutting off for the next.
+        /// <param name="count">
+        /// Amount of data to wait on before finalizing buffer.
         /// </param>
         /// <param name="absolutePosition">
         /// Offset of this stream relative to the large stream.
@@ -974,8 +966,7 @@ namespace Azure.Storage
         /// </returns>
         private async Task<(Stream PartitionContent, ReadOnlyMemory<byte> PartitionChecksum)> GetBufferedPartitionInternal(
             Stream stream,
-            long minCount,
-            long maxCount,
+            long count,
             long absolutePosition,
             bool async,
             CancellationToken cancellationToken)
@@ -984,8 +975,7 @@ namespace Azure.Storage
             (Stream slicedStream, UploadTransferValidationOptions validationOptions)
                 = await BufferAndOptionalChecksumStreamInternal(
                     stream,
-                    minCount,
-                    maxCount,
+                    count,
                     new UploadTransferValidationOptions { ChecksumAlgorithm = _validationAlgorithm },
                     async,
                     cancellationToken).ConfigureAwait(false);
@@ -1002,10 +992,7 @@ namespace Azure.Storage
         /// <param name="stream">
         /// Stream to wrap.
         /// </param>
-        /// <param name="minCount">
-        /// Unused, but part of <see cref="GetNextStreamPartition"/> definition.
-        /// </param>
-        /// <param name="maxCount">
+        /// <param name="count">
         /// Length of this facade stream.
         /// </param>
         /// <param name="absolutePosition">
@@ -1020,8 +1007,7 @@ namespace Azure.Storage
         /// </returns>
         private async Task<(Stream PartitionContent, ReadOnlyMemory<byte> PartitionChecksum)> GetStreamedPartitionInternal(
             Stream stream,
-            long minCount,
-            long maxCount,
+            long count,
             long absolutePosition,
             bool async,
             CancellationToken cancellationToken)
@@ -1030,7 +1016,7 @@ namespace Azure.Storage
             {
                 throw Errors.InvalidArgument(nameof(stream));
             }
-            var partitionStream = WindowStream.GetWindow(stream, maxCount);
+            var partitionStream = WindowStream.GetWindow(stream, count);
             // this resets stream position for us
             var checksum = await ContentHasher.GetHashOrDefaultInternal(
                 partitionStream,

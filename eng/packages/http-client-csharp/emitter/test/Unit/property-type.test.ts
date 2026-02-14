@@ -18,9 +18,7 @@ describe("Test GetInputType for enum", () => {
   it("Fixed string enum", async () => {
     const program = await typeSpecCompile(
       `
-        #suppress "@azure-tools/typespec-azure-core/use-extensible-enum" "Enums should be defined without the @fixed decorator."
         @doc("fixed string enum")
-        @fixed
         enum SimpleEnum {
             @doc("Enum value one")
             One: "1",
@@ -39,11 +37,12 @@ describe("Test GetInputType for enum", () => {
     const context = createEmitterContext(program);
     const sdkContext = await createCSharpSdkContext(context);
     const root = createModel(sdkContext);
-    const inputParamArray = root.Clients[0].Operations[0].Parameters.filter(
-      (p) => p.Name === "input"
-    );
+    const inputParamArray =
+      root.clients[0].methods[0].operation.parameters.filter(
+        (p) => p.name === "input"
+      );
     strictEqual(1, inputParamArray.length);
-    const type = inputParamArray[0].Type;
+    const type = inputParamArray[0].type;
     strictEqual(type.kind, "enum");
     strictEqual(type.name, "SimpleEnum");
     strictEqual(type.isFixed, true);
@@ -66,9 +65,7 @@ describe("Test GetInputType for enum", () => {
   it("Fixed int enum", async () => {
     const program = await typeSpecCompile(
       `
-      #suppress "@azure-tools/typespec-azure-core/use-extensible-enum" "Enums should be defined without the @fixed decorator."
       @doc("Fixed int enum")
-      @fixed
       enum FixedIntEnum {
           @doc("Enum value one")
           One: 1,
@@ -87,11 +84,12 @@ describe("Test GetInputType for enum", () => {
     const context = createEmitterContext(program);
     const sdkContext = await createCSharpSdkContext(context);
     const root = createModel(sdkContext);
-    const inputParamArray = root.Clients[0].Operations[0].Parameters.filter(
-      (p) => p.Name === "input"
-    );
+    const inputParamArray =
+      root.clients[0].methods[0].operation.parameters.filter(
+        (p) => p.name === "input"
+      );
     strictEqual(1, inputParamArray.length);
-    const type = inputParamArray[0].Type;
+    const type = inputParamArray[0].type;
     strictEqual(type.kind, "enum");
     strictEqual(type.name, "FixedIntEnum");
     strictEqual(
@@ -113,4 +111,3 @@ describe("Test GetInputType for enum", () => {
     strictEqual(type.usage, UsageFlags.Input | UsageFlags.Json);
   });
 });
-//# sourceMappingURL=property-type.test.js.map

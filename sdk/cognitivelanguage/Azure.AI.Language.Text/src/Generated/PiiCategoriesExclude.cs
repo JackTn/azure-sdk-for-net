@@ -193,12 +193,38 @@ namespace Azure.AI.Language.Text
         private const string DateValue = "Date";
         private const string PersonValue = "Person";
         private const string AddressValue = "Address";
+        private const string DateOfBirthValue = "DateOfBirth";
+        private const string BankAccountNumberValue = "BankAccountNumber";
+        private const string PassportNumberValue = "PassportNumber";
+        private const string DriversLicenseNumberValue = "DriversLicenseNumber";
+        private const string NeighborhoodValue = "Neighborhood";
+        private const string SortCodeValue = "SortCode";
+        private const string PINValue = "PIN";
+        private const string VINValue = "VIN";
+        private const string VehicleIdentificationNumberValue = "VehicleIdentificationNumber";
+        private const string LicensePlateValue = "LicensePlate";
+        private const string KRPassportNumberValue = "KRPassportNumber";
+        private const string KRDriversLicenseNumberValue = "KRDriversLicenseNumber";
+        private const string KRSocialSecurityNumberValue = "KRSocialSecurityNumber";
+        private const string GovernmentIssuedIdValue = "GovernmentIssuedId";
+        private const string PasswordValue = "Password";
+        private const string NationalIdValue = "NationalId";
+        private const string ZipCodeValue = "ZipCode";
+        private const string CVVValue = "CVV";
+        private const string ExpirationDateValue = "ExpirationDate";
+        private const string CASocialIdentificationNumberValue = "CASocialIdentificationNumber";
+        private const string MedicareBeneficiaryIdValue = "USMedicareBeneficiaryId";
+        private const string LocationValue = "Location";
+        private const string CityValue = "City";
+        private const string StateValue = "State";
+        private const string AirportValue = "Airport";
+        private const string GPEValue = "GPE";
 
         /// <summary> ABA Routing number. </summary>
         public static PiiCategoriesExclude AbaRoutingNumber { get; } = new PiiCategoriesExclude(AbaRoutingNumberValue);
         /// <summary> AR National Identity Number. </summary>
         public static PiiCategoriesExclude ArNationalIdentityNumber { get; } = new PiiCategoriesExclude(ArNationalIdentityNumberValue);
-        /// <summary> AT Identity Card. </summary>
+        /// <summary> AT Bank Account Number. </summary>
         public static PiiCategoriesExclude AuBankAccountNumber { get; } = new PiiCategoriesExclude(AuBankAccountNumberValue);
         /// <summary> AU Driver's License Number. </summary>
         public static PiiCategoriesExclude AuDriversLicenseNumber { get; } = new PiiCategoriesExclude(AuDriversLicenseNumberValue);
@@ -536,6 +562,58 @@ namespace Azure.AI.Language.Text
         public static PiiCategoriesExclude Person { get; } = new PiiCategoriesExclude(PersonValue);
         /// <summary> Address. </summary>
         public static PiiCategoriesExclude Address { get; } = new PiiCategoriesExclude(AddressValue);
+        /// <summary> Date Of Birth. </summary>
+        public static PiiCategoriesExclude DateOfBirth { get; } = new PiiCategoriesExclude(DateOfBirthValue);
+        /// <summary> Bank Account Number. </summary>
+        public static PiiCategoriesExclude BankAccountNumber { get; } = new PiiCategoriesExclude(BankAccountNumberValue);
+        /// <summary> Passport Number. </summary>
+        public static PiiCategoriesExclude PassportNumber { get; } = new PiiCategoriesExclude(PassportNumberValue);
+        /// <summary> Drivers License Number. </summary>
+        public static PiiCategoriesExclude DriversLicenseNumber { get; } = new PiiCategoriesExclude(DriversLicenseNumberValue);
+        /// <summary> Neighborhood. </summary>
+        public static PiiCategoriesExclude Neighborhood { get; } = new PiiCategoriesExclude(NeighborhoodValue);
+        /// <summary> Sort Code. 6-digit number used in the UK to identify a specific bank and branch where a bank account is held. </summary>
+        public static PiiCategoriesExclude SortCode { get; } = new PiiCategoriesExclude(SortCodeValue);
+        /// <summary> PIN. </summary>
+        public static PiiCategoriesExclude PIN { get; } = new PiiCategoriesExclude(PINValue);
+        /// <summary> VIN. </summary>
+        public static PiiCategoriesExclude VIN { get; } = new PiiCategoriesExclude(VINValue);
+        /// <summary> VIN. </summary>
+        public static PiiCategoriesExclude VehicleIdentificationNumber { get; } = new PiiCategoriesExclude(VehicleIdentificationNumberValue);
+        /// <summary> License Plate. </summary>
+        public static PiiCategoriesExclude LicensePlate { get; } = new PiiCategoriesExclude(LicensePlateValue);
+        /// <summary> KR Passport Number. </summary>
+        public static PiiCategoriesExclude KRPassportNumber { get; } = new PiiCategoriesExclude(KRPassportNumberValue);
+        /// <summary> KR Driver's License Number. </summary>
+        public static PiiCategoriesExclude KRDriversLicenseNumber { get; } = new PiiCategoriesExclude(KRDriversLicenseNumberValue);
+        /// <summary> KR Social Security Number. </summary>
+        public static PiiCategoriesExclude KRSocialSecurityNumber { get; } = new PiiCategoriesExclude(KRSocialSecurityNumberValue);
+        /// <summary> Government Issued ID. </summary>
+        public static PiiCategoriesExclude GovernmentIssuedId { get; } = new PiiCategoriesExclude(GovernmentIssuedIdValue);
+        /// <summary> Password. </summary>
+        public static PiiCategoriesExclude Password { get; } = new PiiCategoriesExclude(PasswordValue);
+        /// <summary> National Identification. </summary>
+        public static PiiCategoriesExclude NationalId { get; } = new PiiCategoriesExclude(NationalIdValue);
+        /// <summary> Zip Code. </summary>
+        public static PiiCategoriesExclude ZipCode { get; } = new PiiCategoriesExclude(ZipCodeValue);
+        /// <summary> Card Verification Value. </summary>
+        public static PiiCategoriesExclude CVV { get; } = new PiiCategoriesExclude(CVVValue);
+        /// <summary> Expiration Date. </summary>
+        public static PiiCategoriesExclude ExpirationDate { get; } = new PiiCategoriesExclude(ExpirationDateValue);
+        /// <summary> CA Social Identification Number. </summary>
+        public static PiiCategoriesExclude CASocialIdentificationNumber { get; } = new PiiCategoriesExclude(CASocialIdentificationNumberValue);
+        /// <summary> Medicare Beneficiary ID. </summary>
+        public static PiiCategoriesExclude MedicareBeneficiaryId { get; } = new PiiCategoriesExclude(MedicareBeneficiaryIdValue);
+        /// <summary> Location. </summary>
+        public static PiiCategoriesExclude Location { get; } = new PiiCategoriesExclude(LocationValue);
+        /// <summary> City. </summary>
+        public static PiiCategoriesExclude City { get; } = new PiiCategoriesExclude(CityValue);
+        /// <summary> State. </summary>
+        public static PiiCategoriesExclude State { get; } = new PiiCategoriesExclude(StateValue);
+        /// <summary> Airport. </summary>
+        public static PiiCategoriesExclude Airport { get; } = new PiiCategoriesExclude(AirportValue);
+        /// <summary> Geopolitical Entity. </summary>
+        public static PiiCategoriesExclude GPE { get; } = new PiiCategoriesExclude(GPEValue);
         /// <summary> Determines if two <see cref="PiiCategoriesExclude"/> values are the same. </summary>
         public static bool operator ==(PiiCategoriesExclude left, PiiCategoriesExclude right) => left.Equals(right);
         /// <summary> Determines if two <see cref="PiiCategoriesExclude"/> values are not the same. </summary>

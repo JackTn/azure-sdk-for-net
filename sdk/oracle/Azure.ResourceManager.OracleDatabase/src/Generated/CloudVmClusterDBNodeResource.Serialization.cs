@@ -11,16 +11,29 @@ using System.Text.Json;
 
 namespace Azure.ResourceManager.OracleDatabase
 {
+    /// <summary></summary>
     public partial class CloudVmClusterDBNodeResource : IJsonModel<CloudVmClusterDBNodeData>
     {
+        private static IJsonModel<CloudVmClusterDBNodeData> s_dataDeserializationInstance;
+
+        private static IJsonModel<CloudVmClusterDBNodeData> DataDeserializationInstance => s_dataDeserializationInstance ??= new CloudVmClusterDBNodeData();
+
+        /// <param name="writer"> The writer to serialize the model to. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
         void IJsonModel<CloudVmClusterDBNodeData>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options) => ((IJsonModel<CloudVmClusterDBNodeData>)Data).Write(writer, options);
 
-        CloudVmClusterDBNodeData IJsonModel<CloudVmClusterDBNodeData>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => ((IJsonModel<CloudVmClusterDBNodeData>)Data).Create(ref reader, options);
+        /// <param name="reader"> The reader for deserializing the model. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
+        CloudVmClusterDBNodeData IJsonModel<CloudVmClusterDBNodeData>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => DataDeserializationInstance.Create(ref reader, options);
 
-        BinaryData IPersistableModel<CloudVmClusterDBNodeData>.Write(ModelReaderWriterOptions options) => ModelReaderWriter.Write(Data, options);
+        /// <param name="options"> The client options for reading and writing models. </param>
+        BinaryData IPersistableModel<CloudVmClusterDBNodeData>.Write(ModelReaderWriterOptions options) => ModelReaderWriter.Write<CloudVmClusterDBNodeData>(Data, options, AzureResourceManagerOracleDatabaseContext.Default);
 
-        CloudVmClusterDBNodeData IPersistableModel<CloudVmClusterDBNodeData>.Create(BinaryData data, ModelReaderWriterOptions options) => ModelReaderWriter.Read<CloudVmClusterDBNodeData>(data, options);
+        /// <param name="data"> The binary data to be processed. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
+        CloudVmClusterDBNodeData IPersistableModel<CloudVmClusterDBNodeData>.Create(BinaryData data, ModelReaderWriterOptions options) => ModelReaderWriter.Read<CloudVmClusterDBNodeData>(data, options, AzureResourceManagerOracleDatabaseContext.Default);
 
-        string IPersistableModel<CloudVmClusterDBNodeData>.GetFormatFromOptions(ModelReaderWriterOptions options) => ((IPersistableModel<CloudVmClusterDBNodeData>)Data).GetFormatFromOptions(options);
+        /// <param name="options"> The client options for reading and writing models. </param>
+        string IPersistableModel<CloudVmClusterDBNodeData>.GetFormatFromOptions(ModelReaderWriterOptions options) => DataDeserializationInstance.GetFormatFromOptions(options);
     }
 }

@@ -617,7 +617,6 @@ namespace Azure.Storage.Blobs.Test
                 _retryStageBlockFromUri);
         }
 
-        [Ignore("https://github.com/Azure/azure-sdk-for-net/issues/44324")]
         [RecordedTest]
         [ServiceVersion(Min = BlobClientOptions.ServiceVersion.V2024_08_04)]
         public async Task StageBlobFromUriAsync_SourceErrorAndStatusCode()
@@ -633,9 +632,9 @@ namespace Azure.Storage.Blobs.Test
                 destBlob.StageBlockFromUriAsync(sourceBlob.Uri, ToBase64(GetNewBlockName())),
                 e =>
                 {
-                    Assert.IsTrue(e.Message.Contains("CopySourceStatusCode: 409"));
-                    Assert.IsTrue(e.Message.Contains("CopySourceErrorCode: PublicAccessNotPermitted"));
-                    Assert.IsTrue(e.Message.Contains("CopySourceErrorMessage: Public access is not permitted on this storage account."));
+                    Assert.IsTrue(e.Message.Contains("CopySourceStatusCode: 401"));
+                    Assert.IsTrue(e.Message.Contains("CopySourceErrorCode: NoAuthenticationInformation"));
+                    Assert.IsTrue(e.Message.Contains("CopySourceErrorMessage: Server failed to authenticate the request. Please refer to the information in the www-authenticate header."));
                 });
         }
 
@@ -715,6 +714,79 @@ namespace Azure.Storage.Blobs.Test
                     sourceBlob.GenerateSasUri(BlobSasPermissions.Read, Recording.UtcNow.AddHours(1)),
                     ToBase64(GetNewBlockName())),
                 _retryStageBlockFromUri);
+        }
+
+        [RecordedTest]
+        [ServiceVersion(Min = BlobClientOptions.ServiceVersion.V2026_04_06)]
+        [LiveOnly(Reason = "Encryption Key cannot be stored in recordings.")]
+        public async Task StageBlockFromUriAsync_SourceCPK()
+        {
+            // Arrange
+            await using DisposingContainer test = await GetTestContainerAsync();
+            BlockBlobClient sourceBlob = InstrumentClient(test.Container.GetBlockBlobClient(GetNewBlobName()));
+            BlockBlobClient destBlob = InstrumentClient(test.Container.GetBlockBlobClient(GetNewBlobName()));
+
+            CustomerProvidedKey destCustomerProvidedKey = GetCustomerProvidedKey();
+            destBlob = destBlob.WithCustomerProvidedKey(destCustomerProvidedKey);
+
+            CustomerProvidedKey sourceCustomerProvidedKey = GetCustomerProvidedKey();
+            sourceBlob = sourceBlob.WithCustomerProvidedKey(sourceCustomerProvidedKey);
+            // Upload data to source blob
+            byte[] data = GetRandomBuffer(Constants.KB);
+            using Stream stream = new MemoryStream(data);
+            await sourceBlob.UploadAsync(stream);
+
+            // Act
+            StageBlockFromUriOptions options = new StageBlockFromUriOptions
+            {
+                SourceCustomerProvidedKey = sourceCustomerProvidedKey
+            };
+            Response<BlockInfo> response = await destBlob.StageBlockFromUriAsync(
+                    sourceBlob.GenerateSasUri(BlobSasPermissions.Read, Recording.UtcNow.AddHours(1)),
+                    ToBase64(GetNewBlockName()),
+                    options);
+
+            // Assert
+            Assert.AreEqual(destCustomerProvidedKey.EncryptionKeyHash, response.Value.EncryptionKeySha256);
+        }
+
+        [RecordedTest]
+        [ServiceVersion(Min = BlobClientOptions.ServiceVersion.V2026_04_06)]
+        [LiveOnly(Reason = "Encryption Key cannot be stored in recordings.")]
+        public async Task StageBlockFromUriAsync_SourceCPK_Fail()
+        {
+            // Arrange
+            await using DisposingContainer test = await GetTestContainerAsync();
+            BlockBlobClient sourceBlob = InstrumentClient(test.Container.GetBlockBlobClient(GetNewBlobName()));
+            BlockBlobClient destBlob = InstrumentClient(test.Container.GetBlockBlobClient(GetNewBlobName()));
+
+            CustomerProvidedKey destCustomerProvidedKey = GetCustomerProvidedKey();
+            destBlob = destBlob.WithCustomerProvidedKey(destCustomerProvidedKey);
+
+            CustomerProvidedKey sourceCustomerProvidedKey = GetCustomerProvidedKey();
+            sourceBlob = sourceBlob.WithCustomerProvidedKey(sourceCustomerProvidedKey);
+            // Upload data to source blob
+            byte[] data = GetRandomBuffer(Constants.KB);
+            using Stream stream = new MemoryStream(data);
+            await sourceBlob.UploadAsync(stream);
+
+            // Act
+            StageBlockFromUriOptions options = new StageBlockFromUriOptions
+            {
+                // incorrectly use the dest CPK here
+                SourceCustomerProvidedKey = destCustomerProvidedKey
+            };
+            await TestHelper.AssertExpectedExceptionAsync<RequestFailedException>(
+                destBlob.StageBlockFromUriAsync(
+                    sourceBlob.GenerateSasUri(BlobSasPermissions.Read, Recording.UtcNow.AddHours(1)),
+                    ToBase64(GetNewBlockName()),
+                    options),
+                e =>
+                {
+                    Assert.AreEqual(409, e.Status);
+                    Assert.AreEqual("CannotVerifyCopySource", e.ErrorCode);
+                    StringAssert.Contains("The given customer specified encryption does not match the encryption used to encrypt the blob.", e.Message);
+                });
         }
 
         [RecordedTest]
@@ -2906,7 +2978,6 @@ namespace Azure.Storage.Blobs.Test
         }
 
         [RecordedTest]
-        [Ignore("https://github.com/Azure/azure-sdk-for-net/issues/44324")]
         [ServiceVersion(Min = BlobClientOptions.ServiceVersion.V2024_08_04)]
         public async Task SyncUploadFromUriAsync_SourceErrorAndStatusCode()
         {
@@ -2918,12 +2989,12 @@ namespace Azure.Storage.Blobs.Test
 
             // Act
             await TestHelper.AssertExpectedExceptionAsync<RequestFailedException>(
-                destBlob.SyncUploadFromUriAsync(sourceBlob.GenerateSasUri(BlobSasPermissions.Read, Recording.UtcNow.AddHours(1))),
+                destBlob.SyncUploadFromUriAsync(sourceBlob.Uri),
                 e =>
                 {
-                    Assert.IsTrue(e.Message.Contains("CopySourceStatusCode: 409"));
-                    Assert.IsTrue(e.Message.Contains("CopySourceErrorCode: PublicAccessNotPermitted"));
-                    Assert.IsTrue(e.Message.Contains("CopySourceErrorMessage: Public access is not permitted on this storage account."));
+                    Assert.IsTrue(e.Message.Contains("CopySourceStatusCode: 401"));
+                    Assert.IsTrue(e.Message.Contains("CopySourceErrorCode: NoAuthenticationInformation"));
+                    Assert.IsTrue(e.Message.Contains("CopySourceErrorMessage: Server failed to authenticate the request. Please refer to the information in the www-authenticate header."));
                 });
         }
 
@@ -3314,6 +3385,74 @@ namespace Azure.Storage.Blobs.Test
 
             // Assert
             Assert.AreEqual(customerProvidedKey.EncryptionKeyHash, response.Value.EncryptionKeySha256);
+        }
+
+        [RecordedTest]
+        [ServiceVersion(Min = BlobClientOptions.ServiceVersion.V2026_04_06)]
+        [LiveOnly(Reason = "Encryption Key cannot be stored in recordings.")]
+        public async Task SyncUploadFromUriAsync_SourceCPK()
+        {
+            // Arrange
+            await using DisposingContainer test = await GetTestContainerAsync();
+            BlockBlobClient sourceBlob = InstrumentClient(test.Container.GetBlockBlobClient(GetNewBlobName()));
+            BlockBlobClient destBlob = InstrumentClient(test.Container.GetBlockBlobClient(GetNewBlobName()));
+
+            CustomerProvidedKey destCustomerProvidedKey = GetCustomerProvidedKey();
+            destBlob = destBlob.WithCustomerProvidedKey(destCustomerProvidedKey);
+
+            CustomerProvidedKey sourceCustomerProvidedKey = GetCustomerProvidedKey();
+            sourceBlob = sourceBlob.WithCustomerProvidedKey(sourceCustomerProvidedKey);
+            // Upload data to source blob
+            byte[] data = GetRandomBuffer(Constants.KB);
+            using Stream stream = new MemoryStream(data);
+            await sourceBlob.UploadAsync(stream);
+
+            // Act
+            BlobSyncUploadFromUriOptions options = new BlobSyncUploadFromUriOptions
+            {
+                SourceCustomerProvidedKey = sourceCustomerProvidedKey
+            };
+            Response<BlobContentInfo> response = await destBlob.SyncUploadFromUriAsync(
+                sourceBlob.GenerateSasUri(BlobSasPermissions.Read, Recording.UtcNow.AddHours(1)), options);
+
+            // Assert
+            Assert.AreEqual(destCustomerProvidedKey.EncryptionKeyHash, response.Value.EncryptionKeySha256);
+        }
+
+        [RecordedTest]
+        [ServiceVersion(Min = BlobClientOptions.ServiceVersion.V2026_04_06)]
+        [LiveOnly(Reason = "Encryption Key cannot be stored in recordings.")]
+        public async Task SyncUploadFromUriAsync_SourceCPK_Fail()
+        {
+            // Arrange
+            await using DisposingContainer test = await GetTestContainerAsync();
+            BlockBlobClient sourceBlob = InstrumentClient(test.Container.GetBlockBlobClient(GetNewBlobName()));
+            BlockBlobClient destBlob = InstrumentClient(test.Container.GetBlockBlobClient(GetNewBlobName()));
+
+            CustomerProvidedKey destCustomerProvidedKey = GetCustomerProvidedKey();
+            destBlob = destBlob.WithCustomerProvidedKey(destCustomerProvidedKey);
+
+            CustomerProvidedKey sourceCustomerProvidedKey = GetCustomerProvidedKey();
+            sourceBlob = sourceBlob.WithCustomerProvidedKey(sourceCustomerProvidedKey);
+            // Upload data to source blob
+            byte[] data = GetRandomBuffer(Constants.KB);
+            using Stream stream = new MemoryStream(data);
+            await sourceBlob.UploadAsync(stream);
+
+            // Act
+            BlobSyncUploadFromUriOptions options = new BlobSyncUploadFromUriOptions
+            {
+                // incorrectly use the dest CPK here
+                SourceCustomerProvidedKey = destCustomerProvidedKey
+            };
+            await TestHelper.AssertExpectedExceptionAsync<RequestFailedException>(
+                destBlob.SyncUploadFromUriAsync(sourceBlob.GenerateSasUri(BlobSasPermissions.Read, Recording.UtcNow.AddHours(1)), options),
+                e =>
+                {
+                    Assert.AreEqual(409, e.Status);
+                    Assert.AreEqual("CannotVerifyCopySource", e.ErrorCode);
+                    StringAssert.Contains("The given customer specified encryption does not match the encryption used to encrypt the blob.", e.Message);
+                });
         }
 
         [RecordedTest]

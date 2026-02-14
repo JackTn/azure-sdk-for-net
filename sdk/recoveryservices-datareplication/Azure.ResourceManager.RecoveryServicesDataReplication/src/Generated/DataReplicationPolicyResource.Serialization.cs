@@ -11,16 +11,29 @@ using System.Text.Json;
 
 namespace Azure.ResourceManager.RecoveryServicesDataReplication
 {
+    /// <summary></summary>
     public partial class DataReplicationPolicyResource : IJsonModel<DataReplicationPolicyData>
     {
+        private static IJsonModel<DataReplicationPolicyData> s_dataDeserializationInstance;
+
+        private static IJsonModel<DataReplicationPolicyData> DataDeserializationInstance => s_dataDeserializationInstance ??= new DataReplicationPolicyData();
+
+        /// <param name="writer"> The writer to serialize the model to. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
         void IJsonModel<DataReplicationPolicyData>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options) => ((IJsonModel<DataReplicationPolicyData>)Data).Write(writer, options);
 
-        DataReplicationPolicyData IJsonModel<DataReplicationPolicyData>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => ((IJsonModel<DataReplicationPolicyData>)Data).Create(ref reader, options);
+        /// <param name="reader"> The reader for deserializing the model. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
+        DataReplicationPolicyData IJsonModel<DataReplicationPolicyData>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => DataDeserializationInstance.Create(ref reader, options);
 
-        BinaryData IPersistableModel<DataReplicationPolicyData>.Write(ModelReaderWriterOptions options) => ModelReaderWriter.Write(Data, options);
+        /// <param name="options"> The client options for reading and writing models. </param>
+        BinaryData IPersistableModel<DataReplicationPolicyData>.Write(ModelReaderWriterOptions options) => ModelReaderWriter.Write<DataReplicationPolicyData>(Data, options, AzureResourceManagerRecoveryServicesDataReplicationContext.Default);
 
-        DataReplicationPolicyData IPersistableModel<DataReplicationPolicyData>.Create(BinaryData data, ModelReaderWriterOptions options) => ModelReaderWriter.Read<DataReplicationPolicyData>(data, options);
+        /// <param name="data"> The binary data to be processed. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
+        DataReplicationPolicyData IPersistableModel<DataReplicationPolicyData>.Create(BinaryData data, ModelReaderWriterOptions options) => ModelReaderWriter.Read<DataReplicationPolicyData>(data, options, AzureResourceManagerRecoveryServicesDataReplicationContext.Default);
 
-        string IPersistableModel<DataReplicationPolicyData>.GetFormatFromOptions(ModelReaderWriterOptions options) => ((IPersistableModel<DataReplicationPolicyData>)Data).GetFormatFromOptions(options);
+        /// <param name="options"> The client options for reading and writing models. </param>
+        string IPersistableModel<DataReplicationPolicyData>.GetFormatFromOptions(ModelReaderWriterOptions options) => DataDeserializationInstance.GetFormatFromOptions(options);
     }
 }

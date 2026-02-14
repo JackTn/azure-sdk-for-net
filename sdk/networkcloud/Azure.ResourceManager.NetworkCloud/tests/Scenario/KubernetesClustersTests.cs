@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using System.Threading;
 using System.Threading.Tasks;
 using Azure.Core;
 using Azure.Core.TestFramework;
@@ -13,8 +14,8 @@ namespace Azure.ResourceManager.NetworkCloud.Tests.ScenarioTests
 {
     public partial class KubernetesClustersTests : NetworkCloudManagementTestBase
     {
-        public KubernetesClustersTests(bool isAsync, RecordedTestMode mode) : base(isAsync, mode) {}
-        public KubernetesClustersTests(bool isAsync) : base(isAsync) {}
+        public KubernetesClustersTests(bool isAsync, RecordedTestMode mode) : base(isAsync, mode) { }
+        public KubernetesClustersTests(bool isAsync) : base(isAsync) { }
 
         [Test]
         [RecordedTest]
@@ -143,7 +144,7 @@ namespace Azure.ResourceManager.NetworkCloud.Tests.ScenarioTests
             Assert.IsNotEmpty(listBySubscriptionResult);
 
             // Delete KubernetesCluster
-            var deleteResult = await kubernetesCluster.DeleteAsync(WaitUntil.Completed);
+            var deleteResult = await kubernetesCluster.DeleteAsync(WaitUntil.Completed, CancellationToken.None);
             Assert.IsTrue(deleteResult.HasCompleted);
         }
     }

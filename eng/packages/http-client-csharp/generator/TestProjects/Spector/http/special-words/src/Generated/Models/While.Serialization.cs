@@ -8,13 +8,27 @@
 using System;
 using System.ClientModel.Primitives;
 using System.Text.Json;
-using Azure;
 using Azure.Core;
 
 namespace SpecialWords._Models
 {
     public partial class While : IJsonModel<While>
     {
+        internal While() => throw null;
+
+        protected virtual While PersistableModelCreateCore(BinaryData data, ModelReaderWriterOptions options) => throw null;
+
+        protected virtual BinaryData PersistableModelWriteCore(ModelReaderWriterOptions options) => throw null;
+
+        BinaryData IPersistableModel<While>.Write(ModelReaderWriterOptions options) => throw null;
+
+        While IPersistableModel<While>.Create(BinaryData data, ModelReaderWriterOptions options) => throw null;
+
+        string IPersistableModel<While>.GetFormatFromOptions(ModelReaderWriterOptions options) => throw null;
+
+        /// <param name="while"> The <see cref="While"/> to serialize into <see cref="RequestContent"/>. </param>
+        public static implicit operator RequestContent(While @while) => throw null;
+
         void IJsonModel<While>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options) => throw null;
 
         protected virtual void JsonModelWriteCore(Utf8JsonWriter writer, ModelReaderWriterOptions options) => throw null;
@@ -22,20 +36,5 @@ namespace SpecialWords._Models
         While IJsonModel<While>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => throw null;
 
         protected virtual While JsonModelCreateCore(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => throw null;
-
-        BinaryData IPersistableModel<While>.Write(ModelReaderWriterOptions options) => throw null;
-
-        protected virtual BinaryData PersistableModelWriteCore(ModelReaderWriterOptions options) => throw null;
-
-        While IPersistableModel<While>.Create(BinaryData data, ModelReaderWriterOptions options) => throw null;
-
-        protected virtual While PersistableModelCreateCore(BinaryData data, ModelReaderWriterOptions options) => throw null;
-
-        string IPersistableModel<While>.GetFormatFromOptions(ModelReaderWriterOptions options) => throw null;
-
-        /// <param name="while"> The <see cref="While"/> to serialize into <see cref="RequestContent"/>. </param>
-        public static implicit operator RequestContent(While @while) => throw null;
-
-        public static explicit operator While(Response result) => throw null;
     }
 }

@@ -10,6 +10,24 @@ namespace Azure.Health.Insights.RadiologyInsights
         string System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.AgeMismatchInference>.GetFormatFromOptions(System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
         System.BinaryData System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.AgeMismatchInference>.Write(System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
     }
+    public partial class AssessmentValueRange : System.ClientModel.Primitives.IJsonModel<Azure.Health.Insights.RadiologyInsights.AssessmentValueRange>, System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.AssessmentValueRange>
+    {
+        internal AssessmentValueRange() { }
+        public string Maximum { get { throw null; } }
+        public string Minimum { get { throw null; } }
+        protected virtual void JsonModelWriteCore(System.Text.Json.Utf8JsonWriter writer, System.ClientModel.Primitives.ModelReaderWriterOptions options) { }
+        Azure.Health.Insights.RadiologyInsights.AssessmentValueRange System.ClientModel.Primitives.IJsonModel<Azure.Health.Insights.RadiologyInsights.AssessmentValueRange>.Create(ref System.Text.Json.Utf8JsonReader reader, System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+        void System.ClientModel.Primitives.IJsonModel<Azure.Health.Insights.RadiologyInsights.AssessmentValueRange>.Write(System.Text.Json.Utf8JsonWriter writer, System.ClientModel.Primitives.ModelReaderWriterOptions options) { }
+        Azure.Health.Insights.RadiologyInsights.AssessmentValueRange System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.AssessmentValueRange>.Create(System.BinaryData data, System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+        string System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.AssessmentValueRange>.GetFormatFromOptions(System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+        System.BinaryData System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.AssessmentValueRange>.Write(System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+    }
+    public partial class AzureHealthInsightsRadiologyInsightsContext : System.ClientModel.Primitives.ModelReaderWriterContext
+    {
+        internal AzureHealthInsightsRadiologyInsightsContext() { }
+        public static Azure.Health.Insights.RadiologyInsights.AzureHealthInsightsRadiologyInsightsContext Default { get { throw null; } }
+        protected override bool TryGetTypeBuilderCore(System.Type type, out System.ClientModel.Primitives.ModelReaderWriterTypeBuilder builder) { throw null; }
+    }
     public partial class ClinicalDocumentAuthor : System.ClientModel.Primitives.IJsonModel<Azure.Health.Insights.RadiologyInsights.ClinicalDocumentAuthor>, System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.ClinicalDocumentAuthor>
     {
         public ClinicalDocumentAuthor() { }
@@ -45,9 +63,7 @@ namespace Azure.Health.Insights.RadiologyInsights
         public static Azure.Health.Insights.RadiologyInsights.ClinicalDocumentContentType GenomicSequencing { get { throw null; } }
         public static Azure.Health.Insights.RadiologyInsights.ClinicalDocumentContentType Note { get { throw null; } }
         public bool Equals(Azure.Health.Insights.RadiologyInsights.ClinicalDocumentContentType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.RadiologyInsights.ClinicalDocumentContentType left, Azure.Health.Insights.RadiologyInsights.ClinicalDocumentContentType right) { throw null; }
         public static implicit operator Azure.Health.Insights.RadiologyInsights.ClinicalDocumentContentType (string value) { throw null; }
@@ -69,9 +85,7 @@ namespace Azure.Health.Insights.RadiologyInsights
         public static Azure.Health.Insights.RadiologyInsights.ClinicalDocumentType Progress { get { throw null; } }
         public static Azure.Health.Insights.RadiologyInsights.ClinicalDocumentType RadiologyReport { get { throw null; } }
         public bool Equals(Azure.Health.Insights.RadiologyInsights.ClinicalDocumentType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.RadiologyInsights.ClinicalDocumentType left, Azure.Health.Insights.RadiologyInsights.ClinicalDocumentType right) { throw null; }
         public static implicit operator Azure.Health.Insights.RadiologyInsights.ClinicalDocumentType (string value) { throw null; }
@@ -105,9 +119,7 @@ namespace Azure.Health.Insights.RadiologyInsights
         public static Azure.Health.Insights.RadiologyInsights.ContactPointSystem Sms { get { throw null; } }
         public static Azure.Health.Insights.RadiologyInsights.ContactPointSystem Url { get { throw null; } }
         public bool Equals(Azure.Health.Insights.RadiologyInsights.ContactPointSystem other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.RadiologyInsights.ContactPointSystem left, Azure.Health.Insights.RadiologyInsights.ContactPointSystem right) { throw null; }
         public static implicit operator Azure.Health.Insights.RadiologyInsights.ContactPointSystem (string value) { throw null; }
@@ -126,9 +138,7 @@ namespace Azure.Health.Insights.RadiologyInsights
         public static Azure.Health.Insights.RadiologyInsights.ContactPointUse Temp { get { throw null; } }
         public static Azure.Health.Insights.RadiologyInsights.ContactPointUse Work { get { throw null; } }
         public bool Equals(Azure.Health.Insights.RadiologyInsights.ContactPointUse other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.RadiologyInsights.ContactPointUse left, Azure.Health.Insights.RadiologyInsights.ContactPointUse right) { throw null; }
         public static implicit operator Azure.Health.Insights.RadiologyInsights.ContactPointUse (string value) { throw null; }
@@ -179,9 +189,7 @@ namespace Azure.Health.Insights.RadiologyInsights
         public static Azure.Health.Insights.RadiologyInsights.DocumentContentSourceType Inline { get { throw null; } }
         public static Azure.Health.Insights.RadiologyInsights.DocumentContentSourceType Reference { get { throw null; } }
         public bool Equals(Azure.Health.Insights.RadiologyInsights.DocumentContentSourceType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.RadiologyInsights.DocumentContentSourceType left, Azure.Health.Insights.RadiologyInsights.DocumentContentSourceType right) { throw null; }
         public static implicit operator Azure.Health.Insights.RadiologyInsights.DocumentContentSourceType (string value) { throw null; }
@@ -201,9 +209,7 @@ namespace Azure.Health.Insights.RadiologyInsights
         public static Azure.Health.Insights.RadiologyInsights.EncounterClass Observation { get { throw null; } }
         public static Azure.Health.Insights.RadiologyInsights.EncounterClass Virtual { get { throw null; } }
         public bool Equals(Azure.Health.Insights.RadiologyInsights.EncounterClass other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.RadiologyInsights.EncounterClass left, Azure.Health.Insights.RadiologyInsights.EncounterClass right) { throw null; }
         public static implicit operator Azure.Health.Insights.RadiologyInsights.EncounterClass (string value) { throw null; }
@@ -703,9 +709,53 @@ namespace Azure.Health.Insights.RadiologyInsights
         string System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.GenericProcedureRecommendation>.GetFormatFromOptions(System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
         System.BinaryData System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.GenericProcedureRecommendation>.Write(System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
     }
+    public partial class GuidanceInference : Azure.Health.Insights.RadiologyInsights.RadiologyInsightsInference, System.ClientModel.Primitives.IJsonModel<Azure.Health.Insights.RadiologyInsights.GuidanceInference>, System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.GuidanceInference>
+    {
+        internal GuidanceInference() { }
+        public Azure.Health.Insights.RadiologyInsights.FindingInference Finding { get { throw null; } }
+        public Azure.Health.Insights.RadiologyInsights.FhirR4CodeableConcept Identifier { get { throw null; } }
+        public System.Collections.Generic.IReadOnlyList<string> MissingGuidanceInformation { get { throw null; } }
+        public System.Collections.Generic.IReadOnlyList<Azure.Health.Insights.RadiologyInsights.PresentGuidanceInformation> PresentGuidanceInformation { get { throw null; } }
+        public Azure.Health.Insights.RadiologyInsights.GuidanceRankingType Ranking { get { throw null; } }
+        public System.Collections.Generic.IReadOnlyList<Azure.Health.Insights.RadiologyInsights.FollowupRecommendationInference> RecommendationProposals { get { throw null; } }
+        protected override void JsonModelWriteCore(System.Text.Json.Utf8JsonWriter writer, System.ClientModel.Primitives.ModelReaderWriterOptions options) { }
+        Azure.Health.Insights.RadiologyInsights.GuidanceInference System.ClientModel.Primitives.IJsonModel<Azure.Health.Insights.RadiologyInsights.GuidanceInference>.Create(ref System.Text.Json.Utf8JsonReader reader, System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+        void System.ClientModel.Primitives.IJsonModel<Azure.Health.Insights.RadiologyInsights.GuidanceInference>.Write(System.Text.Json.Utf8JsonWriter writer, System.ClientModel.Primitives.ModelReaderWriterOptions options) { }
+        Azure.Health.Insights.RadiologyInsights.GuidanceInference System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.GuidanceInference>.Create(System.BinaryData data, System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+        string System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.GuidanceInference>.GetFormatFromOptions(System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+        System.BinaryData System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.GuidanceInference>.Write(System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+    }
+    public partial class GuidanceOptions : System.ClientModel.Primitives.IJsonModel<Azure.Health.Insights.RadiologyInsights.GuidanceOptions>, System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.GuidanceOptions>
+    {
+        public GuidanceOptions(bool showGuidanceInHistory) { }
+        public bool ShowGuidanceInHistory { get { throw null; } set { } }
+        protected virtual void JsonModelWriteCore(System.Text.Json.Utf8JsonWriter writer, System.ClientModel.Primitives.ModelReaderWriterOptions options) { }
+        Azure.Health.Insights.RadiologyInsights.GuidanceOptions System.ClientModel.Primitives.IJsonModel<Azure.Health.Insights.RadiologyInsights.GuidanceOptions>.Create(ref System.Text.Json.Utf8JsonReader reader, System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+        void System.ClientModel.Primitives.IJsonModel<Azure.Health.Insights.RadiologyInsights.GuidanceOptions>.Write(System.Text.Json.Utf8JsonWriter writer, System.ClientModel.Primitives.ModelReaderWriterOptions options) { }
+        Azure.Health.Insights.RadiologyInsights.GuidanceOptions System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.GuidanceOptions>.Create(System.BinaryData data, System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+        string System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.GuidanceOptions>.GetFormatFromOptions(System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+        System.BinaryData System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.GuidanceOptions>.Write(System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+    }
+    [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
+    public readonly partial struct GuidanceRankingType : System.IEquatable<Azure.Health.Insights.RadiologyInsights.GuidanceRankingType>
+    {
+        private readonly object _dummy;
+        private readonly int _dummyPrimitive;
+        public GuidanceRankingType(string value) { throw null; }
+        public static Azure.Health.Insights.RadiologyInsights.GuidanceRankingType High { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.GuidanceRankingType Low { get { throw null; } }
+        public bool Equals(Azure.Health.Insights.RadiologyInsights.GuidanceRankingType other) { throw null; }
+        public override bool Equals(object obj) { throw null; }
+        public override int GetHashCode() { throw null; }
+        public static bool operator ==(Azure.Health.Insights.RadiologyInsights.GuidanceRankingType left, Azure.Health.Insights.RadiologyInsights.GuidanceRankingType right) { throw null; }
+        public static implicit operator Azure.Health.Insights.RadiologyInsights.GuidanceRankingType (string value) { throw null; }
+        public static bool operator !=(Azure.Health.Insights.RadiologyInsights.GuidanceRankingType left, Azure.Health.Insights.RadiologyInsights.GuidanceRankingType right) { throw null; }
+        public override string ToString() { throw null; }
+    }
     public static partial class HealthInsightsRadiologyInsightsModelFactory
     {
         public static Azure.Health.Insights.RadiologyInsights.AgeMismatchInference AgeMismatchInference(System.Collections.Generic.IEnumerable<Azure.Health.Insights.RadiologyInsights.FhirR4Extension> extension = null) { throw null; }
+        public static Azure.Health.Insights.RadiologyInsights.AssessmentValueRange AssessmentValueRange(string minimum = null, string maximum = null) { throw null; }
         public static Azure.Health.Insights.RadiologyInsights.CompleteOrderDiscrepancyInference CompleteOrderDiscrepancyInference(System.Collections.Generic.IEnumerable<Azure.Health.Insights.RadiologyInsights.FhirR4Extension> extension = null, Azure.Health.Insights.RadiologyInsights.FhirR4CodeableConcept orderType = null, System.Collections.Generic.IEnumerable<Azure.Health.Insights.RadiologyInsights.FhirR4CodeableConcept> missingBodyParts = null, System.Collections.Generic.IEnumerable<Azure.Health.Insights.RadiologyInsights.FhirR4CodeableConcept> missingBodyPartMeasurements = null) { throw null; }
         public static Azure.Health.Insights.RadiologyInsights.CriticalResult CriticalResult(string description = null, Azure.Health.Insights.RadiologyInsights.FhirR4Observation finding = null) { throw null; }
         public static Azure.Health.Insights.RadiologyInsights.CriticalResultInference CriticalResultInference(System.Collections.Generic.IEnumerable<Azure.Health.Insights.RadiologyInsights.FhirR4Extension> extension = null, Azure.Health.Insights.RadiologyInsights.CriticalResult result = null) { throw null; }
@@ -724,11 +774,14 @@ namespace Azure.Health.Insights.RadiologyInsights
         public static Azure.Health.Insights.RadiologyInsights.FollowupCommunicationInference FollowupCommunicationInference(System.Collections.Generic.IEnumerable<Azure.Health.Insights.RadiologyInsights.FhirR4Extension> extension = null, System.Collections.Generic.IEnumerable<System.DateTimeOffset> communicatedAt = null, System.Collections.Generic.IEnumerable<Azure.Health.Insights.RadiologyInsights.MedicalProfessionalType> recipient = null, bool wasAcknowledged = false) { throw null; }
         public static Azure.Health.Insights.RadiologyInsights.FollowupRecommendationInference FollowupRecommendationInference(System.Collections.Generic.IEnumerable<Azure.Health.Insights.RadiologyInsights.FhirR4Extension> extension = null, string effectiveAt = null, Azure.Health.Insights.RadiologyInsights.FhirR4Period effectivePeriod = null, System.Collections.Generic.IEnumerable<Azure.Health.Insights.RadiologyInsights.RecommendationFinding> findings = null, bool isConditional = false, bool isOption = false, bool isGuideline = false, bool isHedging = false, Azure.Health.Insights.RadiologyInsights.ProcedureRecommendation recommendedProcedure = null) { throw null; }
         public static Azure.Health.Insights.RadiologyInsights.GenericProcedureRecommendation GenericProcedureRecommendation(System.Collections.Generic.IEnumerable<Azure.Health.Insights.RadiologyInsights.FhirR4Extension> extension = null, Azure.Health.Insights.RadiologyInsights.FhirR4CodeableConcept code = null, string description = null) { throw null; }
+        public static Azure.Health.Insights.RadiologyInsights.GuidanceInference GuidanceInference(System.Collections.Generic.IEnumerable<Azure.Health.Insights.RadiologyInsights.FhirR4Extension> extension = null, Azure.Health.Insights.RadiologyInsights.FindingInference finding = null, Azure.Health.Insights.RadiologyInsights.FhirR4CodeableConcept identifier = null, System.Collections.Generic.IEnumerable<Azure.Health.Insights.RadiologyInsights.PresentGuidanceInformation> presentGuidanceInformation = null, Azure.Health.Insights.RadiologyInsights.GuidanceRankingType ranking = default(Azure.Health.Insights.RadiologyInsights.GuidanceRankingType), System.Collections.Generic.IEnumerable<Azure.Health.Insights.RadiologyInsights.FollowupRecommendationInference> recommendationProposals = null, System.Collections.Generic.IEnumerable<string> missingGuidanceInformation = null) { throw null; }
         public static Azure.Health.Insights.RadiologyInsights.ImagingProcedure ImagingProcedure(Azure.Health.Insights.RadiologyInsights.FhirR4CodeableConcept modality = null, Azure.Health.Insights.RadiologyInsights.FhirR4CodeableConcept anatomy = null, Azure.Health.Insights.RadiologyInsights.FhirR4CodeableConcept laterality = null, Azure.Health.Insights.RadiologyInsights.RadiologyCodeWithTypes contrast = null, Azure.Health.Insights.RadiologyInsights.RadiologyCodeWithTypes view = null) { throw null; }
         public static Azure.Health.Insights.RadiologyInsights.ImagingProcedureRecommendation ImagingProcedureRecommendation(System.Collections.Generic.IEnumerable<Azure.Health.Insights.RadiologyInsights.FhirR4Extension> extension = null, System.Collections.Generic.IEnumerable<Azure.Health.Insights.RadiologyInsights.FhirR4CodeableConcept> procedureCodes = null, System.Collections.Generic.IEnumerable<Azure.Health.Insights.RadiologyInsights.ImagingProcedure> imagingProcedures = null) { throw null; }
         public static Azure.Health.Insights.RadiologyInsights.LateralityDiscrepancyInference LateralityDiscrepancyInference(System.Collections.Generic.IEnumerable<Azure.Health.Insights.RadiologyInsights.FhirR4Extension> extension = null, Azure.Health.Insights.RadiologyInsights.FhirR4CodeableConcept lateralityIndication = null, Azure.Health.Insights.RadiologyInsights.LateralityDiscrepancyType discrepancyType = default(Azure.Health.Insights.RadiologyInsights.LateralityDiscrepancyType)) { throw null; }
         public static Azure.Health.Insights.RadiologyInsights.LimitedOrderDiscrepancyInference LimitedOrderDiscrepancyInference(System.Collections.Generic.IEnumerable<Azure.Health.Insights.RadiologyInsights.FhirR4Extension> extension = null, Azure.Health.Insights.RadiologyInsights.FhirR4CodeableConcept orderType = null, System.Collections.Generic.IEnumerable<Azure.Health.Insights.RadiologyInsights.FhirR4CodeableConcept> presentBodyParts = null, System.Collections.Generic.IEnumerable<Azure.Health.Insights.RadiologyInsights.FhirR4CodeableConcept> presentBodyPartMeasurements = null) { throw null; }
+        public static Azure.Health.Insights.RadiologyInsights.PresentGuidanceInformation PresentGuidanceInformation(string presentGuidanceItem = null, System.Collections.Generic.IEnumerable<Azure.Health.Insights.RadiologyInsights.FhirR4Observation> sizes = null, Azure.Health.Insights.RadiologyInsights.FhirR4Quantity maximumDiameterAsInText = null, System.Collections.Generic.IEnumerable<string> presentGuidanceValues = null, System.Collections.Generic.IEnumerable<Azure.Health.Insights.RadiologyInsights.FhirR4Extension> extension = null) { throw null; }
         public static Azure.Health.Insights.RadiologyInsights.ProcedureRecommendation ProcedureRecommendation(string kind = null, System.Collections.Generic.IEnumerable<Azure.Health.Insights.RadiologyInsights.FhirR4Extension> extension = null) { throw null; }
+        public static Azure.Health.Insights.RadiologyInsights.QualityMeasureInference QualityMeasureInference(System.Collections.Generic.IEnumerable<Azure.Health.Insights.RadiologyInsights.FhirR4Extension> extension = null, string qualityMeasureDenominator = null, Azure.Health.Insights.RadiologyInsights.QualityMeasureComplianceType complianceType = default(Azure.Health.Insights.RadiologyInsights.QualityMeasureComplianceType), System.Collections.Generic.IEnumerable<string> qualityCriteria = null) { throw null; }
         public static Azure.Health.Insights.RadiologyInsights.RadiologyCodeWithTypes RadiologyCodeWithTypes(Azure.Health.Insights.RadiologyInsights.FhirR4CodeableConcept code = null, System.Collections.Generic.IEnumerable<Azure.Health.Insights.RadiologyInsights.FhirR4CodeableConcept> types = null) { throw null; }
         public static Azure.Health.Insights.RadiologyInsights.RadiologyInsightsInference RadiologyInsightsInference(string kind = null, System.Collections.Generic.IEnumerable<Azure.Health.Insights.RadiologyInsights.FhirR4Extension> extension = null) { throw null; }
         public static Azure.Health.Insights.RadiologyInsights.RadiologyInsightsInferenceResult RadiologyInsightsInferenceResult(System.Collections.Generic.IEnumerable<Azure.Health.Insights.RadiologyInsights.RadiologyInsightsPatientResult> patientResults = null, string modelVersion = null) { throw null; }
@@ -738,6 +791,7 @@ namespace Azure.Health.Insights.RadiologyInsights
         public static Azure.Health.Insights.RadiologyInsights.RecommendationFinding RecommendationFinding(Azure.Health.Insights.RadiologyInsights.FhirR4Observation finding = null, Azure.Health.Insights.RadiologyInsights.CriticalResult criticalFinding = null, Azure.Health.Insights.RadiologyInsights.RecommendationFindingStatusType recommendationFindingStatus = default(Azure.Health.Insights.RadiologyInsights.RecommendationFindingStatusType), System.Collections.Generic.IEnumerable<Azure.Health.Insights.RadiologyInsights.FhirR4Extension> extension = null) { throw null; }
         public static Azure.Health.Insights.RadiologyInsights.ResearchStudyArm ResearchStudyArm(string name = null, Azure.Health.Insights.RadiologyInsights.FhirR4CodeableConcept type = null, string description = null) { throw null; }
         public static Azure.Health.Insights.RadiologyInsights.ResearchStudyObjective ResearchStudyObjective(string name = null, Azure.Health.Insights.RadiologyInsights.FhirR4CodeableConcept type = null) { throw null; }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentInference ScoringAndAssessmentInference(System.Collections.Generic.IEnumerable<Azure.Health.Insights.RadiologyInsights.FhirR4Extension> extension = null, Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType category = default(Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType), string categoryDescription = null, string singleValue = null, Azure.Health.Insights.RadiologyInsights.AssessmentValueRange rangeValue = null) { throw null; }
         public static Azure.Health.Insights.RadiologyInsights.SexMismatchInference SexMismatchInference(System.Collections.Generic.IEnumerable<Azure.Health.Insights.RadiologyInsights.FhirR4Extension> extension = null, Azure.Health.Insights.RadiologyInsights.FhirR4CodeableConcept sexIndication = null) { throw null; }
     }
     public partial class ImagingProcedure : System.ClientModel.Primitives.IJsonModel<Azure.Health.Insights.RadiologyInsights.ImagingProcedure>, System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.ImagingProcedure>
@@ -779,9 +833,7 @@ namespace Azure.Health.Insights.RadiologyInsights
         public static Azure.Health.Insights.RadiologyInsights.JobStatus Running { get { throw null; } }
         public static Azure.Health.Insights.RadiologyInsights.JobStatus Succeeded { get { throw null; } }
         public bool Equals(Azure.Health.Insights.RadiologyInsights.JobStatus other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.RadiologyInsights.JobStatus left, Azure.Health.Insights.RadiologyInsights.JobStatus right) { throw null; }
         public static implicit operator Azure.Health.Insights.RadiologyInsights.JobStatus (string value) { throw null; }
@@ -810,9 +862,7 @@ namespace Azure.Health.Insights.RadiologyInsights
         public static Azure.Health.Insights.RadiologyInsights.LateralityDiscrepancyType TextLateralityContradiction { get { throw null; } }
         public static Azure.Health.Insights.RadiologyInsights.LateralityDiscrepancyType TextLateralityMissing { get { throw null; } }
         public bool Equals(Azure.Health.Insights.RadiologyInsights.LateralityDiscrepancyType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.RadiologyInsights.LateralityDiscrepancyType left, Azure.Health.Insights.RadiologyInsights.LateralityDiscrepancyType right) { throw null; }
         public static implicit operator Azure.Health.Insights.RadiologyInsights.LateralityDiscrepancyType (string value) { throw null; }
@@ -844,9 +894,7 @@ namespace Azure.Health.Insights.RadiologyInsights
         public static Azure.Health.Insights.RadiologyInsights.MedicalProfessionalType PhysicianAssistant { get { throw null; } }
         public static Azure.Health.Insights.RadiologyInsights.MedicalProfessionalType Unknown { get { throw null; } }
         public bool Equals(Azure.Health.Insights.RadiologyInsights.MedicalProfessionalType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.RadiologyInsights.MedicalProfessionalType left, Azure.Health.Insights.RadiologyInsights.MedicalProfessionalType right) { throw null; }
         public static implicit operator Azure.Health.Insights.RadiologyInsights.MedicalProfessionalType (string value) { throw null; }
@@ -868,9 +916,7 @@ namespace Azure.Health.Insights.RadiologyInsights
         public static Azure.Health.Insights.RadiologyInsights.ObservationStatusCodeType Registered { get { throw null; } }
         public static Azure.Health.Insights.RadiologyInsights.ObservationStatusCodeType Unknown { get { throw null; } }
         public bool Equals(Azure.Health.Insights.RadiologyInsights.ObservationStatusCodeType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.RadiologyInsights.ObservationStatusCodeType left, Azure.Health.Insights.RadiologyInsights.ObservationStatusCodeType right) { throw null; }
         public static implicit operator Azure.Health.Insights.RadiologyInsights.ObservationStatusCodeType (string value) { throw null; }
@@ -959,14 +1005,27 @@ namespace Azure.Health.Insights.RadiologyInsights
         public static Azure.Health.Insights.RadiologyInsights.PatientSex Male { get { throw null; } }
         public static Azure.Health.Insights.RadiologyInsights.PatientSex Unspecified { get { throw null; } }
         public bool Equals(Azure.Health.Insights.RadiologyInsights.PatientSex other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.RadiologyInsights.PatientSex left, Azure.Health.Insights.RadiologyInsights.PatientSex right) { throw null; }
         public static implicit operator Azure.Health.Insights.RadiologyInsights.PatientSex (string value) { throw null; }
         public static bool operator !=(Azure.Health.Insights.RadiologyInsights.PatientSex left, Azure.Health.Insights.RadiologyInsights.PatientSex right) { throw null; }
         public override string ToString() { throw null; }
+    }
+    public partial class PresentGuidanceInformation : System.ClientModel.Primitives.IJsonModel<Azure.Health.Insights.RadiologyInsights.PresentGuidanceInformation>, System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.PresentGuidanceInformation>
+    {
+        internal PresentGuidanceInformation() { }
+        public System.Collections.Generic.IReadOnlyList<Azure.Health.Insights.RadiologyInsights.FhirR4Extension> Extension { get { throw null; } }
+        public Azure.Health.Insights.RadiologyInsights.FhirR4Quantity MaximumDiameterAsInText { get { throw null; } }
+        public string PresentGuidanceItem { get { throw null; } }
+        public System.Collections.Generic.IReadOnlyList<string> PresentGuidanceValues { get { throw null; } }
+        public System.Collections.Generic.IReadOnlyList<Azure.Health.Insights.RadiologyInsights.FhirR4Observation> Sizes { get { throw null; } }
+        protected virtual void JsonModelWriteCore(System.Text.Json.Utf8JsonWriter writer, System.ClientModel.Primitives.ModelReaderWriterOptions options) { }
+        Azure.Health.Insights.RadiologyInsights.PresentGuidanceInformation System.ClientModel.Primitives.IJsonModel<Azure.Health.Insights.RadiologyInsights.PresentGuidanceInformation>.Create(ref System.Text.Json.Utf8JsonReader reader, System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+        void System.ClientModel.Primitives.IJsonModel<Azure.Health.Insights.RadiologyInsights.PresentGuidanceInformation>.Write(System.Text.Json.Utf8JsonWriter writer, System.ClientModel.Primitives.ModelReaderWriterOptions options) { }
+        Azure.Health.Insights.RadiologyInsights.PresentGuidanceInformation System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.PresentGuidanceInformation>.Create(System.BinaryData data, System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+        string System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.PresentGuidanceInformation>.GetFormatFromOptions(System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+        System.BinaryData System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.PresentGuidanceInformation>.Write(System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
     }
     public abstract partial class ProcedureRecommendation : System.ClientModel.Primitives.IJsonModel<Azure.Health.Insights.RadiologyInsights.ProcedureRecommendation>, System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.ProcedureRecommendation>
     {
@@ -978,6 +1037,85 @@ namespace Azure.Health.Insights.RadiologyInsights
         Azure.Health.Insights.RadiologyInsights.ProcedureRecommendation System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.ProcedureRecommendation>.Create(System.BinaryData data, System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
         string System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.ProcedureRecommendation>.GetFormatFromOptions(System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
         System.BinaryData System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.ProcedureRecommendation>.Write(System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+    }
+    [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
+    public readonly partial struct QualityMeasureComplianceType : System.IEquatable<Azure.Health.Insights.RadiologyInsights.QualityMeasureComplianceType>
+    {
+        private readonly object _dummy;
+        private readonly int _dummyPrimitive;
+        public QualityMeasureComplianceType(string value) { throw null; }
+        public static Azure.Health.Insights.RadiologyInsights.QualityMeasureComplianceType DenominatorException { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.QualityMeasureComplianceType NotEligible { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.QualityMeasureComplianceType PerformanceMet { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.QualityMeasureComplianceType PerformanceNotMet { get { throw null; } }
+        public bool Equals(Azure.Health.Insights.RadiologyInsights.QualityMeasureComplianceType other) { throw null; }
+        public override bool Equals(object obj) { throw null; }
+        public override int GetHashCode() { throw null; }
+        public static bool operator ==(Azure.Health.Insights.RadiologyInsights.QualityMeasureComplianceType left, Azure.Health.Insights.RadiologyInsights.QualityMeasureComplianceType right) { throw null; }
+        public static implicit operator Azure.Health.Insights.RadiologyInsights.QualityMeasureComplianceType (string value) { throw null; }
+        public static bool operator !=(Azure.Health.Insights.RadiologyInsights.QualityMeasureComplianceType left, Azure.Health.Insights.RadiologyInsights.QualityMeasureComplianceType right) { throw null; }
+        public override string ToString() { throw null; }
+    }
+    public partial class QualityMeasureInference : Azure.Health.Insights.RadiologyInsights.RadiologyInsightsInference, System.ClientModel.Primitives.IJsonModel<Azure.Health.Insights.RadiologyInsights.QualityMeasureInference>, System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.QualityMeasureInference>
+    {
+        internal QualityMeasureInference() { }
+        public Azure.Health.Insights.RadiologyInsights.QualityMeasureComplianceType ComplianceType { get { throw null; } }
+        public System.Collections.Generic.IReadOnlyList<string> QualityCriteria { get { throw null; } }
+        public string QualityMeasureDenominator { get { throw null; } }
+        protected override void JsonModelWriteCore(System.Text.Json.Utf8JsonWriter writer, System.ClientModel.Primitives.ModelReaderWriterOptions options) { }
+        Azure.Health.Insights.RadiologyInsights.QualityMeasureInference System.ClientModel.Primitives.IJsonModel<Azure.Health.Insights.RadiologyInsights.QualityMeasureInference>.Create(ref System.Text.Json.Utf8JsonReader reader, System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+        void System.ClientModel.Primitives.IJsonModel<Azure.Health.Insights.RadiologyInsights.QualityMeasureInference>.Write(System.Text.Json.Utf8JsonWriter writer, System.ClientModel.Primitives.ModelReaderWriterOptions options) { }
+        Azure.Health.Insights.RadiologyInsights.QualityMeasureInference System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.QualityMeasureInference>.Create(System.BinaryData data, System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+        string System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.QualityMeasureInference>.GetFormatFromOptions(System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+        System.BinaryData System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.QualityMeasureInference>.Write(System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+    }
+    public partial class QualityMeasureOptions : System.ClientModel.Primitives.IJsonModel<Azure.Health.Insights.RadiologyInsights.QualityMeasureOptions>, System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.QualityMeasureOptions>
+    {
+        public QualityMeasureOptions(System.Collections.Generic.IEnumerable<Azure.Health.Insights.RadiologyInsights.QualityMeasureType> measureTypes) { }
+        public System.Collections.Generic.IList<Azure.Health.Insights.RadiologyInsights.QualityMeasureType> MeasureTypes { get { throw null; } }
+        protected virtual void JsonModelWriteCore(System.Text.Json.Utf8JsonWriter writer, System.ClientModel.Primitives.ModelReaderWriterOptions options) { }
+        Azure.Health.Insights.RadiologyInsights.QualityMeasureOptions System.ClientModel.Primitives.IJsonModel<Azure.Health.Insights.RadiologyInsights.QualityMeasureOptions>.Create(ref System.Text.Json.Utf8JsonReader reader, System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+        void System.ClientModel.Primitives.IJsonModel<Azure.Health.Insights.RadiologyInsights.QualityMeasureOptions>.Write(System.Text.Json.Utf8JsonWriter writer, System.ClientModel.Primitives.ModelReaderWriterOptions options) { }
+        Azure.Health.Insights.RadiologyInsights.QualityMeasureOptions System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.QualityMeasureOptions>.Create(System.BinaryData data, System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+        string System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.QualityMeasureOptions>.GetFormatFromOptions(System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+        System.BinaryData System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.QualityMeasureOptions>.Write(System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+    }
+    [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
+    public readonly partial struct QualityMeasureType : System.IEquatable<Azure.Health.Insights.RadiologyInsights.QualityMeasureType>
+    {
+        private readonly object _dummy;
+        private readonly int _dummyPrimitive;
+        public QualityMeasureType(string value) { throw null; }
+        public static Azure.Health.Insights.RadiologyInsights.QualityMeasureType Acrad36 { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.QualityMeasureType Acrad37 { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.QualityMeasureType Acrad38 { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.QualityMeasureType Acrad39 { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.QualityMeasureType Acrad40 { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.QualityMeasureType Acrad41 { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.QualityMeasureType Acrad42 { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.QualityMeasureType Mednax55 { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.QualityMeasureType Mips145 { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.QualityMeasureType Mips147 { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.QualityMeasureType Mips195 { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.QualityMeasureType Mips360 { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.QualityMeasureType Mips364 { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.QualityMeasureType Mips405 { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.QualityMeasureType Mips406 { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.QualityMeasureType Mips436 { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.QualityMeasureType Mips76 { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.QualityMeasureType Msn13 { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.QualityMeasureType Msn15 { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.QualityMeasureType Qmm17 { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.QualityMeasureType Qmm18 { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.QualityMeasureType Qmm19 { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.QualityMeasureType Qmm26 { get { throw null; } }
+        public bool Equals(Azure.Health.Insights.RadiologyInsights.QualityMeasureType other) { throw null; }
+        public override bool Equals(object obj) { throw null; }
+        public override int GetHashCode() { throw null; }
+        public static bool operator ==(Azure.Health.Insights.RadiologyInsights.QualityMeasureType left, Azure.Health.Insights.RadiologyInsights.QualityMeasureType right) { throw null; }
+        public static implicit operator Azure.Health.Insights.RadiologyInsights.QualityMeasureType (string value) { throw null; }
+        public static bool operator !=(Azure.Health.Insights.RadiologyInsights.QualityMeasureType left, Azure.Health.Insights.RadiologyInsights.QualityMeasureType right) { throw null; }
+        public override string ToString() { throw null; }
     }
     public partial class RadiologyCodeWithTypes : System.ClientModel.Primitives.IJsonModel<Azure.Health.Insights.RadiologyInsights.RadiologyCodeWithTypes>, System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.RadiologyCodeWithTypes>
     {
@@ -1006,10 +1144,11 @@ namespace Azure.Health.Insights.RadiologyInsights
     }
     public partial class RadiologyInsightsClientOptions : Azure.Core.ClientOptions
     {
-        public RadiologyInsightsClientOptions(Azure.Health.Insights.RadiologyInsights.RadiologyInsightsClientOptions.ServiceVersion version = Azure.Health.Insights.RadiologyInsights.RadiologyInsightsClientOptions.ServiceVersion.V2024_04_01) { }
+        public RadiologyInsightsClientOptions(Azure.Health.Insights.RadiologyInsights.RadiologyInsightsClientOptions.ServiceVersion version = Azure.Health.Insights.RadiologyInsights.RadiologyInsightsClientOptions.ServiceVersion.V2024_10_01) { }
         public enum ServiceVersion
         {
             V2024_04_01 = 1,
+            V2024_10_01 = 2,
         }
     }
     public partial class RadiologyInsightsData : System.ClientModel.Primitives.IJsonModel<Azure.Health.Insights.RadiologyInsights.RadiologyInsightsData>, System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.RadiologyInsightsData>
@@ -1040,6 +1179,8 @@ namespace Azure.Health.Insights.RadiologyInsights
         public RadiologyInsightsInferenceOptions() { }
         public Azure.Health.Insights.RadiologyInsights.FindingOptions FindingOptions { get { throw null; } set { } }
         public Azure.Health.Insights.RadiologyInsights.FollowupRecommendationOptions FollowupRecommendationOptions { get { throw null; } set { } }
+        public Azure.Health.Insights.RadiologyInsights.GuidanceOptions GuidanceOptions { get { throw null; } set { } }
+        public Azure.Health.Insights.RadiologyInsights.QualityMeasureOptions QualityMeasureOptions { get { throw null; } set { } }
         protected virtual void JsonModelWriteCore(System.Text.Json.Utf8JsonWriter writer, System.ClientModel.Primitives.ModelReaderWriterOptions options) { }
         Azure.Health.Insights.RadiologyInsights.RadiologyInsightsInferenceOptions System.ClientModel.Primitives.IJsonModel<Azure.Health.Insights.RadiologyInsights.RadiologyInsightsInferenceOptions>.Create(ref System.Text.Json.Utf8JsonReader reader, System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
         void System.ClientModel.Primitives.IJsonModel<Azure.Health.Insights.RadiologyInsights.RadiologyInsightsInferenceOptions>.Write(System.Text.Json.Utf8JsonWriter writer, System.ClientModel.Primitives.ModelReaderWriterOptions options) { }
@@ -1071,14 +1212,15 @@ namespace Azure.Health.Insights.RadiologyInsights
         public static Azure.Health.Insights.RadiologyInsights.RadiologyInsightsInferenceType Finding { get { throw null; } }
         public static Azure.Health.Insights.RadiologyInsights.RadiologyInsightsInferenceType FollowupCommunication { get { throw null; } }
         public static Azure.Health.Insights.RadiologyInsights.RadiologyInsightsInferenceType FollowupRecommendation { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.RadiologyInsightsInferenceType Guidance { get { throw null; } }
         public static Azure.Health.Insights.RadiologyInsights.RadiologyInsightsInferenceType LateralityDiscrepancy { get { throw null; } }
         public static Azure.Health.Insights.RadiologyInsights.RadiologyInsightsInferenceType LimitedOrderDiscrepancy { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.RadiologyInsightsInferenceType QualityMeasure { get { throw null; } }
         public static Azure.Health.Insights.RadiologyInsights.RadiologyInsightsInferenceType RadiologyProcedure { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.RadiologyInsightsInferenceType ScoringAndAssessment { get { throw null; } }
         public static Azure.Health.Insights.RadiologyInsights.RadiologyInsightsInferenceType SexMismatch { get { throw null; } }
         public bool Equals(Azure.Health.Insights.RadiologyInsights.RadiologyInsightsInferenceType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.RadiologyInsights.RadiologyInsightsInferenceType left, Azure.Health.Insights.RadiologyInsights.RadiologyInsightsInferenceType right) { throw null; }
         public static implicit operator Azure.Health.Insights.RadiologyInsights.RadiologyInsightsInferenceType (string value) { throw null; }
@@ -1168,9 +1310,7 @@ namespace Azure.Health.Insights.RadiologyInsights
         public static Azure.Health.Insights.RadiologyInsights.RecommendationFindingStatusType Present { get { throw null; } }
         public static Azure.Health.Insights.RadiologyInsights.RecommendationFindingStatusType RuleOut { get { throw null; } }
         public bool Equals(Azure.Health.Insights.RadiologyInsights.RecommendationFindingStatusType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.RadiologyInsights.RecommendationFindingStatusType left, Azure.Health.Insights.RadiologyInsights.RecommendationFindingStatusType right) { throw null; }
         public static implicit operator Azure.Health.Insights.RadiologyInsights.RecommendationFindingStatusType (string value) { throw null; }
@@ -1220,14 +1360,74 @@ namespace Azure.Health.Insights.RadiologyInsights
         public static Azure.Health.Insights.RadiologyInsights.ResearchStudyStatusCodeType TemporarilyClosedToAccrualAndIntervention { get { throw null; } }
         public static Azure.Health.Insights.RadiologyInsights.ResearchStudyStatusCodeType Withdrawn { get { throw null; } }
         public bool Equals(Azure.Health.Insights.RadiologyInsights.ResearchStudyStatusCodeType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.RadiologyInsights.ResearchStudyStatusCodeType left, Azure.Health.Insights.RadiologyInsights.ResearchStudyStatusCodeType right) { throw null; }
         public static implicit operator Azure.Health.Insights.RadiologyInsights.ResearchStudyStatusCodeType (string value) { throw null; }
         public static bool operator !=(Azure.Health.Insights.RadiologyInsights.ResearchStudyStatusCodeType left, Azure.Health.Insights.RadiologyInsights.ResearchStudyStatusCodeType right) { throw null; }
         public override string ToString() { throw null; }
+    }
+    [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
+    public readonly partial struct ScoringAndAssessmentCategoryType : System.IEquatable<Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType>
+    {
+        private readonly object _dummy;
+        private readonly int _dummyPrimitive;
+        public ScoringAndAssessmentCategoryType(string value) { throw null; }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType AgatstonScore { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType AlbertaStrokeProgramEarlyCtScore { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType AscvdRisk { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType Birads { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType CadRads { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType CalciumMassScore { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType CalciumScoreUnspecified { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType CalciumVolumeScore { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType CeusLiRads { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType CRadsColonicFindings { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType CRadsExtracolonicFindings { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType FraxScore { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType HnpccMutationRisk { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType KellgrenLawrenceGradingScale { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType LifetimeBreastCancerRisk { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType LiRads { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType LungRads { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType ModifiedGailModelRisk { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType NiRads { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType ORads { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType ORadsMri { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType PiRads { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType RiskOfMalignancyIndex { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType TenYearChdRisk { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType TenYearChdRiskArterialAge { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType TenYearChdRiskObservedAge { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType TiRads { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType TonnisClassification { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType TreatmentResponseLiRads { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType TScore { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType TyrerCusickModelRisk { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType UsLiRads { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType UsLiRadsVisualizationScore { get { throw null; } }
+        public static Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType ZScore { get { throw null; } }
+        public bool Equals(Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType other) { throw null; }
+        public override bool Equals(object obj) { throw null; }
+        public override int GetHashCode() { throw null; }
+        public static bool operator ==(Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType left, Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType right) { throw null; }
+        public static implicit operator Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType (string value) { throw null; }
+        public static bool operator !=(Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType left, Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType right) { throw null; }
+        public override string ToString() { throw null; }
+    }
+    public partial class ScoringAndAssessmentInference : Azure.Health.Insights.RadiologyInsights.RadiologyInsightsInference, System.ClientModel.Primitives.IJsonModel<Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentInference>, System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentInference>
+    {
+        internal ScoringAndAssessmentInference() { }
+        public Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentCategoryType Category { get { throw null; } }
+        public string CategoryDescription { get { throw null; } }
+        public Azure.Health.Insights.RadiologyInsights.AssessmentValueRange RangeValue { get { throw null; } }
+        public string SingleValue { get { throw null; } }
+        protected override void JsonModelWriteCore(System.Text.Json.Utf8JsonWriter writer, System.ClientModel.Primitives.ModelReaderWriterOptions options) { }
+        Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentInference System.ClientModel.Primitives.IJsonModel<Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentInference>.Create(ref System.Text.Json.Utf8JsonReader reader, System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+        void System.ClientModel.Primitives.IJsonModel<Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentInference>.Write(System.Text.Json.Utf8JsonWriter writer, System.ClientModel.Primitives.ModelReaderWriterOptions options) { }
+        Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentInference System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentInference>.Create(System.BinaryData data, System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+        string System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentInference>.GetFormatFromOptions(System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+        System.BinaryData System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.ScoringAndAssessmentInference>.Write(System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
     }
     public partial class SexMismatchInference : Azure.Health.Insights.RadiologyInsights.RadiologyInsightsInference, System.ClientModel.Primitives.IJsonModel<Azure.Health.Insights.RadiologyInsights.SexMismatchInference>, System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.RadiologyInsights.SexMismatchInference>
     {
@@ -1249,9 +1449,7 @@ namespace Azure.Health.Insights.RadiologyInsights
         public static Azure.Health.Insights.RadiologyInsights.SpecialtyType Pathology { get { throw null; } }
         public static Azure.Health.Insights.RadiologyInsights.SpecialtyType Radiology { get { throw null; } }
         public bool Equals(Azure.Health.Insights.RadiologyInsights.SpecialtyType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.RadiologyInsights.SpecialtyType left, Azure.Health.Insights.RadiologyInsights.SpecialtyType right) { throw null; }
         public static implicit operator Azure.Health.Insights.RadiologyInsights.SpecialtyType (string value) { throw null; }

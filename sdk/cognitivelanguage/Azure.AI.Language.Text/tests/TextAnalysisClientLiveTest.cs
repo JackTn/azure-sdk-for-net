@@ -2,6 +2,8 @@
 // Licensed under the MIT License.
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Azure.AI.Language.Text;
 using Azure.AI.Language.Text.Tests;
@@ -205,7 +207,7 @@ namespace Azure.AI.Language.TextAnalytics.Tests
             }
         }
 
-        [Test]
+        [RecordedTest]
         public async Task AnalyzeText_RecognizePii()
         {
             string textA =
@@ -248,7 +250,7 @@ namespace Azure.AI.Language.TextAnalytics.Tests
             }
         }
 
-        [Test]
+        [RecordedTest]
         public async Task AnalyzeText_RecognizeLinkedEntities()
         {
             string textA =
@@ -303,7 +305,7 @@ namespace Azure.AI.Language.TextAnalytics.Tests
             }
         }
 
-        [Test]
+        [RecordedTest]
         public async Task AnalyzeText_HealthcareLROTask()
         {
             string textA = "Prescribed 100mg ibuprofen, taken twice daily.";
@@ -381,7 +383,7 @@ namespace Azure.AI.Language.TextAnalytics.Tests
             }
         }
 
-        [Test]
+        [RecordedTest]
         public async Task AnalyzeText_CustomEntitiesLROTask()
         {
             string textA =
@@ -448,7 +450,7 @@ namespace Azure.AI.Language.TextAnalytics.Tests
             }
         }
 
-        [Test]
+        [RecordedTest]
         public async Task AnalyzeText_CustomSingleLabelClassificationLROTask()
         {
             string textA =
@@ -509,7 +511,7 @@ namespace Azure.AI.Language.TextAnalytics.Tests
             }
         }
 
-        [Test]
+        [RecordedTest]
         public async Task AnalyzeText_CustomMultiLabelClassificationLROTask()
         {
             string textA =
@@ -570,7 +572,7 @@ namespace Azure.AI.Language.TextAnalytics.Tests
             }
         }
 
-        [Test]
+        [RecordedTest]
         [ServiceVersion(Min = TextAnalysisClientOptions.ServiceVersion.V2023_04_01)]
         public async Task AnalyzeText_ExtractiveSummarizationLROTaskAsync()
         {
@@ -663,7 +665,7 @@ namespace Azure.AI.Language.TextAnalytics.Tests
             }
         }
 
-        [Test]
+        [RecordedTest]
         [ServiceVersion(Min = TextAnalysisClientOptions.ServiceVersion.V2023_04_01)]
         public async Task AnalyzeText_AbstractiveSummarizationLROTaskAsync()
         {
@@ -761,6 +763,346 @@ namespace Azure.AI.Language.TextAnalytics.Tests
                         }
                     }
                 }
+            }
+        }
+
+        [RecordedTest]
+        [ServiceVersion(Min = TextAnalysisClientOptions.ServiceVersion.V2025_05_15_Preview)]
+        public async Task AnalyzeText_RecognizePii_WithValueExclusion()
+        {
+            string text = "My SSN is 859-98-0987.";
+
+            AnalyzeTextInput body = new TextPiiEntitiesRecognitionInput()
+            {
+                TextInput = new MultiLanguageTextInput()
+                {
+                    MultiLanguageInputs =
+                    {
+                        new MultiLanguageInput("3", text) { Language = "en" },
+                    }
+                },
+                ActionContent = new PiiActionContent()
+                {
+                    ModelVersion = "latest",
+                    ValueExclusionPolicy = new ValueExclusionPolicy(
+                        caseSensitive: false,
+                        excludedValues: new[] { "859-98-0987" }
+                    )
+                }
+            };
+
+            Response<AnalyzeTextResult> response = await client.AnalyzeTextAsync(body);
+            Assert.IsNotNull(response?.Value);
+
+            AnalyzeTextPiiResult piiTaskResult = (AnalyzeTextPiiResult)response.Value;
+
+            foreach (PiiActionResult result in piiTaskResult.Results.Documents)
+            {
+                Assert.AreEqual("3", result.Id);
+                Assert.IsNotNull(result.Entities);
+                Assert.AreEqual(0, result.Entities.Count, "Expected no PII entities due to exclusion.");
+                Assert.AreEqual(text, result.RedactedText, "Expected redacted text to remain unchanged.");
+            }
+        }
+
+        [RecordedTest]
+        [ServiceVersion(Min = TextAnalysisClientOptions.ServiceVersion.V2025_05_15_Preview)]
+        public async Task AnalyzeText_RecognizePii_WithSynonyms()
+        {
+            PiiActionContent actionContent = new PiiActionContent();
+            actionContent.ExcludePiiCategories.Add(PiiCategoriesExclude.PhoneNumber);
+            actionContent.EntitySynonyms.Add(
+                new EntitySynonyms(
+                    new EntityCategory("USBankAccountNumber"),
+                    new List<EntitySynonym>
+                    {
+                        new EntitySynonym("FAN") { Language = "en" },
+                        new EntitySynonym("RAN") { Language = "en" }
+                    }
+                )
+            );
+
+            AnalyzeTextInput input = new TextPiiEntitiesRecognitionInput
+            {
+                TextInput = new MultiLanguageTextInput
+                {
+                    MultiLanguageInputs =
+                    {
+                        new MultiLanguageInput("1", "My FAN is 281314478878") { Language = "en" },
+                        new MultiLanguageInput("2", "My bank account number is 281314478873.") { Language = "en" },
+                        new MultiLanguageInput("3", "My FAN is 281314478878 and Tom's RAN is 281314478879.") { Language = "en" },
+                    }
+                },
+                ActionContent = actionContent
+            };
+
+            Response<AnalyzeTextResult> response = await client.AnalyzeTextAsync(input);
+            Assert.IsNotNull(response);
+            Assert.IsNotNull(response.Value);
+
+            AnalyzeTextPiiResult piiResult = (AnalyzeTextPiiResult)response.Value;
+            // Assert — Document 1
+            var doc1 = piiResult.Results.Documents.Single(d => d.Id == "1");
+            Assert.IsTrue(doc1.Entities.Any(e =>
+                e.Text == "281314478878" &&
+                e.Category == "USBankAccountNumber"),
+                "Doc 1 should contain USBankAccountNumber entity for FAN.");
+
+            // Assert — Document 2
+            var doc2 = piiResult.Results.Documents.Single(d => d.Id == "2");
+            Assert.IsTrue(doc2.Entities.Any(e =>
+                e.Text == "281314478873" &&
+                e.Category == "USBankAccountNumber"),
+                "Doc 2 should contain USBankAccountNumber entity for a normal bank acct number.");
+
+            // Assert — Document 3
+            var doc3 = piiResult.Results.Documents.Single(d => d.Id == "3");
+
+            Assert.IsTrue(doc3.Entities.Any(e =>
+                e.Text == "281314478878" &&
+                e.Category == "USBankAccountNumber"),
+                "Doc 3 should contain USBankAccountNumber entity for FAN.");
+
+            Assert.IsTrue(doc3.Entities.Any(e =>
+                e.Text == "281314478879" &&
+                e.Category == "USBankAccountNumber"),
+                "Doc 3 should contain USBankAccountNumber entity for RAN.");
+        }
+
+        [RecordedTest]
+        [ServiceVersion(Min = TextAnalysisClientOptions.ServiceVersion.V2025_05_15_Preview)]
+        public async Task AnalyzeText_RecognizePii_WithNewEntityTypes()
+        {
+            AnalyzeTextInput input = new TextPiiEntitiesRecognitionInput()
+            {
+                TextInput = new MultiLanguageTextInput()
+                {
+                    MultiLanguageInputs =
+                    {
+                        new MultiLanguageInput("1", "The date of birth is May 15th, 2015") { Language = "en" },
+                        new MultiLanguageInput("2", "The phone number is 5551234567") { Language = "en" }
+                    }
+                },
+                ActionContent = new PiiActionContent()
+                {
+                    ModelVersion = "latest"
+                }
+            };
+
+            Response<AnalyzeTextResult> response = await client.AnalyzeTextAsync(input);
+            Assert.IsNotNull(response?.Value);
+
+            AnalyzeTextPiiResult piiResult = (AnalyzeTextPiiResult)response.Value;
+            // Assert: document 1 (Date of birth)
+            PiiActionResult doc1 = piiResult.Results.Documents.Single(d => d.Id == "1");
+
+            // The raw date string should not appear in redacted text.
+            const string dobText = "May 15th, 2015";
+            Assert.IsTrue(
+                doc1.RedactedText != null && !doc1.RedactedText.Contains(dobText),
+                "Document 1 redacted text should not contain the raw date of birth."
+            );
+
+            // Assert: document 2 (Phone number)
+            PiiActionResult doc2 = piiResult.Results.Documents.Single(d => d.Id == "2");
+
+            // There should be at least one PhoneNumber entity.
+            Assert.IsTrue(
+                doc2.Entities.Any(e => e.Category == PiiCategory.PhoneNumber),
+                "Document 2 should contain a PhoneNumber entity."
+            );
+
+            // The raw phone number should not appear in redacted text.
+            const string phoneText = "(555) 123-4567";
+            Assert.IsTrue(
+                doc2.RedactedText != null && !doc2.RedactedText.Contains(phoneText),
+                "Document 2 redacted text should not contain the raw phone number."
+            );
+        }
+
+        [RecordedTest]
+        [ServiceVersion(Min = TextAnalysisClientOptions.ServiceVersion.V2025_11_15_Preview)]
+        public async Task AnalyzeText_RecognizePii_RedactionPolicies()
+        {
+            string documentText = "My name is John Doe. My ssn is 123-45-6789. My email is john@example.com..";
+
+            AnalyzeTextInput body = new TextPiiEntitiesRecognitionInput
+            {
+                TextInput = new MultiLanguageTextInput
+                {
+                    MultiLanguageInputs =
+            {
+                new MultiLanguageInput("A", documentText) { Language = "en" },
+                new MultiLanguageInput("B", documentText) { Language = "en" },
+            }
+                },
+                ActionContent = new PiiActionContent
+                {
+                    PiiCategories = { PiiCategory.All },
+
+                    RedactionPolicies =
+            {
+                new EntityMaskPolicyType
+                {
+                    // defaultPolicy: use entity mask for everything unless overridden
+                    PolicyName = "defaultPolicy",
+                    IsDefault = true,
+                },
+                new CharacterMaskPolicyType
+                {
+                    // customMaskForSSN: keep part of SSN visible while masking the rest
+                    PolicyName = "customMaskForSSN",
+                    UnmaskLength = 4,
+                    UnmaskFromEnd = true, // if you really want "****-***-6789"-style behavior
+                    EntityTypes =
+                    {
+                        PiiCategoriesExclude.UsSocialSecurityNumber
+                    },
+                },
+                new SyntheticReplacementPolicyType
+                {
+                    // syntheticMaskForPerson: generate synthetic values for Person and Email
+                    PolicyName = "syntheticMaskForPerson",
+                    EntityTypes =
+                    {
+                        PiiCategoriesExclude.Person,
+                        PiiCategoriesExclude.Email
+                    },
+                }
+            }
+                }
+            };
+
+            // Act
+            Response<AnalyzeTextResult> response = await client.AnalyzeTextAsync(body);
+            AnalyzeTextPiiResult piiResult = (AnalyzeTextPiiResult)response.Value;
+
+            // Basic sanity checks
+            Assert.AreEqual(2, piiResult.Results.Documents.Count, "Expected 2 document results.");
+            Assert.IsEmpty(piiResult.Results.Errors, "Did not expect any document errors.");
+
+            foreach (PiiActionResult doc in piiResult.Results.Documents)
+            {
+                // 1. We should have at least these three PII categories recognized:
+                Assert.IsTrue(
+                    doc.Entities.Any(e => e.Category == PiiCategory.UsSocialSecurityNumber),
+                    $"Document {doc.Id} should contain a US SSN entity.");
+
+                Assert.IsTrue(
+                    doc.Entities.Any(e => e.Category == PiiCategory.Person),
+                    $"Document {doc.Id} should contain a Person entity.");
+
+                Assert.IsTrue(
+                    doc.Entities.Any(e => e.Category == PiiCategory.Email),
+                    $"Document {doc.Id} should contain an Email entity.");
+
+                // 2. Check redaction behavior for Person and Email:
+                //    "John Doe" and "john@example.com" should not appear in the redacted text
+                Assert.IsNotNull(doc.RedactedText, "RedactedText should not be null.");
+                StringAssert.DoesNotContain("John Doe", doc.RedactedText, $"Document {doc.Id} redacted text should not contain the original person name.");
+                StringAssert.DoesNotContain("john@example.com", doc.RedactedText, $"Document {doc.Id} redacted text should not contain the original email.");
+
+                // 3. Check SSN redaction behavior:
+                //    Full SSN should be masked, but the last 4 digits may remain visible due to CharacterMask policy.
+                const string fullSsn = "123-45-6789";
+                const string last4 = "6789";
+
+                StringAssert.DoesNotContain(fullSsn, doc.RedactedText, $"Document {doc.Id} redacted text should not contain the full SSN.");
+                StringAssert.Contains(last4, doc.RedactedText, $"Document {doc.Id} redacted text should still contain the last 4 digits of the SSN due to the custom mask policy.");
+            }
+        }
+
+        [RecordedTest]
+        [ServiceVersion(Min = TextAnalysisClientOptions.ServiceVersion.V2025_11_15_Preview)]
+        public async Task AnalyzeText_RecognizePii_ConfidenceScoreThreshold()
+        {
+            string text =
+            "My name is John Doe. My ssn is 222-45-6789. My email is john@example.com. John Doe is my name.";
+
+            // Input documents
+            var textInput = new MultiLanguageTextInput
+            {
+                MultiLanguageInputs =
+            {
+                new MultiLanguageInput("1", text) { Language = "en" }
+            }
+            };
+
+            // Confidence score overrides:
+            //   default = 0.3
+            //   SSN & Email overridden to 0.9 (so they get filtered out as entities)
+            var confidenceThreshold = new ConfidenceScoreThreshold(0.3f);
+            confidenceThreshold.Overrides.Add(
+                new ConfidenceScoreThresholdOverride(
+                    value: 0.9f,
+                    entity: PiiCategory.UsSocialSecurityNumber.ToString()
+                ));
+            confidenceThreshold.Overrides.Add(
+                new ConfidenceScoreThresholdOverride(
+                    value: 0.9f,
+                    entity: PiiCategory.Email.ToString()
+                ));
+
+            var actionContent = new PiiActionContent
+            {
+                PiiCategories = { PiiCategory.All },
+                DisableEntityValidation = true,
+                ConfidenceScoreThreshold = confidenceThreshold
+            };
+
+            var body = new TextPiiEntitiesRecognitionInput
+            {
+                TextInput = textInput,
+                ActionContent = actionContent
+            };
+
+            // Act (non-LRO)
+            Response<AnalyzeTextResult> response = await client.AnalyzeTextAsync(body);
+            var piiResult = (AnalyzeTextPiiResult)response.Value;
+
+            // Basic shape checks
+            Assert.IsNotNull(piiResult);
+            Assert.IsNotNull(piiResult.Results);
+            Assert.IsNotNull(piiResult.Results.Documents);
+            Assert.AreEqual(1, piiResult.Results.Documents.Count);
+
+            PiiActionResult doc = piiResult.Results.Documents[0];
+            string redacted = doc.RedactedText;
+
+            // Person should be masked out in text; SSN & Email should remain in the text
+            // (but be filtered out as entities due to the 0.9 threshold overrides)
+            StringAssert.DoesNotContain("John Doe", redacted, "Person name should be masked in redacted text.");
+            StringAssert.Contains("222-45-6789", redacted, "SSN should remain visible in redacted text.");
+            StringAssert.Contains("john@example.com", redacted, "Email should remain visible in redacted text.");
+
+            // Only Person entities should be returned (SSN & Email filtered by high thresholds)
+            Assert.AreEqual(2, doc.Entities.Count, "Expected exactly 2 entities to be returned.");
+
+            var categories = new HashSet<string>(
+            doc.Entities.Select(e => e.Category.ToString())
+);
+
+            CollectionAssert.AreEquivalent(
+                new[] { PiiCategory.Person.ToString() },
+                categories,
+                "Only Person entities should be returned."
+            );
+
+            // Ensure no SSN or Email entities are present
+            Assert.IsFalse(
+                doc.Entities.Any(e => e.Category == PiiCategory.UsSocialSecurityNumber),
+                "USSocialSecurityNumber entities should be filtered out by the confidence threshold override."
+            );
+            Assert.IsFalse(
+                doc.Entities.Any(e => e.Category == PiiCategory.Email),
+                "Email entities should be filtered out by the confidence threshold override."
+            );
+
+            // Quick sanity on confidence
+            foreach (PiiEntity e in doc.Entities)
+            {
+                Assert.AreEqual(PiiCategory.Person.ToString(), e.Category, "All returned entities should be Person.");
+                Assert.GreaterOrEqual(e.ConfidenceScore, 0.3, "Entities should respect the default confidence floor.");
             }
         }
     }

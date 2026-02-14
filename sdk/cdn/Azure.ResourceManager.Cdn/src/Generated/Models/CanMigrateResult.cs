@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using Azure.Core;
 
 namespace Azure.ResourceManager.Cdn.Models
 {
@@ -52,15 +53,15 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> Initializes a new instance of <see cref="CanMigrateResult"/>. </summary>
-        /// <param name="id"> Resource ID. </param>
+        /// <param name="resourceId"> Resource ID. </param>
         /// <param name="canMigrateResultType"> Resource type. </param>
         /// <param name="canMigrate"> Flag that says if the profile can be migrated. </param>
         /// <param name="defaultSku"> Recommended sku for the migration. </param>
         /// <param name="errors"></param>
         /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
-        internal CanMigrateResult(string id, string canMigrateResultType, bool? canMigrate, CanMigrateDefaultSku? defaultSku, IReadOnlyList<MigrationErrorType> errors, IDictionary<string, BinaryData> serializedAdditionalRawData)
+        internal CanMigrateResult(ResourceIdentifier resourceId, string canMigrateResultType, bool? canMigrate, CanMigrateDefaultSku? defaultSku, IReadOnlyList<MigrationErrorType> errors, IDictionary<string, BinaryData> serializedAdditionalRawData)
         {
-            Id = id;
+            ResourceId = resourceId;
             CanMigrateResultType = canMigrateResultType;
             CanMigrate = canMigrate;
             DefaultSku = defaultSku;
@@ -69,14 +70,19 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> Resource ID. </summary>
-        public string Id { get; }
+        [WirePath("id")]
+        public ResourceIdentifier ResourceId { get; }
         /// <summary> Resource type. </summary>
+        [WirePath("type")]
         public string CanMigrateResultType { get; }
         /// <summary> Flag that says if the profile can be migrated. </summary>
+        [WirePath("properties.canMigrate")]
         public bool? CanMigrate { get; }
         /// <summary> Recommended sku for the migration. </summary>
+        [WirePath("properties.defaultSku")]
         public CanMigrateDefaultSku? DefaultSku { get; }
         /// <summary> Gets the errors. </summary>
+        [WirePath("properties.errors")]
         public IReadOnlyList<MigrationErrorType> Errors { get; }
     }
 }

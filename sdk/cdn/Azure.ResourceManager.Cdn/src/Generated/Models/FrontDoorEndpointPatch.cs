@@ -65,10 +65,13 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> Endpoint tags. </summary>
+        [WirePath("tags")]
         public IDictionary<string, string> Tags { get; }
         /// <summary> The name of the profile which holds the endpoint. </summary>
+        [WirePath("properties.profileName")]
         public string ProfileName { get; }
         /// <summary> Whether to enable use of this rule. Permitted values are 'Enabled' or 'Disabled'. </summary>
+        [WirePath("properties.enabledState")]
         public EnabledState? EnabledState { get; set; }
     }
 }

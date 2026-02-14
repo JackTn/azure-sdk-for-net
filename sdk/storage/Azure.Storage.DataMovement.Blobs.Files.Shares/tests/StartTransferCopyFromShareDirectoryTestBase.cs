@@ -1,10 +1,9 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+extern alias BaseShares;
 extern alias DMBlob;
 extern alias DMShare;
-extern alias BaseShares;
-
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,13 +16,13 @@ using Azure.Core.TestFramework;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Azure.Storage.Common;
-using DMShare::Azure.Storage.DataMovement.Files.Shares;
 using Azure.Storage.DataMovement.Tests;
-using BaseShares::Azure.Storage.Files.Shares;
-using BaseShares::Azure.Storage.Files.Shares.Models;
 using Azure.Storage.Test;
 using Azure.Storage.Test.Shared;
+using BaseShares::Azure.Storage.Files.Shares;
+using BaseShares::Azure.Storage.Files.Shares.Models;
 using DMBlob::Azure.Storage.DataMovement.Blobs;
+using DMShare::Azure.Storage.DataMovement.Files.Shares;
 using NUnit.Framework;
 using Metadata = System.Collections.Generic.IDictionary<string, string>;
 
@@ -102,22 +101,25 @@ namespace Azure.Storage.DataMovement.Blobs.Files.Shares.Tests
             }
         }
 
+        protected override async Task<IDisposingContainer<BlobContainerClient>> GetDestinationDisposingContainerOauthAsync(
+            string containerName = default,
+            CancellationToken cancellationToken = default)
+        {
+            BlobServiceClient oauthService = DestinationClientBuilder.GetServiceClientFromOauthConfig(Tenants.TestConfigOAuth, TestEnvironment.Credential);
+            return await DestinationClientBuilder.GetTestContainerAsync(oauthService, containerName);
+        }
+
         protected override async Task<IDisposingContainer<BlobContainerClient>> GetDestinationDisposingContainerAsync(BlobServiceClient service = null, string containerName = null, CancellationToken cancellationToken = default)
             => await DestinationClientBuilder.GetTestContainerAsync(service, containerName);
 
-        protected override BlobContainerClient GetOAuthDestinationContainerClient(string containerName)
-        {
-            BlobClientOptions options = DestinationClientBuilder.GetOptions();
-            BlobServiceClient oauthService = DestinationClientBuilder.GetServiceClientFromOauthConfig(Tenants.TestConfigOAuth, TestEnvironment.Credential, options);
-            return oauthService.GetBlobContainerClient(containerName);
-        }
-
-        protected override ShareClient GetOAuthSourceContainerClient(string containerName)
+        protected override async Task<IDisposingContainer<ShareClient>> GetSourceDisposingContainerOauthAsync(
+            string containerName = default,
+            CancellationToken cancellationToken = default)
         {
             ShareClientOptions options = SourceClientBuilder.GetOptions();
             options.ShareTokenIntent = ShareTokenIntent.Backup;
             ShareServiceClient oauthService = SourceClientBuilder.GetServiceClientFromOauthConfig(Tenants.TestConfigOAuth, TestEnvironment.Credential, options);
-            return oauthService.GetShareClient(containerName);
+            return await SourceClientBuilder.GetTestShareAsync(oauthService, containerName);
         }
 
         protected override async Task<IDisposingContainer<ShareClient>> GetSourceDisposingContainerAsync(
@@ -141,7 +143,11 @@ namespace Azure.Storage.DataMovement.Blobs.Files.Shares.Tests
         protected override async Task VerifyEmptyDestinationContainerAsync(BlobContainerClient destinationContainer, string destinationPrefix, CancellationToken cancellationToken = default)
         {
             CancellationHelper.ThrowIfCancellationRequested(cancellationToken);
-            IList<BlobItem> items = await destinationContainer.GetBlobsAsync(prefix: destinationPrefix, cancellationToken: cancellationToken).ToListAsync();
+            GetBlobsOptions options = new GetBlobsOptions()
+            {
+                Prefix = destinationPrefix,
+            };
+            IList<BlobItem> items = await destinationContainer.GetBlobsAsync(options, cancellationToken: cancellationToken).ToListAsync();
             Assert.IsEmpty(items);
         }
 
@@ -173,7 +179,11 @@ namespace Azure.Storage.DataMovement.Blobs.Files.Shares.Tests
 
             // List all files in the destination blob folder path
             List<string> destinationFileNames = new List<string>();
-            await foreach (Page<BlobItem> page in destinationContainer.GetBlobsAsync(prefix: destinationPrefix, cancellationToken: cancellationToken).AsPages())
+            GetBlobsOptions options = new GetBlobsOptions
+            {
+                Prefix = destinationPrefix,
+            };
+            await foreach (Page<BlobItem> page in destinationContainer.GetBlobsAsync(options, cancellationToken: cancellationToken).AsPages())
             {
                 destinationFileNames.AddRange(page.Values.Select((BlobItem item) => item.Name.Substring(destinationPrefix.Length + 1)));
             }

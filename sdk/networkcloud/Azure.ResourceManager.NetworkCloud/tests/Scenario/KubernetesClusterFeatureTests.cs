@@ -8,14 +8,15 @@ using Azure.ResourceManager.Resources;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Azure.ResourceManager.NetworkCloud.Tests.ScenarioTests
 {
     public class KubernetesClusterFeatureTests : NetworkCloudManagementTestBase
     {
-        public KubernetesClusterFeatureTests  (bool isAsync, RecordedTestMode mode) : base(isAsync, mode) {}
-        public KubernetesClusterFeatureTests (bool isAsync) : base(isAsync) {}
+        public KubernetesClusterFeatureTests(bool isAsync, RecordedTestMode mode) : base(isAsync, mode) { }
+        public KubernetesClusterFeatureTests(bool isAsync) : base(isAsync) { }
 
         [Test, MaxTime(1800000)]
         [RecordedTest]
@@ -71,7 +72,7 @@ new StringKeyValuePair("featureOptionName","featureOptionValue")
             Assert.AreEqual(patch.Tags, updateResult.Value.Data.Tags);
 
             // Delete
-            ArmOperation<NetworkCloudOperationStatusResult> deleteResult = await feature.DeleteAsync(WaitUntil.Completed);
+            ArmOperation<NetworkCloudOperationStatusResult> deleteResult = await feature.DeleteAsync(WaitUntil.Completed, "*", "*", CancellationToken.None);
             NetworkCloudOperationStatusResult result = deleteResult.Value;
             Assert.IsNotNull(result);
         }

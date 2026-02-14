@@ -12,84 +12,42 @@ namespace Azure.ResourceManager.Chaos.Models
 {
     /// <summary>
     /// Model that represents a selector in the Experiment resource.
-    /// Please note <see cref="ChaosTargetSelector"/> is the base class. According to the scenario, a derived class of the base class might need to be assigned here, or this property needs to be casted to one of the possible derived classes.
-    /// The available derived classes include <see cref="ChaosTargetListSelector"/> and <see cref="ChaosTargetQuerySelector"/>.
+    /// Please note this is the abstract base class. The derived classes available for instantiation are: <see cref="ChaosTargetListSelector"/> and <see cref="ChaosTargetQuerySelector"/>.
     /// </summary>
     public abstract partial class ChaosTargetSelector
     {
+        /// <summary> Keeps track of any properties unknown to the library. </summary>
+        private protected readonly IDictionary<string, BinaryData> _additionalBinaryDataProperties;
+
         /// <summary> Initializes a new instance of <see cref="ChaosTargetSelector"/>. </summary>
         /// <param name="id"> String of the selector ID. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="id"/> is null. </exception>
-        protected ChaosTargetSelector(string id)
+        /// <param name="type"> Chaos target selector discriminator type. </param>
+        private protected ChaosTargetSelector(string id, SelectorType @type)
         {
-            Argument.AssertNotNull(id, nameof(id));
-
             Id = id;
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            Type = @type;
         }
 
         /// <summary> Initializes a new instance of <see cref="ChaosTargetSelector"/>. </summary>
-        /// <param name="selectorType"> Enum of the selector type. </param>
         /// <param name="id"> String of the selector ID. </param>
-        /// <param name="filter">
-        /// Model that represents available filter types that can be applied to a targets list.
-        /// Please note <see cref="ChaosTargetFilter"/> is the base class. According to the scenario, a derived class of the base class might need to be assigned here, or this property needs to be casted to one of the possible derived classes.
-        /// The available derived classes include <see cref="ChaosTargetSimpleFilter"/>.
-        /// </param>
-        /// <param name="additionalProperties"> Additional Properties. </param>
-        internal ChaosTargetSelector(SelectorType selectorType, string id, ChaosTargetFilter filter, IDictionary<string, BinaryData> additionalProperties)
+        /// <param name="type"> Chaos target selector discriminator type. </param>
+        /// <param name="filter"> Model that represents available filter types that can be applied to a targets list. </param>
+        /// <param name="additionalBinaryDataProperties"> Keeps track of any properties unknown to the library. </param>
+        internal ChaosTargetSelector(string id, SelectorType @type, ChaosTargetFilter filter, IDictionary<string, BinaryData> additionalBinaryDataProperties)
         {
-            SelectorType = selectorType;
             Id = id;
+            Type = @type;
             Filter = filter;
-            AdditionalProperties = additionalProperties;
+            _additionalBinaryDataProperties = additionalBinaryDataProperties;
         }
 
-        /// <summary> Initializes a new instance of <see cref="ChaosTargetSelector"/> for deserialization. </summary>
-        internal ChaosTargetSelector()
-        {
-        }
-
-        /// <summary> Enum of the selector type. </summary>
-        internal SelectorType SelectorType { get; set; }
         /// <summary> String of the selector ID. </summary>
         public string Id { get; set; }
-        /// <summary>
-        /// Model that represents available filter types that can be applied to a targets list.
-        /// Please note <see cref="ChaosTargetFilter"/> is the base class. According to the scenario, a derived class of the base class might need to be assigned here, or this property needs to be casted to one of the possible derived classes.
-        /// The available derived classes include <see cref="ChaosTargetSimpleFilter"/>.
-        /// </summary>
+
+        /// <summary> Chaos target selector discriminator type. </summary>
+        internal SelectorType Type { get; set; }
+
+        /// <summary> Model that represents available filter types that can be applied to a targets list. </summary>
         public ChaosTargetFilter Filter { get; set; }
-        /// <summary>
-        /// Additional Properties
-        /// <para>
-        /// To assign an object to the value of this property use <see cref="BinaryData.FromObjectAsJson{T}(T, System.Text.Json.JsonSerializerOptions?)"/>.
-        /// </para>
-        /// <para>
-        /// To assign an already formatted json string to this property use <see cref="BinaryData.FromString(string)"/>.
-        /// </para>
-        /// <para>
-        /// Examples:
-        /// <list type="bullet">
-        /// <item>
-        /// <term>BinaryData.FromObjectAsJson("foo")</term>
-        /// <description>Creates a payload of "foo".</description>
-        /// </item>
-        /// <item>
-        /// <term>BinaryData.FromString("\"foo\"")</term>
-        /// <description>Creates a payload of "foo".</description>
-        /// </item>
-        /// <item>
-        /// <term>BinaryData.FromObjectAsJson(new { key = "value" })</term>
-        /// <description>Creates a payload of { "key": "value" }.</description>
-        /// </item>
-        /// <item>
-        /// <term>BinaryData.FromString("{\"key\": \"value\"}")</term>
-        /// <description>Creates a payload of { "key": "value" }.</description>
-        /// </item>
-        /// </list>
-        /// </para>
-        /// </summary>
-        public IDictionary<string, BinaryData> AdditionalProperties { get; }
     }
 }

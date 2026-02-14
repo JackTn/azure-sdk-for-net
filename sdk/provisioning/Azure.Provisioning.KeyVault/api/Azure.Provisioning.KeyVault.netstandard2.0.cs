@@ -178,11 +178,8 @@ namespace Azure.Provisioning.KeyVault
         public static Azure.Provisioning.KeyVault.KeyVaultBuiltInRole KeyVaultSecretsUser { get { throw null; } }
         public static Azure.Provisioning.KeyVault.KeyVaultBuiltInRole ManagedHsmContributor { get { throw null; } }
         public bool Equals(Azure.Provisioning.KeyVault.KeyVaultBuiltInRole other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object? obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public static string GetBuiltInRoleName(Azure.Provisioning.KeyVault.KeyVaultBuiltInRole value) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Provisioning.KeyVault.KeyVaultBuiltInRole left, Azure.Provisioning.KeyVault.KeyVaultBuiltInRole right) { throw null; }
         public static implicit operator Azure.Provisioning.KeyVault.KeyVaultBuiltInRole (string value) { throw null; }
@@ -248,6 +245,7 @@ namespace Azure.Provisioning.KeyVault
             public static readonly string V2023_02_01;
             public static readonly string V2023_07_01;
             public static readonly string V2023_08_01_PREVIEW;
+            public static readonly string V2024_11_01;
         }
     }
     public partial class KeyVaultPrivateEndpointConnectionItemData : Azure.Provisioning.Primitives.ProvisionableConstruct
@@ -323,7 +321,6 @@ namespace Azure.Provisioning.KeyVault
         public Azure.Provisioning.BicepDictionary<string> Tags { get { throw null; } set { } }
         protected override void DefineProvisionableProperties() { }
         public static Azure.Provisioning.KeyVault.KeyVaultSecret FromExisting(string bicepIdentifier, string? resourceVersion = null) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override Azure.Provisioning.Primitives.ResourceNameRequirements GetResourceNameRequirements() { throw null; }
         public static partial class ResourceVersions
         {
@@ -337,6 +334,7 @@ namespace Azure.Provisioning.KeyVault
             public static readonly string V2023_02_01;
             public static readonly string V2023_07_01;
             public static readonly string V2023_08_01_PREVIEW;
+            public static readonly string V2024_11_01;
         }
     }
     public partial class KeyVaultService : Azure.Provisioning.Primitives.ProvisionableResource
@@ -352,7 +350,6 @@ namespace Azure.Provisioning.KeyVault
         public Azure.Provisioning.Authorization.RoleAssignment CreateRoleAssignment(Azure.Provisioning.KeyVault.KeyVaultBuiltInRole role, Azure.Provisioning.Roles.UserAssignedIdentity identity) { throw null; }
         protected override void DefineProvisionableProperties() { }
         public static Azure.Provisioning.KeyVault.KeyVaultService FromExisting(string bicepIdentifier, string? resourceVersion = null) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override Azure.Provisioning.Primitives.ResourceNameRequirements GetResourceNameRequirements() { throw null; }
         public static partial class ResourceVersions
         {
@@ -366,6 +363,7 @@ namespace Azure.Provisioning.KeyVault
             public static readonly string V2023_02_01;
             public static readonly string V2023_07_01;
             public static readonly string V2023_08_01_PREVIEW;
+            public static readonly string V2024_11_01;
         }
     }
     public partial class KeyVaultSku : Azure.Provisioning.Primitives.ProvisionableConstruct
@@ -397,6 +395,7 @@ namespace Azure.Provisioning.KeyVault
     {
         public ManagedHsm(string bicepIdentifier, string? resourceVersion = null) : base (default(string), default(Azure.Core.ResourceType), default(string)) { }
         public Azure.Provisioning.BicepValue<Azure.Core.ResourceIdentifier> Id { get { throw null; } }
+        public Azure.Provisioning.Resources.ManagedServiceIdentity Identity { get { throw null; } set { } }
         public Azure.Provisioning.BicepValue<Azure.Core.AzureLocation> Location { get { throw null; } set { } }
         public Azure.Provisioning.BicepValue<string> Name { get { throw null; } set { } }
         public Azure.Provisioning.KeyVault.ManagedHsmProperties Properties { get { throw null; } set { } }
@@ -413,6 +412,7 @@ namespace Azure.Provisioning.KeyVault
             public static readonly string V2023_02_01;
             public static readonly string V2023_07_01;
             public static readonly string V2023_08_01_PREVIEW;
+            public static readonly string V2024_11_01;
         }
     }
     public enum ManagedHsmActionsRequiredMessage
@@ -473,6 +473,7 @@ namespace Azure.Provisioning.KeyVault
         public ManagedHsmPrivateEndpointConnection(string bicepIdentifier, string? resourceVersion = null) : base (default(string), default(Azure.Core.ResourceType), default(string)) { }
         public Azure.Provisioning.BicepValue<Azure.ETag> ETag { get { throw null; } set { } }
         public Azure.Provisioning.BicepValue<Azure.Core.ResourceIdentifier> Id { get { throw null; } }
+        public Azure.Provisioning.Resources.ManagedServiceIdentity Identity { get { throw null; } set { } }
         public Azure.Provisioning.BicepValue<Azure.Core.AzureLocation> Location { get { throw null; } set { } }
         public Azure.Provisioning.BicepValue<string> Name { get { throw null; } set { } }
         public Azure.Provisioning.KeyVault.ManagedHsm? Parent { get { throw null; } set { } }
@@ -492,6 +493,7 @@ namespace Azure.Provisioning.KeyVault
             public static readonly string V2023_02_01;
             public static readonly string V2023_07_01;
             public static readonly string V2023_08_01_PREVIEW;
+            public static readonly string V2024_11_01;
         }
     }
     public partial class ManagedHsmPrivateEndpointConnectionItemData : Azure.Provisioning.Primitives.ProvisionableConstruct
@@ -588,6 +590,7 @@ namespace Azure.Provisioning.KeyVault
     public enum ManagedHsmSkuFamily
     {
         B = 0,
+        C = 1,
     }
     public enum ManagedHsmSkuName
     {
@@ -597,6 +600,10 @@ namespace Azure.Provisioning.KeyVault
         CustomB32 = 1,
         [System.Runtime.Serialization.DataMemberAttribute(Name="Custom_B6")]
         CustomB6 = 2,
+        [System.Runtime.Serialization.DataMemberAttribute(Name="Custom_C42")]
+        CustomC42 = 3,
+        [System.Runtime.Serialization.DataMemberAttribute(Name="Custom_C10")]
+        CustomC10 = 4,
     }
     public partial class ManagedHsmVirtualNetworkRule : Azure.Provisioning.Primitives.ProvisionableConstruct
     {

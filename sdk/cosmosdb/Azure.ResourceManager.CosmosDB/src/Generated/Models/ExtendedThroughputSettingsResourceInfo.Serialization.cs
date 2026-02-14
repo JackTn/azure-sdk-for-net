@@ -8,7 +8,6 @@
 using System;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Text.Json;
 using Azure.Core;
@@ -83,7 +82,6 @@ namespace Azure.ResourceManager.CosmosDB.Models
             string offerReplacePending = default;
             string instantMaximumThroughput = default;
             string softAllowedMaximumThroughput = default;
-            IList<CosmosDBThroughputBucket> throughputBuckets = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> rawDataDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
@@ -149,20 +147,6 @@ namespace Azure.ResourceManager.CosmosDB.Models
                     softAllowedMaximumThroughput = property.Value.GetString();
                     continue;
                 }
-                if (property.NameEquals("throughputBuckets"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    List<CosmosDBThroughputBucket> array = new List<CosmosDBThroughputBucket>();
-                    foreach (var item in property.Value.EnumerateArray())
-                    {
-                        array.Add(CosmosDBThroughputBucket.DeserializeCosmosDBThroughputBucket(item, options));
-                    }
-                    throughputBuckets = array;
-                    continue;
-                }
                 if (options.Format != "W")
                 {
                     rawDataDictionary.Add(property.Name, BinaryData.FromString(property.Value.GetRawText()));
@@ -176,7 +160,6 @@ namespace Azure.ResourceManager.CosmosDB.Models
                 offerReplacePending,
                 instantMaximumThroughput,
                 softAllowedMaximumThroughput,
-                throughputBuckets ?? new ChangeTrackingList<CosmosDBThroughputBucket>(),
                 serializedAdditionalRawData,
                 rid,
                 ts,
@@ -369,29 +352,6 @@ namespace Azure.ResourceManager.CosmosDB.Models
                 }
             }
 
-            hasPropertyOverride = hasObjectOverride && propertyOverrides.TryGetValue(nameof(ThroughputBuckets), out propertyOverride);
-            if (hasPropertyOverride)
-            {
-                builder.Append("  throughputBuckets: ");
-                builder.AppendLine(propertyOverride);
-            }
-            else
-            {
-                if (Optional.IsCollectionDefined(ThroughputBuckets))
-                {
-                    if (ThroughputBuckets.Any())
-                    {
-                        builder.Append("  throughputBuckets: ");
-                        builder.AppendLine("[");
-                        foreach (var item in ThroughputBuckets)
-                        {
-                            BicepSerializationHelpers.AppendChildObject(builder, item, options, 4, true, "  throughputBuckets: ");
-                        }
-                        builder.AppendLine("  ]");
-                    }
-                }
-            }
-
             builder.AppendLine("}");
             return BinaryData.FromString(builder.ToString());
         }
@@ -403,7 +363,7 @@ namespace Azure.ResourceManager.CosmosDB.Models
             switch (format)
             {
                 case "J":
-                    return ModelReaderWriter.Write(this, options);
+                    return ModelReaderWriter.Write(this, options, AzureResourceManagerCosmosDBContext.Default);
                 case "bicep":
                     return SerializeBicep(options);
                 default:

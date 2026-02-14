@@ -1,9 +1,8 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-extern alias DMBlobs;
 extern alias BaseBlobs;
-
+extern alias DMBlobs;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,17 +10,17 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure.Core;
+using Azure.Core.TestFramework;
+using Azure.Storage.DataMovement.Tests;
+using Azure.Storage.Shared;
+using Azure.Storage.Test;
+using Azure.Storage.Test.Shared;
 using BaseBlobs::Azure.Storage.Blobs;
 using BaseBlobs::Azure.Storage.Blobs.Models;
 using BaseBlobs::Azure.Storage.Blobs.Specialized;
-using Azure.Storage.DataMovement.Tests;
-using Azure.Storage.Test;
-using Azure.Storage.Test.Shared;
 using DMBlobs::Azure.Storage.DataMovement.Blobs;
 using NUnit.Framework;
-using Azure.Core.TestFramework;
 using Metadata = System.Collections.Generic.IDictionary<string, string>;
-using Azure.Storage.Shared;
 
 namespace Azure.Storage.DataMovement.Blobs.Tests
 {
@@ -234,24 +233,27 @@ namespace Azure.Storage.DataMovement.Blobs.Tests
             }
         }
 
+        protected override async Task<IDisposingContainer<BlobContainerClient>> GetDestinationDisposingContainerOauthAsync(
+            string containerName = default,
+            CancellationToken cancellationToken = default)
+        {
+            BlobServiceClient oauthService = DestinationClientBuilder.GetServiceClientFromOauthConfig(Tenants.TestConfigOAuth, TestEnvironment.Credential);
+            return await DestinationClientBuilder.GetTestContainerAsync(oauthService, containerName);
+        }
+
         protected override async Task<IDisposingContainer<BlobContainerClient>> GetDestinationDisposingContainerAsync(
             BlobServiceClient service = null,
             string containerName = null,
             CancellationToken cancellationToken = default)
             => await DestinationClientBuilder.GetTestContainerAsync(service, containerName);
 
-        private BlobContainerClient GetOAuthContainerClient(string containerName)
+        protected override async Task<IDisposingContainer<BlobContainerClient>> GetSourceDisposingContainerOauthAsync(
+            string containerName = default,
+            CancellationToken cancellationToken = default)
         {
-            BlobClientOptions options = SourceClientBuilder.GetOptions();
-            BlobServiceClient oauthService = SourceClientBuilder.GetServiceClientFromOauthConfig(Tenants.TestConfigOAuth, TestEnvironment.Credential, options);
-            return oauthService.GetBlobContainerClient(containerName);
+            BlobServiceClient oauthService = SourceClientBuilder.GetServiceClientFromOauthConfig(Tenants.TestConfigOAuth, TestEnvironment.Credential);
+            return await SourceClientBuilder.GetTestContainerAsync(oauthService, containerName);
         }
-
-        protected override BlobContainerClient GetOAuthDestinationContainerClient(string containerName)
-            => GetOAuthContainerClient(containerName);
-
-        protected override BlobContainerClient GetOAuthSourceContainerClient(string containerName)
-            => GetOAuthContainerClient(containerName);
 
         protected override async Task<IDisposingContainer<BlobContainerClient>> GetSourceDisposingContainerAsync(BlobServiceClient service = null, string containerName = null, CancellationToken cancellationToken = default)
         {
@@ -263,7 +265,11 @@ namespace Azure.Storage.DataMovement.Blobs.Tests
         protected override async Task VerifyEmptyDestinationContainerAsync(BlobContainerClient destinationContainer, string destinationPrefix, CancellationToken cancellationToken = default)
         {
             CancellationHelper.ThrowIfCancellationRequested(cancellationToken);
-            IList<BlobItem> items = await destinationContainer.GetBlobsAsync(prefix: destinationPrefix, cancellationToken: cancellationToken).ToListAsync();
+            GetBlobsOptions options = new GetBlobsOptions
+            {
+                Prefix = destinationPrefix
+            };
+            IList<BlobItem> items = await destinationContainer.GetBlobsAsync(options, cancellationToken: cancellationToken).ToListAsync();
             Assert.IsEmpty(items);
         }
 
@@ -284,16 +290,26 @@ namespace Azure.Storage.DataMovement.Blobs.Tests
             List<string> sourceFileNames = new List<string>();
 
             // Get source directory client and list the paths
-            await foreach (Page<BlobItem> page in sourceContainer.GetBlobsAsync(prefix: sourcePrefix, cancellationToken: cancellationToken).AsPages())
+            GetBlobsOptions options = new GetBlobsOptions
             {
-                sourceFileNames.AddRange(page.Values.Select((BlobItem item) => item.Name.Substring(sourcePrefix.Length + 1)));
+                Prefix = !string.IsNullOrEmpty(sourcePrefix) ? sourcePrefix + '/' : sourcePrefix
+            };
+            await foreach (Page<BlobItem> page in sourceContainer.GetBlobsAsync(options, cancellationToken: cancellationToken).AsPages())
+            {
+                sourceFileNames.AddRange(page.Values.Select(
+                    (BlobItem item) => !string.IsNullOrEmpty(sourcePrefix) ? item.Name.Substring(sourcePrefix.Length + 1) : item.Name));
             }
 
             // List all files in the destination blob folder path
             List<string> destinationFileNames = new List<string>();
-            await foreach (Page<BlobItem> page in destinationContainer.GetBlobsAsync(prefix: destinationPrefix, cancellationToken: cancellationToken).AsPages())
+            options = new GetBlobsOptions
             {
-                destinationFileNames.AddRange(page.Values.Select((BlobItem item) => item.Name.Substring(destinationPrefix.Length + 1)));
+                Prefix = !string.IsNullOrEmpty(destinationPrefix) ? destinationPrefix + '/' : destinationPrefix
+            };
+            await foreach (Page<BlobItem> page in destinationContainer.GetBlobsAsync(options, cancellationToken: cancellationToken).AsPages())
+            {
+                destinationFileNames.AddRange(page.Values.Select(
+                    (BlobItem item) => !string.IsNullOrEmpty(destinationPrefix) ? item.Name.Substring(destinationPrefix.Length + 1) : item.Name));
             }
 
             // Assert file and file contents
@@ -307,8 +323,12 @@ namespace Azure.Storage.DataMovement.Blobs.Tests
                     destinationFileNames[i]);
 
                 // Verify contents
-                string sourceFullName = string.Join("/", sourcePrefix, sourceFileNames[i]);
-                string destinationFullName = string.Join("/", destinationPrefix, destinationFileNames[i]);
+                string sourceFullName = !string.IsNullOrEmpty(sourcePrefix) ?
+                    string.Join("/", sourcePrefix, sourceFileNames[i]) :
+                    sourceFileNames[i];
+                string destinationFullName = !string.IsNullOrEmpty(destinationPrefix) ?
+                    string.Join("/", destinationPrefix, destinationFileNames[i]) :
+                    destinationFileNames[i];
                 TSourceObjectClient sourceClient = GetSourceBlob(sourceContainer, sourceFullName);
                 TDestinationObjectClient destinationClient = GetDestinationBlob(destinationContainer, destinationFullName);
                 using Stream sourceStream = await sourceClient.OpenReadAsync(cancellationToken: cancellationToken);

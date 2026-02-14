@@ -72,6 +72,7 @@ namespace Azure.ResourceManager.Cdn.Models
         /// <summary> The resource id of the resource the shared private link resource is for. </summary>
         internal WritableSubResource PrivateLink { get; set; }
         /// <summary> Gets or sets Id. </summary>
+        [WirePath("privateLink.id")]
         public ResourceIdentifier PrivateLinkId
         {
             get => PrivateLink is null ? default : PrivateLink.Id;
@@ -84,12 +85,16 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> The location of the shared private link resource. </summary>
+        [WirePath("privateLinkLocation")]
         public string PrivateLinkLocation { get; set; }
         /// <summary> The group id from the provider of resource the shared private link resource is for. </summary>
+        [WirePath("groupId")]
         public string GroupId { get; set; }
         /// <summary> The request message for requesting approval of the shared private link resource. </summary>
+        [WirePath("requestMessage")]
         public string RequestMessage { get; set; }
         /// <summary> Status of the shared private link resource. Can be Pending, Approved, Rejected, Disconnected, or Timeout. </summary>
+        [WirePath("status")]
         public SharedPrivateLinkResourceStatus? Status { get; set; }
     }
 }

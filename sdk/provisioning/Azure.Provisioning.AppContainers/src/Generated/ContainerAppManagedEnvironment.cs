@@ -43,9 +43,8 @@ public partial class ContainerAppManagedEnvironment : ProvisionableResource
     private BicepValue<AzureLocation>? _location;
 
     /// <summary>
-    /// Cluster configuration which enables the log daemon to export
-    /// app logs to a destination. Currently only
-    /// &quot;log-analytics&quot; is             supported
+    /// Cluster configuration which enables the log daemon to export app logs
+    /// to configured destination.
     /// </summary>
     public ContainerAppLogsConfiguration AppLogsConfiguration 
     {
@@ -87,6 +86,17 @@ public partial class ContainerAppManagedEnvironment : ProvisionableResource
     private BicepValue<string>? _daprAIInstrumentationKey;
 
     /// <summary>
+    /// Managed identities for the Managed Environment to interact with other
+    /// Azure services without maintaining any secrets or credentials in code.
+    /// </summary>
+    public ManagedServiceIdentity Identity 
+    {
+        get { Initialize(); return _identity!; }
+        set { Initialize(); AssignOrReplace(ref _identity, value); }
+    }
+    private ManagedServiceIdentity? _identity;
+
+    /// <summary>
     /// Name of the platform-managed resource group created for the Managed
     /// Environment to host infrastructure resources. If a subnet ID is
     /// provided, this resource group will be created in the same subscription
@@ -98,6 +108,16 @@ public partial class ContainerAppManagedEnvironment : ProvisionableResource
         set { Initialize(); _infrastructureResourceGroup!.Assign(value); }
     }
     private BicepValue<string>? _infrastructureResourceGroup;
+
+    /// <summary>
+    /// Ingress configuration for the Managed Environment.
+    /// </summary>
+    public ManagedEnvironmentIngressConfiguration IngressConfiguration 
+    {
+        get { Initialize(); return _ingressConfiguration!; }
+        set { Initialize(); AssignOrReplace(ref _ingressConfiguration, value); }
+    }
+    private ManagedEnvironmentIngressConfiguration? _ingressConfiguration;
 
     /// <summary>
     /// Boolean indicating whether the peer traffic encryption is enabled.
@@ -138,6 +158,17 @@ public partial class ContainerAppManagedEnvironment : ProvisionableResource
         set { Initialize(); _kind!.Assign(value); }
     }
     private BicepValue<string>? _kind;
+
+    /// <summary>
+    /// Property to allow or block all public traffic. Allowed Values:
+    /// &apos;Enabled&apos;, &apos;Disabled&apos;.
+    /// </summary>
+    public BicepValue<ContainerAppPublicNetworkAccess> PublicNetworkAccess 
+    {
+        get { Initialize(); return _publicNetworkAccess!; }
+        set { Initialize(); _publicNetworkAccess!.Assign(value); }
+    }
+    private BicepValue<ContainerAppPublicNetworkAccess>? _publicNetworkAccess;
 
     /// <summary>
     /// Gets or sets the Tags.
@@ -224,6 +255,15 @@ public partial class ContainerAppManagedEnvironment : ProvisionableResource
     private BicepValue<string>? _kedaVersion;
 
     /// <summary>
+    /// Private endpoint connections to the resource.
+    /// </summary>
+    public BicepList<ContainerAppPrivateEndpointConnection> PrivateEndpointConnections 
+    {
+        get { Initialize(); return _privateEndpointConnections!; }
+    }
+    private BicepList<ContainerAppPrivateEndpointConnection>? _privateEndpointConnections;
+
+    /// <summary>
     /// Provisioning state of the Environment.
     /// </summary>
     public BicepValue<ContainerAppEnvironmentProvisioningState> ProvisioningState 
@@ -261,7 +301,7 @@ public partial class ContainerAppManagedEnvironment : ProvisionableResource
     /// </param>
     /// <param name="resourceVersion">Version of the ContainerAppManagedEnvironment.</param>
     public ContainerAppManagedEnvironment(string bicepIdentifier, string? resourceVersion = default)
-        : base(bicepIdentifier, "Microsoft.App/managedEnvironments", resourceVersion ?? "2024-03-01")
+        : base(bicepIdentifier, "Microsoft.App/managedEnvironments", resourceVersion ?? "2026-01-01")
     {
     }
 
@@ -271,17 +311,21 @@ public partial class ContainerAppManagedEnvironment : ProvisionableResource
     /// </summary>
     protected override void DefineProvisionableProperties()
     {
+        base.DefineProvisionableProperties();
         _name = DefineProperty<string>("Name", ["name"], isRequired: true);
         _location = DefineProperty<AzureLocation>("Location", ["location"], isRequired: true);
         _appLogsConfiguration = DefineModelProperty<ContainerAppLogsConfiguration>("AppLogsConfiguration", ["properties", "appLogsConfiguration"]);
         _customDomainConfiguration = DefineModelProperty<ContainerAppCustomDomainConfiguration>("CustomDomainConfiguration", ["properties", "customDomainConfiguration"]);
         _daprAIConnectionString = DefineProperty<string>("DaprAIConnectionString", ["properties", "daprAIConnectionString"]);
         _daprAIInstrumentationKey = DefineProperty<string>("DaprAIInstrumentationKey", ["properties", "daprAIInstrumentationKey"]);
+        _identity = DefineModelProperty<ManagedServiceIdentity>("Identity", ["identity"]);
         _infrastructureResourceGroup = DefineProperty<string>("InfrastructureResourceGroup", ["properties", "infrastructureResourceGroup"]);
+        _ingressConfiguration = DefineModelProperty<ManagedEnvironmentIngressConfiguration>("IngressConfiguration", ["properties", "ingressConfiguration"]);
         _isEnabled = DefineProperty<bool>("IsEnabled", ["properties", "peerTrafficConfiguration", "encryption", "enabled"]);
         _isMtlsEnabled = DefineProperty<bool>("IsMtlsEnabled", ["properties", "peerAuthentication", "mtls", "enabled"]);
         _isZoneRedundant = DefineProperty<bool>("IsZoneRedundant", ["properties", "zoneRedundant"]);
         _kind = DefineProperty<string>("Kind", ["kind"]);
+        _publicNetworkAccess = DefineProperty<ContainerAppPublicNetworkAccess>("PublicNetworkAccess", ["properties", "publicNetworkAccess"]);
         _tags = DefineDictionaryProperty<string>("Tags", ["tags"]);
         _vnetConfiguration = DefineModelProperty<ContainerAppVnetConfiguration>("VnetConfiguration", ["properties", "vnetConfiguration"]);
         _workloadProfiles = DefineListProperty<ContainerAppWorkloadProfile>("WorkloadProfiles", ["properties", "workloadProfiles"]);
@@ -291,6 +335,7 @@ public partial class ContainerAppManagedEnvironment : ProvisionableResource
         _eventStreamEndpoint = DefineProperty<string>("EventStreamEndpoint", ["properties", "eventStreamEndpoint"], isOutput: true);
         _id = DefineProperty<ResourceIdentifier>("Id", ["id"], isOutput: true);
         _kedaVersion = DefineProperty<string>("KedaVersion", ["properties", "kedaConfiguration", "version"], isOutput: true);
+        _privateEndpointConnections = DefineListProperty<ContainerAppPrivateEndpointConnection>("PrivateEndpointConnections", ["properties", "privateEndpointConnections"], isOutput: true);
         _provisioningState = DefineProperty<ContainerAppEnvironmentProvisioningState>("ProvisioningState", ["properties", "provisioningState"], isOutput: true);
         _staticIP = DefineProperty<IPAddress>("StaticIP", ["properties", "staticIp"], isOutput: true);
         _systemData = DefineModelProperty<SystemData>("SystemData", ["systemData"], isOutput: true);
@@ -301,6 +346,21 @@ public partial class ContainerAppManagedEnvironment : ProvisionableResource
     /// </summary>
     public static class ResourceVersions
     {
+        /// <summary>
+        /// 2026-01-01.
+        /// </summary>
+        public static readonly string V2026_01_01 = "2026-01-01";
+
+        /// <summary>
+        /// 2025-07-01.
+        /// </summary>
+        public static readonly string V2025_07_01 = "2025-07-01";
+
+        /// <summary>
+        /// 2025-01-01.
+        /// </summary>
+        public static readonly string V2025_01_01 = "2025-01-01";
+
         /// <summary>
         /// 2024-03-01.
         /// </summary>

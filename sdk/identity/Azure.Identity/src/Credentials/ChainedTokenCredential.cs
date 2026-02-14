@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using Azure.Core;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Azure.Core;
 using Azure.Core.Pipeline;
 
 namespace Azure.Identity
@@ -50,7 +50,8 @@ namespace Azure.Identity
         /// <param name="sources">The ordered chain of <see cref="TokenCredential"/> implementations to tried when calling <see cref="GetToken"/> or <see cref="GetTokenAsync"/></param>
         public ChainedTokenCredential(params TokenCredential[] sources)
         {
-            if (sources is null) throw new ArgumentNullException(nameof(sources));
+            if (sources is null)
+                throw new ArgumentNullException(nameof(sources));
 
             if (sources.Length == 0)
             {
@@ -69,7 +70,7 @@ namespace Azure.Identity
         }
 
         /// <summary>
-        /// Sequentially calls <see cref="TokenCredential.GetToken"/> on all the specified sources, returning the first successfully obtained
+        /// Sequentially calls <see cref="TokenCredential.GetToken(TokenRequestContext, CancellationToken)"/> on all the specified sources, returning the first successfully obtained
         /// <see cref="AccessToken"/>. Acquired tokens are <see href="https://aka.ms/azsdk/net/identity/token-cache">cached</see> by the
         /// credential instance. Token lifetime and refreshing is handled automatically. Where possible, <see href="https://aka.ms/azsdk/net/identity/credential-reuse">reuse credential instances</see>
         /// to optimize cache effectiveness.
@@ -82,7 +83,7 @@ namespace Azure.Identity
             => GetTokenImplAsync(false, requestContext, cancellationToken).EnsureCompleted();
 
         /// <summary>
-        /// Sequentially calls <see cref="TokenCredential.GetToken"/> on all the specified sources, returning the first successfully obtained
+        /// Sequentially calls <see cref="TokenCredential.GetToken(TokenRequestContext, CancellationToken)"/> on all the specified sources, returning the first successfully obtained
         /// <see cref="AccessToken"/>. Acquired tokens are <see href="https://aka.ms/azsdk/net/identity/token-cache">cached</see> by the
         /// credential instance. Token lifetime and refreshing is handled automatically. Where possible, <see href="https://aka.ms/azsdk/net/identity/credential-reuse">reuse credential instances</see>
         /// to optimize cache effectiveness.

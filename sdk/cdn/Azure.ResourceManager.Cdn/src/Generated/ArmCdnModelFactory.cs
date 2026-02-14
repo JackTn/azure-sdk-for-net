@@ -164,7 +164,7 @@ namespace Azure.ResourceManager.Cdn.Models
                 profileName,
                 tlsSettings,
                 dnsZoneId != null ? ResourceManagerModelFactory.WritableSubResource(dnsZoneId) : null,
-                preValidatedCustomDomainResourceId != null ? new FrontDoorCustomDomainUpdatePropertiesParametersPreValidatedCustomDomainResourceId(preValidatedCustomDomainResourceId, serializedAdditionalRawData: null) : null,
+                preValidatedCustomDomainResourceId != null ? ResourceManagerModelFactory.WritableSubResource(preValidatedCustomDomainResourceId) : null,
                 provisioningState,
                 deploymentStatus,
                 domainValidationState,
@@ -191,7 +191,7 @@ namespace Azure.ResourceManager.Cdn.Models
         /// <returns> A new <see cref="Models.FrontDoorCustomDomainPatch"/> instance for mocking. </returns>
         public static FrontDoorCustomDomainPatch FrontDoorCustomDomainPatch(string profileName = null, FrontDoorCustomDomainHttpsContent tlsSettings = null, ResourceIdentifier dnsZoneId = null, ResourceIdentifier preValidatedCustomDomainResourceId = null)
         {
-            return new FrontDoorCustomDomainPatch(profileName, tlsSettings, dnsZoneId != null ? ResourceManagerModelFactory.WritableSubResource(dnsZoneId) : null, preValidatedCustomDomainResourceId != null ? new FrontDoorCustomDomainUpdatePropertiesParametersPreValidatedCustomDomainResourceId(preValidatedCustomDomainResourceId, serializedAdditionalRawData: null) : null, serializedAdditionalRawData: null);
+            return new FrontDoorCustomDomainPatch(profileName, tlsSettings, dnsZoneId != null ? ResourceManagerModelFactory.WritableSubResource(dnsZoneId) : null, preValidatedCustomDomainResourceId != null ? ResourceManagerModelFactory.WritableSubResource(preValidatedCustomDomainResourceId) : null, serializedAdditionalRawData: null);
         }
 
         /// <summary> Initializes a new instance of <see cref="Cdn.FrontDoorEndpointData"/>. </summary>
@@ -260,10 +260,11 @@ namespace Azure.ResourceManager.Cdn.Models
         /// <param name="healthProbeSettings"> Health probe settings to the origin that is used to determine the health of the origin. </param>
         /// <param name="trafficRestorationTimeInMinutes"> Time in minutes to shift the traffic to the endpoint gradually when an unhealthy endpoint comes healthy or a new endpoint is added. Default is 10 mins. This property is currently not supported. </param>
         /// <param name="sessionAffinityState"> Whether to allow session affinity on this host. Valid options are 'Enabled' or 'Disabled'. </param>
+        /// <param name="authentication"> Authentication settings for origin in origin group. </param>
         /// <param name="provisioningState"> Provisioning status. </param>
         /// <param name="deploymentStatus"></param>
         /// <returns> A new <see cref="Cdn.FrontDoorOriginGroupData"/> instance for mocking. </returns>
-        public static FrontDoorOriginGroupData FrontDoorOriginGroupData(ResourceIdentifier id = null, string name = null, ResourceType resourceType = default, SystemData systemData = null, string profileName = null, LoadBalancingSettings loadBalancingSettings = null, HealthProbeSettings healthProbeSettings = null, int? trafficRestorationTimeInMinutes = null, EnabledState? sessionAffinityState = null, FrontDoorProvisioningState? provisioningState = null, FrontDoorDeploymentStatus? deploymentStatus = null)
+        public static FrontDoorOriginGroupData FrontDoorOriginGroupData(ResourceIdentifier id = null, string name = null, ResourceType resourceType = default, SystemData systemData = null, string profileName = null, LoadBalancingSettings loadBalancingSettings = null, HealthProbeSettings healthProbeSettings = null, int? trafficRestorationTimeInMinutes = null, EnabledState? sessionAffinityState = null, OriginAuthenticationProperties authentication = null, FrontDoorProvisioningState? provisioningState = null, FrontDoorDeploymentStatus? deploymentStatus = null)
         {
             return new FrontDoorOriginGroupData(
                 id,
@@ -275,6 +276,7 @@ namespace Azure.ResourceManager.Cdn.Models
                 healthProbeSettings,
                 trafficRestorationTimeInMinutes,
                 sessionAffinityState,
+                authentication,
                 provisioningState,
                 deploymentStatus,
                 serializedAdditionalRawData: null);
@@ -286,8 +288,9 @@ namespace Azure.ResourceManager.Cdn.Models
         /// <param name="healthProbeSettings"> Health probe settings to the origin that is used to determine the health of the origin. </param>
         /// <param name="trafficRestorationTimeInMinutes"> Time in minutes to shift the traffic to the endpoint gradually when an unhealthy endpoint comes healthy or a new endpoint is added. Default is 10 mins. This property is currently not supported. </param>
         /// <param name="sessionAffinityState"> Whether to allow session affinity on this host. Valid options are 'Enabled' or 'Disabled'. </param>
+        /// <param name="authentication"> Authentication settings for origin in origin group. </param>
         /// <returns> A new <see cref="Models.FrontDoorOriginGroupPatch"/> instance for mocking. </returns>
-        public static FrontDoorOriginGroupPatch FrontDoorOriginGroupPatch(string profileName = null, LoadBalancingSettings loadBalancingSettings = null, HealthProbeSettings healthProbeSettings = null, int? trafficRestorationTimeInMinutes = null, EnabledState? sessionAffinityState = null)
+        public static FrontDoorOriginGroupPatch FrontDoorOriginGroupPatch(string profileName = null, LoadBalancingSettings loadBalancingSettings = null, HealthProbeSettings healthProbeSettings = null, int? trafficRestorationTimeInMinutes = null, EnabledState? sessionAffinityState = null, OriginAuthenticationProperties authentication = null)
         {
             return new FrontDoorOriginGroupPatch(
                 profileName,
@@ -295,6 +298,7 @@ namespace Azure.ResourceManager.Cdn.Models
                 healthProbeSettings,
                 trafficRestorationTimeInMinutes,
                 sessionAffinityState,
+                authentication,
                 serializedAdditionalRawData: null);
         }
 
@@ -860,18 +864,18 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> Initializes a new instance of <see cref="Models.CanMigrateResult"/>. </summary>
-        /// <param name="id"> Resource ID. </param>
+        /// <param name="resourceId"> Resource ID. </param>
         /// <param name="canMigrateResultType"> Resource type. </param>
         /// <param name="canMigrate"> Flag that says if the profile can be migrated. </param>
         /// <param name="defaultSku"> Recommended sku for the migration. </param>
         /// <param name="errors"></param>
         /// <returns> A new <see cref="Models.CanMigrateResult"/> instance for mocking. </returns>
-        public static CanMigrateResult CanMigrateResult(string id = null, string canMigrateResultType = null, bool? canMigrate = null, CanMigrateDefaultSku? defaultSku = null, IEnumerable<MigrationErrorType> errors = null)
+        public static CanMigrateResult CanMigrateResult(ResourceIdentifier resourceId = null, string canMigrateResultType = null, bool? canMigrate = null, CanMigrateDefaultSku? defaultSku = null, IEnumerable<MigrationErrorType> errors = null)
         {
             errors ??= new List<MigrationErrorType>();
 
             return new CanMigrateResult(
-                id,
+                resourceId,
                 canMigrateResultType,
                 canMigrate,
                 defaultSku,
@@ -904,13 +908,13 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> Initializes a new instance of <see cref="Models.MigrateResult"/>. </summary>
-        /// <param name="id"> Resource ID. </param>
+        /// <param name="resourceId"> Resource ID. </param>
         /// <param name="migrateResultType"> Resource type. </param>
         /// <param name="migratedProfileResourceIdId"> Arm resource id of the migrated profile. </param>
         /// <returns> A new <see cref="Models.MigrateResult"/> instance for mocking. </returns>
-        public static MigrateResult MigrateResult(string id = null, string migrateResultType = null, ResourceIdentifier migratedProfileResourceIdId = null)
+        public static MigrateResult MigrateResult(ResourceIdentifier resourceId = null, string migrateResultType = null, ResourceIdentifier migratedProfileResourceIdId = null)
         {
-            return new MigrateResult(id, migrateResultType, migratedProfileResourceIdId != null ? ResourceManagerModelFactory.WritableSubResource(migratedProfileResourceIdId) : null, serializedAdditionalRawData: null);
+            return new MigrateResult(resourceId, migrateResultType, migratedProfileResourceIdId != null ? ResourceManagerModelFactory.WritableSubResource(migratedProfileResourceIdId) : null, serializedAdditionalRawData: null);
         }
 
         /// <summary> Initializes a new instance of <see cref="Models.SsoUri"/>. </summary>
@@ -997,7 +1001,7 @@ namespace Azure.ResourceManager.Cdn.Models
                 optimizationType,
                 probePath,
                 geoFilters?.ToList(),
-                defaultOriginGroupId != null ? new EndpointPropertiesUpdateParametersDefaultOriginGroup(defaultOriginGroupId, serializedAdditionalRawData: null) : null,
+                defaultOriginGroupId != null ? ResourceManagerModelFactory.WritableSubResource(defaultOriginGroupId) : null,
                 uriSigningKeys?.ToList(),
                 deliveryPolicy,
                 webApplicationFirewallPolicyLinkId != null ? new EndpointPropertiesUpdateParametersWebApplicationFirewallPolicyLink(webApplicationFirewallPolicyLinkId, serializedAdditionalRawData: null) : null,
@@ -1192,6 +1196,17 @@ namespace Azure.ResourceManager.Cdn.Models
                 serializedAdditionalRawData: null);
         }
 
+        /// <summary> Initializes a new instance of <see cref="Models.CdnMigrationToAfdContent"/>. </summary>
+        /// <param name="skuName"> Sku for the migration. </param>
+        /// <param name="migrationEndpointMappings"> A name map between classic CDN endpoints and AFD Premium/Standard endpoints. </param>
+        /// <returns> A new <see cref="Models.CdnMigrationToAfdContent"/> instance for mocking. </returns>
+        public static CdnMigrationToAfdContent CdnMigrationToAfdContent(CdnSkuName? skuName = null, IEnumerable<MigrationEndpointMapping> migrationEndpointMappings = null)
+        {
+            migrationEndpointMappings ??= new List<MigrationEndpointMapping>();
+
+            return new CdnMigrationToAfdContent(skuName != null ? new CdnSku(skuName, serializedAdditionalRawData: null) : null, migrationEndpointMappings?.ToList(), serializedAdditionalRawData: null);
+        }
+
         /// <summary> Initializes a new instance of <see cref="Cdn.CdnWebApplicationFirewallPolicyData"/>. </summary>
         /// <param name="id"> The id. </param>
         /// <param name="name"> The name. </param>
@@ -1345,6 +1360,71 @@ namespace Azure.ResourceManager.Cdn.Models
                 certificateAuthority,
                 subjectAlternativeNames?.ToList(),
                 thumbprint);
+        }
+
+        /// <summary> Initializes a new instance of <see cref="T:Azure.ResourceManager.Cdn.FrontDoorOriginGroupData" />. </summary>
+        /// <param name="id"> The id. </param>
+        /// <param name="name"> The name. </param>
+        /// <param name="resourceType"> The resourceType. </param>
+        /// <param name="systemData"> The systemData. </param>
+        /// <param name="profileName">
+        /// The name of the profile which holds the origin group.
+        /// Serialized Name: AFDOriginGroup.properties.profileName
+        /// </param>
+        /// <param name="loadBalancingSettings">
+        /// Load balancing settings for a backend pool
+        /// Serialized Name: AFDOriginGroup.properties.loadBalancingSettings
+        /// </param>
+        /// <param name="healthProbeSettings">
+        /// Health probe settings to the origin that is used to determine the health of the origin.
+        /// Serialized Name: AFDOriginGroup.properties.healthProbeSettings
+        /// </param>
+        /// <param name="trafficRestorationTimeInMinutes">
+        /// Time in minutes to shift the traffic to the endpoint gradually when an unhealthy endpoint comes healthy or a new endpoint is added. Default is 10 mins. This property is currently not supported.
+        /// Serialized Name: AFDOriginGroup.properties.trafficRestorationTimeToHealedOrNewEndpointsInMinutes
+        /// </param>
+        /// <param name="sessionAffinityState">
+        /// Whether to allow session affinity on this host. Valid options are 'Enabled' or 'Disabled'
+        /// Serialized Name: AFDOriginGroup.properties.sessionAffinityState
+        /// </param>
+        /// <param name="provisioningState">
+        /// Provisioning status
+        /// Serialized Name: AFDOriginGroup.properties.provisioningState
+        /// </param>
+        /// <param name="deploymentStatus"> Serialized Name: AFDOriginGroup.properties.deploymentStatus. </param>
+        /// <returns> A new <see cref="T:Azure.ResourceManager.Cdn.FrontDoorOriginGroupData" /> instance for mocking. </returns>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static FrontDoorOriginGroupData FrontDoorOriginGroupData(ResourceIdentifier id, string name, ResourceType resourceType, SystemData systemData, string profileName, LoadBalancingSettings loadBalancingSettings, HealthProbeSettings healthProbeSettings, int? trafficRestorationTimeInMinutes, EnabledState? sessionAffinityState, FrontDoorProvisioningState? provisioningState, FrontDoorDeploymentStatus? deploymentStatus)
+        {
+            return FrontDoorOriginGroupData(id: id, name: name, resourceType: resourceType, systemData: systemData, profileName: profileName, loadBalancingSettings: loadBalancingSettings, healthProbeSettings: healthProbeSettings, trafficRestorationTimeInMinutes: trafficRestorationTimeInMinutes, sessionAffinityState: sessionAffinityState, authentication: default, provisioningState: provisioningState, deploymentStatus: deploymentStatus);
+        }
+
+        /// <summary> Initializes a new instance of <see cref="T:Azure.ResourceManager.Cdn.Models.FrontDoorOriginGroupPatch" />. </summary>
+        /// <param name="profileName">
+        /// The name of the profile which holds the origin group.
+        /// Serialized Name: AFDOriginGroupUpdateParameters.properties.profileName
+        /// </param>
+        /// <param name="loadBalancingSettings">
+        /// Load balancing settings for a backend pool
+        /// Serialized Name: AFDOriginGroupUpdateParameters.properties.loadBalancingSettings
+        /// </param>
+        /// <param name="healthProbeSettings">
+        /// Health probe settings to the origin that is used to determine the health of the origin.
+        /// Serialized Name: AFDOriginGroupUpdateParameters.properties.healthProbeSettings
+        /// </param>
+        /// <param name="trafficRestorationTimeInMinutes">
+        /// Time in minutes to shift the traffic to the endpoint gradually when an unhealthy endpoint comes healthy or a new endpoint is added. Default is 10 mins. This property is currently not supported.
+        /// Serialized Name: AFDOriginGroupUpdateParameters.properties.trafficRestorationTimeToHealedOrNewEndpointsInMinutes
+        /// </param>
+        /// <param name="sessionAffinityState">
+        /// Whether to allow session affinity on this host. Valid options are 'Enabled' or 'Disabled'
+        /// Serialized Name: AFDOriginGroupUpdateParameters.properties.sessionAffinityState
+        /// </param>
+        /// <returns> A new <see cref="T:Azure.ResourceManager.Cdn.Models.FrontDoorOriginGroupPatch" /> instance for mocking. </returns>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static FrontDoorOriginGroupPatch FrontDoorOriginGroupPatch(string profileName, LoadBalancingSettings loadBalancingSettings, HealthProbeSettings healthProbeSettings, int? trafficRestorationTimeInMinutes, EnabledState? sessionAffinityState)
+        {
+            return FrontDoorOriginGroupPatch(profileName: profileName, loadBalancingSettings: loadBalancingSettings, healthProbeSettings: healthProbeSettings, trafficRestorationTimeInMinutes: trafficRestorationTimeInMinutes, sessionAffinityState: sessionAffinityState, authentication: default);
         }
 
         /// <summary> Initializes a new instance of FrontDoorCustomDomainData. </summary>

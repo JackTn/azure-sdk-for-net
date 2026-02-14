@@ -39,7 +39,7 @@ namespace Azure.ResourceManager.Compute.Models
                 writer.WritePropertyName("type"u8);
                 writer.WriteStringValue(ExecutedValidationType);
             }
-            if (Optional.IsDefined(Status))
+            if (options.Format != "W" && Optional.IsDefined(Status))
             {
                 writer.WritePropertyName("status"u8);
                 writer.WriteStringValue(Status.Value.ToString());
@@ -143,7 +143,7 @@ namespace Azure.ResourceManager.Compute.Models
             switch (format)
             {
                 case "J":
-                    return ModelReaderWriter.Write(this, options);
+                    return ModelReaderWriter.Write(this, options, AzureResourceManagerComputeContext.Default);
                 default:
                     throw new FormatException($"The model {nameof(GalleryImageExecutedValidation)} does not support writing '{options.Format}' format.");
             }

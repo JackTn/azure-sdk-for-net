@@ -80,16 +80,20 @@ namespace Azure.ResourceManager.Cdn
         }
 
         /// <summary> Provisioning status. </summary>
+        [WirePath("properties.provisioningState")]
         public FrontDoorProvisioningState? ProvisioningState { get; }
         /// <summary> Gets the deployment status. </summary>
+        [WirePath("properties.deploymentStatus")]
         public FrontDoorDeploymentStatus? DeploymentStatus { get; }
         /// <summary> The name of the profile which holds the security policy. </summary>
+        [WirePath("properties.profileName")]
         public string ProfileName { get; }
         /// <summary>
         /// object which contains security policy parameters
         /// Please note <see cref="SecurityPolicyProperties"/> is the base class. According to the scenario, a derived class of the base class might need to be assigned here, or this property needs to be casted to one of the possible derived classes.
         /// The available derived classes include <see cref="SecurityPolicyWebApplicationFirewall"/>.
         /// </summary>
+        [WirePath("properties.parameters")]
         public SecurityPolicyProperties Properties { get; set; }
     }
 }

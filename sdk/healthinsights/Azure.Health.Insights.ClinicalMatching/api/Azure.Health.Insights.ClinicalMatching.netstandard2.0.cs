@@ -34,9 +34,7 @@ namespace Azure.Health.Insights.ClinicalMatching
         public static Azure.Health.Insights.ClinicalMatching.AgeUnit Months { get { throw null; } }
         public static Azure.Health.Insights.ClinicalMatching.AgeUnit Years { get { throw null; } }
         public bool Equals(Azure.Health.Insights.ClinicalMatching.AgeUnit other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.ClinicalMatching.AgeUnit left, Azure.Health.Insights.ClinicalMatching.AgeUnit right) { throw null; }
         public static implicit operator Azure.Health.Insights.ClinicalMatching.AgeUnit (string value) { throw null; }
@@ -67,6 +65,12 @@ namespace Azure.Health.Insights.ClinicalMatching
         string System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.ClinicalMatching.AreaProperties>.GetFormatFromOptions(System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
         System.BinaryData System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.ClinicalMatching.AreaProperties>.Write(System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
     }
+    public partial class AzureHealthInsightsClinicalMatchingContext : System.ClientModel.Primitives.ModelReaderWriterContext
+    {
+        internal AzureHealthInsightsClinicalMatchingContext() { }
+        public static Azure.Health.Insights.ClinicalMatching.AzureHealthInsightsClinicalMatchingContext Default { get { throw null; } }
+        protected override bool TryGetTypeBuilderCore(System.Type type, out System.ClientModel.Primitives.ModelReaderWriterTypeBuilder builder) { throw null; }
+    }
     public partial class ClinicalCodedElement : System.ClientModel.Primitives.IJsonModel<Azure.Health.Insights.ClinicalMatching.ClinicalCodedElement>, System.ClientModel.Primitives.IPersistableModel<Azure.Health.Insights.ClinicalMatching.ClinicalCodedElement>
     {
         public ClinicalCodedElement(string system, string code) { }
@@ -96,9 +100,7 @@ namespace Azure.Health.Insights.ClinicalMatching
         public static Azure.Health.Insights.ClinicalMatching.ClinicalDocumentType Procedure { get { throw null; } }
         public static Azure.Health.Insights.ClinicalMatching.ClinicalDocumentType Progress { get { throw null; } }
         public bool Equals(Azure.Health.Insights.ClinicalMatching.ClinicalDocumentType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.ClinicalMatching.ClinicalDocumentType left, Azure.Health.Insights.ClinicalMatching.ClinicalDocumentType right) { throw null; }
         public static implicit operator Azure.Health.Insights.ClinicalMatching.ClinicalDocumentType (string value) { throw null; }
@@ -148,9 +150,7 @@ namespace Azure.Health.Insights.ClinicalMatching
         public static Azure.Health.Insights.ClinicalMatching.ClinicalTrialAcceptedSex Female { get { throw null; } }
         public static Azure.Health.Insights.ClinicalMatching.ClinicalTrialAcceptedSex Male { get { throw null; } }
         public bool Equals(Azure.Health.Insights.ClinicalMatching.ClinicalTrialAcceptedSex other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.ClinicalMatching.ClinicalTrialAcceptedSex left, Azure.Health.Insights.ClinicalMatching.ClinicalTrialAcceptedSex right) { throw null; }
         public static implicit operator Azure.Health.Insights.ClinicalMatching.ClinicalTrialAcceptedSex (string value) { throw null; }
@@ -213,9 +213,7 @@ namespace Azure.Health.Insights.ClinicalMatching
         public static Azure.Health.Insights.ClinicalMatching.ClinicalTrialPhase Phase3 { get { throw null; } }
         public static Azure.Health.Insights.ClinicalMatching.ClinicalTrialPhase Phase4 { get { throw null; } }
         public bool Equals(Azure.Health.Insights.ClinicalMatching.ClinicalTrialPhase other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.ClinicalMatching.ClinicalTrialPhase left, Azure.Health.Insights.ClinicalMatching.ClinicalTrialPhase right) { throw null; }
         public static implicit operator Azure.Health.Insights.ClinicalMatching.ClinicalTrialPhase (string value) { throw null; }
@@ -239,9 +237,7 @@ namespace Azure.Health.Insights.ClinicalMatching
         public static Azure.Health.Insights.ClinicalMatching.ClinicalTrialPurpose SupportiveCare { get { throw null; } }
         public static Azure.Health.Insights.ClinicalMatching.ClinicalTrialPurpose Treatment { get { throw null; } }
         public bool Equals(Azure.Health.Insights.ClinicalMatching.ClinicalTrialPurpose other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.ClinicalMatching.ClinicalTrialPurpose left, Azure.Health.Insights.ClinicalMatching.ClinicalTrialPurpose right) { throw null; }
         public static implicit operator Azure.Health.Insights.ClinicalMatching.ClinicalTrialPurpose (string value) { throw null; }
@@ -259,9 +255,7 @@ namespace Azure.Health.Insights.ClinicalMatching
         public static Azure.Health.Insights.ClinicalMatching.ClinicalTrialRecruitmentStatus Recruiting { get { throw null; } }
         public static Azure.Health.Insights.ClinicalMatching.ClinicalTrialRecruitmentStatus UnknownStatus { get { throw null; } }
         public bool Equals(Azure.Health.Insights.ClinicalMatching.ClinicalTrialRecruitmentStatus other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.ClinicalMatching.ClinicalTrialRecruitmentStatus left, Azure.Health.Insights.ClinicalMatching.ClinicalTrialRecruitmentStatus right) { throw null; }
         public static implicit operator Azure.Health.Insights.ClinicalMatching.ClinicalTrialRecruitmentStatus (string value) { throw null; }
@@ -324,9 +318,7 @@ namespace Azure.Health.Insights.ClinicalMatching
         public static Azure.Health.Insights.ClinicalMatching.ClinicalTrialSource ClinicaltrialsGov { get { throw null; } }
         public static Azure.Health.Insights.ClinicalMatching.ClinicalTrialSource Custom { get { throw null; } }
         public bool Equals(Azure.Health.Insights.ClinicalMatching.ClinicalTrialSource other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.ClinicalMatching.ClinicalTrialSource left, Azure.Health.Insights.ClinicalMatching.ClinicalTrialSource right) { throw null; }
         public static implicit operator Azure.Health.Insights.ClinicalMatching.ClinicalTrialSource (string value) { throw null; }
@@ -344,9 +336,7 @@ namespace Azure.Health.Insights.ClinicalMatching
         public static Azure.Health.Insights.ClinicalMatching.ClinicalTrialStudyType Observational { get { throw null; } }
         public static Azure.Health.Insights.ClinicalMatching.ClinicalTrialStudyType PatientRegistries { get { throw null; } }
         public bool Equals(Azure.Health.Insights.ClinicalMatching.ClinicalTrialStudyType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.ClinicalMatching.ClinicalTrialStudyType left, Azure.Health.Insights.ClinicalMatching.ClinicalTrialStudyType right) { throw null; }
         public static implicit operator Azure.Health.Insights.ClinicalMatching.ClinicalTrialStudyType (string value) { throw null; }
@@ -387,9 +377,7 @@ namespace Azure.Health.Insights.ClinicalMatching
         public static Azure.Health.Insights.ClinicalMatching.DocumentContentSourceType Inline { get { throw null; } }
         public static Azure.Health.Insights.ClinicalMatching.DocumentContentSourceType Reference { get { throw null; } }
         public bool Equals(Azure.Health.Insights.ClinicalMatching.DocumentContentSourceType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.ClinicalMatching.DocumentContentSourceType left, Azure.Health.Insights.ClinicalMatching.DocumentContentSourceType right) { throw null; }
         public static implicit operator Azure.Health.Insights.ClinicalMatching.DocumentContentSourceType (string value) { throw null; }
@@ -407,9 +395,7 @@ namespace Azure.Health.Insights.ClinicalMatching
         public static Azure.Health.Insights.ClinicalMatching.DocumentType GenomicSequencing { get { throw null; } }
         public static Azure.Health.Insights.ClinicalMatching.DocumentType Note { get { throw null; } }
         public bool Equals(Azure.Health.Insights.ClinicalMatching.DocumentType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.ClinicalMatching.DocumentType left, Azure.Health.Insights.ClinicalMatching.DocumentType right) { throw null; }
         public static implicit operator Azure.Health.Insights.ClinicalMatching.DocumentType (string value) { throw null; }
@@ -466,9 +452,7 @@ namespace Azure.Health.Insights.ClinicalMatching
         public GeoJsonGeometryType(string value) { throw null; }
         public static Azure.Health.Insights.ClinicalMatching.GeoJsonGeometryType Point { get { throw null; } }
         public bool Equals(Azure.Health.Insights.ClinicalMatching.GeoJsonGeometryType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.ClinicalMatching.GeoJsonGeometryType left, Azure.Health.Insights.ClinicalMatching.GeoJsonGeometryType right) { throw null; }
         public static implicit operator Azure.Health.Insights.ClinicalMatching.GeoJsonGeometryType (string value) { throw null; }
@@ -483,9 +467,7 @@ namespace Azure.Health.Insights.ClinicalMatching
         public GeoJsonPropertiesSubType(string value) { throw null; }
         public static Azure.Health.Insights.ClinicalMatching.GeoJsonPropertiesSubType Circle { get { throw null; } }
         public bool Equals(Azure.Health.Insights.ClinicalMatching.GeoJsonPropertiesSubType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.ClinicalMatching.GeoJsonPropertiesSubType left, Azure.Health.Insights.ClinicalMatching.GeoJsonPropertiesSubType right) { throw null; }
         public static implicit operator Azure.Health.Insights.ClinicalMatching.GeoJsonPropertiesSubType (string value) { throw null; }
@@ -500,9 +482,7 @@ namespace Azure.Health.Insights.ClinicalMatching
         public GeoJsonType(string value) { throw null; }
         public static Azure.Health.Insights.ClinicalMatching.GeoJsonType Feature { get { throw null; } }
         public bool Equals(Azure.Health.Insights.ClinicalMatching.GeoJsonType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.ClinicalMatching.GeoJsonType left, Azure.Health.Insights.ClinicalMatching.GeoJsonType right) { throw null; }
         public static implicit operator Azure.Health.Insights.ClinicalMatching.GeoJsonType (string value) { throw null; }
@@ -562,9 +542,7 @@ namespace Azure.Health.Insights.ClinicalMatching
         public static Azure.Health.Insights.ClinicalMatching.PatientInfoSex Male { get { throw null; } }
         public static Azure.Health.Insights.ClinicalMatching.PatientInfoSex Unspecified { get { throw null; } }
         public bool Equals(Azure.Health.Insights.ClinicalMatching.PatientInfoSex other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.ClinicalMatching.PatientInfoSex left, Azure.Health.Insights.ClinicalMatching.PatientInfoSex right) { throw null; }
         public static implicit operator Azure.Health.Insights.ClinicalMatching.PatientInfoSex (string value) { throw null; }
@@ -636,9 +614,7 @@ namespace Azure.Health.Insights.ClinicalMatching
         public TrialMatcherInferenceType(string value) { throw null; }
         public static Azure.Health.Insights.ClinicalMatching.TrialMatcherInferenceType TrialEligibility { get { throw null; } }
         public bool Equals(Azure.Health.Insights.ClinicalMatching.TrialMatcherInferenceType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.ClinicalMatching.TrialMatcherInferenceType left, Azure.Health.Insights.ClinicalMatching.TrialMatcherInferenceType right) { throw null; }
         public static implicit operator Azure.Health.Insights.ClinicalMatching.TrialMatcherInferenceType (string value) { throw null; }

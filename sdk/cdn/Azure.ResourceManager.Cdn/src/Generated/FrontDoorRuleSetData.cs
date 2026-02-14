@@ -74,10 +74,13 @@ namespace Azure.ResourceManager.Cdn
         }
 
         /// <summary> Provisioning status. </summary>
+        [WirePath("properties.provisioningState")]
         public FrontDoorProvisioningState? ProvisioningState { get; }
         /// <summary> Gets the deployment status. </summary>
+        [WirePath("properties.deploymentStatus")]
         public FrontDoorDeploymentStatus? DeploymentStatus { get; }
         /// <summary> The name of the profile which holds the rule set. </summary>
+        [WirePath("properties.profileName")]
         public string ProfileName { get; }
     }
 }

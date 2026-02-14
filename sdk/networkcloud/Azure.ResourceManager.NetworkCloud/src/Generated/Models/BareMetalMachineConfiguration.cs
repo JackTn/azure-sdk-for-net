@@ -46,7 +46,7 @@ namespace Azure.ResourceManager.NetworkCloud.Models
         private IDictionary<string, BinaryData> _serializedAdditionalRawData;
 
         /// <summary> Initializes a new instance of <see cref="BareMetalMachineConfiguration"/>. </summary>
-        /// <param name="bmcCredentials"> The credentials of the baseboard management controller on this bare metal machine. </param>
+        /// <param name="bmcCredentials"> The credentials of the baseboard management controller on this bare metal machine. The password field is expected to be an Azure Key Vault key URL. Until the cluster is converted to utilize managed identity by setting the secret archive settings, the actual password value should be provided instead. </param>
         /// <param name="bmcMacAddress"> The MAC address of the BMC for this machine. </param>
         /// <param name="bootMacAddress"> The MAC address associated with the PXE NIC card. </param>
         /// <param name="rackSlot"> The slot the physical machine is in the rack based on the BOM configuration. </param>
@@ -68,14 +68,11 @@ namespace Azure.ResourceManager.NetworkCloud.Models
 
         /// <summary> Initializes a new instance of <see cref="BareMetalMachineConfiguration"/>. </summary>
         /// <param name="bmcConnectionString"> The connection string for the baseboard management controller including IP address and protocol. </param>
-        /// <param name="bmcCredentials"> The credentials of the baseboard management controller on this bare metal machine. </param>
+        /// <param name="bmcCredentials"> The credentials of the baseboard management controller on this bare metal machine. The password field is expected to be an Azure Key Vault key URL. Until the cluster is converted to utilize managed identity by setting the secret archive settings, the actual password value should be provided instead. </param>
         /// <param name="bmcMacAddress"> The MAC address of the BMC for this machine. </param>
         /// <param name="bootMacAddress"> The MAC address associated with the PXE NIC card. </param>
         /// <param name="machineDetails"> The free-form additional information about the machine, e.g. an asset tag. </param>
-        /// <param name="machineName">
-        /// The user-provided name for the bare metal machine created from this specification.
-        /// If not provided, the machine name will be generated programmatically.
-        /// </param>
+        /// <param name="machineName"> The user-provided name for the bare metal machine created from this specification. If not provided, the machine name will be generated programmatically. </param>
         /// <param name="rackSlot"> The slot the physical machine is in the rack based on the BOM configuration. </param>
         /// <param name="serialNumber"> The serial number of the machine. Hardware suppliers may use an alternate value. For example, service tag. </param>
         /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
@@ -99,7 +96,7 @@ namespace Azure.ResourceManager.NetworkCloud.Models
 
         /// <summary> The connection string for the baseboard management controller including IP address and protocol. </summary>
         public string BmcConnectionString { get; }
-        /// <summary> The credentials of the baseboard management controller on this bare metal machine. </summary>
+        /// <summary> The credentials of the baseboard management controller on this bare metal machine. The password field is expected to be an Azure Key Vault key URL. Until the cluster is converted to utilize managed identity by setting the secret archive settings, the actual password value should be provided instead. </summary>
         public AdministrativeCredentials BmcCredentials { get; set; }
         /// <summary> The MAC address of the BMC for this machine. </summary>
         public string BmcMacAddress { get; set; }
@@ -107,10 +104,7 @@ namespace Azure.ResourceManager.NetworkCloud.Models
         public string BootMacAddress { get; set; }
         /// <summary> The free-form additional information about the machine, e.g. an asset tag. </summary>
         public string MachineDetails { get; set; }
-        /// <summary>
-        /// The user-provided name for the bare metal machine created from this specification.
-        /// If not provided, the machine name will be generated programmatically.
-        /// </summary>
+        /// <summary> The user-provided name for the bare metal machine created from this specification. If not provided, the machine name will be generated programmatically. </summary>
         public string MachineName { get; set; }
         /// <summary> The slot the physical machine is in the rack based on the BOM configuration. </summary>
         public long RackSlot { get; set; }

@@ -58,7 +58,6 @@ namespace Azure.ResourceManager.ServiceFabricManagedClusters.Tests
 
         [RecordedTest]
         [PlaybackOnly("Need manually upload a .sfpkg file to StorageAccount")]
-        [Ignore("Nee re-record")]
         public async Task CreateOrUpdateExistGetGetAllDelete()
         {
             // CreateOrUpdate
@@ -84,9 +83,9 @@ namespace Azure.ResourceManager.ServiceFabricManagedClusters.Tests
             Assert.IsFalse(flag);
         }
 
+        [RecordedTest]
         [TestCase(false)]
-        [PlaybackOnly("Need manually upload a .sfpkg file to StorageAccount")]
-        [Ignore("Nee re-record")]
+        [PlaybackOnlyAttribute("Need manually upload a .sfpkg file to StorageAccount")]
         //[TestCase(null)] // The HTTP method 'GET' is not supported at scope 'Microsoft.ServiceFabric/managedclusters/sfmctest1063/applications/application5675'.
         //[TestCase(true)] // The HTTP method 'GET' is not supported at scope 'Microsoft.ServiceFabric/managedclusters/sfmctest1063/applications/application5675'.
         public async Task AddRemoveTag(bool? useTagResource)

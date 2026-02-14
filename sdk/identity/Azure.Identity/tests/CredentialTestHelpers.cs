@@ -7,8 +7,8 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Security.Cryptography.X509Certificates;
 using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -75,6 +75,15 @@ namespace Azure.Identity.Tests
         {
             var expiresOn = DateTimeOffset.FromUnixTimeSeconds(DateTimeOffset.UtcNow.Add(expiresOffset).ToUnixTimeSeconds());
             var token = TokenGenerator.GenerateToken(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), expiresOn.UtcDateTime);
+            var xml = @$"<Object Type=""System.Management.Automation.PSCustomObject""><Property Name=""Token"" Type=""System.String"">{token}</Property><Property Name=""ExpiresOn"" Type=""System.Int64"">{expiresOn.UtcDateTime.Ticks}</Property></Object>";
+            return (token, expiresOn, xml);
+        }
+
+        public static (string Token, DateTimeOffset ExpiresOn, string Json) CreateTokenForAzurePowerShellSecureString(TimeSpan expiresOffset)
+        {
+            var expiresOn = DateTimeOffset.FromUnixTimeSeconds(DateTimeOffset.UtcNow.Add(expiresOffset).ToUnixTimeSeconds());
+            var token = TokenGenerator.GenerateToken(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), expiresOn.UtcDateTime);
+            // Simulate Az 14.0+ output with secure string token as returned by our PowerShell script after conversion
             var xml = @$"<Object Type=""System.Management.Automation.PSCustomObject""><Property Name=""Token"" Type=""System.String"">{token}</Property><Property Name=""ExpiresOn"" Type=""System.Int64"">{expiresOn.UtcDateTime.Ticks}</Property></Object>";
             return (token, expiresOn, xml);
         }
@@ -553,6 +562,13 @@ namespace Azure.Identity.Tests
         private static Type GetMsalClientType(TokenCredential cred)
         {
             var targetCred = cred is EnvironmentCredential environmentCredential ? environmentCredential.Credential : cred;
+
+            if (targetCred is ConfigurableCredential configCred)
+            {
+                targetCred = new ConfigurableCredentials.ConfigurableCredentialTestHelper<TokenCredential>(string.Empty)
+                    .GetUnderlyingCredential(configCred);
+            }
+
             return targetCred.GetType().GetProperty("Client", BindingFlags.Instance | BindingFlags.NonPublic)?.PropertyType;
         }
 

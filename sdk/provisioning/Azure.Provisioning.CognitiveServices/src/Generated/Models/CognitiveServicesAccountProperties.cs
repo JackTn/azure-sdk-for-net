@@ -119,6 +119,16 @@ public partial class CognitiveServicesAccountProperties : ProvisionableConstruct
     private BicepList<ServiceAccountUserOwnedStorage>? _userOwnedStorage;
 
     /// <summary>
+    /// The user owned AML account properties.
+    /// </summary>
+    public UserOwnedAmlWorkspace AmlWorkspace 
+    {
+        get { Initialize(); return _amlWorkspace!; }
+        set { Initialize(); AssignOrReplace(ref _amlWorkspace, value); }
+    }
+    private UserOwnedAmlWorkspace? _amlWorkspace;
+
+    /// <summary>
     /// The private endpoint connection associated with the Cognitive Services
     /// account.
     /// </summary>
@@ -281,6 +291,60 @@ public partial class CognitiveServicesAccountProperties : ProvisionableConstruct
     private AbusePenalty? _abusePenalty;
 
     /// <summary>
+    /// Cognitive Services Rai Monitor Config.
+    /// </summary>
+    public RaiMonitorConfig RaiMonitorConfig 
+    {
+        get { Initialize(); return _raiMonitorConfig!; }
+        set { Initialize(); AssignOrReplace(ref _raiMonitorConfig, value); }
+    }
+    private RaiMonitorConfig? _raiMonitorConfig;
+
+    /// <summary>
+    /// Gets the ai foundry network injections.
+    /// </summary>
+    public BicepList<AIFoundryNetworkInjection> AIFoundryNetworkInjections 
+    {
+        get { Initialize(); return _aIFoundryNetworkInjections!; }
+        set { Initialize(); _aIFoundryNetworkInjections!.Assign(value); }
+    }
+    private BicepList<AIFoundryNetworkInjection>? _aIFoundryNetworkInjections;
+
+    /// <summary>
+    /// Specifies whether this resource support project management as child
+    /// resources, used as containers for access management, data isolation
+    /// and cost in AI Foundry.
+    /// </summary>
+    public BicepValue<bool> AllowProjectManagement 
+    {
+        get { Initialize(); return _allowProjectManagement!; }
+        set { Initialize(); _allowProjectManagement!.Assign(value); }
+    }
+    private BicepValue<bool>? _allowProjectManagement;
+
+    /// <summary>
+    /// Specifies the project, by project name, that is targeted when data
+    /// plane endpoints are called without a project parameter.
+    /// </summary>
+    public BicepValue<string> DefaultProject 
+    {
+        get { Initialize(); return _defaultProject!; }
+        set { Initialize(); _defaultProject!.Assign(value); }
+    }
+    private BicepValue<string>? _defaultProject;
+
+    /// <summary>
+    /// Specifies the projects, by project name, that are associated with this
+    /// resource.
+    /// </summary>
+    public BicepList<string> AssociatedProjects 
+    {
+        get { Initialize(); return _associatedProjects!; }
+        set { Initialize(); _associatedProjects!.Assign(value); }
+    }
+    private BicepList<string>? _associatedProjects;
+
+    /// <summary>
     /// Creates a new CognitiveServicesAccountProperties.
     /// </summary>
     public CognitiveServicesAccountProperties()
@@ -304,6 +368,7 @@ public partial class CognitiveServicesAccountProperties : ProvisionableConstruct
         _networkAcls = DefineModelProperty<CognitiveServicesNetworkRuleSet>("NetworkAcls", ["networkAcls"]);
         _encryption = DefineModelProperty<ServiceAccountEncryptionProperties>("Encryption", ["encryption"]);
         _userOwnedStorage = DefineListProperty<ServiceAccountUserOwnedStorage>("UserOwnedStorage", ["userOwnedStorage"]);
+        _amlWorkspace = DefineModelProperty<UserOwnedAmlWorkspace>("AmlWorkspace", ["amlWorkspace"]);
         _privateEndpointConnections = DefineListProperty<CognitiveServicesPrivateEndpointConnectionData>("PrivateEndpointConnections", ["privateEndpointConnections"], isOutput: true);
         _publicNetworkAccess = DefineProperty<ServiceAccountPublicNetworkAccess>("PublicNetworkAccess", ["publicNetworkAccess"]);
         _apiProperties = DefineModelProperty<ServiceAccountApiProperties>("ApiProperties", ["apiProperties"]);
@@ -321,5 +386,10 @@ public partial class CognitiveServicesAccountProperties : ProvisionableConstruct
         _locations = DefineModelProperty<CognitiveServicesMultiRegionSettings>("Locations", ["locations"]);
         _commitmentPlanAssociations = DefineListProperty<CommitmentPlanAssociation>("CommitmentPlanAssociations", ["commitmentPlanAssociations"], isOutput: true);
         _abusePenalty = DefineModelProperty<AbusePenalty>("AbusePenalty", ["abusePenalty"], isOutput: true);
+        _raiMonitorConfig = DefineModelProperty<RaiMonitorConfig>("RaiMonitorConfig", ["raiMonitorConfig"]);
+        _aIFoundryNetworkInjections = DefineListProperty<AIFoundryNetworkInjection>("AIFoundryNetworkInjections", ["networkInjections"]);
+        _allowProjectManagement = DefineProperty<bool>("AllowProjectManagement", ["allowProjectManagement"]);
+        _defaultProject = DefineProperty<string>("DefaultProject", ["defaultProject"]);
+        _associatedProjects = DefineListProperty<string>("AssociatedProjects", ["associatedProjects"]);
     }
 }

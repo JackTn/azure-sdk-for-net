@@ -7,21 +7,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Azure.Core;
+using Azure.Core.TestFramework;
+using Azure.Core.TestFramework.Models;
 using Azure.ResourceManager.ApiManagement.Models;
-using Azure.ResourceManager.Resources;
 using Azure.ResourceManager.EventHubs;
 using Azure.ResourceManager.EventHubs.Models;
-using NUnit.Framework;
-using Azure.Core.TestFramework;
 using Azure.ResourceManager.Models;
-using Azure.Core.TestFramework.Models;
+using Azure.ResourceManager.Resources;
+using NUnit.Framework;
 
 namespace Azure.ResourceManager.ApiManagement.Tests
 {
     public class LoggerTests : ApiManagementManagementTestBase
     {
         public LoggerTests(bool isAsync)
-                    : base(isAsync)//, RecordedTestMode.Record)
+                    : base(isAsync) //, RecordedTestMode.Record)
         {
             IgnoreApiVersionInEventHubOperations();
         }
@@ -40,8 +40,8 @@ namespace Azure.ResourceManager.ApiManagement.Tests
 
         private async Task CreateApiServiceAsync()
         {
-            var apiName = Recording.GenerateAssetName("testapi-");
-            var data = new ApiManagementServiceData(AzureLocation.EastUS, new ApiManagementServiceSkuProperties(ApiManagementServiceSkuType.Developer, 1), "Sample@Sample.com", "sample")
+            var apiName = Recording.GenerateAssetName("sdktestapimv2-");
+            var data = new ApiManagementServiceData(AzureLocation.WestUS2, new ApiManagementServiceSkuProperties(ApiManagementServiceSkuType.StandardV2, 1), "Sample@Sample.com", "sample")
             {
                 Identity = new ManagedServiceIdentity(ManagedServiceIdentityType.SystemAssigned)
             };
@@ -70,7 +70,7 @@ namespace Azure.ResourceManager.ApiManagement.Tests
 
             // first create the event hub namespace
             var eventCollection = ResourceGroup.GetEventHubsNamespaces();
-            var eventHubNamespace = (await eventCollection.CreateOrUpdateAsync(WaitUntil.Completed, eventHubNameSpaceName, new EventHubsNamespaceData(AzureLocation.EastUS))).Value;
+            var eventHubNamespace = (await eventCollection.CreateOrUpdateAsync(WaitUntil.Completed, eventHubNameSpaceName, new EventHubsNamespaceData(AzureLocation.WestUS2))).Value;
             Assert.NotNull(eventHubNamespace.Data.Name);
 
             // then create eventhub

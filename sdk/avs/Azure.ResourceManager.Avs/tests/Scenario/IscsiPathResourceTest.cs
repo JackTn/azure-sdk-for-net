@@ -25,7 +25,7 @@ namespace Azure.ResourceManager.Avs.Tests.Scenario
         {
             IscsiPathData data = new IscsiPathData()
             {
-                NetworkBlock = "172.16.0.0/24",
+                NetworkBlock = "192.168.100.0/24",
             };
             ArmOperation<IscsiPathResource> lro = await getIscsiPathResource().CreateOrUpdateAsync(WaitUntil.Completed, data);
             IscsiPathResource result = lro.Value;
@@ -44,7 +44,7 @@ namespace Azure.ResourceManager.Avs.Tests.Scenario
         [RecordedTest]
         public async Task Delete()
         {
-            ArmOperation lro =  await getIscsiPathResource().DeleteAsync(WaitUntil.Started);
+            ArmOperation lro = await getIscsiPathResource().DeleteAsync(WaitUntil.Started);
         }
     }
 }

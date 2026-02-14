@@ -74,10 +74,40 @@ namespace Azure.AI.Language.Text
                 }
                 writer.WriteEndArray();
             }
-            if (Optional.IsDefined(RedactionPolicy))
+            if (Optional.IsDefined(ValueExclusionPolicy))
             {
-                writer.WritePropertyName("redactionPolicy"u8);
-                writer.WriteObjectValue(RedactionPolicy, options);
+                writer.WritePropertyName("valueExclusionPolicy"u8);
+                writer.WriteObjectValue(ValueExclusionPolicy, options);
+            }
+            if (Optional.IsCollectionDefined(EntitySynonyms))
+            {
+                writer.WritePropertyName("entitySynonyms"u8);
+                writer.WriteStartArray();
+                foreach (var item in EntitySynonyms)
+                {
+                    writer.WriteObjectValue(item, options);
+                }
+                writer.WriteEndArray();
+            }
+            if (Optional.IsCollectionDefined(RedactionPolicies))
+            {
+                writer.WritePropertyName("redactionPolicies"u8);
+                writer.WriteStartArray();
+                foreach (var item in RedactionPolicies)
+                {
+                    writer.WriteObjectValue(item, options);
+                }
+                writer.WriteEndArray();
+            }
+            if (Optional.IsDefined(ConfidenceScoreThreshold))
+            {
+                writer.WritePropertyName("confidenceScoreThreshold"u8);
+                writer.WriteObjectValue(ConfidenceScoreThreshold, options);
+            }
+            if (Optional.IsDefined(DisableEntityValidation))
+            {
+                writer.WritePropertyName("disableEntityValidation"u8);
+                writer.WriteBooleanValue(DisableEntityValidation.Value);
             }
             if (options.Format != "W" && _serializedAdditionalRawData != null)
             {
@@ -122,7 +152,11 @@ namespace Azure.AI.Language.Text
             IList<PiiCategory> piiCategories = default;
             StringIndexType? stringIndexType = default;
             IList<PiiCategoriesExclude> excludePiiCategories = default;
-            BaseRedactionPolicy redactionPolicy = default;
+            ValueExclusionPolicy valueExclusionPolicy = default;
+            IList<EntitySynonyms> entitySynonyms = default;
+            IList<BaseRedactionPolicy> redactionPolicies = default;
+            ConfidenceScoreThreshold confidenceScoreThreshold = default;
+            bool? disableEntityValidation = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> rawDataDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
@@ -187,13 +221,59 @@ namespace Azure.AI.Language.Text
                     excludePiiCategories = array;
                     continue;
                 }
-                if (property.NameEquals("redactionPolicy"u8))
+                if (property.NameEquals("valueExclusionPolicy"u8))
                 {
                     if (property.Value.ValueKind == JsonValueKind.Null)
                     {
                         continue;
                     }
-                    redactionPolicy = BaseRedactionPolicy.DeserializeBaseRedactionPolicy(property.Value, options);
+                    valueExclusionPolicy = ValueExclusionPolicy.DeserializeValueExclusionPolicy(property.Value, options);
+                    continue;
+                }
+                if (property.NameEquals("entitySynonyms"u8))
+                {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    List<EntitySynonyms> array = new List<EntitySynonyms>();
+                    foreach (var item in property.Value.EnumerateArray())
+                    {
+                        array.Add(Text.EntitySynonyms.DeserializeEntitySynonyms(item, options));
+                    }
+                    entitySynonyms = array;
+                    continue;
+                }
+                if (property.NameEquals("redactionPolicies"u8))
+                {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    List<BaseRedactionPolicy> array = new List<BaseRedactionPolicy>();
+                    foreach (var item in property.Value.EnumerateArray())
+                    {
+                        array.Add(BaseRedactionPolicy.DeserializeBaseRedactionPolicy(item, options));
+                    }
+                    redactionPolicies = array;
+                    continue;
+                }
+                if (property.NameEquals("confidenceScoreThreshold"u8))
+                {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    confidenceScoreThreshold = ConfidenceScoreThreshold.DeserializeConfidenceScoreThreshold(property.Value, options);
+                    continue;
+                }
+                if (property.NameEquals("disableEntityValidation"u8))
+                {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    disableEntityValidation = property.Value.GetBoolean();
                     continue;
                 }
                 if (options.Format != "W")
@@ -209,7 +289,11 @@ namespace Azure.AI.Language.Text
                 piiCategories ?? new ChangeTrackingList<PiiCategory>(),
                 stringIndexType,
                 excludePiiCategories ?? new ChangeTrackingList<PiiCategoriesExclude>(),
-                redactionPolicy,
+                valueExclusionPolicy,
+                entitySynonyms ?? new ChangeTrackingList<EntitySynonyms>(),
+                redactionPolicies ?? new ChangeTrackingList<BaseRedactionPolicy>(),
+                confidenceScoreThreshold,
+                disableEntityValidation,
                 serializedAdditionalRawData);
         }
 
@@ -220,7 +304,7 @@ namespace Azure.AI.Language.Text
             switch (format)
             {
                 case "J":
-                    return ModelReaderWriter.Write(this, options);
+                    return ModelReaderWriter.Write(this, options, AzureAILanguageTextContext.Default);
                 default:
                     throw new FormatException($"The model {nameof(PiiActionContent)} does not support writing '{options.Format}' format.");
             }

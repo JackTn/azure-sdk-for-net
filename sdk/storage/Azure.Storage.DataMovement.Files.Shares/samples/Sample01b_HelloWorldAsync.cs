@@ -2,15 +2,15 @@
 // Licensed under the MIT License.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
-using NUnit.Framework;
 using Azure.Core;
 using Azure.Identity;
 using Azure.Storage.Files.Shares;
 using Azure.Storage.Sas;
-using System.Threading;
-using System.Collections.Generic;
+using NUnit.Framework;
 
 namespace Azure.Storage.DataMovement.Files.Shares.Samples
 {
@@ -47,11 +47,11 @@ namespace Azure.Storage.DataMovement.Files.Shares.Samples
                     // Construct simple share file resources for data movement
                     #region Snippet:ResourceConstruction_Shares
                     StorageResource directory = await shares.FromDirectoryAsync(
-                        new Uri("http://myaccount.files.core.windows.net/share/path/to/directory"));
+                        new Uri("https://myaccount.files.core.windows.net/share/path/to/directory"));
                     StorageResource rootDirectory = await shares.FromDirectoryAsync(
-                        new Uri("http://myaccount.files.core.windows.net/share"));
+                        new Uri("https://myaccount.files.core.windows.net/share"));
                     StorageResource file = await shares.FromFileAsync(
-                        new Uri("http://myaccount.files.core.windows.net/share/path/to/file.txt"));
+                        new Uri("https://myaccount.files.core.windows.net/share/path/to/file.txt"));
                     #endregion
                 }
                 {

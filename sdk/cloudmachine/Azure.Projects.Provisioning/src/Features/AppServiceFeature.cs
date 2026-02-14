@@ -4,10 +4,9 @@
 using Azure.Projects.Core;
 using Azure.Provisioning.AppService;
 using Azure.Provisioning.Expressions;
-using Azure.Provisioning.Primitives;
 using Azure.Provisioning.Resources;
 
-namespace Azure.Projects.AppService;
+namespace Azure.Projects;
 
 public class AppServiceFeature : AzureProjectFeature
 {
@@ -21,7 +20,7 @@ public class AppServiceFeature : AzureProjectFeature
     protected internal override void EmitConstructs(ProjectInfrastructure infrastructure)
     {
         //Add a App Service to the infrastructure.
-        AppServicePlan hostingPlan = new("appServicePlan")
+        AppServicePlan hostingPlan = new("appServicePlan", AppServicePlan.ResourceVersions.V2024_04_01)
         {
             Name = infrastructure.ProjectId,
             Sku = Sku,
@@ -29,7 +28,7 @@ public class AppServiceFeature : AzureProjectFeature
         };
         infrastructure.AddConstruct(Id + "_plan", hostingPlan);
 
-        WebSite appService = new("appServiceWebsite")
+        WebSite appService = new("appServiceWebsite", WebSite.ResourceVersions.V2024_04_01)
         {
             Name = infrastructure.ProjectId,
             Kind = "app",

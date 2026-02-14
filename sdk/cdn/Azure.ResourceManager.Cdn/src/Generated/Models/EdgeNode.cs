@@ -67,6 +67,7 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> List of ip address groups. </summary>
+        [WirePath("properties.ipAddressGroups")]
         public IList<IPAddressGroup> IPAddressGroups { get; }
     }
 }

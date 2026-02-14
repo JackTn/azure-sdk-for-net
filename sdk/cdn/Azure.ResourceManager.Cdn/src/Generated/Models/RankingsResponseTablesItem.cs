@@ -63,8 +63,10 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> Gets the ranking. </summary>
+        [WirePath("ranking")]
         public string Ranking { get; }
         /// <summary> Gets the data. </summary>
+        [WirePath("data")]
         public IReadOnlyList<RankingsResponseTablesPropertiesItemsItem> Data { get; }
     }
 }

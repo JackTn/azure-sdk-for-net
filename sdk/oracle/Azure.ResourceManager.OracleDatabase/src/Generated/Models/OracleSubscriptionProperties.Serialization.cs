@@ -9,14 +9,32 @@ using System;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
-using Azure.Core;
+using Azure.ResourceManager.OracleDatabase;
 
 namespace Azure.ResourceManager.OracleDatabase.Models
 {
-    public partial class OracleSubscriptionProperties : IUtf8JsonSerializable, IJsonModel<OracleSubscriptionProperties>
+    /// <summary> Oracle Subscription resource model. </summary>
+    public partial class OracleSubscriptionProperties : IJsonModel<OracleSubscriptionProperties>
     {
-        void IUtf8JsonSerializable.Write(Utf8JsonWriter writer) => ((IJsonModel<OracleSubscriptionProperties>)this).Write(writer, ModelSerializationExtensions.WireOptions);
+        /// <param name="data"> The data to parse. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
+        protected virtual OracleSubscriptionProperties PersistableModelCreateCore(BinaryData data, ModelReaderWriterOptions options)
+        {
+            string format = options.Format == "W" ? ((IPersistableModel<OracleSubscriptionProperties>)this).GetFormatFromOptions(options) : options.Format;
+            switch (format)
+            {
+                case "J":
+                    using (JsonDocument document = JsonDocument.Parse(data, ModelSerializationExtensions.JsonDocumentOptions))
+                    {
+                        return DeserializeOracleSubscriptionProperties(document.RootElement, options);
+                    }
+                default:
+                    throw new FormatException($"The model {nameof(OracleSubscriptionProperties)} does not support reading '{options.Format}' format.");
+            }
+        }
 
+        /// <param name="writer"> The JSON writer. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
         void IJsonModel<OracleSubscriptionProperties>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options)
         {
             writer.WriteStartObject();
@@ -28,12 +46,11 @@ namespace Azure.ResourceManager.OracleDatabase.Models
         /// <param name="options"> The client options for reading and writing models. </param>
         protected virtual void JsonModelWriteCore(Utf8JsonWriter writer, ModelReaderWriterOptions options)
         {
-            var format = options.Format == "W" ? ((IPersistableModel<OracleSubscriptionProperties>)this).GetFormatFromOptions(options) : options.Format;
+            string format = options.Format == "W" ? ((IPersistableModel<OracleSubscriptionProperties>)this).GetFormatFromOptions(options) : options.Format;
             if (format != "J")
             {
                 throw new FormatException($"The model {nameof(OracleSubscriptionProperties)} does not support writing '{format}' format.");
             }
-
             if (options.Format != "W" && Optional.IsDefined(ProvisioningState))
             {
                 writer.WritePropertyName("provisioningState"u8);
@@ -44,10 +61,10 @@ namespace Azure.ResourceManager.OracleDatabase.Models
                 writer.WritePropertyName("saasSubscriptionId"u8);
                 writer.WriteStringValue(SaasSubscriptionId);
             }
-            if (options.Format != "W" && Optional.IsDefined(CloudAccountId))
+            if (options.Format != "W" && Optional.IsDefined(CloudAccountOcid))
             {
                 writer.WritePropertyName("cloudAccountId"u8);
-                writer.WriteStringValue(CloudAccountId);
+                writer.WriteStringValue(CloudAccountOcid);
             }
             if (options.Format != "W" && Optional.IsDefined(CloudAccountState))
             {
@@ -69,15 +86,40 @@ namespace Azure.ResourceManager.OracleDatabase.Models
                 writer.WritePropertyName("intent"u8);
                 writer.WriteStringValue(Intent.Value.ToString());
             }
-            if (options.Format != "W" && _serializedAdditionalRawData != null)
+            if (options.Format != "W" && Optional.IsCollectionDefined(AzureSubscriptionIds))
             {
-                foreach (var item in _serializedAdditionalRawData)
+                writer.WritePropertyName("azureSubscriptionIds"u8);
+                writer.WriteStartArray();
+                foreach (string item in AzureSubscriptionIds)
+                {
+                    if (item == null)
+                    {
+                        writer.WriteNullValue();
+                        continue;
+                    }
+                    writer.WriteStringValue(item);
+                }
+                writer.WriteEndArray();
+            }
+            if (options.Format != "W" && Optional.IsDefined(AddSubscriptionOperationState))
+            {
+                writer.WritePropertyName("addSubscriptionOperationState"u8);
+                writer.WriteStringValue(AddSubscriptionOperationState.Value.ToString());
+            }
+            if (options.Format != "W" && Optional.IsDefined(LastOperationStatusDetail))
+            {
+                writer.WritePropertyName("lastOperationStatusDetail"u8);
+                writer.WriteStringValue(LastOperationStatusDetail);
+            }
+            if (options.Format != "W" && _additionalBinaryDataProperties != null)
+            {
+                foreach (var item in _additionalBinaryDataProperties)
                 {
                     writer.WritePropertyName(item.Key);
 #if NET6_0_OR_GREATER
-				writer.WriteRawValue(item.Value);
+                    writer.WriteRawValue(item.Value);
 #else
-                    using (JsonDocument document = JsonDocument.Parse(item.Value, ModelSerializationExtensions.JsonDocumentOptions))
+                    using (JsonDocument document = JsonDocument.Parse(item.Value))
                     {
                         JsonSerializer.Serialize(writer, document.RootElement);
                     }
@@ -86,134 +128,166 @@ namespace Azure.ResourceManager.OracleDatabase.Models
             }
         }
 
-        OracleSubscriptionProperties IJsonModel<OracleSubscriptionProperties>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options)
+        /// <param name="reader"> The JSON reader. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
+        OracleSubscriptionProperties IJsonModel<OracleSubscriptionProperties>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => JsonModelCreateCore(ref reader, options);
+
+        /// <param name="reader"> The JSON reader. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
+        protected virtual OracleSubscriptionProperties JsonModelCreateCore(ref Utf8JsonReader reader, ModelReaderWriterOptions options)
         {
-            var format = options.Format == "W" ? ((IPersistableModel<OracleSubscriptionProperties>)this).GetFormatFromOptions(options) : options.Format;
+            string format = options.Format == "W" ? ((IPersistableModel<OracleSubscriptionProperties>)this).GetFormatFromOptions(options) : options.Format;
             if (format != "J")
             {
                 throw new FormatException($"The model {nameof(OracleSubscriptionProperties)} does not support reading '{format}' format.");
             }
-
             using JsonDocument document = JsonDocument.ParseValue(ref reader);
             return DeserializeOracleSubscriptionProperties(document.RootElement, options);
         }
 
-        internal static OracleSubscriptionProperties DeserializeOracleSubscriptionProperties(JsonElement element, ModelReaderWriterOptions options = null)
+        /// <param name="element"> The JSON element to deserialize. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
+        internal static OracleSubscriptionProperties DeserializeOracleSubscriptionProperties(JsonElement element, ModelReaderWriterOptions options)
         {
-            options ??= ModelSerializationExtensions.WireOptions;
-
             if (element.ValueKind == JsonValueKind.Null)
             {
                 return null;
             }
             OracleSubscriptionProvisioningState? provisioningState = default;
             string saasSubscriptionId = default;
-            ResourceIdentifier cloudAccountId = default;
+            string cloudAccountOcid = default;
             CloudAccountProvisioningState? cloudAccountState = default;
             string termUnit = default;
             string productCode = default;
             OracleSubscriptionUpdateIntent? intent = default;
-            IDictionary<string, BinaryData> serializedAdditionalRawData = default;
-            Dictionary<string, BinaryData> rawDataDictionary = new Dictionary<string, BinaryData>();
-            foreach (var property in element.EnumerateObject())
+            IReadOnlyList<string> azureSubscriptionIds = default;
+            AddSubscriptionOperationState? addSubscriptionOperationState = default;
+            string lastOperationStatusDetail = default;
+            IDictionary<string, BinaryData> additionalBinaryDataProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            foreach (var prop in element.EnumerateObject())
             {
-                if (property.NameEquals("provisioningState"u8))
+                if (prop.NameEquals("provisioningState"u8))
                 {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    if (prop.Value.ValueKind == JsonValueKind.Null)
                     {
                         continue;
                     }
-                    provisioningState = new OracleSubscriptionProvisioningState(property.Value.GetString());
+                    provisioningState = new OracleSubscriptionProvisioningState(prop.Value.GetString());
                     continue;
                 }
-                if (property.NameEquals("saasSubscriptionId"u8))
+                if (prop.NameEquals("saasSubscriptionId"u8))
                 {
-                    saasSubscriptionId = property.Value.GetString();
+                    saasSubscriptionId = prop.Value.GetString();
                     continue;
                 }
-                if (property.NameEquals("cloudAccountId"u8))
+                if (prop.NameEquals("cloudAccountId"u8))
                 {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    cloudAccountOcid = prop.Value.GetString();
+                    continue;
+                }
+                if (prop.NameEquals("cloudAccountState"u8))
+                {
+                    if (prop.Value.ValueKind == JsonValueKind.Null)
                     {
                         continue;
                     }
-                    cloudAccountId = new ResourceIdentifier(property.Value.GetString());
+                    cloudAccountState = new CloudAccountProvisioningState(prop.Value.GetString());
                     continue;
                 }
-                if (property.NameEquals("cloudAccountState"u8))
+                if (prop.NameEquals("termUnit"u8))
                 {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    termUnit = prop.Value.GetString();
+                    continue;
+                }
+                if (prop.NameEquals("productCode"u8))
+                {
+                    productCode = prop.Value.GetString();
+                    continue;
+                }
+                if (prop.NameEquals("intent"u8))
+                {
+                    if (prop.Value.ValueKind == JsonValueKind.Null)
                     {
                         continue;
                     }
-                    cloudAccountState = new CloudAccountProvisioningState(property.Value.GetString());
+                    intent = new OracleSubscriptionUpdateIntent(prop.Value.GetString());
                     continue;
                 }
-                if (property.NameEquals("termUnit"u8))
+                if (prop.NameEquals("azureSubscriptionIds"u8))
                 {
-                    termUnit = property.Value.GetString();
-                    continue;
-                }
-                if (property.NameEquals("productCode"u8))
-                {
-                    productCode = property.Value.GetString();
-                    continue;
-                }
-                if (property.NameEquals("intent"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    if (prop.Value.ValueKind == JsonValueKind.Null)
                     {
                         continue;
                     }
-                    intent = new OracleSubscriptionUpdateIntent(property.Value.GetString());
+                    List<string> array = new List<string>();
+                    foreach (var item in prop.Value.EnumerateArray())
+                    {
+                        if (item.ValueKind == JsonValueKind.Null)
+                        {
+                            array.Add(null);
+                        }
+                        else
+                        {
+                            array.Add(item.GetString());
+                        }
+                    }
+                    azureSubscriptionIds = array;
+                    continue;
+                }
+                if (prop.NameEquals("addSubscriptionOperationState"u8))
+                {
+                    if (prop.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    addSubscriptionOperationState = new AddSubscriptionOperationState(prop.Value.GetString());
+                    continue;
+                }
+                if (prop.NameEquals("lastOperationStatusDetail"u8))
+                {
+                    lastOperationStatusDetail = prop.Value.GetString();
                     continue;
                 }
                 if (options.Format != "W")
                 {
-                    rawDataDictionary.Add(property.Name, BinaryData.FromString(property.Value.GetRawText()));
+                    additionalBinaryDataProperties.Add(prop.Name, BinaryData.FromString(prop.Value.GetRawText()));
                 }
             }
-            serializedAdditionalRawData = rawDataDictionary;
             return new OracleSubscriptionProperties(
                 provisioningState,
                 saasSubscriptionId,
-                cloudAccountId,
+                cloudAccountOcid,
                 cloudAccountState,
                 termUnit,
                 productCode,
                 intent,
-                serializedAdditionalRawData);
+                azureSubscriptionIds ?? new ChangeTrackingList<string>(),
+                addSubscriptionOperationState,
+                lastOperationStatusDetail,
+                additionalBinaryDataProperties);
         }
 
-        BinaryData IPersistableModel<OracleSubscriptionProperties>.Write(ModelReaderWriterOptions options)
-        {
-            var format = options.Format == "W" ? ((IPersistableModel<OracleSubscriptionProperties>)this).GetFormatFromOptions(options) : options.Format;
+        /// <param name="options"> The client options for reading and writing models. </param>
+        BinaryData IPersistableModel<OracleSubscriptionProperties>.Write(ModelReaderWriterOptions options) => PersistableModelWriteCore(options);
 
+        /// <param name="options"> The client options for reading and writing models. </param>
+        protected virtual BinaryData PersistableModelWriteCore(ModelReaderWriterOptions options)
+        {
+            string format = options.Format == "W" ? ((IPersistableModel<OracleSubscriptionProperties>)this).GetFormatFromOptions(options) : options.Format;
             switch (format)
             {
                 case "J":
-                    return ModelReaderWriter.Write(this, options);
+                    return ModelReaderWriter.Write(this, options, AzureResourceManagerOracleDatabaseContext.Default);
                 default:
                     throw new FormatException($"The model {nameof(OracleSubscriptionProperties)} does not support writing '{options.Format}' format.");
             }
         }
 
-        OracleSubscriptionProperties IPersistableModel<OracleSubscriptionProperties>.Create(BinaryData data, ModelReaderWriterOptions options)
-        {
-            var format = options.Format == "W" ? ((IPersistableModel<OracleSubscriptionProperties>)this).GetFormatFromOptions(options) : options.Format;
+        /// <param name="data"> The data to parse. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
+        OracleSubscriptionProperties IPersistableModel<OracleSubscriptionProperties>.Create(BinaryData data, ModelReaderWriterOptions options) => PersistableModelCreateCore(data, options);
 
-            switch (format)
-            {
-                case "J":
-                    {
-                        using JsonDocument document = JsonDocument.Parse(data, ModelSerializationExtensions.JsonDocumentOptions);
-                        return DeserializeOracleSubscriptionProperties(document.RootElement, options);
-                    }
-                default:
-                    throw new FormatException($"The model {nameof(OracleSubscriptionProperties)} does not support reading '{options.Format}' format.");
-            }
-        }
-
+        /// <param name="options"> The client options for reading and writing models. </param>
         string IPersistableModel<OracleSubscriptionProperties>.GetFormatFromOptions(ModelReaderWriterOptions options) => "J";
     }
 }

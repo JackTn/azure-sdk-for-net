@@ -47,7 +47,7 @@ namespace Azure.Storage.DataMovement.Tests
 
         protected internal override async IAsyncEnumerable<StorageResource> GetStorageResourcesAsync(
             StorageResourceContainer destinationContainer = default,
-            [EnumeratorCancellation]CancellationToken cancellationToken = default)
+            [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             foreach (StorageResource storageResource in GetStorageResources(ReturnsContainersOnEnumeration))
             {
@@ -101,6 +101,11 @@ namespace Azure.Storage.DataMovement.Tests
         }
 
         protected internal override StorageResourceContainer GetChildStorageResourceContainer(string path)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected internal override Task<StorageResourceContainerProperties> GetPropertiesAsync(CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }

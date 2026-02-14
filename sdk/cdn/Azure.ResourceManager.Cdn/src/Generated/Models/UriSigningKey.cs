@@ -75,8 +75,10 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> Defines the customer defined key Id. This id will exist in the incoming request to indicate the key used to form the hash. </summary>
+        [WirePath("keyId")]
         public string KeyId { get; set; }
         /// <summary> Defines the parameters for using customer key vault for Url Signing Key. </summary>
+        [WirePath("keySourceParameters")]
         public KeyVaultSigningKey KeySourceParameters { get; set; }
     }
 }

@@ -66,6 +66,7 @@ namespace Azure.ResourceManager.Cdn.Models
         /// <summary> Migration From Waf policy. </summary>
         internal WritableSubResource MigratedFrom { get; set; }
         /// <summary> Gets or sets Id. </summary>
+        [WirePath("migratedFrom.id")]
         public ResourceIdentifier MigratedFromId
         {
             get => MigratedFrom is null ? default : MigratedFrom.Id;
@@ -80,6 +81,7 @@ namespace Azure.ResourceManager.Cdn.Models
         /// <summary> Migration to Waf policy. </summary>
         internal WritableSubResource MigratedTo { get; set; }
         /// <summary> Gets or sets Id. </summary>
+        [WirePath("migratedTo.id")]
         public ResourceIdentifier MigratedToId
         {
             get => MigratedTo is null ? default : MigratedTo.Id;

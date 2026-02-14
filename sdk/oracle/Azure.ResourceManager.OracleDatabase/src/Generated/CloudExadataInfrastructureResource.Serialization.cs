@@ -11,16 +11,29 @@ using System.Text.Json;
 
 namespace Azure.ResourceManager.OracleDatabase
 {
+    /// <summary></summary>
     public partial class CloudExadataInfrastructureResource : IJsonModel<CloudExadataInfrastructureData>
     {
+        private static IJsonModel<CloudExadataInfrastructureData> s_dataDeserializationInstance;
+
+        private static IJsonModel<CloudExadataInfrastructureData> DataDeserializationInstance => s_dataDeserializationInstance ??= new CloudExadataInfrastructureData();
+
+        /// <param name="writer"> The writer to serialize the model to. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
         void IJsonModel<CloudExadataInfrastructureData>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options) => ((IJsonModel<CloudExadataInfrastructureData>)Data).Write(writer, options);
 
-        CloudExadataInfrastructureData IJsonModel<CloudExadataInfrastructureData>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => ((IJsonModel<CloudExadataInfrastructureData>)Data).Create(ref reader, options);
+        /// <param name="reader"> The reader for deserializing the model. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
+        CloudExadataInfrastructureData IJsonModel<CloudExadataInfrastructureData>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => DataDeserializationInstance.Create(ref reader, options);
 
-        BinaryData IPersistableModel<CloudExadataInfrastructureData>.Write(ModelReaderWriterOptions options) => ModelReaderWriter.Write(Data, options);
+        /// <param name="options"> The client options for reading and writing models. </param>
+        BinaryData IPersistableModel<CloudExadataInfrastructureData>.Write(ModelReaderWriterOptions options) => ModelReaderWriter.Write<CloudExadataInfrastructureData>(Data, options, AzureResourceManagerOracleDatabaseContext.Default);
 
-        CloudExadataInfrastructureData IPersistableModel<CloudExadataInfrastructureData>.Create(BinaryData data, ModelReaderWriterOptions options) => ModelReaderWriter.Read<CloudExadataInfrastructureData>(data, options);
+        /// <param name="data"> The binary data to be processed. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
+        CloudExadataInfrastructureData IPersistableModel<CloudExadataInfrastructureData>.Create(BinaryData data, ModelReaderWriterOptions options) => ModelReaderWriter.Read<CloudExadataInfrastructureData>(data, options, AzureResourceManagerOracleDatabaseContext.Default);
 
-        string IPersistableModel<CloudExadataInfrastructureData>.GetFormatFromOptions(ModelReaderWriterOptions options) => ((IPersistableModel<CloudExadataInfrastructureData>)Data).GetFormatFromOptions(options);
+        /// <param name="options"> The client options for reading and writing models. </param>
+        string IPersistableModel<CloudExadataInfrastructureData>.GetFormatFromOptions(ModelReaderWriterOptions options) => DataDeserializationInstance.GetFormatFromOptions(options);
     }
 }

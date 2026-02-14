@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using System;
+using System.Buffers;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,6 +14,8 @@ namespace Azure.Storage
     /// </summary>
     internal static partial class StreamExtensions
     {
+        private const int DefaultCopyBufferSize = 81920; // default from .NET documentation
+
         public static async Task<int> ReadInternal(
             this Stream stream,
             byte[] buffer,
@@ -48,7 +52,7 @@ namespace Azure.Storage
             }
         }
 
-        public static Task CopyToInternal(
+        public static Task<long> CopyToInternal(
             this Stream src,
             Stream dest,
             bool async,
@@ -56,7 +60,7 @@ namespace Azure.Storage
             => CopyToInternal(
                 src,
                 dest,
-                bufferSize: 81920, // default from .NET documentation
+                DefaultCopyBufferSize,
                 async,
                 cancellationToken);
 
@@ -79,21 +83,71 @@ namespace Azure.Storage
         /// Cancellation token for the operation.
         /// </param>
         /// <returns></returns>
-        public static async Task CopyToInternal(
+        public static async Task<long> CopyToInternal(
             this Stream src,
             Stream dest,
             int bufferSize,
             bool async,
             CancellationToken cancellationToken)
         {
+            using IDisposable _ = ArrayPool<byte>.Shared.RentDisposable(bufferSize, out byte[] buffer);
+            long totalRead = 0;
+            int read;
             if (async)
             {
-                await src.CopyToAsync(dest, bufferSize, cancellationToken).ConfigureAwait(false);
+                while (0 < (read = await src.ReadAsync(buffer, 0, buffer.Length, cancellationToken).ConfigureAwait(false)))
+                {
+                    totalRead += read;
+                    await dest.WriteAsync(buffer, 0, read, cancellationToken).ConfigureAwait(false);
+                }
             }
             else
             {
-                src.CopyTo(dest, bufferSize);
+                while (0 < (read = src.Read(buffer, 0, buffer.Length)))
+                {
+                    totalRead += read;
+                    dest.Write(buffer, 0, read);
+                }
             }
+            return totalRead;
+        }
+
+        public static async Task<long> CopyToExactInternal(
+            this Stream src,
+            Stream dst,
+            long count,
+            bool async,
+            CancellationToken cancellationToken)
+            => await CopyToExactInternal(
+                src,
+                dst,
+                count,
+                DefaultCopyBufferSize,
+                async,
+                cancellationToken)
+                .ConfigureAwait(false);
+
+        public static async Task<long> CopyToExactInternal(
+            this Stream src,
+            Stream dst,
+            long count,
+            int copyBufferSize,
+            bool async,
+            CancellationToken cancellationToken)
+        {
+            using IDisposable _ = ArrayPool<byte>.Shared.RentDisposable(copyBufferSize, out byte[] copyBuffer);
+            long totalCopied = 0;
+            while (totalCopied < count)
+            {
+                int read = await src.ReadInternal(copyBuffer, 0, (int)Math.Min(count - totalCopied, copyBuffer.Length), async, cancellationToken).ConfigureAwait(false);
+                if (read == 0)
+                {
+                    break;
+                }
+                await dst.WriteInternal(copyBuffer, 0, read, async, cancellationToken).ConfigureAwait(false);
+                totalCopied += read;
+            }
+            return totalCopied;
         }
     }
 }

@@ -8,13 +8,27 @@
 using System;
 using System.ClientModel.Primitives;
 using System.Text.Json;
-using Azure;
 using Azure.Core;
 
 namespace SpecialWords._Models
 {
     public partial class As : IJsonModel<As>
     {
+        internal As() => throw null;
+
+        protected virtual As PersistableModelCreateCore(BinaryData data, ModelReaderWriterOptions options) => throw null;
+
+        protected virtual BinaryData PersistableModelWriteCore(ModelReaderWriterOptions options) => throw null;
+
+        BinaryData IPersistableModel<As>.Write(ModelReaderWriterOptions options) => throw null;
+
+        As IPersistableModel<As>.Create(BinaryData data, ModelReaderWriterOptions options) => throw null;
+
+        string IPersistableModel<As>.GetFormatFromOptions(ModelReaderWriterOptions options) => throw null;
+
+        /// <param name="as"> The <see cref="As"/> to serialize into <see cref="RequestContent"/>. </param>
+        public static implicit operator RequestContent(As @as) => throw null;
+
         void IJsonModel<As>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options) => throw null;
 
         protected virtual void JsonModelWriteCore(Utf8JsonWriter writer, ModelReaderWriterOptions options) => throw null;
@@ -22,20 +36,5 @@ namespace SpecialWords._Models
         As IJsonModel<As>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => throw null;
 
         protected virtual As JsonModelCreateCore(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => throw null;
-
-        BinaryData IPersistableModel<As>.Write(ModelReaderWriterOptions options) => throw null;
-
-        protected virtual BinaryData PersistableModelWriteCore(ModelReaderWriterOptions options) => throw null;
-
-        As IPersistableModel<As>.Create(BinaryData data, ModelReaderWriterOptions options) => throw null;
-
-        protected virtual As PersistableModelCreateCore(BinaryData data, ModelReaderWriterOptions options) => throw null;
-
-        string IPersistableModel<As>.GetFormatFromOptions(ModelReaderWriterOptions options) => throw null;
-
-        /// <param name="as"> The <see cref="As"/> to serialize into <see cref="RequestContent"/>. </param>
-        public static implicit operator RequestContent(As @as) => throw null;
-
-        public static explicit operator As(Response result) => throw null;
     }
 }

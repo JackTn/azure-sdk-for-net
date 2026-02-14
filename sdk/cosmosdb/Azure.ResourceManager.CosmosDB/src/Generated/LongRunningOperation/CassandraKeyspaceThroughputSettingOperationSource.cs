@@ -31,13 +31,13 @@ namespace Azure.ResourceManager.CosmosDB
 
         CassandraKeyspaceThroughputSettingResource IOperationSource<CassandraKeyspaceThroughputSettingResource>.CreateResult(Response response, CancellationToken cancellationToken)
         {
-            var data = ScrubId(ModelReaderWriter.Read<ThroughputSettingData>(response.Content));
+            var data = ScrubId(ModelReaderWriter.Read<ThroughputSettingData>(response.Content, ModelReaderWriterOptions.Json, AzureResourceManagerCosmosDBContext.Default));
             return new CassandraKeyspaceThroughputSettingResource(_client, data);
         }
 
         async ValueTask<CassandraKeyspaceThroughputSettingResource> IOperationSource<CassandraKeyspaceThroughputSettingResource>.CreateResultAsync(Response response, CancellationToken cancellationToken)
         {
-            var data = ScrubId(ModelReaderWriter.Read<ThroughputSettingData>(response.Content));
+            var data = ScrubId(ModelReaderWriter.Read<ThroughputSettingData>(response.Content, ModelReaderWriterOptions.Json, AzureResourceManagerCosmosDBContext.Default));
             return await Task.FromResult(new CassandraKeyspaceThroughputSettingResource(_client, data)).ConfigureAwait(false);
         }
 
@@ -60,7 +60,6 @@ namespace Azure.ResourceManager.CosmosDB
                 data.Tags,
                 data.Location,
                 data.Resource,
-                data.Identity,
                 null);
         }
 

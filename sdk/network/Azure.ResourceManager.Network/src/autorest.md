@@ -7,12 +7,12 @@ Run `dotnet build /t:GenerateCode` to generate code.
 azure-arm: true
 library-name: Network
 namespace: Azure.ResourceManager.Network
-require: https://github.com/Azure/azure-rest-api-specs/blob/177b67dfa65d476ac941b157ca42eec440e98cb0/specification/network/resource-manager/readme.md
-tag: package-2024-06-preview
+require: https://github.com/Azure/azure-rest-api-specs/blob/b6d0dc8ef749d50348f0e27f5eee38ac3e5469d0/specification/network/resource-manager/readme.md
+#tag: package-2025-05-01
 output-folder: $(this-folder)/Generated
 clear-output-folder: true
 sample-gen:
-  output-folder: $(this-folder)/../samples/Generated
+  output-folder: $(this-folder)/../tests/Generated
   clear-output-folder: true
   skipped-operations:
     # Not support generate samples from customized operations
@@ -24,22 +24,22 @@ sample-gen:
     - VirtualMachineScaleSetVMs_ListPublicIPAddresses
     - VirtualMachineScaleSetVMs_ListNetworkInterfaces
     - VirtualMachineScaleSets_GetNetworkInterface
-    - NetworkSecurityPerimeterOperationStatus_Get
 skip-csproj: true
 modelerfour:
   flatten-payloads: false
-  lenient-model-deduplication: true
 use-model-reader-writer: true
 model-namespace: true
 public-clients: false
 head-as-boolean: false
 resource-model-requires-type: false
+enable-bicep-serialization: true
 
 #mgmt-debug:
 #  show-serialized-names: true
 
 rename-mapping:
   Access: NetworkAccess
+  AccessMode: PrivateLinkServiceAccessMode
   AssociationAccessMode: NetworkSecurityPerimeterAssociationAccessMode
   AccessRuleDirection: NetworkSecurityPerimeterAccessRuleDirection
   Action: RouteMapAction
@@ -48,18 +48,24 @@ rename-mapping:
   ActiveConfigurationParameter: ActiveConfigurationContent
   ActiveConnectivityConfiguration.commitTime: CommittedOn
   ActiveConnectivityConfiguration.region: -|azure-location
-  AddressSpace: VirtualNetworkAddressSpace 
+  AddressSpace: VirtualNetworkAddressSpace
   AdminRule: NetworkAdminRule
   AdminRuleCollection: AdminRuleGroup
   AdminRuleCollectionListResult: AdminRuleGroupListResult
   AdminState: ExpressRouteGatewayAdminState
   ApplicationGateway.zones: AvailabilityZones
   ApplicationGatewayAvailableSslOptions: ApplicationGatewayAvailableSslOptionsInfo
+  ApplicationGatewayBackendHttpSettings.properties.dedicatedBackendConnection: IsDedicatedBackendConnectionEnabled
   ApplicationGatewayBackendHttpSettings.properties.requestTimeout: RequestTimeoutInSeconds
+  ApplicationGatewayBackendHttpSettings.properties.validateCertChainAndExpiry: IsValidateCertChainAndExpiryEnabled
+  ApplicationGatewayBackendHttpSettings.properties.validateSNI: IsValidateSniEnabled
+  ApplicationGatewayBackendSettings.properties.enableL4ClientIpPreservation: IsL4ClientIPPreservationEnabled
   ApplicationGatewayBackendSettings.properties.timeout: TimeoutInSeconds
   ApplicationGatewayConnectionDraining.drainTimeoutInSec: DrainTimeoutInSeconds
+  ApplicationGatewayOnDemandProbe.enableProbeProxyProtocolHeader: IsProbeProxyProtocolHeaderEnabled
   ApplicationGatewayPrivateEndpointConnection.properties.privateLinkServiceConnectionState: connectionState
   ApplicationGatewayPrivateLinkIpConfiguration.properties.primary: IsPrimary
+  ApplicationGatewayProbe.properties.enableProbeProxyProtocolHeader: IsProbeProxyProtocolHeaderEnabled
   ApplicationGatewayProbe.properties.interval: IntervalInSeconds
   ApplicationGatewayProbe.properties.timeout: TimeoutInSeconds
   ApplicationGatewayTierTypes.WAF: Waf
@@ -70,6 +76,8 @@ rename-mapping:
   AzureFirewallApplicationRuleCollection: AzureFirewallApplicationRuleCollectionData
   AzureFirewallNatRuleCollection: AzureFirewallNatRuleCollectionData
   AzureFirewallNetworkRuleCollection: AzureFirewallNetworkRuleCollectionData
+  AzureFirewallPacketCaptureResponse: AzureFirewallPacketCaptureResult
+  AzureFirewallPacketCaptureResponseCode: AzureFirewallPacketCaptureResultCode
   ConfigurationGroup: NetworkConfigurationGroup
   ConfigurationType: NetworkConfigurationDeploymentType
   ConnectionMonitor: ConnectionMonitorInput
@@ -100,7 +108,7 @@ rename-mapping:
   ExplicitProxy: FirewallPolicyExplicitProxy
   ExpressRouteGateway.properties.expressRouteConnections: ExpressRouteConnectionList
   FilterItems: IdpsQueryFilterItems
-  FirewallPacketCaptureParameters: FirewallPacketCaptureRequestParameters   # To workaround breaking change in FirewallPacketCaptureParameters, we have to keep the old codes and rename it
+  FirewallPacketCaptureParameters: FirewallPacketCaptureRequestContent
   FirewallPolicyFilterRuleCollection: FirewallPolicyFilterRuleCollectionInfo
   FirewallPolicyNatRuleCollection: FirewallPolicyNatRuleCollectionInfo
   FirewallPolicyRuleCollection: FirewallPolicyRuleCollectionInfo
@@ -133,19 +141,24 @@ rename-mapping:
   IPTraffic: NetworkVerifierIPTraffic
   IpType: IpamIPType
   IPVersion: NetworkIPVersion
+  IsRollback: UndoReservationType
   IsGlobal: GlobalMeshSupportFlag
   IssueType: ConnectivityIssueType
   IsWorkloadProtected: WorkloadProtectedFlag
+  LoadBalancerHealthPerRulePerBackendAddress.networkInterfaceIPConfigurationId: NetworkInterfaceIPConfigurationResourceId|arm-id
   LoadBalancingRulePropertiesFormat: LoadBalancingRuleProperties
   MigratedPools: MigrateLoadBalancerToIPBasedResult
+  NspServiceTagsResource: NetworkSecurityPerimeterServiceTags
   NetworkManagerConnection.properties.networkManagerId: -|arm-id
   NetworkManagerDeploymentStatus.deploymentStatus: DeploymentState
   NetworkManagerDeploymentStatusParameter: NetworkManagerDeploymentStatusContent
   NetworkManagerSecurityGroupItem.networkGroupId: -|arm-id
+  NetworkVirtualAppliance.properties.privateIpAddress: -|ip-address
   NetworkVirtualApplianceConnection.properties.routingConfiguration: ConnectionRoutingConfiguration
   NextStep: RouteMapNextStepBehavior
   OrderBy: IdpsQueryOrderBy
   Origin: IssueOrigin
+  P2SConnectionConfiguration.properties.configurationPolicyGroupAssociations: ConfigurationPolicyGroups
   PacketCapture.properties.continuousCapture: IsContinuousCapture
   PacketCapture: PacketCaptureInput
   PacketCaptureResult.properties.continuousCapture: IsContinuousCapture
@@ -296,6 +309,7 @@ acronym-mapping:
   IkeV2: IkeV2
   Stag: STag|stag
   Nsp: NetworkSecurityPerimeter
+  JWT: Jwt|jwt
 
 #TODO: remove after we resolve why DdosCustomPolicy has no list
 list-exception:
@@ -356,7 +370,7 @@ directive:
   - remove-operation: 'VirtualNetworks_ListDdosProtectionStatus'
   - remove-operation: 'NetworkSecurityPerimeterAssociations_Reconcile'
   - remove-operation: 'NetworkSecurityPerimeterAccessRules_Reconcile'
-  - remove-operation: 'NetworkSecurityPerimeterOperationStatus_Get'
+  - remove-operation: 'NetworkSecurityPerimeterOperationStatuses_Get'
   # This part is for generate partial class in network
   # these operations are renamed because their api-versions are different from others in the same operation group
   # - rename-operation:
@@ -655,7 +669,7 @@ directive:
   #     {
   #         delete $[param];
   #     }
-  
+
   # Remove the format of id which break current type replacement logic, issue https://github.com/Azure/azure-sdk-for-net/issues/47589 opened to track this requirement.
   - from: network.json
     where: $.definitions

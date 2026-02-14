@@ -35,10 +35,10 @@ namespace Azure.AI.Language.Text
             }
 
             base.JsonModelWriteCore(writer, options);
-            if (Optional.IsDefined(ActionContent))
+            if (Optional.IsDefined(Parameters))
             {
                 writer.WritePropertyName("parameters"u8);
-                writer.WriteObjectValue(ActionContent, options);
+                writer.WriteObjectValue(Parameters, options);
             }
         }
 
@@ -104,7 +104,7 @@ namespace Azure.AI.Language.Text
             switch (format)
             {
                 case "J":
-                    return ModelReaderWriter.Write(this, options);
+                    return ModelReaderWriter.Write(this, options, AzureAILanguageTextContext.Default);
                 default:
                     throw new FormatException($"The model {nameof(SentimentAnalysisOperationAction)} does not support writing '{options.Format}' format.");
             }

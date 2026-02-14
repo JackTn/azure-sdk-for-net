@@ -1,6 +1,6 @@
 # Release History
 
-## 1.3.0-beta.1 (Unreleased)
+## 1.4.0-beta.1 (Unreleased)
 
 ### Features Added
 
@@ -9,6 +9,20 @@
 ### Bugs Fixed
 
 ### Other Changes
+
+## 1.3.1 (2025-12-16)
+
+### Features Added
+
+- Make `Azure.ResourceManager.StorageSync` AOT compatible
+
+## 1.3.0 (2025-05-01)
+
+### Features Added
+
+- Upgrade the ApiVersion to 2022-09-01
+- Managaed Identity support for Storage Sync Service.
+- Fast DR V2 support for Storage Sync Service.
 
 ## 1.2.1 (2025-03-11)
 

@@ -2,15 +2,9 @@
 // Licensed under the MIT License.
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Azure.Core;
 using Azure.Core.TestFramework;
 using Azure.ResourceManager.ElasticSan.Models;
-using Azure.ResourceManager.Resources;
-using Microsoft.Identity.Client;
 using NUnit.Framework;
 
 namespace Azure.ResourceManager.ElasticSan.Tests.Scenario
@@ -53,7 +47,7 @@ namespace Azure.ResourceManager.ElasticSan.Tests.Scenario
             ElasticSanVolumeResource volume3 = (await volume1.UpdateAsync(WaitUntil.Completed, patch)).Value;
             Assert.AreEqual(200, volume3.Data.SizeGiB);
 
-            await volume1.DeleteAsync(WaitUntil.Completed, XmsDeleteSnapshot.True, XmsForceDelete.True);
+            await volume1.DeleteAsync(WaitUntil.Completed, ElasticSanDeleteSnapshotsUnderVolume.True, ElasticSanForceDeleteVolume.True, cancellationToken: default);
         }
     }
 }

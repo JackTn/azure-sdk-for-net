@@ -1,9 +1,9 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using System.Threading.Tasks;
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Azure.Communication.CallAutomation
 {
@@ -75,19 +75,13 @@ namespace Azure.Communication.CallAutomation
             switch (returnedEvent)
             {
                 case PlayStarted:
-                    result = new PlayEventResult(true, null, null, (PlayStarted)returnedEvent, null, null);
-                    break;
-                case PlayPaused:
-                    result = new PlayEventResult(true, null, null, null, (PlayPaused)returnedEvent, null);
-                    break;
-                case PlayResumed:
-                    result = new PlayEventResult(true, null, null, null, null, (PlayResumed)returnedEvent);
+                    result = new PlayEventResult(true, null, null, (PlayStarted)returnedEvent);
                     break;
                 case PlayCompleted:
-                    result = new PlayEventResult(true, (PlayCompleted)returnedEvent, null, null, null, null);
+                    result = new PlayEventResult(true, (PlayCompleted)returnedEvent, null, null);
                     break;
                 case PlayFailed:
-                    result = result = new PlayEventResult(false, null, (PlayFailed)returnedEvent, null, null, null);
+                    result = result = new PlayEventResult(false, null, (PlayFailed)returnedEvent, null);
                     break;
                 default:
                     throw new NotSupportedException(returnedEvent.GetType().Name);

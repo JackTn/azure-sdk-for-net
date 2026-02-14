@@ -1,5 +1,11 @@
 namespace Azure.ResourceManager.ManagementPartner
 {
+    public partial class AzureResourceManagerManagementPartnerContext : System.ClientModel.Primitives.ModelReaderWriterContext
+    {
+        internal AzureResourceManagerManagementPartnerContext() { }
+        public static Azure.ResourceManager.ManagementPartner.AzureResourceManagerManagementPartnerContext Default { get { throw null; } }
+        protected override bool TryGetTypeBuilderCore(System.Type type, out System.ClientModel.Primitives.ModelReaderWriterTypeBuilder builder) { throw null; }
+    }
     public static partial class ManagementPartnerExtensions
     {
         public static Azure.Pageable<Azure.ResourceManager.ManagementPartner.Models.OperationResponse> GetOperations(this Azure.ResourceManager.Resources.TenantResource tenantResource, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) { throw null; }
@@ -94,9 +100,7 @@ namespace Azure.ResourceManager.ManagementPartner.Models
         public static Azure.ResourceManager.ManagementPartner.Models.ManagementPartnerState Active { get { throw null; } }
         public static Azure.ResourceManager.ManagementPartner.Models.ManagementPartnerState Deleted { get { throw null; } }
         public bool Equals(Azure.ResourceManager.ManagementPartner.Models.ManagementPartnerState other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.ManagementPartner.Models.ManagementPartnerState left, Azure.ResourceManager.ManagementPartner.Models.ManagementPartnerState right) { throw null; }
         public static implicit operator Azure.ResourceManager.ManagementPartner.Models.ManagementPartnerState (string value) { throw null; }

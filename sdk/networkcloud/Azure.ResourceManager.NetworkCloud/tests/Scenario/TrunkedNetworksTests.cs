@@ -7,14 +7,15 @@ using Azure.ResourceManager.NetworkCloud.Models;
 using Azure.ResourceManager.Resources;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Azure.ResourceManager.NetworkCloud.Tests.ScenarioTests
 {
     public class TrunkedNetworksTests : NetworkCloudManagementTestBase
     {
-        public TrunkedNetworksTests   (bool isAsync, RecordedTestMode mode) : base(isAsync, mode) {}
-        public TrunkedNetworksTests  (bool isAsync) : base(isAsync) {}
+        public TrunkedNetworksTests(bool isAsync, RecordedTestMode mode) : base(isAsync, mode) { }
+        public TrunkedNetworksTests(bool isAsync) : base(isAsync) { }
 
         [Test, MaxTime(1800000)]
         [RecordedTest]
@@ -90,7 +91,7 @@ namespace Azure.ResourceManager.NetworkCloud.Tests.ScenarioTests
             Assert.IsNotEmpty(listBySubscription);
 
             // Delete
-            var deleteResult = await trunkedNetwork.DeleteAsync(WaitUntil.Completed);
+            var deleteResult = await trunkedNetwork.DeleteAsync(WaitUntil.Completed, CancellationToken.None);
             Assert.IsTrue(deleteResult.HasCompleted);
         }
     }

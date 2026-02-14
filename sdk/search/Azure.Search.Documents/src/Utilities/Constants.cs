@@ -102,6 +102,11 @@ namespace Azure.Search.Documents
         public static readonly JsonEncodedText SearchRerankerScoreKeyJson = JsonEncodedText.Encode("@search.rerankerScore");
 
         /// <summary>
+        /// The @search.rerankerBoostedScore key.
+        /// </summary>
+        public static readonly JsonEncodedText SearchRerankerBoostedScoreKeyJson = JsonEncodedText.Encode("@search.rerankerBoostedScore");
+
+        /// <summary>
         /// The @search.captions key.
         /// </summary>
         public static readonly JsonEncodedText SearchCaptionsKeyJson = JsonEncodedText.Encode("@search.captions");
@@ -160,6 +165,46 @@ namespace Azure.Search.Documents
         /// The sum key.
         /// </summary>
         public static readonly JsonEncodedText SumKeyJson = JsonEncodedText.Encode(SumKey);
+
+        /// <summary>
+        /// The avg key.
+        /// </summary>
+        public const string AvgKey = "avg";
+
+        /// <summary>
+        /// The avg key.
+        /// </summary>
+        public static readonly JsonEncodedText AvgKeyJson = JsonEncodedText.Encode(AvgKey);
+
+        /// <summary>
+        /// The min key.
+        /// </summary>
+        public const string MinKey = "min";
+
+        /// <summary>
+        /// The min key.
+        /// </summary>
+        public static readonly JsonEncodedText MinKeyJson = JsonEncodedText.Encode(MinKey);
+
+        /// <summary>
+        /// The max key.
+        /// </summary>
+        public const string MaxKey = "max";
+
+        /// <summary>
+        /// The max key.
+        /// </summary>
+        public static readonly JsonEncodedText MaxKeyJson = JsonEncodedText.Encode(MaxKey);
+
+        /// <summary>
+        /// The cardinality key.
+        /// </summary>
+        public const string CardinalityKey = "cardinality";
+
+        /// <summary>
+        /// The cardinality key.
+        /// </summary>
+        public static readonly JsonEncodedText CardinalityKeyJson = JsonEncodedText.Encode(CardinalityKey);
 
         /// <summary>
         /// The facets key.

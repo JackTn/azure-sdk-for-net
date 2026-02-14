@@ -35,7 +35,7 @@ namespace Azure.ResourceManager.Hci.Models
                 {
                     writer.WritePropertyName(item.Key);
 #if NET6_0_OR_GREATER
-				writer.WriteRawValue(item.Value);
+                    writer.WriteRawValue(item.Value);
 #else
                     using (JsonDocument document = JsonDocument.Parse(item.Value))
                     {
@@ -93,7 +93,7 @@ namespace Azure.ResourceManager.Hci.Models
             switch (format)
             {
                 case "J":
-                    return ModelReaderWriter.Write(this, options);
+                    return ModelReaderWriter.Write(this, options, AzureResourceManagerHciContext.Default);
                 default:
                     throw new FormatException($"The model {nameof(ExtensionUpgradeContent)} does not support writing '{options.Format}' format.");
             }

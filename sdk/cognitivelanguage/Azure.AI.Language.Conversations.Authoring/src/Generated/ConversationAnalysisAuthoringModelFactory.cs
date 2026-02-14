@@ -8,46 +8,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Azure.Core;
 
 namespace Azure.AI.Language.Conversations.Authoring
 {
     /// <summary> Model factory for models. </summary>
     public static partial class ConversationAnalysisAuthoringModelFactory
     {
-        /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringProjectDeployment"/>. </summary>
-        /// <param name="deploymentName"> Represents deployment name. </param>
-        /// <param name="modelId"> Represents deployment modelId. </param>
-        /// <param name="lastTrainedOn"> Represents deployment last trained time. </param>
-        /// <param name="lastDeployedOn"> Represents deployment last deployed time. </param>
-        /// <param name="deploymentExpiredOn"> Represents deployment expiration date in the runtime. </param>
-        /// <param name="modelTrainingConfigVersion"> Represents model training config version. </param>
-        /// <param name="assignedResources"> Represents the metadata of the assigned Azure resources. </param>
-        /// <returns> A new <see cref="Authoring.ConversationAuthoringProjectDeployment"/> instance for mocking. </returns>
-        public static ConversationAuthoringProjectDeployment ConversationAuthoringProjectDeployment(string deploymentName = null, string modelId = null, DateTimeOffset lastTrainedOn = default, DateTimeOffset lastDeployedOn = default, DateTimeOffset deploymentExpiredOn = default, string modelTrainingConfigVersion = null, IEnumerable<ConversationAuthoringDeploymentResource> assignedResources = null)
-        {
-            assignedResources ??= new List<ConversationAuthoringDeploymentResource>();
-
-            return new ConversationAuthoringProjectDeployment(
-                deploymentName,
-                modelId,
-                lastTrainedOn,
-                lastDeployedOn,
-                deploymentExpiredOn,
-                modelTrainingConfigVersion,
-                assignedResources?.ToList(),
-                serializedAdditionalRawData: null);
-        }
-
-        /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringDeploymentResource"/>. </summary>
-        /// <param name="resourceId"> Represents the Azure resource Id. </param>
-        /// <param name="region"> Represents the resource region. </param>
-        /// <returns> A new <see cref="Authoring.ConversationAuthoringDeploymentResource"/> instance for mocking. </returns>
-        public static ConversationAuthoringDeploymentResource ConversationAuthoringDeploymentResource(string resourceId = null, string region = null)
-        {
-            return new ConversationAuthoringDeploymentResource(resourceId, region, serializedAdditionalRawData: null);
-        }
-
         /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringProjectMetadata"/>. </summary>
         /// <param name="createdOn"> Represents the project creation datetime. </param>
         /// <param name="lastModifiedOn"> Represents the project creation datetime. </param>
@@ -108,15 +74,6 @@ namespace Azure.AI.Language.Conversations.Authoring
             return new ConversationAuthoringAssignedProjectDeploymentMetadata(deploymentName, lastDeployedOn, deploymentExpiresOn, serializedAdditionalRawData: null);
         }
 
-        /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringAssignedDeploymentResource"/>. </summary>
-        /// <param name="resourceId"> The resource ID. </param>
-        /// <param name="region"> The resource region. </param>
-        /// <returns> A new <see cref="Authoring.ConversationAuthoringAssignedDeploymentResource"/> instance for mocking. </returns>
-        public static ConversationAuthoringAssignedDeploymentResource ConversationAuthoringAssignedDeploymentResource(ResourceIdentifier resourceId = null, AzureLocation region = default)
-        {
-            return new ConversationAuthoringAssignedDeploymentResource(resourceId, region, serializedAdditionalRawData: null);
-        }
-
         /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringPrebuiltEntity"/>. </summary>
         /// <param name="category"> The prebuilt entity category. </param>
         /// <param name="description"> The description. </param>
@@ -134,6 +91,30 @@ namespace Azure.AI.Language.Conversations.Authoring
         public static ConversationAuthoringTrainingConfigVersion ConversationAuthoringTrainingConfigVersion(string trainingConfigVersion = null, DateTimeOffset modelExpirationDate = default)
         {
             return new ConversationAuthoringTrainingConfigVersion(trainingConfigVersion, modelExpirationDate, serializedAdditionalRawData: null);
+        }
+
+        /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringProjectDeployment"/>. </summary>
+        /// <param name="deploymentName"> Represents deployment name. </param>
+        /// <param name="modelId"> Represents deployment modelId. </param>
+        /// <param name="lastTrainedOn"> Represents deployment last trained time. </param>
+        /// <param name="lastDeployedOn"> Represents deployment last deployed time. </param>
+        /// <param name="deploymentExpiredOn"> Represents deployment expiration date in the runtime. </param>
+        /// <param name="modelTrainingConfigVersion"> Represents model training config version. </param>
+        /// <param name="assignedResources"> Represents the metadata of the assigned Azure resources. </param>
+        /// <returns> A new <see cref="Authoring.ConversationAuthoringProjectDeployment"/> instance for mocking. </returns>
+        public static ConversationAuthoringProjectDeployment ConversationAuthoringProjectDeployment(string deploymentName = null, string modelId = null, DateTimeOffset lastTrainedOn = default, DateTimeOffset lastDeployedOn = default, DateTimeOffset deploymentExpiredOn = default, string modelTrainingConfigVersion = null, IEnumerable<ConversationAuthoringAssignedProjectResource> assignedResources = null)
+        {
+            assignedResources ??= new List<ConversationAuthoringAssignedProjectResource>();
+
+            return new ConversationAuthoringProjectDeployment(
+                deploymentName,
+                modelId,
+                lastTrainedOn,
+                lastDeployedOn,
+                deploymentExpiredOn,
+                modelTrainingConfigVersion,
+                assignedResources?.ToList(),
+                serializedAdditionalRawData: null);
         }
 
         /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringTrainingState"/>. </summary>
@@ -168,16 +149,18 @@ namespace Azure.AI.Language.Conversations.Authoring
         /// <param name="trainingConfigVersion"> Represents training config version. </param>
         /// <param name="trainingMode"> Represents the mode of the training operation. </param>
         /// <param name="trainingStatus"> Represents the model training status. </param>
+        /// <param name="dataGenerationStatus"> Represents the model data generation status. </param>
         /// <param name="evaluationStatus"> Represents model evaluation status. </param>
         /// <param name="estimatedEndOn"> Represents the estimated end date time for training and evaluation. </param>
         /// <returns> A new <see cref="Authoring.ConversationAuthoringTrainingJobResult"/> instance for mocking. </returns>
-        public static ConversationAuthoringTrainingJobResult ConversationAuthoringTrainingJobResult(string modelLabel = null, string trainingConfigVersion = null, ConversationAuthoringTrainingMode? trainingMode = null, ConversationAuthoringSubTrainingState trainingStatus = null, ConversationAuthoringSubTrainingState evaluationStatus = null, DateTimeOffset? estimatedEndOn = null)
+        public static ConversationAuthoringTrainingJobResult ConversationAuthoringTrainingJobResult(string modelLabel = null, string trainingConfigVersion = null, ConversationAuthoringTrainingMode? trainingMode = null, ConversationAuthoringSubTrainingState trainingStatus = null, ConversationAuthoringSubTrainingState dataGenerationStatus = null, ConversationAuthoringSubTrainingState evaluationStatus = null, DateTimeOffset? estimatedEndOn = null)
         {
             return new ConversationAuthoringTrainingJobResult(
                 modelLabel,
                 trainingConfigVersion,
                 trainingMode,
                 trainingStatus,
+                dataGenerationStatus,
                 evaluationStatus,
                 estimatedEndOn,
                 serializedAdditionalRawData: null);
@@ -236,18 +219,18 @@ namespace Azure.AI.Language.Conversations.Authoring
                 serializedAdditionalRawData: null);
         }
 
-        /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringEvaluationJobResult"/>. </summary>
-        /// <param name="evaluationDetails"> Represents the options used running the evaluation. </param>
-        /// <param name="modelLabel"> Represents trained model label. </param>
-        /// <param name="trainingConfigVersion"> Represents training config version. </param>
-        /// <param name="percentComplete"> Represents progress percentage. </param>
-        /// <returns> A new <see cref="Authoring.ConversationAuthoringEvaluationJobResult"/> instance for mocking. </returns>
-        public static ConversationAuthoringEvaluationJobResult ConversationAuthoringEvaluationJobResult(ConversationAuthoringEvaluationDetails evaluationDetails = null, string modelLabel = null, string trainingConfigVersion = null, int percentComplete = default)
+        /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringCreateDeploymentDetails"/>. </summary>
+        /// <param name="trainedModelLabel"> Represents the trained model label. </param>
+        /// <param name="azureResourceIds"> Represents the Language or AIService resource IDs that if provided,\n            the deployment will be rolled out to the resources provided here as well as the original resource in which the project is created. </param>
+        /// <returns> A new <see cref="Authoring.ConversationAuthoringCreateDeploymentDetails"/> instance for mocking. </returns>
+        public static ConversationAuthoringCreateDeploymentDetails ConversationAuthoringCreateDeploymentDetails(string trainedModelLabel = null, IEnumerable<ConversationAuthoringAssignedProjectResource> azureResourceIds = null)
         {
-            return new ConversationAuthoringEvaluationJobResult(evaluationDetails, modelLabel, trainingConfigVersion, percentComplete, serializedAdditionalRawData: null);
+            azureResourceIds ??= new List<ConversationAuthoringAssignedProjectResource>();
+
+            return new ConversationAuthoringCreateDeploymentDetails(trainedModelLabel, azureResourceIds?.ToList(), serializedAdditionalRawData: null);
         }
 
-        /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringEvaluationState"/>. </summary>
+        /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringDeploymentState"/>. </summary>
         /// <param name="jobId"> The job ID. </param>
         /// <param name="createdOn"> The creation date time of the job. </param>
         /// <param name="lastUpdatedOn"> The last date time the job was updated. </param>
@@ -255,40 +238,13 @@ namespace Azure.AI.Language.Conversations.Authoring
         /// <param name="status"> The job status. </param>
         /// <param name="warnings"> The warnings that were encountered while executing the job. </param>
         /// <param name="errors"> The errors encountered while executing the job. </param>
-        /// <param name="result"> Represents evaluation task detailed result. </param>
-        /// <returns> A new <see cref="Authoring.ConversationAuthoringEvaluationState"/> instance for mocking. </returns>
-        public static ConversationAuthoringEvaluationState ConversationAuthoringEvaluationState(string jobId = null, DateTimeOffset createdOn = default, DateTimeOffset lastUpdatedOn = default, DateTimeOffset? expiresOn = null, ConversationAuthoringOperationStatus status = default, IEnumerable<ResponseError> warnings = null, IEnumerable<ResponseError> errors = null, ConversationAuthoringEvaluationJobResult result = null)
+        /// <returns> A new <see cref="Authoring.ConversationAuthoringDeploymentState"/> instance for mocking. </returns>
+        public static ConversationAuthoringDeploymentState ConversationAuthoringDeploymentState(string jobId = null, DateTimeOffset createdOn = default, DateTimeOffset lastUpdatedOn = default, DateTimeOffset? expiresOn = null, ConversationAuthoringOperationStatus status = default, IEnumerable<ResponseError> warnings = null, IEnumerable<ResponseError> errors = null)
         {
             warnings ??= new List<ResponseError>();
             errors ??= new List<ResponseError>();
 
-            return new ConversationAuthoringEvaluationState(
-                jobId,
-                createdOn,
-                lastUpdatedOn,
-                expiresOn,
-                status,
-                warnings?.ToList(),
-                errors?.ToList(),
-                result,
-                serializedAdditionalRawData: null);
-        }
-
-        /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringLoadSnapshotState"/>. </summary>
-        /// <param name="jobId"> The job ID. </param>
-        /// <param name="createdOn"> The creation date time of the job. </param>
-        /// <param name="lastUpdatedOn"> The last date time the job was updated. </param>
-        /// <param name="expiresOn"> The expiration date time of the job. </param>
-        /// <param name="status"> The job status. </param>
-        /// <param name="warnings"> The warnings that were encountered while executing the job. </param>
-        /// <param name="errors"> The errors encountered while executing the job. </param>
-        /// <returns> A new <see cref="Authoring.ConversationAuthoringLoadSnapshotState"/> instance for mocking. </returns>
-        public static ConversationAuthoringLoadSnapshotState ConversationAuthoringLoadSnapshotState(string jobId = null, DateTimeOffset createdOn = default, DateTimeOffset lastUpdatedOn = default, DateTimeOffset? expiresOn = null, ConversationAuthoringOperationStatus status = default, IEnumerable<ResponseError> warnings = null, IEnumerable<ResponseError> errors = null)
-        {
-            warnings ??= new List<ResponseError>();
-            errors ??= new List<ResponseError>();
-
-            return new ConversationAuthoringLoadSnapshotState(
+            return new ConversationAuthoringDeploymentState(
                 jobId,
                 createdOn,
                 lastUpdatedOn,
@@ -299,176 +255,7 @@ namespace Azure.AI.Language.Conversations.Authoring
                 serializedAdditionalRawData: null);
         }
 
-        /// <summary> Initializes a new instance of <see cref="Authoring.UtteranceEvaluationResult"/>. </summary>
-        /// <param name="text"> Represents the utterance text. </param>
-        /// <param name="language"> Represents the utterance language. This is BCP-47 representation of a language. For example, use "en" for English, "en-gb" for English (UK), "es" for Spanish etc. </param>
-        /// <param name="entitiesResult"> Represents the entities results for the utterance. </param>
-        /// <param name="intentsResult"> Represents the intents results for the utterance. </param>
-        /// <returns> A new <see cref="Authoring.UtteranceEvaluationResult"/> instance for mocking. </returns>
-        public static UtteranceEvaluationResult UtteranceEvaluationResult(string text = null, string language = null, UtteranceEntitiesEvaluationResult entitiesResult = null, UtteranceIntentsEvaluationResult intentsResult = null)
-        {
-            return new UtteranceEvaluationResult(text, language, entitiesResult, intentsResult, serializedAdditionalRawData: null);
-        }
-
-        /// <summary> Initializes a new instance of <see cref="Authoring.UtteranceEntitiesEvaluationResult"/>. </summary>
-        /// <param name="expectedEntities"> Represents the expected entity labels. </param>
-        /// <param name="predictedEntities"> Represents the predicted entity labels. </param>
-        /// <returns> A new <see cref="Authoring.UtteranceEntitiesEvaluationResult"/> instance for mocking. </returns>
-        public static UtteranceEntitiesEvaluationResult UtteranceEntitiesEvaluationResult(IEnumerable<UtteranceEntityEvaluationResult> expectedEntities = null, IEnumerable<UtteranceEntityEvaluationResult> predictedEntities = null)
-        {
-            expectedEntities ??= new List<UtteranceEntityEvaluationResult>();
-            predictedEntities ??= new List<UtteranceEntityEvaluationResult>();
-
-            return new UtteranceEntitiesEvaluationResult(expectedEntities?.ToList(), predictedEntities?.ToList(), serializedAdditionalRawData: null);
-        }
-
-        /// <summary> Initializes a new instance of <see cref="Authoring.UtteranceEntityEvaluationResult"/>. </summary>
-        /// <param name="category"> Represents the entity category. </param>
-        /// <param name="offset"> Represents the entity offset index relative to the original text. </param>
-        /// <param name="length"> Represents the entity length. </param>
-        /// <returns> A new <see cref="Authoring.UtteranceEntityEvaluationResult"/> instance for mocking. </returns>
-        public static UtteranceEntityEvaluationResult UtteranceEntityEvaluationResult(string category = null, int offset = default, int length = default)
-        {
-            return new UtteranceEntityEvaluationResult(category, offset, length, serializedAdditionalRawData: null);
-        }
-
-        /// <summary> Initializes a new instance of <see cref="Authoring.UtteranceIntentsEvaluationResult"/>. </summary>
-        /// <param name="expectedIntent"> Represents the utterance's expected intent. </param>
-        /// <param name="predictedIntent"> Represents the utterance's predicted intent. </param>
-        /// <returns> A new <see cref="Authoring.UtteranceIntentsEvaluationResult"/> instance for mocking. </returns>
-        public static UtteranceIntentsEvaluationResult UtteranceIntentsEvaluationResult(string expectedIntent = null, string predictedIntent = null)
-        {
-            return new UtteranceIntentsEvaluationResult(expectedIntent, predictedIntent, serializedAdditionalRawData: null);
-        }
-
-        /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringEvalSummary"/>. </summary>
-        /// <param name="entitiesEvaluation"> Contains the data related to entities evaluation. </param>
-        /// <param name="intentsEvaluation"> Contains the data related to intents evaluation. </param>
-        /// <param name="evaluationOptions"> The options that were used while running the evaluation. </param>
-        /// <returns> A new <see cref="Authoring.ConversationAuthoringEvalSummary"/> instance for mocking. </returns>
-        public static ConversationAuthoringEvalSummary ConversationAuthoringEvalSummary(EntitiesEvaluationSummary entitiesEvaluation = null, IntentsEvaluationSummary intentsEvaluation = null, ConversationAuthoringEvaluationDetails evaluationOptions = null)
-        {
-            return new ConversationAuthoringEvalSummary(entitiesEvaluation, intentsEvaluation, evaluationOptions, serializedAdditionalRawData: null);
-        }
-
-        /// <summary> Initializes a new instance of <see cref="Authoring.EntitiesEvaluationSummary"/>. </summary>
-        /// <param name="confusionMatrix"> Represents the confusion matrix between two entities (the two entities can be the same). The matrix is between the entity that was labelled and the entity that was predicted. </param>
-        /// <param name="entities"> Represents the entities evaluation summary. </param>
-        /// <param name="microF1"> Represents the micro F1. Expected value is a float between 0 and 1 inclusive. </param>
-        /// <param name="microPrecision"> Represents the micro precision. Expected value is a float between 0 and 1 inclusive. </param>
-        /// <param name="microRecall"> Represents the micro recall. Expected value is a float between 0 and 1 inclusive. </param>
-        /// <param name="macroF1"> Represents the macro F1. Expected value is a float between 0 and 1 inclusive. </param>
-        /// <param name="macroPrecision"> Represents the macro precision. Expected value is a float between 0 and 1 inclusive. </param>
-        /// <param name="macroRecall"> Represents the macro recall. Expected value is a float between 0 and 1 inclusive. </param>
-        /// <returns> A new <see cref="Authoring.EntitiesEvaluationSummary"/> instance for mocking. </returns>
-        public static EntitiesEvaluationSummary EntitiesEvaluationSummary(IReadOnlyDictionary<string, ConversationAuthoringConfusionMatrixRow> confusionMatrix = null, IReadOnlyDictionary<string, ConversationAuthoringEntityEvalSummary> entities = null, float microF1 = default, float microPrecision = default, float microRecall = default, float macroF1 = default, float macroPrecision = default, float macroRecall = default)
-        {
-            confusionMatrix ??= new Dictionary<string, ConversationAuthoringConfusionMatrixRow>();
-            entities ??= new Dictionary<string, ConversationAuthoringEntityEvalSummary>();
-
-            return new EntitiesEvaluationSummary(
-                confusionMatrix,
-                entities,
-                microF1,
-                microPrecision,
-                microRecall,
-                macroF1,
-                macroPrecision,
-                macroRecall,
-                serializedAdditionalRawData: null);
-        }
-
-        /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringConfusionMatrixRow"/>. </summary>
-        /// <param name="additionalProperties"> Additional Properties. </param>
-        /// <returns> A new <see cref="Authoring.ConversationAuthoringConfusionMatrixRow"/> instance for mocking. </returns>
-        public static ConversationAuthoringConfusionMatrixRow ConversationAuthoringConfusionMatrixRow(IReadOnlyDictionary<string, BinaryData> additionalProperties = null)
-        {
-            additionalProperties ??= new Dictionary<string, BinaryData>();
-
-            return new ConversationAuthoringConfusionMatrixRow(additionalProperties);
-        }
-
-        /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringConfusionMatrixCell"/>. </summary>
-        /// <param name="normalizedValue"> Represents normalized value in percentages. </param>
-        /// <param name="rawValue"> Represents raw value. </param>
-        /// <returns> A new <see cref="Authoring.ConversationAuthoringConfusionMatrixCell"/> instance for mocking. </returns>
-        public static ConversationAuthoringConfusionMatrixCell ConversationAuthoringConfusionMatrixCell(float normalizedValue = default, float rawValue = default)
-        {
-            return new ConversationAuthoringConfusionMatrixCell(normalizedValue, rawValue, serializedAdditionalRawData: null);
-        }
-
-        /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringEntityEvalSummary"/>. </summary>
-        /// <param name="f1"> Represents the model F1 score. </param>
-        /// <param name="precision"> Represents the model precision. </param>
-        /// <param name="recall"> Represents the model precision. </param>
-        /// <param name="truePositiveCount"> Represents the count of true positive. </param>
-        /// <param name="trueNegativeCount"> Represents the count of true negative. </param>
-        /// <param name="falsePositiveCount"> Represents the count of false positive. </param>
-        /// <param name="falseNegativeCount"> Represents the count of false negative. </param>
-        /// <returns> A new <see cref="Authoring.ConversationAuthoringEntityEvalSummary"/> instance for mocking. </returns>
-        public static ConversationAuthoringEntityEvalSummary ConversationAuthoringEntityEvalSummary(double f1 = default, double precision = default, double recall = default, int truePositiveCount = default, int trueNegativeCount = default, int falsePositiveCount = default, int falseNegativeCount = default)
-        {
-            return new ConversationAuthoringEntityEvalSummary(
-                f1,
-                precision,
-                recall,
-                truePositiveCount,
-                trueNegativeCount,
-                falsePositiveCount,
-                falseNegativeCount,
-                serializedAdditionalRawData: null);
-        }
-
-        /// <summary> Initializes a new instance of <see cref="Authoring.IntentsEvaluationSummary"/>. </summary>
-        /// <param name="confusionMatrix"> Represents the confusion matrix between two intents (the two intents can be the same). The matrix is between the intent that was labelled and the intent that was predicted. </param>
-        /// <param name="intents"> Represents the intents evaluation summary. </param>
-        /// <param name="microF1"> Represents the micro F1. Expected value is a float between 0 and 1 inclusive. </param>
-        /// <param name="microPrecision"> Represents the micro precision. Expected value is a float between 0 and 1 inclusive. </param>
-        /// <param name="microRecall"> Represents the micro recall. Expected value is a float between 0 and 1 inclusive. </param>
-        /// <param name="macroF1"> Represents the macro F1. Expected value is a float between 0 and 1 inclusive. </param>
-        /// <param name="macroPrecision"> Represents the macro precision. Expected value is a float between 0 and 1 inclusive. </param>
-        /// <param name="macroRecall"> Represents the macro recall. Expected value is a float between 0 and 1 inclusive. </param>
-        /// <returns> A new <see cref="Authoring.IntentsEvaluationSummary"/> instance for mocking. </returns>
-        public static IntentsEvaluationSummary IntentsEvaluationSummary(IReadOnlyDictionary<string, ConversationAuthoringConfusionMatrixRow> confusionMatrix = null, IReadOnlyDictionary<string, IntentEvaluationSummary> intents = null, float microF1 = default, float microPrecision = default, float microRecall = default, float macroF1 = default, float macroPrecision = default, float macroRecall = default)
-        {
-            confusionMatrix ??= new Dictionary<string, ConversationAuthoringConfusionMatrixRow>();
-            intents ??= new Dictionary<string, IntentEvaluationSummary>();
-
-            return new IntentsEvaluationSummary(
-                confusionMatrix,
-                intents,
-                microF1,
-                microPrecision,
-                microRecall,
-                macroF1,
-                macroPrecision,
-                macroRecall,
-                serializedAdditionalRawData: null);
-        }
-
-        /// <summary> Initializes a new instance of <see cref="Authoring.IntentEvaluationSummary"/>. </summary>
-        /// <param name="f1"> Represents the model precision. </param>
-        /// <param name="precision"> Represents the model recall. </param>
-        /// <param name="recall"> Represents the model F1 score. </param>
-        /// <param name="truePositiveCount"> Represents the count of true positive. </param>
-        /// <param name="trueNegativeCount"> Represents the count of true negative. </param>
-        /// <param name="falsePositiveCount"> Represents the count of false positive. </param>
-        /// <param name="falseNegativeCount"> Represents the count of false negative. </param>
-        /// <returns> A new <see cref="Authoring.IntentEvaluationSummary"/> instance for mocking. </returns>
-        public static IntentEvaluationSummary IntentEvaluationSummary(double f1 = default, double precision = default, double recall = default, int truePositiveCount = default, int trueNegativeCount = default, int falsePositiveCount = default, int falseNegativeCount = default)
-        {
-            return new IntentEvaluationSummary(
-                f1,
-                precision,
-                recall,
-                truePositiveCount,
-                trueNegativeCount,
-                falsePositiveCount,
-                falseNegativeCount,
-                serializedAdditionalRawData: null);
-        }
-
-        /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringExportedModelState"/>. </summary>
+        /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringDeploymentDeleteFromResourcesState"/>. </summary>
         /// <param name="jobId"> The job ID. </param>
         /// <param name="createdOn"> The creation date time of the job. </param>
         /// <param name="lastUpdatedOn"> The last date time the job was updated. </param>
@@ -476,13 +263,13 @@ namespace Azure.AI.Language.Conversations.Authoring
         /// <param name="status"> The job status. </param>
         /// <param name="warnings"> The warnings that were encountered while executing the job. </param>
         /// <param name="errors"> The errors encountered while executing the job. </param>
-        /// <returns> A new <see cref="Authoring.ConversationAuthoringExportedModelState"/> instance for mocking. </returns>
-        public static ConversationAuthoringExportedModelState ConversationAuthoringExportedModelState(string jobId = null, DateTimeOffset createdOn = default, DateTimeOffset lastUpdatedOn = default, DateTimeOffset? expiresOn = null, ConversationAuthoringOperationStatus status = default, IEnumerable<ResponseError> warnings = null, IEnumerable<ResponseError> errors = null)
+        /// <returns> A new <see cref="Authoring.ConversationAuthoringDeploymentDeleteFromResourcesState"/> instance for mocking. </returns>
+        public static ConversationAuthoringDeploymentDeleteFromResourcesState ConversationAuthoringDeploymentDeleteFromResourcesState(string jobId = null, DateTimeOffset createdOn = default, DateTimeOffset lastUpdatedOn = default, DateTimeOffset? expiresOn = null, ConversationAuthoringOperationStatus status = default, IEnumerable<ResponseError> warnings = null, IEnumerable<ResponseError> errors = null)
         {
             warnings ??= new List<ResponseError>();
             errors ??= new List<ResponseError>();
 
-            return new ConversationAuthoringExportedModelState(
+            return new ConversationAuthoringDeploymentDeleteFromResourcesState(
                 jobId,
                 createdOn,
                 lastUpdatedOn,
@@ -493,7 +280,7 @@ namespace Azure.AI.Language.Conversations.Authoring
                 serializedAdditionalRawData: null);
         }
 
-        /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringDeploymentResourcesState"/>. </summary>
+        /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringProjectResourcesState"/>. </summary>
         /// <param name="jobId"> The job ID. </param>
         /// <param name="createdOn"> The creation date time of the job. </param>
         /// <param name="lastUpdatedOn"> The last date time the job was updated. </param>
@@ -501,13 +288,13 @@ namespace Azure.AI.Language.Conversations.Authoring
         /// <param name="status"> The job status. </param>
         /// <param name="warnings"> The warnings that were encountered while executing the job. </param>
         /// <param name="errors"> The errors encountered while executing the job. </param>
-        /// <returns> A new <see cref="Authoring.ConversationAuthoringDeploymentResourcesState"/> instance for mocking. </returns>
-        public static ConversationAuthoringDeploymentResourcesState ConversationAuthoringDeploymentResourcesState(string jobId = null, DateTimeOffset createdOn = default, DateTimeOffset lastUpdatedOn = default, DateTimeOffset? expiresOn = null, ConversationAuthoringOperationStatus status = default, IEnumerable<ResponseError> warnings = null, IEnumerable<ResponseError> errors = null)
+        /// <returns> A new <see cref="Authoring.ConversationAuthoringProjectResourcesState"/> instance for mocking. </returns>
+        public static ConversationAuthoringProjectResourcesState ConversationAuthoringProjectResourcesState(string jobId = null, DateTimeOffset createdOn = default, DateTimeOffset lastUpdatedOn = default, DateTimeOffset? expiresOn = null, ConversationAuthoringOperationStatus status = default, IEnumerable<ResponseError> warnings = null, IEnumerable<ResponseError> errors = null)
         {
             warnings ??= new List<ResponseError>();
             errors ??= new List<ResponseError>();
 
-            return new ConversationAuthoringDeploymentResourcesState(
+            return new ConversationAuthoringProjectResourcesState(
                 jobId,
                 createdOn,
                 lastUpdatedOn,
@@ -543,28 +330,6 @@ namespace Azure.AI.Language.Conversations.Authoring
                 serializedAdditionalRawData: null);
         }
 
-        /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringCreateProjectDetails"/>. </summary>
-        /// <param name="projectKind"> Represents the project kind. </param>
-        /// <param name="settings"> The project settings. </param>
-        /// <param name="storageInputContainerName"> The storage container name in case of conversation summarization. </param>
-        /// <param name="projectName"> The new project name. </param>
-        /// <param name="multilingual"> Whether the project would be used for multiple languages or not. </param>
-        /// <param name="description"> The project description. </param>
-        /// <param name="language"> The project language. This is BCP-47 representation of a language. For example, use "en" for English, "en-gb" for English (UK), "es" for Spanish etc. </param>
-        /// <returns> A new <see cref="Authoring.ConversationAuthoringCreateProjectDetails"/> instance for mocking. </returns>
-        public static ConversationAuthoringCreateProjectDetails ConversationAuthoringCreateProjectDetails(ConversationAuthoringProjectKind projectKind = default, ConversationAuthoringProjectSettings settings = null, string storageInputContainerName = null, string projectName = null, bool? multilingual = null, string description = null, string language = null)
-        {
-            return new ConversationAuthoringCreateProjectDetails(
-                projectKind,
-                settings,
-                storageInputContainerName,
-                projectName,
-                multilingual,
-                description,
-                language,
-                serializedAdditionalRawData: null);
-        }
-
         /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringProjectDeletionState"/>. </summary>
         /// <param name="jobId"> The job ID. </param>
         /// <param name="createdOn"> The creation date time of the job. </param>
@@ -590,33 +355,6 @@ namespace Azure.AI.Language.Conversations.Authoring
                 serializedAdditionalRawData: null);
         }
 
-        /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringExportProjectState"/>. </summary>
-        /// <param name="jobId"> The job ID. </param>
-        /// <param name="createdOn"> The creation date time of the job. </param>
-        /// <param name="lastUpdatedOn"> The last date time the job was updated. </param>
-        /// <param name="expiresOn"> The expiration date time of the job. </param>
-        /// <param name="status"> The job status. </param>
-        /// <param name="warnings"> The warnings that were encountered while executing the job. </param>
-        /// <param name="errors"> The errors encountered while executing the job. </param>
-        /// <param name="resultUri"> The URL to use in order to download the exported project. </param>
-        /// <returns> A new <see cref="Authoring.ConversationAuthoringExportProjectState"/> instance for mocking. </returns>
-        public static ConversationAuthoringExportProjectState ConversationAuthoringExportProjectState(string jobId = null, DateTimeOffset createdOn = default, DateTimeOffset lastUpdatedOn = default, DateTimeOffset? expiresOn = null, ConversationAuthoringOperationStatus status = default, IEnumerable<ResponseError> warnings = null, IEnumerable<ResponseError> errors = null, string resultUri = null)
-        {
-            warnings ??= new List<ResponseError>();
-            errors ??= new List<ResponseError>();
-
-            return new ConversationAuthoringExportProjectState(
-                jobId,
-                createdOn,
-                lastUpdatedOn,
-                expiresOn,
-                status,
-                warnings?.ToList(),
-                errors?.ToList(),
-                resultUri,
-                serializedAdditionalRawData: null);
-        }
-
         /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringExportedProject"/>. </summary>
         /// <param name="projectFileVersion"> The version of the exported file. </param>
         /// <param name="stringIndexType"> Specifies the method used to interpret string offsets. For additional information see https://aka.ms/text-analytics-offsets. </param>
@@ -632,21 +370,57 @@ namespace Azure.AI.Language.Conversations.Authoring
             return new ConversationAuthoringExportedProject(projectFileVersion, stringIndexType, metadata, assets, serializedAdditionalRawData: null);
         }
 
+        /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringCreateProjectDetails"/>. </summary>
+        /// <param name="projectKind"> Represents the project kind. </param>
+        /// <param name="settings"> The project settings. </param>
+        /// <param name="storageInputContainerName"> The storage container name in case of conversation summarization. </param>
+        /// <param name="projectName"> The new project name. </param>
+        /// <param name="multilingual"> Whether the project would be used for multiple languages or not. </param>
+        /// <param name="description"> The project description. </param>
+        /// <param name="language"> The project language. This is BCP-47 representation of a language. For example, use "en" for English, "en-gb" for English (UK), "es" for Spanish etc. </param>
+        /// <returns> A new <see cref="Authoring.ConversationAuthoringCreateProjectDetails"/> instance for mocking. </returns>
+        public static ConversationAuthoringCreateProjectDetails ConversationAuthoringCreateProjectDetails(ConversationAuthoringProjectKind projectKind = default, ConversationAuthoringProjectSettings settings = null, string storageInputContainerName = null, string projectName = null, bool? multilingual = null, string description = null, string language = null)
+        {
+            return new ConversationAuthoringCreateProjectDetails(
+                projectKind,
+                settings,
+                storageInputContainerName,
+                projectName,
+                multilingual,
+                description,
+                language,
+                serializedAdditionalRawData: null);
+        }
+
+        /// <summary> Initializes a new instance of <see cref="Authoring.ConversationExportedIntent"/>. </summary>
+        /// <param name="category"> The intent category. </param>
+        /// <param name="description"> The intent description. </param>
+        /// <param name="associatedEntities"> The list of associated entities. </param>
+        /// <returns> A new <see cref="Authoring.ConversationExportedIntent"/> instance for mocking. </returns>
+        public static ConversationExportedIntent ConversationExportedIntent(string category = null, string description = null, IEnumerable<ConversationExportedAssociatedEntityLabel> associatedEntities = null)
+        {
+            associatedEntities ??= new List<ConversationExportedAssociatedEntityLabel>();
+
+            return new ConversationExportedIntent(category, description, associatedEntities?.ToList(), serializedAdditionalRawData: null);
+        }
+
         /// <summary> Initializes a new instance of <see cref="Authoring.ConversationExportedEntity"/>. </summary>
         /// <param name="category"> The category of the entity. </param>
+        /// <param name="description"> The entity description. </param>
         /// <param name="compositionMode"> The behavior to follow when the entity's components overlap with each other. </param>
         /// <param name="entities"> The list component of the entity. </param>
         /// <param name="prebuilts"> The prebuilt entities components. </param>
         /// <param name="regex"> The regex component of the entity. </param>
         /// <param name="requiredComponents"> The required components. Allowed values are 'learned', 'list', 'prebuilts' and 'regex'. </param>
         /// <returns> A new <see cref="Authoring.ConversationExportedEntity"/> instance for mocking. </returns>
-        public static ConversationExportedEntity ConversationExportedEntity(string category = null, ConversationAuthoringCompositionMode? compositionMode = null, ConversationAuthoringExportedEntityList entities = null, IEnumerable<ConversationAuthoringExportedPrebuiltEntity> prebuilts = null, ExportedEntityRegex regex = null, IEnumerable<string> requiredComponents = null)
+        public static ConversationExportedEntity ConversationExportedEntity(string category = null, string description = null, ConversationAuthoringCompositionMode? compositionMode = null, ConversationAuthoringExportedEntityList entities = null, IEnumerable<ConversationAuthoringExportedPrebuiltEntity> prebuilts = null, ExportedEntityRegex regex = null, IEnumerable<string> requiredComponents = null)
         {
             prebuilts ??= new List<ConversationAuthoringExportedPrebuiltEntity>();
             requiredComponents ??= new List<string>();
 
             return new ConversationExportedEntity(
                 category,
+                description,
                 compositionMode,
                 entities,
                 prebuilts?.ToList(),
@@ -682,10 +456,11 @@ namespace Azure.AI.Language.Conversations.Authoring
         /// The available derived classes include <see cref="Authoring.ExportedConversationOrchestrationDetails"/>, <see cref="Authoring.ExportedLuisOrchestrationDetails"/> and <see cref="Authoring.ExportedQuestionAnsweringOrchestrationDetails"/>.
         /// </param>
         /// <param name="category"> The intent category. </param>
+        /// <param name="description"> The intent description. </param>
         /// <returns> A new <see cref="Authoring.OrchestrationExportedIntent"/> instance for mocking. </returns>
-        public static OrchestrationExportedIntent OrchestrationExportedIntent(ExportedOrchestrationDetails orchestration = null, string category = null)
+        public static OrchestrationExportedIntent OrchestrationExportedIntent(ExportedOrchestrationDetails orchestration = null, string category = null, string description = null)
         {
-            return new OrchestrationExportedIntent(orchestration, category, serializedAdditionalRawData: null);
+            return new OrchestrationExportedIntent(orchestration, category, description, serializedAdditionalRawData: null);
         }
 
         /// <summary> Initializes a new instance of <see cref="Authoring.ExportedConversationOrchestrationDetails"/>. </summary>
@@ -758,6 +533,33 @@ namespace Azure.AI.Language.Conversations.Authoring
                 serializedAdditionalRawData: null);
         }
 
+        /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringExportProjectState"/>. </summary>
+        /// <param name="jobId"> The job ID. </param>
+        /// <param name="createdOn"> The creation date time of the job. </param>
+        /// <param name="lastUpdatedOn"> The last date time the job was updated. </param>
+        /// <param name="expiresOn"> The expiration date time of the job. </param>
+        /// <param name="status"> The job status. </param>
+        /// <param name="warnings"> The warnings that were encountered while executing the job. </param>
+        /// <param name="errors"> The errors encountered while executing the job. </param>
+        /// <param name="resultUri"> The URL to use in order to download the exported project. </param>
+        /// <returns> A new <see cref="Authoring.ConversationAuthoringExportProjectState"/> instance for mocking. </returns>
+        public static ConversationAuthoringExportProjectState ConversationAuthoringExportProjectState(string jobId = null, DateTimeOffset createdOn = default, DateTimeOffset lastUpdatedOn = default, DateTimeOffset? expiresOn = null, ConversationAuthoringOperationStatus status = default, IEnumerable<ResponseError> warnings = null, IEnumerable<ResponseError> errors = null, string resultUri = null)
+        {
+            warnings ??= new List<ResponseError>();
+            errors ??= new List<ResponseError>();
+
+            return new ConversationAuthoringExportProjectState(
+                jobId,
+                createdOn,
+                lastUpdatedOn,
+                expiresOn,
+                status,
+                warnings?.ToList(),
+                errors?.ToList(),
+                resultUri,
+                serializedAdditionalRawData: null);
+        }
+
         /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringCopyProjectState"/>. </summary>
         /// <param name="jobId"> The job ID. </param>
         /// <param name="createdOn"> The creation date time of the job. </param>
@@ -788,24 +590,20 @@ namespace Azure.AI.Language.Conversations.Authoring
         /// <param name="trainingConfigVersion"> Represents training config version. By default, "latest" value is used which uses the latest released training config version. </param>
         /// <param name="trainingMode"> Represents the mode of the training operation. </param>
         /// <param name="evaluationOptions"> Represents the evaluation options. By default, the evaluation kind is percentage, with training split percentage as 80, and testing split percentage as 20. </param>
+        /// <param name="dataGenerationSettings"> For customers to populate if they wish to use data generation for their model training job. </param>
         /// <returns> A new <see cref="Authoring.ConversationAuthoringTrainingJobDetails"/> instance for mocking. </returns>
-        public static ConversationAuthoringTrainingJobDetails ConversationAuthoringTrainingJobDetails(string modelLabel = null, string trainingConfigVersion = null, ConversationAuthoringTrainingMode trainingMode = default, ConversationAuthoringEvaluationDetails evaluationOptions = null)
+        public static ConversationAuthoringTrainingJobDetails ConversationAuthoringTrainingJobDetails(string modelLabel = null, string trainingConfigVersion = null, ConversationAuthoringTrainingMode trainingMode = default, ConversationAuthoringEvaluationDetails evaluationOptions = null, AnalyzeConversationAuthoringDataGenerationSettings dataGenerationSettings = null)
         {
-            return new ConversationAuthoringTrainingJobDetails(modelLabel, trainingConfigVersion, trainingMode, evaluationOptions, serializedAdditionalRawData: null);
+            return new ConversationAuthoringTrainingJobDetails(
+                modelLabel,
+                trainingConfigVersion,
+                trainingMode,
+                evaluationOptions,
+                dataGenerationSettings,
+                serializedAdditionalRawData: null);
         }
 
-        /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringCreateDeploymentDetails"/>. </summary>
-        /// <param name="trainedModelLabel"> Represents the trained model label. </param>
-        /// <param name="assignedResourceIds"> Represents the resource IDs to be assigned to the deployment. If provided, the deployment will be rolled out to the resources provided here as well as the original resource in which the project is created. </param>
-        /// <returns> A new <see cref="Authoring.ConversationAuthoringCreateDeploymentDetails"/> instance for mocking. </returns>
-        public static ConversationAuthoringCreateDeploymentDetails ConversationAuthoringCreateDeploymentDetails(string trainedModelLabel = null, IEnumerable<string> assignedResourceIds = null)
-        {
-            assignedResourceIds ??= new List<string>();
-
-            return new ConversationAuthoringCreateDeploymentDetails(trainedModelLabel, assignedResourceIds?.ToList(), serializedAdditionalRawData: null);
-        }
-
-        /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringDeploymentState"/>. </summary>
+        /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringExportedModelState"/>. </summary>
         /// <param name="jobId"> The job ID. </param>
         /// <param name="createdOn"> The creation date time of the job. </param>
         /// <param name="lastUpdatedOn"> The last date time the job was updated. </param>
@@ -813,13 +611,13 @@ namespace Azure.AI.Language.Conversations.Authoring
         /// <param name="status"> The job status. </param>
         /// <param name="warnings"> The warnings that were encountered while executing the job. </param>
         /// <param name="errors"> The errors encountered while executing the job. </param>
-        /// <returns> A new <see cref="Authoring.ConversationAuthoringDeploymentState"/> instance for mocking. </returns>
-        public static ConversationAuthoringDeploymentState ConversationAuthoringDeploymentState(string jobId = null, DateTimeOffset createdOn = default, DateTimeOffset lastUpdatedOn = default, DateTimeOffset? expiresOn = null, ConversationAuthoringOperationStatus status = default, IEnumerable<ResponseError> warnings = null, IEnumerable<ResponseError> errors = null)
+        /// <returns> A new <see cref="Authoring.ConversationAuthoringExportedModelState"/> instance for mocking. </returns>
+        public static ConversationAuthoringExportedModelState ConversationAuthoringExportedModelState(string jobId = null, DateTimeOffset createdOn = default, DateTimeOffset lastUpdatedOn = default, DateTimeOffset? expiresOn = null, ConversationAuthoringOperationStatus status = default, IEnumerable<ResponseError> warnings = null, IEnumerable<ResponseError> errors = null)
         {
             warnings ??= new List<ResponseError>();
             errors ??= new List<ResponseError>();
 
-            return new ConversationAuthoringDeploymentState(
+            return new ConversationAuthoringExportedModelState(
                 jobId,
                 createdOn,
                 lastUpdatedOn,
@@ -830,7 +628,18 @@ namespace Azure.AI.Language.Conversations.Authoring
                 serializedAdditionalRawData: null);
         }
 
-        /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringDeploymentDeleteFromResourcesState"/>. </summary>
+        /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringEvaluationJobResult"/>. </summary>
+        /// <param name="evaluationDetails"> Represents the options used running the evaluation. </param>
+        /// <param name="modelLabel"> Represents trained model label. </param>
+        /// <param name="trainingConfigVersion"> Represents training config version. </param>
+        /// <param name="percentComplete"> Represents progress percentage. </param>
+        /// <returns> A new <see cref="Authoring.ConversationAuthoringEvaluationJobResult"/> instance for mocking. </returns>
+        public static ConversationAuthoringEvaluationJobResult ConversationAuthoringEvaluationJobResult(ConversationAuthoringEvaluationDetails evaluationDetails = null, string modelLabel = null, string trainingConfigVersion = null, int percentComplete = default)
+        {
+            return new ConversationAuthoringEvaluationJobResult(evaluationDetails, modelLabel, trainingConfigVersion, percentComplete, serializedAdditionalRawData: null);
+        }
+
+        /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringEvaluationState"/>. </summary>
         /// <param name="jobId"> The job ID. </param>
         /// <param name="createdOn"> The creation date time of the job. </param>
         /// <param name="lastUpdatedOn"> The last date time the job was updated. </param>
@@ -838,13 +647,14 @@ namespace Azure.AI.Language.Conversations.Authoring
         /// <param name="status"> The job status. </param>
         /// <param name="warnings"> The warnings that were encountered while executing the job. </param>
         /// <param name="errors"> The errors encountered while executing the job. </param>
-        /// <returns> A new <see cref="Authoring.ConversationAuthoringDeploymentDeleteFromResourcesState"/> instance for mocking. </returns>
-        public static ConversationAuthoringDeploymentDeleteFromResourcesState ConversationAuthoringDeploymentDeleteFromResourcesState(string jobId = null, DateTimeOffset createdOn = default, DateTimeOffset lastUpdatedOn = default, DateTimeOffset? expiresOn = null, ConversationAuthoringOperationStatus status = default, IEnumerable<ResponseError> warnings = null, IEnumerable<ResponseError> errors = null)
+        /// <param name="result"> Represents evaluation task detailed result. </param>
+        /// <returns> A new <see cref="Authoring.ConversationAuthoringEvaluationState"/> instance for mocking. </returns>
+        public static ConversationAuthoringEvaluationState ConversationAuthoringEvaluationState(string jobId = null, DateTimeOffset createdOn = default, DateTimeOffset lastUpdatedOn = default, DateTimeOffset? expiresOn = null, ConversationAuthoringOperationStatus status = default, IEnumerable<ResponseError> warnings = null, IEnumerable<ResponseError> errors = null, ConversationAuthoringEvaluationJobResult result = null)
         {
             warnings ??= new List<ResponseError>();
             errors ??= new List<ResponseError>();
 
-            return new ConversationAuthoringDeploymentDeleteFromResourcesState(
+            return new ConversationAuthoringEvaluationState(
                 jobId,
                 createdOn,
                 lastUpdatedOn,
@@ -852,6 +662,201 @@ namespace Azure.AI.Language.Conversations.Authoring
                 status,
                 warnings?.ToList(),
                 errors?.ToList(),
+                result,
+                serializedAdditionalRawData: null);
+        }
+
+        /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringLoadSnapshotState"/>. </summary>
+        /// <param name="jobId"> The job ID. </param>
+        /// <param name="createdOn"> The creation date time of the job. </param>
+        /// <param name="lastUpdatedOn"> The last date time the job was updated. </param>
+        /// <param name="expiresOn"> The expiration date time of the job. </param>
+        /// <param name="status"> The job status. </param>
+        /// <param name="warnings"> The warnings that were encountered while executing the job. </param>
+        /// <param name="errors"> The errors encountered while executing the job. </param>
+        /// <returns> A new <see cref="Authoring.ConversationAuthoringLoadSnapshotState"/> instance for mocking. </returns>
+        public static ConversationAuthoringLoadSnapshotState ConversationAuthoringLoadSnapshotState(string jobId = null, DateTimeOffset createdOn = default, DateTimeOffset lastUpdatedOn = default, DateTimeOffset? expiresOn = null, ConversationAuthoringOperationStatus status = default, IEnumerable<ResponseError> warnings = null, IEnumerable<ResponseError> errors = null)
+        {
+            warnings ??= new List<ResponseError>();
+            errors ??= new List<ResponseError>();
+
+            return new ConversationAuthoringLoadSnapshotState(
+                jobId,
+                createdOn,
+                lastUpdatedOn,
+                expiresOn,
+                status,
+                warnings?.ToList(),
+                errors?.ToList(),
+                serializedAdditionalRawData: null);
+        }
+
+        /// <summary> Initializes a new instance of <see cref="Authoring.UtteranceEvaluationResult"/>. </summary>
+        /// <param name="text"> Represents the utterance text. </param>
+        /// <param name="language"> Represents the utterance language. This is BCP-47 representation of a language. For example, use "en" for English, "en-gb" for English (UK), "es" for Spanish etc. </param>
+        /// <param name="entitiesResult"> Represents the entities results for the utterance. </param>
+        /// <param name="intentsResult"> Represents the intents results for the utterance. </param>
+        /// <returns> A new <see cref="Authoring.UtteranceEvaluationResult"/> instance for mocking. </returns>
+        public static UtteranceEvaluationResult UtteranceEvaluationResult(string text = null, string language = null, AnalyzeConversationAuthoringUtteranceEntitiesEvaluationResult entitiesResult = null, AnalyzeConversationAuthoringUtteranceIntentsEvaluationResult intentsResult = null)
+        {
+            return new UtteranceEvaluationResult(text, language, entitiesResult, intentsResult, serializedAdditionalRawData: null);
+        }
+
+        /// <summary> Initializes a new instance of <see cref="Authoring.AnalyzeConversationAuthoringUtteranceEntitiesEvaluationResult"/>. </summary>
+        /// <param name="expectedEntities"> Represents the expected entity labels. </param>
+        /// <param name="predictedEntities"> Represents the predicted entity labels. </param>
+        /// <returns> A new <see cref="Authoring.AnalyzeConversationAuthoringUtteranceEntitiesEvaluationResult"/> instance for mocking. </returns>
+        public static AnalyzeConversationAuthoringUtteranceEntitiesEvaluationResult AnalyzeConversationAuthoringUtteranceEntitiesEvaluationResult(IEnumerable<UtteranceEntityEvaluationResult> expectedEntities = null, IEnumerable<UtteranceEntityEvaluationResult> predictedEntities = null)
+        {
+            expectedEntities ??= new List<UtteranceEntityEvaluationResult>();
+            predictedEntities ??= new List<UtteranceEntityEvaluationResult>();
+
+            return new AnalyzeConversationAuthoringUtteranceEntitiesEvaluationResult(expectedEntities?.ToList(), predictedEntities?.ToList(), serializedAdditionalRawData: null);
+        }
+
+        /// <summary> Initializes a new instance of <see cref="Authoring.UtteranceEntityEvaluationResult"/>. </summary>
+        /// <param name="category"> Represents the entity category. </param>
+        /// <param name="offset"> Represents the entity offset index relative to the original text. </param>
+        /// <param name="length"> Represents the entity length. </param>
+        /// <returns> A new <see cref="Authoring.UtteranceEntityEvaluationResult"/> instance for mocking. </returns>
+        public static UtteranceEntityEvaluationResult UtteranceEntityEvaluationResult(string category = null, int offset = default, int length = default)
+        {
+            return new UtteranceEntityEvaluationResult(category, offset, length, serializedAdditionalRawData: null);
+        }
+
+        /// <summary> Initializes a new instance of <see cref="Authoring.AnalyzeConversationAuthoringUtteranceIntentsEvaluationResult"/>. </summary>
+        /// <param name="expectedIntent"> Represents the utterance's expected intent. </param>
+        /// <param name="predictedIntent"> Represents the utterance's predicted intent. </param>
+        /// <returns> A new <see cref="Authoring.AnalyzeConversationAuthoringUtteranceIntentsEvaluationResult"/> instance for mocking. </returns>
+        public static AnalyzeConversationAuthoringUtteranceIntentsEvaluationResult AnalyzeConversationAuthoringUtteranceIntentsEvaluationResult(string expectedIntent = null, string predictedIntent = null)
+        {
+            return new AnalyzeConversationAuthoringUtteranceIntentsEvaluationResult(expectedIntent, predictedIntent, serializedAdditionalRawData: null);
+        }
+
+        /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringEvalSummary"/>. </summary>
+        /// <param name="entitiesEvaluation"> Contains the data related to entities evaluation. </param>
+        /// <param name="intentsEvaluation"> Contains the data related to intents evaluation. </param>
+        /// <param name="evaluationOptions"> The options that were used while running the evaluation. </param>
+        /// <returns> A new <see cref="Authoring.ConversationAuthoringEvalSummary"/> instance for mocking. </returns>
+        public static ConversationAuthoringEvalSummary ConversationAuthoringEvalSummary(EntitiesEvaluationSummary entitiesEvaluation = null, IntentsEvaluationSummary intentsEvaluation = null, ConversationAuthoringEvaluationDetails evaluationOptions = null)
+        {
+            return new ConversationAuthoringEvalSummary(entitiesEvaluation, intentsEvaluation, evaluationOptions, serializedAdditionalRawData: null);
+        }
+
+        /// <summary> Initializes a new instance of <see cref="Authoring.EntitiesEvaluationSummary"/>. </summary>
+        /// <param name="confusionMatrix"> Represents the confusion matrix between two entities (the two entities can be the same). The matrix is between the entity that was labelled and the entity that was predicted. </param>
+        /// <param name="entities"> Represents the entities evaluation summary. </param>
+        /// <param name="microF1"> Represents the micro F1. Expected value is a float between 0 and 1 inclusive. </param>
+        /// <param name="microPrecision"> Represents the micro precision. Expected value is a float between 0 and 1 inclusive. </param>
+        /// <param name="microRecall"> Represents the micro recall. Expected value is a float between 0 and 1 inclusive. </param>
+        /// <param name="macroF1"> Represents the macro F1. Expected value is a float between 0 and 1 inclusive. </param>
+        /// <param name="macroPrecision"> Represents the macro precision. Expected value is a float between 0 and 1 inclusive. </param>
+        /// <param name="macroRecall"> Represents the macro recall. Expected value is a float between 0 and 1 inclusive. </param>
+        /// <returns> A new <see cref="Authoring.EntitiesEvaluationSummary"/> instance for mocking. </returns>
+        public static EntitiesEvaluationSummary EntitiesEvaluationSummary(IReadOnlyDictionary<string, AnalyzeConversationAuthoringConfusionMatrixRow> confusionMatrix = null, IReadOnlyDictionary<string, ConversationAuthoringEntityEvalSummary> entities = null, float microF1 = default, float microPrecision = default, float microRecall = default, float macroF1 = default, float macroPrecision = default, float macroRecall = default)
+        {
+            confusionMatrix ??= new Dictionary<string, AnalyzeConversationAuthoringConfusionMatrixRow>();
+            entities ??= new Dictionary<string, ConversationAuthoringEntityEvalSummary>();
+
+            return new EntitiesEvaluationSummary(
+                confusionMatrix,
+                entities,
+                microF1,
+                microPrecision,
+                microRecall,
+                macroF1,
+                macroPrecision,
+                macroRecall,
+                serializedAdditionalRawData: null);
+        }
+
+        /// <summary> Initializes a new instance of <see cref="Authoring.AnalyzeConversationAuthoringConfusionMatrixRow"/>. </summary>
+        /// <param name="additionalProperties"> Additional Properties. </param>
+        /// <returns> A new <see cref="Authoring.AnalyzeConversationAuthoringConfusionMatrixRow"/> instance for mocking. </returns>
+        public static AnalyzeConversationAuthoringConfusionMatrixRow AnalyzeConversationAuthoringConfusionMatrixRow(IReadOnlyDictionary<string, BinaryData> additionalProperties = null)
+        {
+            additionalProperties ??= new Dictionary<string, BinaryData>();
+
+            return new AnalyzeConversationAuthoringConfusionMatrixRow(additionalProperties);
+        }
+
+        /// <summary> Initializes a new instance of <see cref="Authoring.AnalyzeConversationAuthoringConfusionMatrixCell"/>. </summary>
+        /// <param name="normalizedValue"> Represents normalized value in percentages. </param>
+        /// <param name="rawValue"> Represents raw value. </param>
+        /// <returns> A new <see cref="Authoring.AnalyzeConversationAuthoringConfusionMatrixCell"/> instance for mocking. </returns>
+        public static AnalyzeConversationAuthoringConfusionMatrixCell AnalyzeConversationAuthoringConfusionMatrixCell(float normalizedValue = default, float rawValue = default)
+        {
+            return new AnalyzeConversationAuthoringConfusionMatrixCell(normalizedValue, rawValue, serializedAdditionalRawData: null);
+        }
+
+        /// <summary> Initializes a new instance of <see cref="Authoring.ConversationAuthoringEntityEvalSummary"/>. </summary>
+        /// <param name="f1"> Represents the model F1 score. </param>
+        /// <param name="precision"> Represents the model precision. </param>
+        /// <param name="recall"> Represents the model precision. </param>
+        /// <param name="truePositiveCount"> Represents the count of true positive. </param>
+        /// <param name="trueNegativeCount"> Represents the count of true negative. </param>
+        /// <param name="falsePositiveCount"> Represents the count of false positive. </param>
+        /// <param name="falseNegativeCount"> Represents the count of false negative. </param>
+        /// <returns> A new <see cref="Authoring.ConversationAuthoringEntityEvalSummary"/> instance for mocking. </returns>
+        public static ConversationAuthoringEntityEvalSummary ConversationAuthoringEntityEvalSummary(double f1 = default, double precision = default, double recall = default, int truePositiveCount = default, int trueNegativeCount = default, int falsePositiveCount = default, int falseNegativeCount = default)
+        {
+            return new ConversationAuthoringEntityEvalSummary(
+                f1,
+                precision,
+                recall,
+                truePositiveCount,
+                trueNegativeCount,
+                falsePositiveCount,
+                falseNegativeCount,
+                serializedAdditionalRawData: null);
+        }
+
+        /// <summary> Initializes a new instance of <see cref="Authoring.IntentsEvaluationSummary"/>. </summary>
+        /// <param name="confusionMatrix"> Represents the confusion matrix between two intents (the two intents can be the same). The matrix is between the intent that was labelled and the intent that was predicted. </param>
+        /// <param name="intents"> Represents the intents evaluation summary. </param>
+        /// <param name="microF1"> Represents the micro F1. Expected value is a float between 0 and 1 inclusive. </param>
+        /// <param name="microPrecision"> Represents the micro precision. Expected value is a float between 0 and 1 inclusive. </param>
+        /// <param name="microRecall"> Represents the micro recall. Expected value is a float between 0 and 1 inclusive. </param>
+        /// <param name="macroF1"> Represents the macro F1. Expected value is a float between 0 and 1 inclusive. </param>
+        /// <param name="macroPrecision"> Represents the macro precision. Expected value is a float between 0 and 1 inclusive. </param>
+        /// <param name="macroRecall"> Represents the macro recall. Expected value is a float between 0 and 1 inclusive. </param>
+        /// <returns> A new <see cref="Authoring.IntentsEvaluationSummary"/> instance for mocking. </returns>
+        public static IntentsEvaluationSummary IntentsEvaluationSummary(IReadOnlyDictionary<string, AnalyzeConversationAuthoringConfusionMatrixRow> confusionMatrix = null, IReadOnlyDictionary<string, IntentEvaluationSummary> intents = null, float microF1 = default, float microPrecision = default, float microRecall = default, float macroF1 = default, float macroPrecision = default, float macroRecall = default)
+        {
+            confusionMatrix ??= new Dictionary<string, AnalyzeConversationAuthoringConfusionMatrixRow>();
+            intents ??= new Dictionary<string, IntentEvaluationSummary>();
+
+            return new IntentsEvaluationSummary(
+                confusionMatrix,
+                intents,
+                microF1,
+                microPrecision,
+                microRecall,
+                macroF1,
+                macroPrecision,
+                macroRecall,
+                serializedAdditionalRawData: null);
+        }
+
+        /// <summary> Initializes a new instance of <see cref="Authoring.IntentEvaluationSummary"/>. </summary>
+        /// <param name="f1"> Represents the model precision. </param>
+        /// <param name="precision"> Represents the model recall. </param>
+        /// <param name="recall"> Represents the model F1 score. </param>
+        /// <param name="truePositiveCount"> Represents the count of true positive. </param>
+        /// <param name="trueNegativeCount"> Represents the count of true negative. </param>
+        /// <param name="falsePositiveCount"> Represents the count of false positive. </param>
+        /// <param name="falseNegativeCount"> Represents the count of false negative. </param>
+        /// <returns> A new <see cref="Authoring.IntentEvaluationSummary"/> instance for mocking. </returns>
+        public static IntentEvaluationSummary IntentEvaluationSummary(double f1 = default, double precision = default, double recall = default, int truePositiveCount = default, int trueNegativeCount = default, int falsePositiveCount = default, int falseNegativeCount = default)
+        {
+            return new IntentEvaluationSummary(
+                f1,
+                precision,
+                recall,
+                truePositiveCount,
+                trueNegativeCount,
+                falsePositiveCount,
+                falseNegativeCount,
                 serializedAdditionalRawData: null);
         }
     }

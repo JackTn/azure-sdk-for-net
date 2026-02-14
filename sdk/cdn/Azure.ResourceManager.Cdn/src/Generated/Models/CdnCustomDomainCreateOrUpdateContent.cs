@@ -60,6 +60,7 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> The host name of the custom domain. Must be a domain name. </summary>
+        [WirePath("properties.hostName")]
         public string HostName { get; set; }
     }
 }

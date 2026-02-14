@@ -89,15 +89,30 @@ namespace Azure.ResourceManager.DataFactory.Models
                 writer.WritePropertyName("privateKeyPassphrase"u8);
                 JsonSerializer.Serialize(writer, PrivateKeyPassphrase);
             }
+            if (Optional.IsDefined(Role))
+            {
+                writer.WritePropertyName("role"u8);
+                JsonSerializer.Serialize(writer, Role);
+            }
             if (Optional.IsDefined(Host))
             {
                 writer.WritePropertyName("host"u8);
                 JsonSerializer.Serialize(writer, Host);
             }
+            if (Optional.IsDefined(Schema))
+            {
+                writer.WritePropertyName("schema"u8);
+                JsonSerializer.Serialize(writer, Schema);
+            }
             if (Optional.IsDefined(EncryptedCredential))
             {
                 writer.WritePropertyName("encryptedCredential"u8);
                 writer.WriteStringValue(EncryptedCredential);
+            }
+            if (Optional.IsDefined(UseUtcTimestamps))
+            {
+                writer.WritePropertyName("useUtcTimestamps"u8);
+                JsonSerializer.Serialize(writer, UseUtcTimestamps);
             }
             writer.WriteEndObject();
             foreach (var item in AdditionalProperties)
@@ -152,8 +167,11 @@ namespace Azure.ResourceManager.DataFactory.Models
             DataFactoryElement<string> scope = default;
             DataFactorySecret privateKey = default;
             DataFactorySecret privateKeyPassphrase = default;
+            DataFactoryElement<string> role = default;
             DataFactoryElement<string> host = default;
+            DataFactoryElement<string> schema = default;
             string encryptedCredential = default;
+            DataFactoryElement<bool> useUtcTimestamps = default;
             IDictionary<string, BinaryData> additionalProperties = default;
             Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
@@ -322,6 +340,15 @@ namespace Azure.ResourceManager.DataFactory.Models
                             privateKeyPassphrase = JsonSerializer.Deserialize<DataFactorySecret>(property0.Value.GetRawText());
                             continue;
                         }
+                        if (property0.NameEquals("role"u8))
+                        {
+                            if (property0.Value.ValueKind == JsonValueKind.Null)
+                            {
+                                continue;
+                            }
+                            role = JsonSerializer.Deserialize<DataFactoryElement<string>>(property0.Value.GetRawText());
+                            continue;
+                        }
                         if (property0.NameEquals("host"u8))
                         {
                             if (property0.Value.ValueKind == JsonValueKind.Null)
@@ -331,9 +358,27 @@ namespace Azure.ResourceManager.DataFactory.Models
                             host = JsonSerializer.Deserialize<DataFactoryElement<string>>(property0.Value.GetRawText());
                             continue;
                         }
+                        if (property0.NameEquals("schema"u8))
+                        {
+                            if (property0.Value.ValueKind == JsonValueKind.Null)
+                            {
+                                continue;
+                            }
+                            schema = JsonSerializer.Deserialize<DataFactoryElement<string>>(property0.Value.GetRawText());
+                            continue;
+                        }
                         if (property0.NameEquals("encryptedCredential"u8))
                         {
                             encryptedCredential = property0.Value.GetString();
+                            continue;
+                        }
+                        if (property0.NameEquals("useUtcTimestamps"u8))
+                        {
+                            if (property0.Value.ValueKind == JsonValueKind.Null)
+                            {
+                                continue;
+                            }
+                            useUtcTimestamps = JsonSerializer.Deserialize<DataFactoryElement<bool>>(property0.Value.GetRawText());
                             continue;
                         }
                     }
@@ -362,8 +407,11 @@ namespace Azure.ResourceManager.DataFactory.Models
                 scope,
                 privateKey,
                 privateKeyPassphrase,
+                role,
                 host,
-                encryptedCredential);
+                schema,
+                encryptedCredential,
+                useUtcTimestamps);
         }
 
         BinaryData IPersistableModel<SnowflakeV2LinkedService>.Write(ModelReaderWriterOptions options)
@@ -373,7 +421,7 @@ namespace Azure.ResourceManager.DataFactory.Models
             switch (format)
             {
                 case "J":
-                    return ModelReaderWriter.Write(this, options);
+                    return ModelReaderWriter.Write(this, options, AzureResourceManagerDataFactoryContext.Default);
                 default:
                     throw new FormatException($"The model {nameof(SnowflakeV2LinkedService)} does not support writing '{options.Format}' format.");
             }

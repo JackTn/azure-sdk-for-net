@@ -68,12 +68,16 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> Gets the metric. </summary>
+        [WirePath("metric")]
         public string Metric { get; }
         /// <summary> Gets the unit. </summary>
+        [WirePath("unit")]
         public WafMetricsResponseSeriesItemUnit? Unit { get; }
         /// <summary> Gets the groups. </summary>
+        [WirePath("groups")]
         public IReadOnlyList<WafMetricsResponseSeriesPropertiesItemsItem> Groups { get; }
         /// <summary> Gets the data. </summary>
+        [WirePath("data")]
         public IReadOnlyList<Components18OrqelSchemasWafmetricsresponsePropertiesSeriesItemsPropertiesDataItems> Data { get; }
     }
 }

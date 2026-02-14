@@ -62,8 +62,10 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> Ip address itself. </summary>
+        [WirePath("baseIpAddress")]
         public string BaseIPAddress { get; set; }
         /// <summary> The length of the prefix of the ip address. </summary>
+        [WirePath("prefixLength")]
         public int? PrefixLength { get; set; }
     }
 }

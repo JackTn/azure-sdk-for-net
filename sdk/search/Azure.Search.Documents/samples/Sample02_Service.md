@@ -100,7 +100,7 @@ SearchIndex index = new SearchIndex(indexName)
                 new SearchableField("StreetAddress"),
                 new SearchableField("City") { IsFilterable = true, IsSortable = true, IsFacetable = true },
                 new SearchableField("StateProvince") { IsFilterable = true, IsSortable = true, IsFacetable = true },
-                new SearchableField("Country") { SynonymMapNames = new[] { synonymMapName }, IsFilterable = true, IsSortable = true, IsFacetable = true },
+                new SearchableField("Country") { SynonymMapNames = { synonymMapName }, IsFilterable = true, IsSortable = true, IsFacetable = true },
                 new SearchableField("PostalCode") { IsFilterable = true, IsSortable = true, IsFacetable = true }
             }
         }
@@ -204,7 +204,7 @@ SearchIndexerSkillset skillset = new SearchIndexerSkillset(
     skillsetName,
     new SearchIndexerSkill[] { translationSkill, conditionalSkill })
 {
-    CognitiveServicesAccount =  new CognitiveServicesAccountKey(
+    CognitiveServicesAccount = new CognitiveServicesAccountKey(
         Environment.GetEnvironmentVariable("COGNITIVE_SERVICES_KEY")),
     KnowledgeStore = new KnowledgeStore(
         Environment.GetEnvironmentVariable("STORAGE_CONNECTION_STRING"),

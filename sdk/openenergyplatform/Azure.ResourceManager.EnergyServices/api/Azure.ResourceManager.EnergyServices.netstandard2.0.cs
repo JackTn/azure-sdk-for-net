@@ -1,5 +1,11 @@
 namespace Azure.ResourceManager.EnergyServices
 {
+    public partial class AzureResourceManagerEnergyServicesContext : System.ClientModel.Primitives.ModelReaderWriterContext
+    {
+        internal AzureResourceManagerEnergyServicesContext() { }
+        public static Azure.ResourceManager.EnergyServices.AzureResourceManagerEnergyServicesContext Default { get { throw null; } }
+        protected override bool TryGetTypeBuilderCore(System.Type type, out System.ClientModel.Primitives.ModelReaderWriterTypeBuilder builder) { throw null; }
+    }
     public partial class EnergyServiceCollection : Azure.ResourceManager.ArmCollection, System.Collections.Generic.IAsyncEnumerable<Azure.ResourceManager.EnergyServices.EnergyServiceResource>, System.Collections.Generic.IEnumerable<Azure.ResourceManager.EnergyServices.EnergyServiceResource>, System.Collections.IEnumerable
     {
         protected EnergyServiceCollection() { }
@@ -183,9 +189,7 @@ namespace Azure.ResourceManager.EnergyServices.Models
         public static Azure.ResourceManager.EnergyServices.Models.EnergyServiceNameUnavailableReason AlreadyExists { get { throw null; } }
         public static Azure.ResourceManager.EnergyServices.Models.EnergyServiceNameUnavailableReason Invalid { get { throw null; } }
         public bool Equals(Azure.ResourceManager.EnergyServices.Models.EnergyServiceNameUnavailableReason other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.EnergyServices.Models.EnergyServiceNameUnavailableReason left, Azure.ResourceManager.EnergyServices.Models.EnergyServiceNameUnavailableReason right) { throw null; }
         public static implicit operator Azure.ResourceManager.EnergyServices.Models.EnergyServiceNameUnavailableReason (string value) { throw null; }
@@ -231,9 +235,7 @@ namespace Azure.ResourceManager.EnergyServices.Models
         public static Azure.ResourceManager.EnergyServices.Models.ProvisioningState Unknown { get { throw null; } }
         public static Azure.ResourceManager.EnergyServices.Models.ProvisioningState Updating { get { throw null; } }
         public bool Equals(Azure.ResourceManager.EnergyServices.Models.ProvisioningState other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.EnergyServices.Models.ProvisioningState left, Azure.ResourceManager.EnergyServices.Models.ProvisioningState right) { throw null; }
         public static implicit operator Azure.ResourceManager.EnergyServices.Models.ProvisioningState (string value) { throw null; }

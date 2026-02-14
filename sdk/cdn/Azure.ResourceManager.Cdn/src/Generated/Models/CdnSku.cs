@@ -75,6 +75,7 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> Name of the pricing tier. </summary>
+        [WirePath("name")]
         public CdnSkuName? Name { get; set; }
     }
 }

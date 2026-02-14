@@ -60,6 +60,7 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> Gets the id. </summary>
+        [WirePath("id")]
         public string Id { get; }
     }
 }

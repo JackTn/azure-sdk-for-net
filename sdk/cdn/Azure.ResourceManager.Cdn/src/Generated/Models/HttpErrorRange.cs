@@ -62,8 +62,10 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> The inclusive start of the http status code range. </summary>
+        [WirePath("begin")]
         public int? Begin { get; set; }
         /// <summary> The inclusive end of the http status code range. </summary>
+        [WirePath("end")]
         public int? End { get; set; }
     }
 }

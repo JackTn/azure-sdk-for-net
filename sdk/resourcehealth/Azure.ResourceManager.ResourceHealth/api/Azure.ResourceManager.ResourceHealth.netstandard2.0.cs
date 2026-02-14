@@ -1,5 +1,11 @@
 namespace Azure.ResourceManager.ResourceHealth
 {
+    public partial class AzureResourceManagerResourceHealthContext : System.ClientModel.Primitives.ModelReaderWriterContext
+    {
+        internal AzureResourceManagerResourceHealthContext() { }
+        public static Azure.ResourceManager.ResourceHealth.AzureResourceManagerResourceHealthContext Default { get { throw null; } }
+        protected override bool TryGetTypeBuilderCore(System.Type type, out System.ClientModel.Primitives.ModelReaderWriterTypeBuilder builder) { throw null; }
+    }
     public partial class ResourceHealthEventCollection : Azure.ResourceManager.ArmCollection, System.Collections.Generic.IAsyncEnumerable<Azure.ResourceManager.ResourceHealth.ResourceHealthEventResource>, System.Collections.Generic.IEnumerable<Azure.ResourceManager.ResourceHealth.ResourceHealthEventResource>, System.Collections.IEnumerable
     {
         protected ResourceHealthEventCollection() { }
@@ -470,9 +476,7 @@ namespace Azure.ResourceManager.ResourceHealth.Models
         public EmergingIssueNameContent(string value) { throw null; }
         public static Azure.ResourceManager.ResourceHealth.Models.EmergingIssueNameContent Default { get { throw null; } }
         public bool Equals(Azure.ResourceManager.ResourceHealth.Models.EmergingIssueNameContent other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.ResourceHealth.Models.EmergingIssueNameContent left, Azure.ResourceManager.ResourceHealth.Models.EmergingIssueNameContent right) { throw null; }
         public static implicit operator Azure.ResourceManager.ResourceHealth.Models.EmergingIssueNameContent (string value) { throw null; }
@@ -487,9 +491,7 @@ namespace Azure.ResourceManager.ResourceHealth.Models
         public EventSubTypeValue(string value) { throw null; }
         public static Azure.ResourceManager.ResourceHealth.Models.EventSubTypeValue Retirement { get { throw null; } }
         public bool Equals(Azure.ResourceManager.ResourceHealth.Models.EventSubTypeValue other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.ResourceHealth.Models.EventSubTypeValue left, Azure.ResourceManager.ResourceHealth.Models.EventSubTypeValue right) { throw null; }
         public static implicit operator Azure.ResourceManager.ResourceHealth.Models.EventSubTypeValue (string value) { throw null; }
@@ -504,9 +506,7 @@ namespace Azure.ResourceManager.ResourceHealth.Models
         public MetadataEntityScenario(string value) { throw null; }
         public static Azure.ResourceManager.ResourceHealth.Models.MetadataEntityScenario Alerts { get { throw null; } }
         public bool Equals(Azure.ResourceManager.ResourceHealth.Models.MetadataEntityScenario other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.ResourceHealth.Models.MetadataEntityScenario left, Azure.ResourceManager.ResourceHealth.Models.MetadataEntityScenario right) { throw null; }
         public static implicit operator Azure.ResourceManager.ResourceHealth.Models.MetadataEntityScenario (string value) { throw null; }
@@ -535,9 +535,7 @@ namespace Azure.ResourceManager.ResourceHealth.Models
         public static Azure.ResourceManager.ResourceHealth.Models.ReasonChronicityType Persistent { get { throw null; } }
         public static Azure.ResourceManager.ResourceHealth.Models.ReasonChronicityType Transient { get { throw null; } }
         public bool Equals(Azure.ResourceManager.ResourceHealth.Models.ReasonChronicityType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.ResourceHealth.Models.ReasonChronicityType left, Azure.ResourceManager.ResourceHealth.Models.ReasonChronicityType right) { throw null; }
         public static implicit operator Azure.ResourceManager.ResourceHealth.Models.ReasonChronicityType (string value) { throw null; }
@@ -568,9 +566,7 @@ namespace Azure.ResourceManager.ResourceHealth.Models
         public static Azure.ResourceManager.ResourceHealth.Models.ResourceHealthAvailabilityStateValue Unavailable { get { throw null; } }
         public static Azure.ResourceManager.ResourceHealth.Models.ResourceHealthAvailabilityStateValue Unknown { get { throw null; } }
         public bool Equals(Azure.ResourceManager.ResourceHealth.Models.ResourceHealthAvailabilityStateValue other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.ResourceHealth.Models.ResourceHealthAvailabilityStateValue left, Azure.ResourceManager.ResourceHealth.Models.ResourceHealthAvailabilityStateValue right) { throw null; }
         public static implicit operator Azure.ResourceManager.ResourceHealth.Models.ResourceHealthAvailabilityStateValue (string value) { throw null; }
@@ -682,9 +678,7 @@ namespace Azure.ResourceManager.ResourceHealth.Models
         public static Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventInsightLevelValue Critical { get { throw null; } }
         public static Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventInsightLevelValue Warning { get { throw null; } }
         public bool Equals(Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventInsightLevelValue other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventInsightLevelValue left, Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventInsightLevelValue right) { throw null; }
         public static implicit operator Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventInsightLevelValue (string value) { throw null; }
@@ -702,9 +696,7 @@ namespace Azure.ResourceManager.ResourceHealth.Models
         public static Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventLevelValue Informational { get { throw null; } }
         public static Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventLevelValue Warning { get { throw null; } }
         public bool Equals(Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventLevelValue other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventLevelValue left, Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventLevelValue right) { throw null; }
         public static implicit operator Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventLevelValue (string value) { throw null; }
@@ -747,9 +739,7 @@ namespace Azure.ResourceManager.ResourceHealth.Models
         public static Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventLinkTypeValue Button { get { throw null; } }
         public static Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventLinkTypeValue Hyperlink { get { throw null; } }
         public bool Equals(Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventLinkTypeValue other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventLinkTypeValue left, Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventLinkTypeValue right) { throw null; }
         public static implicit operator Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventLinkTypeValue (string value) { throw null; }
@@ -791,9 +781,7 @@ namespace Azure.ResourceManager.ResourceHealth.Models
         public static Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventSeverityLevel Information { get { throw null; } }
         public static Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventSeverityLevel Warning { get { throw null; } }
         public bool Equals(Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventSeverityLevel other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventSeverityLevel left, Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventSeverityLevel right) { throw null; }
         public static implicit operator Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventSeverityLevel (string value) { throw null; }
@@ -809,9 +797,7 @@ namespace Azure.ResourceManager.ResourceHealth.Models
         public static Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventSourceValue ResourceHealth { get { throw null; } }
         public static Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventSourceValue ServiceHealth { get { throw null; } }
         public bool Equals(Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventSourceValue other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventSourceValue left, Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventSourceValue right) { throw null; }
         public static implicit operator Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventSourceValue (string value) { throw null; }
@@ -828,9 +814,7 @@ namespace Azure.ResourceManager.ResourceHealth.Models
         public static Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventStageValue Archived { get { throw null; } }
         public static Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventStageValue Resolve { get { throw null; } }
         public bool Equals(Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventStageValue other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventStageValue left, Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventStageValue right) { throw null; }
         public static implicit operator Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventStageValue (string value) { throw null; }
@@ -846,9 +830,7 @@ namespace Azure.ResourceManager.ResourceHealth.Models
         public static Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventStatusValue Active { get { throw null; } }
         public static Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventStatusValue Resolved { get { throw null; } }
         public bool Equals(Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventStatusValue other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventStatusValue left, Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventStatusValue right) { throw null; }
         public static implicit operator Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventStatusValue (string value) { throw null; }
@@ -868,9 +850,7 @@ namespace Azure.ResourceManager.ResourceHealth.Models
         public static Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventTypeValue SecurityAdvisory { get { throw null; } }
         public static Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventTypeValue ServiceIssue { get { throw null; } }
         public bool Equals(Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventTypeValue other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventTypeValue left, Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventTypeValue right) { throw null; }
         public static implicit operator Azure.ResourceManager.ResourceHealth.Models.ResourceHealthEventTypeValue (string value) { throw null; }

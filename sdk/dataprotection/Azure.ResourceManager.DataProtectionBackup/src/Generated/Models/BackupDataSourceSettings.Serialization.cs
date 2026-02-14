@@ -77,6 +77,7 @@ namespace Azure.ResourceManager.DataProtectionBackup.Models
             {
                 switch (discriminator.GetString())
                 {
+                    case "AdlsBlobBackupDatasourceParameters": return AdlsBlobBackupDataSourceSettings.DeserializeAdlsBlobBackupDataSourceSettings(element, options);
                     case "BlobBackupDatasourceParameters": return BlobBackupDataSourceSettings.DeserializeBlobBackupDataSourceSettings(element, options);
                     case "KubernetesClusterBackupDatasourceParameters": return KubernetesClusterBackupDataSourceSettings.DeserializeKubernetesClusterBackupDataSourceSettings(element, options);
                 }
@@ -91,7 +92,7 @@ namespace Azure.ResourceManager.DataProtectionBackup.Models
             switch (format)
             {
                 case "J":
-                    return ModelReaderWriter.Write(this, options);
+                    return ModelReaderWriter.Write(this, options, AzureResourceManagerDataProtectionBackupContext.Default);
                 default:
                     throw new FormatException($"The model {nameof(BackupDataSourceSettings)} does not support writing '{options.Format}' format.");
             }

@@ -5,9 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Azure.Core;
 using System.Threading;
 using System.Threading.Tasks;
+using Azure.Core;
 using Azure.Core.Pipeline;
 
 namespace Azure.AI.Language.Text
@@ -52,7 +52,7 @@ namespace Azure.AI.Language.Text
             using var scope = ClientDiagnostics.CreateScope(scopeName);
             scope.Start();
 
-            AnalyzeTextSubmitJobRequest analyzeTextOperationInput = new AnalyzeTextSubmitJobRequest(displayName, textInput, actions.ToList(), defaultLanguage, null);
+            AnalyzeTextSubmitJobRequest analyzeTextOperationInput = new AnalyzeTextSubmitJobRequest(displayName, textInput, actions.ToList(), defaultLanguage, cancelAfter: null, serializedAdditionalRawData: null);
             RequestContext context = FromCancellationToken(cancellationToken);
 
             try
@@ -85,7 +85,7 @@ namespace Azure.AI.Language.Text
             using var scope = ClientDiagnostics.CreateScope(scopeName);
             scope.Start();
 
-            AnalyzeTextSubmitJobRequest analyzeTextOperationInput = new AnalyzeTextSubmitJobRequest(displayName, textInput, actions.ToList(), defaultLanguage, null);
+            AnalyzeTextSubmitJobRequest analyzeTextOperationInput = new AnalyzeTextSubmitJobRequest(displayName, textInput, actions.ToList(), defaultLanguage, cancelAfter: null, serializedAdditionalRawData: null);
             RequestContext context = FromCancellationToken(cancellationToken);
 
             try

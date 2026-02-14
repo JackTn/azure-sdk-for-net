@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,6 +30,13 @@ namespace Azure.ResourceManager.ElasticSan.Tests.Scenario
             ElasticSanVolumeGroupCollection collection = (await elasticSanCollection.GetAsync(ElasticSanName)).Value.GetElasticSanVolumeGroups();
             return collection;
         }
+        private async Task<ElasticSanVolumeCollection> GetVolumeCollection(string volumeGroupName)
+        {
+            ElasticSanCollection elasticSanCollection = (await GetResourceGroupAsync(ResourceGroupName)).GetElasticSans();
+            ElasticSanVolumeGroupCollection volGroupCollection = (await elasticSanCollection.GetAsync(ElasticSanName)).Value.GetElasticSanVolumeGroups();
+            ElasticSanVolumeGroupResource volGroup = (await volGroupCollection.GetIfExistsAsync(volumeGroupName)).Value;
+            return volGroup.GetElasticSanVolumes();
+        }
 
         [Test]
         [RecordedTest]
@@ -43,7 +51,7 @@ namespace Azure.ResourceManager.ElasticSan.Tests.Scenario
             Assert.IsEmpty(volumeGroup1.Data.VirtualNetworkRules);
             Assert.AreEqual(ElasticSanStorageTargetType.Iscsi, volumeGroup1.Data.ProtocolType);
             Assert.AreEqual(ElasticSanEncryptionType.EncryptionAtRestWithPlatformKey, volumeGroup1.Data.Encryption);
-            Assert.AreEqual(true, volumeGroup1.Data.EnforceDataIntegrityCheckForIscsi);
+            Assert.AreEqual(false, volumeGroup1.Data.EnforceDataIntegrityCheckForIscsi);
 
             ElasticSanVolumeGroupPatch patch = new()
             {
@@ -72,6 +80,34 @@ namespace Azure.ResourceManager.ElasticSan.Tests.Scenario
 
             await volumeGroup.DeleteAsync(WaitUntil.Completed);
             Assert.IsFalse(await _collection.ExistsAsync(volumeGroupName));
+        }
+
+        [Test]
+        [RecordedTest]
+        public async Task PreBackupPreRestore()
+        {
+            _collection = await GetVolumeGroupCollection();
+
+            string volumeGroupName = Recording.GenerateAssetName("testvolgroup-");
+            ElasticSanVolumeGroupResource volumeGroup = (await _collection.CreateOrUpdateAsync(WaitUntil.Completed, volumeGroupName, new ElasticSanVolumeGroupData())).Value;
+
+            var _volumeCollection = await GetVolumeCollection(volumeGroupName);
+            string volumeName = Recording.GenerateAssetName("testvolume-");
+            ElasticSanVolumeData data = new ElasticSanVolumeData(100);
+            ElasticSanVolumeResource volume1 = (await _volumeCollection.CreateOrUpdateAsync(WaitUntil.Completed, volumeName, data)).Value;
+
+            var volumeNameList = new ElasticSanVolumeNameListContent(new string[] { volumeName });
+            var preBackup = (await volumeGroup.PreBackupVolumeAsync(WaitUntil.Completed, volumeNameList)).Value;
+            Assert.AreEqual(preBackup.ValidationStatus, "Success");
+
+            DiskSnapshotListContent diskSnapshotList = new DiskSnapshotListContent(
+                new ResourceIdentifier[] {
+                    new ResourceIdentifier(
+                        "/subscriptions/aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa/resourceGroups/resourcegroup/providers/Microsoft.Compute/snapshots/disksnapshotid") });
+            var preRestore = (await volumeGroup.PreRestoreVolumeAsync(WaitUntil.Completed, diskSnapshotList)).Value;
+            Assert.AreEqual(preRestore.ValidationStatus, "Success");
+
+            await volumeGroup.DeleteAsync(WaitUntil.Completed);
         }
     }
 }

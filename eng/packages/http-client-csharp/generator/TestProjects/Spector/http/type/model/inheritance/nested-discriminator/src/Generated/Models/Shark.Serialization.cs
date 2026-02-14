@@ -8,13 +8,23 @@
 using System;
 using System.ClientModel.Primitives;
 using System.Text.Json;
-using Azure;
-using Azure.Core;
 
-namespace _Type.Model.Inheritance.NestedDiscriminator.Models
+namespace _Type.Model.Inheritance.NestedDiscriminator
 {
-    public partial class Shark : IJsonModel<Shark>
+    public partial class Shark : Fish, IJsonModel<Shark>
     {
+        internal Shark() => throw null;
+
+        protected override Fish PersistableModelCreateCore(BinaryData data, ModelReaderWriterOptions options) => throw null;
+
+        protected override BinaryData PersistableModelWriteCore(ModelReaderWriterOptions options) => throw null;
+
+        BinaryData IPersistableModel<Shark>.Write(ModelReaderWriterOptions options) => throw null;
+
+        Shark IPersistableModel<Shark>.Create(BinaryData data, ModelReaderWriterOptions options) => throw null;
+
+        string IPersistableModel<Shark>.GetFormatFromOptions(ModelReaderWriterOptions options) => throw null;
+
         void IJsonModel<Shark>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options) => throw null;
 
         protected override void JsonModelWriteCore(Utf8JsonWriter writer, ModelReaderWriterOptions options) => throw null;
@@ -22,20 +32,5 @@ namespace _Type.Model.Inheritance.NestedDiscriminator.Models
         Shark IJsonModel<Shark>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => throw null;
 
         protected override Fish JsonModelCreateCore(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => throw null;
-
-        BinaryData IPersistableModel<Shark>.Write(ModelReaderWriterOptions options) => throw null;
-
-        protected override BinaryData PersistableModelWriteCore(ModelReaderWriterOptions options) => throw null;
-
-        Shark IPersistableModel<Shark>.Create(BinaryData data, ModelReaderWriterOptions options) => throw null;
-
-        protected override Fish PersistableModelCreateCore(BinaryData data, ModelReaderWriterOptions options) => throw null;
-
-        string IPersistableModel<Shark>.GetFormatFromOptions(ModelReaderWriterOptions options) => throw null;
-
-        /// <param name="shark"> The <see cref="Shark"/> to serialize into <see cref="RequestContent"/>. </param>
-        public static implicit operator RequestContent(Shark shark) => throw null;
-
-        public static explicit operator Shark(Response result) => throw null;
     }
 }

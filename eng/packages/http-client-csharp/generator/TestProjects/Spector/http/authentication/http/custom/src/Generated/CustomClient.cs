@@ -17,11 +17,13 @@ namespace Authentication.Http.Custom
     {
         protected CustomClient() => throw null;
 
-        public CustomClient(AzureKeyCredential keyCredential) : this(new Uri("http://localhost:3000"), keyCredential, new CustomClientOptions()) => throw null;
+        public CustomClient(AzureKeyCredential credential) : this(new Uri("http://localhost:3000"), credential, new CustomClientOptions()) => throw null;
 
-        public CustomClient(Uri endpoint, AzureKeyCredential keyCredential, CustomClientOptions options) => throw null;
+        public CustomClient(AzureKeyCredential credential, CustomClientOptions options) : this(new Uri("http://localhost:3000"), credential, options) => throw null;
 
-        public HttpPipeline Pipeline => throw null;
+        public CustomClient(Uri endpoint, AzureKeyCredential credential, CustomClientOptions options) => throw null;
+
+        public virtual HttpPipeline Pipeline => throw null;
 
         public virtual Response Valid(RequestContext context) => throw null;
 

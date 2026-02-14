@@ -3,15 +3,15 @@
 
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using Azure.Core;
 using Azure.Storage.Common;
 
 namespace Azure.Storage.DataMovement
 {
-    internal class UriToStreamJobPart : JobPartInternal, IAsyncDisposable
+    internal class UriToStreamJobPart : JobPartInternal
     {
         public delegate Task CommitBlockTaskInternal(CancellationToken cancellationToken);
         public CommitBlockTaskInternal CommitBlockTask { get; internal set; }
@@ -21,32 +21,6 @@ namespace Azure.Storage.DataMovement
         ///  all commit blocks have been uploaded.
         /// </summary>
         private DownloadChunkHandler _downloadChunkHandler;
-
-        /// <summary>
-        /// Creating job part based on a single transfer job
-        /// </summary>
-        private UriToStreamJobPart(
-            TransferJobInternal job,
-            int partNumber)
-            : base(transferOperation: job._transferOperation,
-                  partNumber: partNumber,
-                  sourceResource: job._sourceResource,
-                  destinationResource: job._destinationResource,
-                  transferChunkSize: job._maximumTransferChunkSize,
-                  initialTransferSize: job._initialTransferSize,
-                  errorHandling: job._errorMode,
-                  createMode: job._creationPreference,
-                  checkpointer: job._checkpointer,
-                  progressTracker: job._progressTracker,
-                  arrayPool: job.UploadArrayPool,
-                  jobPartEventHandler: job.GetJobPartStatusEventHandler(),
-                  statusEventHandler: job.TransferStatusEventHandler,
-                  failedEventHandler: job.TransferFailedEventHandler,
-                  skippedEventHandler: job.TransferSkippedEventHandler,
-                  singleTransferEventHandler: job.TransferItemCompletedEventHandler,
-                  clientDiagnostics: job.ClientDiagnostics,
-                  cancellationToken: job._cancellationToken)
-        { }
 
         /// <summary>
         /// Creating transfer job based on a storage resource created from listing.
@@ -113,24 +87,6 @@ namespace Azure.Storage.DataMovement
                   jobPartStatus: jobPartStatus,
                   length: default)
         {
-        }
-
-        public async ValueTask DisposeAsync()
-        {
-            await DisposeHandlersAsync().ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// Called when creating a job part from a single transfer.
-        /// </summary>
-        public static async Task<JobPartInternal> CreateJobPartAsync(
-            TransferJobInternal job,
-            int partNumber)
-        {
-            // Create Job Part file as we're initializing the job part
-            UriToStreamJobPart part = new UriToStreamJobPart(job, partNumber);
-            await part.AddJobPartToCheckpointerAsync().ConfigureAwait(false);
-            return part;
         }
 
         /// <summary>
@@ -204,6 +160,12 @@ namespace Azure.Storage.DataMovement
                     return;
                 }
                 await OnTransferStateChangedAsync(TransferState.InProgress).ConfigureAwait(false);
+
+                if (!await _sourceResource.ShouldItemTransferAsync(_cancellationToken).ConfigureAwait(false))
+                {
+                    await OnTransferStateChangedAsync(TransferState.Completed).ConfigureAwait(false);
+                    return;
+                }
 
                 if (!_sourceResource.Length.HasValue)
                 {
@@ -355,7 +317,7 @@ namespace Azure.Storage.DataMovement
                     cancellationToken: _cancellationToken).ConfigureAwait(false);
 
                 // Dispose the handlers
-                await DisposeHandlersAsync().ConfigureAwait(false);
+                await CleanUpHandlersAsync().ConfigureAwait(false);
 
                 // Update the transfer status
                 await OnTransferStateChangedAsync(TransferState.Completed).ConfigureAwait(false);
@@ -504,11 +466,11 @@ namespace Azure.Storage.DataMovement
             await base.InvokeFailedArgAsync(ex).ConfigureAwait(false);
         }
 
-        public override async Task DisposeHandlersAsync()
+        public override async Task CleanUpHandlersAsync()
         {
             if (_downloadChunkHandler != default)
             {
-                await _downloadChunkHandler.DisposeAsync().ConfigureAwait(false);
+                await _downloadChunkHandler.CleanUpAsync().ConfigureAwait(false);
                 _downloadChunkHandler = null;
             }
         }

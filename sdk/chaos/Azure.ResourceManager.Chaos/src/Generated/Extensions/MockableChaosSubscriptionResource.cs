@@ -8,163 +8,119 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Autorest.CSharp.Core;
+using Azure;
 using Azure.Core;
 using Azure.Core.Pipeline;
+using Azure.ResourceManager;
+using Azure.ResourceManager.Chaos;
+using Azure.ResourceManager.Resources;
 
 namespace Azure.ResourceManager.Chaos.Mocking
 {
-    /// <summary> A class to add extension methods to SubscriptionResource. </summary>
+    /// <summary> A class to add extension methods to <see cref="SubscriptionResource"/>. </summary>
     public partial class MockableChaosSubscriptionResource : ArmResource
     {
-        private ClientDiagnostics _chaosExperimentExperimentsClientDiagnostics;
-        private ExperimentsRestOperations _chaosExperimentExperimentsRestClient;
+        private ClientDiagnostics _experimentsClientDiagnostics;
+        private Experiments _experimentsRestClient;
 
-        /// <summary> Initializes a new instance of the <see cref="MockableChaosSubscriptionResource"/> class for mocking. </summary>
+        /// <summary> Initializes a new instance of MockableChaosSubscriptionResource for mocking. </summary>
         protected MockableChaosSubscriptionResource()
         {
         }
 
-        /// <summary> Initializes a new instance of the <see cref="MockableChaosSubscriptionResource"/> class. </summary>
+        /// <summary> Initializes a new instance of <see cref="MockableChaosSubscriptionResource"/> class. </summary>
         /// <param name="client"> The client parameters to use in these operations. </param>
         /// <param name="id"> The identifier of the resource that is the target of operations. </param>
         internal MockableChaosSubscriptionResource(ArmClient client, ResourceIdentifier id) : base(client, id)
         {
         }
 
-        private ClientDiagnostics ChaosExperimentExperimentsClientDiagnostics => _chaosExperimentExperimentsClientDiagnostics ??= new ClientDiagnostics("Azure.ResourceManager.Chaos", ChaosExperimentResource.ResourceType.Namespace, Diagnostics);
-        private ExperimentsRestOperations ChaosExperimentExperimentsRestClient => _chaosExperimentExperimentsRestClient ??= new ExperimentsRestOperations(Pipeline, Diagnostics.ApplicationId, Endpoint, GetApiVersionOrNull(ChaosExperimentResource.ResourceType));
+        private ClientDiagnostics ExperimentsClientDiagnostics => _experimentsClientDiagnostics ??= new ClientDiagnostics("Azure.ResourceManager.Chaos.Mocking", ProviderConstants.DefaultProviderNamespace, Diagnostics);
 
-        private string GetApiVersionOrNull(ResourceType resourceType)
-        {
-            TryGetApiVersion(resourceType, out string apiVersion);
-            return apiVersion;
-        }
+        private Experiments ExperimentsRestClient => _experimentsRestClient ??= new Experiments(ExperimentsClientDiagnostics, Pipeline, Endpoint, "2025-01-01");
 
-        /// <summary> Gets a collection of ChaosTargetTypeResources in the SubscriptionResource. </summary>
-        /// <param name="locationName"> String that represents a Location resource name. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="locationName"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="locationName"/> is an empty string, and was expected to be non-empty. </exception>
-        /// <returns> An object representing collection of ChaosTargetTypeResources and their operations over a ChaosTargetTypeResource. </returns>
-        public virtual ChaosTargetTypeCollection GetChaosTargetTypes(string locationName)
+        /// <summary> Gets a collection of ChaosTargetMetadata in the <see cref="SubscriptionResource"/>. </summary>
+        /// <param name="location"> The location for the resource. </param>
+        /// <returns> An object representing collection of ChaosTargetMetadata and their operations over a ChaosTargetMetadataResource. </returns>
+        public virtual ChaosTargetMetadataCollection GetAllChaosTargetMetadata(AzureLocation location)
         {
-            return new ChaosTargetTypeCollection(Client, Id, locationName);
+            return GetCachedClient(client => new ChaosTargetMetadataCollection(client, Id, location));
         }
 
         /// <summary>
         /// Get a Target Type resources for given location.
         /// <list type="bullet">
         /// <item>
-        /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.Chaos/locations/{locationName}/targetTypes/{targetTypeName}</description>
+        /// <term> Request Path. </term>
+        /// <description> /subscriptions/{subscriptionId}/providers/Microsoft.Chaos/locations/{location}/targetTypes/{targetTypeName}. </description>
         /// </item>
         /// <item>
-        /// <term>Operation Id</term>
-        /// <description>TargetTypes_Get</description>
+        /// <term> Operation Id. </term>
+        /// <description> TargetTypes_Get. </description>
         /// </item>
         /// <item>
-        /// <term>Default Api Version</term>
-        /// <description>2024-01-01</description>
-        /// </item>
-        /// <item>
-        /// <term>Resource</term>
-        /// <description><see cref="ChaosTargetTypeResource"/></description>
+        /// <term> Default Api Version. </term>
+        /// <description> 2025-01-01. </description>
         /// </item>
         /// </list>
         /// </summary>
-        /// <param name="locationName"> String that represents a Location resource name. </param>
+        /// <param name="location"> The location for the resource. </param>
         /// <param name="targetTypeName"> String that represents a Target Type resource name. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="locationName"/> or <paramref name="targetTypeName"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="locationName"/> or <paramref name="targetTypeName"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="targetTypeName"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="targetTypeName"/> is an empty string, and was expected to be non-empty. </exception>
         [ForwardsClientCalls]
-        public virtual async Task<Response<ChaosTargetTypeResource>> GetChaosTargetTypeAsync(string locationName, string targetTypeName, CancellationToken cancellationToken = default)
+        public virtual async Task<Response<ChaosTargetMetadataResource>> GetChaosTargetMetadataAsync(AzureLocation location, string targetTypeName, CancellationToken cancellationToken = default)
         {
-            return await GetChaosTargetTypes(locationName).GetAsync(targetTypeName, cancellationToken).ConfigureAwait(false);
+            Argument.AssertNotNullOrEmpty(targetTypeName, nameof(targetTypeName));
+
+            return await GetAllChaosTargetMetadata(location).GetAsync(targetTypeName, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Get a Target Type resources for given location.
         /// <list type="bullet">
         /// <item>
-        /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.Chaos/locations/{locationName}/targetTypes/{targetTypeName}</description>
+        /// <term> Request Path. </term>
+        /// <description> /subscriptions/{subscriptionId}/providers/Microsoft.Chaos/locations/{location}/targetTypes/{targetTypeName}. </description>
         /// </item>
         /// <item>
-        /// <term>Operation Id</term>
-        /// <description>TargetTypes_Get</description>
+        /// <term> Operation Id. </term>
+        /// <description> TargetTypes_Get. </description>
         /// </item>
         /// <item>
-        /// <term>Default Api Version</term>
-        /// <description>2024-01-01</description>
-        /// </item>
-        /// <item>
-        /// <term>Resource</term>
-        /// <description><see cref="ChaosTargetTypeResource"/></description>
+        /// <term> Default Api Version. </term>
+        /// <description> 2025-01-01. </description>
         /// </item>
         /// </list>
         /// </summary>
-        /// <param name="locationName"> String that represents a Location resource name. </param>
+        /// <param name="location"> The location for the resource. </param>
         /// <param name="targetTypeName"> String that represents a Target Type resource name. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="locationName"/> or <paramref name="targetTypeName"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="locationName"/> or <paramref name="targetTypeName"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="targetTypeName"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="targetTypeName"/> is an empty string, and was expected to be non-empty. </exception>
         [ForwardsClientCalls]
-        public virtual Response<ChaosTargetTypeResource> GetChaosTargetType(string locationName, string targetTypeName, CancellationToken cancellationToken = default)
+        public virtual Response<ChaosTargetMetadataResource> GetChaosTargetMetadata(AzureLocation location, string targetTypeName, CancellationToken cancellationToken = default)
         {
-            return GetChaosTargetTypes(locationName).Get(targetTypeName, cancellationToken);
+            Argument.AssertNotNullOrEmpty(targetTypeName, nameof(targetTypeName));
+
+            return GetAllChaosTargetMetadata(location).Get(targetTypeName, cancellationToken);
         }
 
         /// <summary>
         /// Get a list of Experiment resources in a subscription.
         /// <list type="bullet">
         /// <item>
-        /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.Chaos/experiments</description>
+        /// <term> Request Path. </term>
+        /// <description> /subscriptions/{subscriptionId}/providers/Microsoft.Chaos/experiments. </description>
         /// </item>
         /// <item>
-        /// <term>Operation Id</term>
-        /// <description>Experiments_ListAll</description>
+        /// <term> Operation Id. </term>
+        /// <description> Experiments_ListAll. </description>
         /// </item>
         /// <item>
-        /// <term>Default Api Version</term>
-        /// <description>2024-01-01</description>
-        /// </item>
-        /// <item>
-        /// <term>Resource</term>
-        /// <description><see cref="ChaosExperimentResource"/></description>
-        /// </item>
-        /// </list>
-        /// </summary>
-        /// <param name="running"> Optional value that indicates whether to filter results based on if the Experiment is currently running. If null, then the results will not be filtered. </param>
-        /// <param name="continuationToken"> String that sets the continuation token. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <returns> An async collection of <see cref="ChaosExperimentResource"/> that may take multiple service requests to iterate over. </returns>
-        public virtual AsyncPageable<ChaosExperimentResource> GetChaosExperimentsAsync(bool? running = null, string continuationToken = null, CancellationToken cancellationToken = default)
-        {
-            HttpMessage FirstPageRequest(int? pageSizeHint) => ChaosExperimentExperimentsRestClient.CreateListAllRequest(Id.SubscriptionId, running, continuationToken);
-            HttpMessage NextPageRequest(int? pageSizeHint, string nextLink) => ChaosExperimentExperimentsRestClient.CreateListAllNextPageRequest(nextLink, Id.SubscriptionId, running, continuationToken);
-            return GeneratorPageableHelpers.CreateAsyncPageable(FirstPageRequest, NextPageRequest, e => new ChaosExperimentResource(Client, ChaosExperimentData.DeserializeChaosExperimentData(e)), ChaosExperimentExperimentsClientDiagnostics, Pipeline, "MockableChaosSubscriptionResource.GetChaosExperiments", "value", "nextLink", cancellationToken);
-        }
-
-        /// <summary>
-        /// Get a list of Experiment resources in a subscription.
-        /// <list type="bullet">
-        /// <item>
-        /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.Chaos/experiments</description>
-        /// </item>
-        /// <item>
-        /// <term>Operation Id</term>
-        /// <description>Experiments_ListAll</description>
-        /// </item>
-        /// <item>
-        /// <term>Default Api Version</term>
-        /// <description>2024-01-01</description>
-        /// </item>
-        /// <item>
-        /// <term>Resource</term>
-        /// <description><see cref="ChaosExperimentResource"/></description>
+        /// <term> Default Api Version. </term>
+        /// <description> 2025-01-01. </description>
         /// </item>
         /// </list>
         /// </summary>
@@ -172,11 +128,43 @@ namespace Azure.ResourceManager.Chaos.Mocking
         /// <param name="continuationToken"> String that sets the continuation token. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <returns> A collection of <see cref="ChaosExperimentResource"/> that may take multiple service requests to iterate over. </returns>
-        public virtual Pageable<ChaosExperimentResource> GetChaosExperiments(bool? running = null, string continuationToken = null, CancellationToken cancellationToken = default)
+        public virtual AsyncPageable<ChaosExperimentResource> GetChaosExperimentsAsync(bool? running = default, string continuationToken = default, CancellationToken cancellationToken = default)
         {
-            HttpMessage FirstPageRequest(int? pageSizeHint) => ChaosExperimentExperimentsRestClient.CreateListAllRequest(Id.SubscriptionId, running, continuationToken);
-            HttpMessage NextPageRequest(int? pageSizeHint, string nextLink) => ChaosExperimentExperimentsRestClient.CreateListAllNextPageRequest(nextLink, Id.SubscriptionId, running, continuationToken);
-            return GeneratorPageableHelpers.CreatePageable(FirstPageRequest, NextPageRequest, e => new ChaosExperimentResource(Client, ChaosExperimentData.DeserializeChaosExperimentData(e)), ChaosExperimentExperimentsClientDiagnostics, Pipeline, "MockableChaosSubscriptionResource.GetChaosExperiments", "value", "nextLink", cancellationToken);
+            RequestContext context = new RequestContext
+            {
+                CancellationToken = cancellationToken
+            };
+            return new AsyncPageableWrapper<ChaosExperimentData, ChaosExperimentResource>(new ExperimentsGetExperimentsAsyncCollectionResultOfT(ExperimentsRestClient, Guid.Parse(Id.SubscriptionId), running, continuationToken, context), data => new ChaosExperimentResource(Client, data));
+        }
+
+        /// <summary>
+        /// Get a list of Experiment resources in a subscription.
+        /// <list type="bullet">
+        /// <item>
+        /// <term> Request Path. </term>
+        /// <description> /subscriptions/{subscriptionId}/providers/Microsoft.Chaos/experiments. </description>
+        /// </item>
+        /// <item>
+        /// <term> Operation Id. </term>
+        /// <description> Experiments_ListAll. </description>
+        /// </item>
+        /// <item>
+        /// <term> Default Api Version. </term>
+        /// <description> 2025-01-01. </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="running"> Optional value that indicates whether to filter results based on if the Experiment is currently running. If null, then the results will not be filtered. </param>
+        /// <param name="continuationToken"> String that sets the continuation token. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <returns> A collection of <see cref="ChaosExperimentResource"/> that may take multiple service requests to iterate over. </returns>
+        public virtual Pageable<ChaosExperimentResource> GetChaosExperiments(bool? running = default, string continuationToken = default, CancellationToken cancellationToken = default)
+        {
+            RequestContext context = new RequestContext
+            {
+                CancellationToken = cancellationToken
+            };
+            return new PageableWrapper<ChaosExperimentData, ChaosExperimentResource>(new ExperimentsGetExperimentsCollectionResultOfT(ExperimentsRestClient, Guid.Parse(Id.SubscriptionId), running, continuationToken, context), data => new ChaosExperimentResource(Client, data));
         }
     }
 }

@@ -64,8 +64,10 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> Gets the group values. </summary>
+        [WirePath("groupValues")]
         public IReadOnlyList<string> GroupValues { get; }
         /// <summary> Gets the metrics. </summary>
+        [WirePath("metrics")]
         public IReadOnlyList<ComponentsKpo1PjSchemasWafrankingsresponsePropertiesDataItemsPropertiesMetricsItems> Metrics { get; }
     }
 }

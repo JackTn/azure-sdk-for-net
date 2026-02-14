@@ -11,16 +11,29 @@ using System.Text.Json;
 
 namespace Azure.ResourceManager.ServiceNetworking
 {
+    /// <summary></summary>
     public partial class TrafficControllerAssociationResource : IJsonModel<TrafficControllerAssociationData>
     {
+        private static IJsonModel<TrafficControllerAssociationData> s_dataDeserializationInstance;
+
+        private static IJsonModel<TrafficControllerAssociationData> DataDeserializationInstance => s_dataDeserializationInstance ??= new TrafficControllerAssociationData();
+
+        /// <param name="writer"> The writer to serialize the model to. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
         void IJsonModel<TrafficControllerAssociationData>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options) => ((IJsonModel<TrafficControllerAssociationData>)Data).Write(writer, options);
 
-        TrafficControllerAssociationData IJsonModel<TrafficControllerAssociationData>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => ((IJsonModel<TrafficControllerAssociationData>)Data).Create(ref reader, options);
+        /// <param name="reader"> The reader for deserializing the model. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
+        TrafficControllerAssociationData IJsonModel<TrafficControllerAssociationData>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => DataDeserializationInstance.Create(ref reader, options);
 
-        BinaryData IPersistableModel<TrafficControllerAssociationData>.Write(ModelReaderWriterOptions options) => ModelReaderWriter.Write(Data, options);
+        /// <param name="options"> The client options for reading and writing models. </param>
+        BinaryData IPersistableModel<TrafficControllerAssociationData>.Write(ModelReaderWriterOptions options) => ModelReaderWriter.Write<TrafficControllerAssociationData>(Data, options, AzureResourceManagerServiceNetworkingContext.Default);
 
-        TrafficControllerAssociationData IPersistableModel<TrafficControllerAssociationData>.Create(BinaryData data, ModelReaderWriterOptions options) => ModelReaderWriter.Read<TrafficControllerAssociationData>(data, options);
+        /// <param name="data"> The binary data to be processed. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
+        TrafficControllerAssociationData IPersistableModel<TrafficControllerAssociationData>.Create(BinaryData data, ModelReaderWriterOptions options) => ModelReaderWriter.Read<TrafficControllerAssociationData>(data, options, AzureResourceManagerServiceNetworkingContext.Default);
 
-        string IPersistableModel<TrafficControllerAssociationData>.GetFormatFromOptions(ModelReaderWriterOptions options) => ((IPersistableModel<TrafficControllerAssociationData>)Data).GetFormatFromOptions(options);
+        /// <param name="options"> The client options for reading and writing models. </param>
+        string IPersistableModel<TrafficControllerAssociationData>.GetFormatFromOptions(ModelReaderWriterOptions options) => DataDeserializationInstance.GetFormatFromOptions(options);
     }
 }

@@ -1,5 +1,11 @@
 namespace Azure.ResourceManager.SpringAppDiscovery
 {
+    public partial class AzureResourceManagerSpringAppDiscoveryContext : System.ClientModel.Primitives.ModelReaderWriterContext
+    {
+        internal AzureResourceManagerSpringAppDiscoveryContext() { }
+        public static Azure.ResourceManager.SpringAppDiscovery.AzureResourceManagerSpringAppDiscoveryContext Default { get { throw null; } }
+        protected override bool TryGetTypeBuilderCore(System.Type type, out System.ClientModel.Primitives.ModelReaderWriterTypeBuilder builder) { throw null; }
+    }
     public static partial class SpringAppDiscoveryExtensions
     {
         public static Azure.ResourceManager.SpringAppDiscovery.SpringBootAppResource GetSpringBootAppResource(this Azure.ResourceManager.ArmClient client, Azure.Core.ResourceIdentifier id) { throw null; }
@@ -330,9 +336,7 @@ namespace Azure.ResourceManager.SpringAppDiscovery.Models
         public static Azure.ResourceManager.SpringAppDiscovery.Models.SpringAppDiscoveryProvisioningState Succeeded { get { throw null; } }
         public static Azure.ResourceManager.SpringAppDiscovery.Models.SpringAppDiscoveryProvisioningState Unknown { get { throw null; } }
         public bool Equals(Azure.ResourceManager.SpringAppDiscovery.Models.SpringAppDiscoveryProvisioningState other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.SpringAppDiscovery.Models.SpringAppDiscoveryProvisioningState left, Azure.ResourceManager.SpringAppDiscovery.Models.SpringAppDiscoveryProvisioningState right) { throw null; }
         public static implicit operator Azure.ResourceManager.SpringAppDiscovery.Models.SpringAppDiscoveryProvisioningState (string value) { throw null; }

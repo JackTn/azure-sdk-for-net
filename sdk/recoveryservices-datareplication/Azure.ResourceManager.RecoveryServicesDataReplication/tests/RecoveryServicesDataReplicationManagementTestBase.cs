@@ -1,12 +1,13 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using System.Threading.Tasks;
 using Azure.Core;
 using Azure.Core.TestFramework;
+using Azure.ResourceManager.RecoveryServicesDataReplication.Tests.Helpers;
 using Azure.ResourceManager.Resources;
 using Azure.ResourceManager.TestFramework;
 using NUnit.Framework;
-using System.Threading.Tasks;
 
 namespace Azure.ResourceManager.RecoveryServicesDataReplication.Tests
 {
@@ -28,7 +29,8 @@ namespace Azure.ResourceManager.RecoveryServicesDataReplication.Tests
         [SetUp]
         public async Task CreateCommonClient()
         {
-            Client = GetArmClient();
+            Client = GetArmClient(
+                subscriptionId: DataReplicationTestUtilities.DefaultSubscriptionId);
             DefaultSubscription = await Client.GetDefaultSubscriptionAsync().ConfigureAwait(false);
         }
 

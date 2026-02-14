@@ -9,14 +9,37 @@ using System;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
-using Azure.Core;
+using Azure.ResourceManager.OracleDatabase;
 
 namespace Azure.ResourceManager.OracleDatabase.Models
 {
-    public partial class CloudVmClusterDBNodeProperties : IUtf8JsonSerializable, IJsonModel<CloudVmClusterDBNodeProperties>
+    /// <summary> The properties of DbNodeResource. </summary>
+    public partial class CloudVmClusterDBNodeProperties : IJsonModel<CloudVmClusterDBNodeProperties>
     {
-        void IUtf8JsonSerializable.Write(Utf8JsonWriter writer) => ((IJsonModel<CloudVmClusterDBNodeProperties>)this).Write(writer, ModelSerializationExtensions.WireOptions);
+        /// <summary> Initializes a new instance of <see cref="CloudVmClusterDBNodeProperties"/> for deserialization. </summary>
+        internal CloudVmClusterDBNodeProperties()
+        {
+        }
 
+        /// <param name="data"> The data to parse. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
+        protected virtual CloudVmClusterDBNodeProperties PersistableModelCreateCore(BinaryData data, ModelReaderWriterOptions options)
+        {
+            string format = options.Format == "W" ? ((IPersistableModel<CloudVmClusterDBNodeProperties>)this).GetFormatFromOptions(options) : options.Format;
+            switch (format)
+            {
+                case "J":
+                    using (JsonDocument document = JsonDocument.Parse(data, ModelSerializationExtensions.JsonDocumentOptions))
+                    {
+                        return DeserializeCloudVmClusterDBNodeProperties(document.RootElement, options);
+                    }
+                default:
+                    throw new FormatException($"The model {nameof(CloudVmClusterDBNodeProperties)} does not support reading '{options.Format}' format.");
+            }
+        }
+
+        /// <param name="writer"> The JSON writer. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
         void IJsonModel<CloudVmClusterDBNodeProperties>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options)
         {
             writer.WriteStartObject();
@@ -28,136 +51,120 @@ namespace Azure.ResourceManager.OracleDatabase.Models
         /// <param name="options"> The client options for reading and writing models. </param>
         protected virtual void JsonModelWriteCore(Utf8JsonWriter writer, ModelReaderWriterOptions options)
         {
-            var format = options.Format == "W" ? ((IPersistableModel<CloudVmClusterDBNodeProperties>)this).GetFormatFromOptions(options) : options.Format;
+            string format = options.Format == "W" ? ((IPersistableModel<CloudVmClusterDBNodeProperties>)this).GetFormatFromOptions(options) : options.Format;
             if (format != "J")
             {
                 throw new FormatException($"The model {nameof(CloudVmClusterDBNodeProperties)} does not support writing '{format}' format.");
             }
-
-            if (options.Format != "W")
-            {
-                writer.WritePropertyName("ocid"u8);
-                writer.WriteStringValue(Ocid);
-            }
-            if (options.Format != "W" && Optional.IsDefined(AdditionalDetails))
+            writer.WritePropertyName("ocid"u8);
+            writer.WriteStringValue(DBNodeOcid);
+            if (Optional.IsDefined(AdditionalDetails))
             {
                 writer.WritePropertyName("additionalDetails"u8);
                 writer.WriteStringValue(AdditionalDetails);
             }
-            if (options.Format != "W" && Optional.IsDefined(BackupIPId))
+            if (Optional.IsDefined(BackupIPOcid))
             {
                 writer.WritePropertyName("backupIpId"u8);
-                writer.WriteStringValue(BackupIPId);
+                writer.WriteStringValue(BackupIPOcid);
             }
-            if (options.Format != "W" && Optional.IsDefined(BackupVnic2Id))
+            if (Optional.IsDefined(BackupVnic2Ocid))
             {
                 writer.WritePropertyName("backupVnic2Id"u8);
-                writer.WriteStringValue(BackupVnic2Id);
+                writer.WriteStringValue(BackupVnic2Ocid);
             }
-            if (options.Format != "W" && Optional.IsDefined(BackupVnicId))
+            if (Optional.IsDefined(BackupVnicOcid))
             {
                 writer.WritePropertyName("backupVnicId"u8);
-                writer.WriteStringValue(BackupVnicId);
+                writer.WriteStringValue(BackupVnicOcid);
             }
-            if (options.Format != "W" && Optional.IsDefined(CpuCoreCount))
+            if (Optional.IsDefined(CpuCoreCount))
             {
                 writer.WritePropertyName("cpuCoreCount"u8);
                 writer.WriteNumberValue(CpuCoreCount.Value);
             }
-            if (options.Format != "W" && Optional.IsDefined(DBNodeStorageSizeInGbs))
+            if (Optional.IsDefined(DBNodeStorageSizeInGbs))
             {
                 writer.WritePropertyName("dbNodeStorageSizeInGbs"u8);
                 writer.WriteNumberValue(DBNodeStorageSizeInGbs.Value);
             }
-            if (options.Format != "W" && Optional.IsDefined(DBServerId))
+            if (Optional.IsDefined(DBServerOcid))
             {
                 writer.WritePropertyName("dbServerId"u8);
-                writer.WriteStringValue(DBServerId);
+                writer.WriteStringValue(DBServerOcid);
             }
-            if (options.Format != "W")
-            {
-                writer.WritePropertyName("dbSystemId"u8);
-                writer.WriteStringValue(DBSystemId);
-            }
-            if (options.Format != "W" && Optional.IsDefined(FaultDomain))
+            writer.WritePropertyName("dbSystemId"u8);
+            writer.WriteStringValue(DBSystemOcid);
+            if (Optional.IsDefined(FaultDomain))
             {
                 writer.WritePropertyName("faultDomain"u8);
                 writer.WriteStringValue(FaultDomain);
             }
-            if (options.Format != "W" && Optional.IsDefined(HostIPId))
+            if (Optional.IsDefined(HostIPOcid))
             {
                 writer.WritePropertyName("hostIpId"u8);
-                writer.WriteStringValue(HostIPId);
+                writer.WriteStringValue(HostIPOcid);
             }
-            if (options.Format != "W" && Optional.IsDefined(Hostname))
+            if (Optional.IsDefined(Hostname))
             {
                 writer.WritePropertyName("hostname"u8);
                 writer.WriteStringValue(Hostname);
             }
-            if (options.Format != "W" && Optional.IsDefined(LifecycleState))
-            {
-                writer.WritePropertyName("lifecycleState"u8);
-                writer.WriteStringValue(LifecycleState.Value.ToString());
-            }
-            if (options.Format != "W" && Optional.IsDefined(LifecycleDetails))
+            writer.WritePropertyName("lifecycleState"u8);
+            writer.WriteStringValue(DBNodeLifecycleState.ToString());
+            if (Optional.IsDefined(LifecycleDetails))
             {
                 writer.WritePropertyName("lifecycleDetails"u8);
                 writer.WriteStringValue(LifecycleDetails);
             }
-            if (options.Format != "W" && Optional.IsDefined(MaintenanceType))
+            if (Optional.IsDefined(MaintenanceType))
             {
                 writer.WritePropertyName("maintenanceType"u8);
                 writer.WriteStringValue(MaintenanceType.Value.ToString());
             }
-            if (options.Format != "W" && Optional.IsDefined(MemorySizeInGbs))
+            if (Optional.IsDefined(MemorySizeInGbs))
             {
                 writer.WritePropertyName("memorySizeInGbs"u8);
                 writer.WriteNumberValue(MemorySizeInGbs.Value);
             }
-            if (options.Format != "W" && Optional.IsDefined(SoftwareStorageSizeInGb))
+            if (Optional.IsDefined(SoftwareStorageSizeInGb))
             {
                 writer.WritePropertyName("softwareStorageSizeInGb"u8);
                 writer.WriteNumberValue(SoftwareStorageSizeInGb.Value);
             }
-            if (options.Format != "W" && Optional.IsDefined(TimeCreated))
-            {
-                writer.WritePropertyName("timeCreated"u8);
-                writer.WriteStringValue(TimeCreated.Value, "O");
-            }
-            if (options.Format != "W" && Optional.IsDefined(TimeMaintenanceWindowEnd))
+            writer.WritePropertyName("timeCreated"u8);
+            writer.WriteStringValue(CreatedOn, "O");
+            if (Optional.IsDefined(TimeMaintenanceWindowEnd))
             {
                 writer.WritePropertyName("timeMaintenanceWindowEnd"u8);
                 writer.WriteStringValue(TimeMaintenanceWindowEnd.Value, "O");
             }
-            if (options.Format != "W" && Optional.IsDefined(TimeMaintenanceWindowStart))
+            if (Optional.IsDefined(TimeMaintenanceWindowStart))
             {
                 writer.WritePropertyName("timeMaintenanceWindowStart"u8);
                 writer.WriteStringValue(TimeMaintenanceWindowStart.Value, "O");
             }
-            if (options.Format != "W" && Optional.IsDefined(Vnic2Id))
+            if (Optional.IsDefined(Vnic2Ocid))
             {
                 writer.WritePropertyName("vnic2Id"u8);
-                writer.WriteStringValue(Vnic2Id);
+                writer.WriteStringValue(Vnic2Ocid);
             }
-            if (options.Format != "W" && Optional.IsDefined(VnicId))
-            {
-                writer.WritePropertyName("vnicId"u8);
-                writer.WriteStringValue(VnicId);
-            }
+            writer.WritePropertyName("vnicId"u8);
+            writer.WriteStringValue(VnicOcid);
             if (options.Format != "W" && Optional.IsDefined(ProvisioningState))
             {
                 writer.WritePropertyName("provisioningState"u8);
                 writer.WriteStringValue(ProvisioningState.Value.ToString());
             }
-            if (options.Format != "W" && _serializedAdditionalRawData != null)
+            if (options.Format != "W" && _additionalBinaryDataProperties != null)
             {
-                foreach (var item in _serializedAdditionalRawData)
+                foreach (var item in _additionalBinaryDataProperties)
                 {
                     writer.WritePropertyName(item.Key);
 #if NET6_0_OR_GREATER
-				writer.WriteRawValue(item.Value);
+                    writer.WriteRawValue(item.Value);
 #else
-                    using (JsonDocument document = JsonDocument.Parse(item.Value, ModelSerializationExtensions.JsonDocumentOptions))
+                    using (JsonDocument document = JsonDocument.Parse(item.Value))
                     {
                         JsonSerializer.Serialize(writer, document.RootElement);
                     }
@@ -166,298 +173,257 @@ namespace Azure.ResourceManager.OracleDatabase.Models
             }
         }
 
-        CloudVmClusterDBNodeProperties IJsonModel<CloudVmClusterDBNodeProperties>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options)
+        /// <param name="reader"> The JSON reader. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
+        CloudVmClusterDBNodeProperties IJsonModel<CloudVmClusterDBNodeProperties>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => JsonModelCreateCore(ref reader, options);
+
+        /// <param name="reader"> The JSON reader. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
+        protected virtual CloudVmClusterDBNodeProperties JsonModelCreateCore(ref Utf8JsonReader reader, ModelReaderWriterOptions options)
         {
-            var format = options.Format == "W" ? ((IPersistableModel<CloudVmClusterDBNodeProperties>)this).GetFormatFromOptions(options) : options.Format;
+            string format = options.Format == "W" ? ((IPersistableModel<CloudVmClusterDBNodeProperties>)this).GetFormatFromOptions(options) : options.Format;
             if (format != "J")
             {
                 throw new FormatException($"The model {nameof(CloudVmClusterDBNodeProperties)} does not support reading '{format}' format.");
             }
-
             using JsonDocument document = JsonDocument.ParseValue(ref reader);
             return DeserializeCloudVmClusterDBNodeProperties(document.RootElement, options);
         }
 
-        internal static CloudVmClusterDBNodeProperties DeserializeCloudVmClusterDBNodeProperties(JsonElement element, ModelReaderWriterOptions options = null)
+        /// <param name="element"> The JSON element to deserialize. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
+        internal static CloudVmClusterDBNodeProperties DeserializeCloudVmClusterDBNodeProperties(JsonElement element, ModelReaderWriterOptions options)
         {
-            options ??= ModelSerializationExtensions.WireOptions;
-
             if (element.ValueKind == JsonValueKind.Null)
             {
                 return null;
             }
-            ResourceIdentifier ocid = default;
+            string dbNodeOcid = default;
             string additionalDetails = default;
-            ResourceIdentifier backupIPId = default;
-            ResourceIdentifier backupVnic2Id = default;
-            ResourceIdentifier backupVnicId = default;
+            string backupIPOcid = default;
+            string backupVnic2Ocid = default;
+            string backupVnicOcid = default;
             int? cpuCoreCount = default;
             int? dbNodeStorageSizeInGbs = default;
-            ResourceIdentifier dbServerId = default;
-            ResourceIdentifier dbSystemId = default;
+            string dbServerOcid = default;
+            string dbSystemOcid = default;
             string faultDomain = default;
-            ResourceIdentifier hostIPId = default;
+            string hostIPOcid = default;
             string hostname = default;
-            DBNodeProvisioningState? lifecycleState = default;
+            DBNodeProvisioningState dbNodeLifecycleState = default;
             string lifecycleDetails = default;
             DBNodeMaintenanceType? maintenanceType = default;
             int? memorySizeInGbs = default;
             int? softwareStorageSizeInGb = default;
-            DateTimeOffset? timeCreated = default;
+            DateTimeOffset createdOn = default;
             DateTimeOffset? timeMaintenanceWindowEnd = default;
             DateTimeOffset? timeMaintenanceWindowStart = default;
-            ResourceIdentifier vnic2Id = default;
-            ResourceIdentifier vnicId = default;
+            string vnic2Ocid = default;
+            string vnicOcid = default;
             OracleDatabaseResourceProvisioningState? provisioningState = default;
-            IDictionary<string, BinaryData> serializedAdditionalRawData = default;
-            Dictionary<string, BinaryData> rawDataDictionary = new Dictionary<string, BinaryData>();
-            foreach (var property in element.EnumerateObject())
+            IDictionary<string, BinaryData> additionalBinaryDataProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            foreach (var prop in element.EnumerateObject())
             {
-                if (property.NameEquals("ocid"u8))
+                if (prop.NameEquals("ocid"u8))
                 {
-                    ocid = new ResourceIdentifier(property.Value.GetString());
+                    dbNodeOcid = prop.Value.GetString();
                     continue;
                 }
-                if (property.NameEquals("additionalDetails"u8))
+                if (prop.NameEquals("additionalDetails"u8))
                 {
-                    additionalDetails = property.Value.GetString();
+                    additionalDetails = prop.Value.GetString();
                     continue;
                 }
-                if (property.NameEquals("backupIpId"u8))
+                if (prop.NameEquals("backupIpId"u8))
                 {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    backupIPOcid = prop.Value.GetString();
+                    continue;
+                }
+                if (prop.NameEquals("backupVnic2Id"u8))
+                {
+                    backupVnic2Ocid = prop.Value.GetString();
+                    continue;
+                }
+                if (prop.NameEquals("backupVnicId"u8))
+                {
+                    backupVnicOcid = prop.Value.GetString();
+                    continue;
+                }
+                if (prop.NameEquals("cpuCoreCount"u8))
+                {
+                    if (prop.Value.ValueKind == JsonValueKind.Null)
                     {
                         continue;
                     }
-                    backupIPId = new ResourceIdentifier(property.Value.GetString());
+                    cpuCoreCount = prop.Value.GetInt32();
                     continue;
                 }
-                if (property.NameEquals("backupVnic2Id"u8))
+                if (prop.NameEquals("dbNodeStorageSizeInGbs"u8))
                 {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    if (prop.Value.ValueKind == JsonValueKind.Null)
                     {
                         continue;
                     }
-                    backupVnic2Id = new ResourceIdentifier(property.Value.GetString());
+                    dbNodeStorageSizeInGbs = prop.Value.GetInt32();
                     continue;
                 }
-                if (property.NameEquals("backupVnicId"u8))
+                if (prop.NameEquals("dbServerId"u8))
                 {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    dbServerOcid = prop.Value.GetString();
+                    continue;
+                }
+                if (prop.NameEquals("dbSystemId"u8))
+                {
+                    dbSystemOcid = prop.Value.GetString();
+                    continue;
+                }
+                if (prop.NameEquals("faultDomain"u8))
+                {
+                    faultDomain = prop.Value.GetString();
+                    continue;
+                }
+                if (prop.NameEquals("hostIpId"u8))
+                {
+                    hostIPOcid = prop.Value.GetString();
+                    continue;
+                }
+                if (prop.NameEquals("hostname"u8))
+                {
+                    hostname = prop.Value.GetString();
+                    continue;
+                }
+                if (prop.NameEquals("lifecycleState"u8))
+                {
+                    dbNodeLifecycleState = new DBNodeProvisioningState(prop.Value.GetString());
+                    continue;
+                }
+                if (prop.NameEquals("lifecycleDetails"u8))
+                {
+                    lifecycleDetails = prop.Value.GetString();
+                    continue;
+                }
+                if (prop.NameEquals("maintenanceType"u8))
+                {
+                    if (prop.Value.ValueKind == JsonValueKind.Null)
                     {
                         continue;
                     }
-                    backupVnicId = new ResourceIdentifier(property.Value.GetString());
+                    maintenanceType = new DBNodeMaintenanceType(prop.Value.GetString());
                     continue;
                 }
-                if (property.NameEquals("cpuCoreCount"u8))
+                if (prop.NameEquals("memorySizeInGbs"u8))
                 {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    if (prop.Value.ValueKind == JsonValueKind.Null)
                     {
                         continue;
                     }
-                    cpuCoreCount = property.Value.GetInt32();
+                    memorySizeInGbs = prop.Value.GetInt32();
                     continue;
                 }
-                if (property.NameEquals("dbNodeStorageSizeInGbs"u8))
+                if (prop.NameEquals("softwareStorageSizeInGb"u8))
                 {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    if (prop.Value.ValueKind == JsonValueKind.Null)
                     {
                         continue;
                     }
-                    dbNodeStorageSizeInGbs = property.Value.GetInt32();
+                    softwareStorageSizeInGb = prop.Value.GetInt32();
                     continue;
                 }
-                if (property.NameEquals("dbServerId"u8))
+                if (prop.NameEquals("timeCreated"u8))
                 {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    createdOn = prop.Value.GetDateTimeOffset("O");
+                    continue;
+                }
+                if (prop.NameEquals("timeMaintenanceWindowEnd"u8))
+                {
+                    if (prop.Value.ValueKind == JsonValueKind.Null)
                     {
                         continue;
                     }
-                    dbServerId = new ResourceIdentifier(property.Value.GetString());
+                    timeMaintenanceWindowEnd = prop.Value.GetDateTimeOffset("O");
                     continue;
                 }
-                if (property.NameEquals("dbSystemId"u8))
+                if (prop.NameEquals("timeMaintenanceWindowStart"u8))
                 {
-                    dbSystemId = new ResourceIdentifier(property.Value.GetString());
-                    continue;
-                }
-                if (property.NameEquals("faultDomain"u8))
-                {
-                    faultDomain = property.Value.GetString();
-                    continue;
-                }
-                if (property.NameEquals("hostIpId"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    if (prop.Value.ValueKind == JsonValueKind.Null)
                     {
                         continue;
                     }
-                    hostIPId = new ResourceIdentifier(property.Value.GetString());
+                    timeMaintenanceWindowStart = prop.Value.GetDateTimeOffset("O");
                     continue;
                 }
-                if (property.NameEquals("hostname"u8))
+                if (prop.NameEquals("vnic2Id"u8))
                 {
-                    hostname = property.Value.GetString();
+                    vnic2Ocid = prop.Value.GetString();
                     continue;
                 }
-                if (property.NameEquals("lifecycleState"u8))
+                if (prop.NameEquals("vnicId"u8))
                 {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    vnicOcid = prop.Value.GetString();
+                    continue;
+                }
+                if (prop.NameEquals("provisioningState"u8))
+                {
+                    if (prop.Value.ValueKind == JsonValueKind.Null)
                     {
                         continue;
                     }
-                    lifecycleState = new DBNodeProvisioningState(property.Value.GetString());
-                    continue;
-                }
-                if (property.NameEquals("lifecycleDetails"u8))
-                {
-                    lifecycleDetails = property.Value.GetString();
-                    continue;
-                }
-                if (property.NameEquals("maintenanceType"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    maintenanceType = new DBNodeMaintenanceType(property.Value.GetString());
-                    continue;
-                }
-                if (property.NameEquals("memorySizeInGbs"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    memorySizeInGbs = property.Value.GetInt32();
-                    continue;
-                }
-                if (property.NameEquals("softwareStorageSizeInGb"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    softwareStorageSizeInGb = property.Value.GetInt32();
-                    continue;
-                }
-                if (property.NameEquals("timeCreated"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    timeCreated = property.Value.GetDateTimeOffset("O");
-                    continue;
-                }
-                if (property.NameEquals("timeMaintenanceWindowEnd"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    timeMaintenanceWindowEnd = property.Value.GetDateTimeOffset("O");
-                    continue;
-                }
-                if (property.NameEquals("timeMaintenanceWindowStart"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    timeMaintenanceWindowStart = property.Value.GetDateTimeOffset("O");
-                    continue;
-                }
-                if (property.NameEquals("vnic2Id"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    vnic2Id = new ResourceIdentifier(property.Value.GetString());
-                    continue;
-                }
-                if (property.NameEquals("vnicId"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    vnicId = new ResourceIdentifier(property.Value.GetString());
-                    continue;
-                }
-                if (property.NameEquals("provisioningState"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    provisioningState = new OracleDatabaseResourceProvisioningState(property.Value.GetString());
+                    provisioningState = new OracleDatabaseResourceProvisioningState(prop.Value.GetString());
                     continue;
                 }
                 if (options.Format != "W")
                 {
-                    rawDataDictionary.Add(property.Name, BinaryData.FromString(property.Value.GetRawText()));
+                    additionalBinaryDataProperties.Add(prop.Name, BinaryData.FromString(prop.Value.GetRawText()));
                 }
             }
-            serializedAdditionalRawData = rawDataDictionary;
             return new CloudVmClusterDBNodeProperties(
-                ocid,
+                dbNodeOcid,
                 additionalDetails,
-                backupIPId,
-                backupVnic2Id,
-                backupVnicId,
+                backupIPOcid,
+                backupVnic2Ocid,
+                backupVnicOcid,
                 cpuCoreCount,
                 dbNodeStorageSizeInGbs,
-                dbServerId,
-                dbSystemId,
+                dbServerOcid,
+                dbSystemOcid,
                 faultDomain,
-                hostIPId,
+                hostIPOcid,
                 hostname,
-                lifecycleState,
+                dbNodeLifecycleState,
                 lifecycleDetails,
                 maintenanceType,
                 memorySizeInGbs,
                 softwareStorageSizeInGb,
-                timeCreated,
+                createdOn,
                 timeMaintenanceWindowEnd,
                 timeMaintenanceWindowStart,
-                vnic2Id,
-                vnicId,
+                vnic2Ocid,
+                vnicOcid,
                 provisioningState,
-                serializedAdditionalRawData);
+                additionalBinaryDataProperties);
         }
 
-        BinaryData IPersistableModel<CloudVmClusterDBNodeProperties>.Write(ModelReaderWriterOptions options)
-        {
-            var format = options.Format == "W" ? ((IPersistableModel<CloudVmClusterDBNodeProperties>)this).GetFormatFromOptions(options) : options.Format;
+        /// <param name="options"> The client options for reading and writing models. </param>
+        BinaryData IPersistableModel<CloudVmClusterDBNodeProperties>.Write(ModelReaderWriterOptions options) => PersistableModelWriteCore(options);
 
+        /// <param name="options"> The client options for reading and writing models. </param>
+        protected virtual BinaryData PersistableModelWriteCore(ModelReaderWriterOptions options)
+        {
+            string format = options.Format == "W" ? ((IPersistableModel<CloudVmClusterDBNodeProperties>)this).GetFormatFromOptions(options) : options.Format;
             switch (format)
             {
                 case "J":
-                    return ModelReaderWriter.Write(this, options);
+                    return ModelReaderWriter.Write(this, options, AzureResourceManagerOracleDatabaseContext.Default);
                 default:
                     throw new FormatException($"The model {nameof(CloudVmClusterDBNodeProperties)} does not support writing '{options.Format}' format.");
             }
         }
 
-        CloudVmClusterDBNodeProperties IPersistableModel<CloudVmClusterDBNodeProperties>.Create(BinaryData data, ModelReaderWriterOptions options)
-        {
-            var format = options.Format == "W" ? ((IPersistableModel<CloudVmClusterDBNodeProperties>)this).GetFormatFromOptions(options) : options.Format;
+        /// <param name="data"> The data to parse. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
+        CloudVmClusterDBNodeProperties IPersistableModel<CloudVmClusterDBNodeProperties>.Create(BinaryData data, ModelReaderWriterOptions options) => PersistableModelCreateCore(data, options);
 
-            switch (format)
-            {
-                case "J":
-                    {
-                        using JsonDocument document = JsonDocument.Parse(data, ModelSerializationExtensions.JsonDocumentOptions);
-                        return DeserializeCloudVmClusterDBNodeProperties(document.RootElement, options);
-                    }
-                default:
-                    throw new FormatException($"The model {nameof(CloudVmClusterDBNodeProperties)} does not support reading '{options.Format}' format.");
-            }
-        }
-
+        /// <param name="options"> The client options for reading and writing models. </param>
         string IPersistableModel<CloudVmClusterDBNodeProperties>.GetFormatFromOptions(ModelReaderWriterOptions options) => "J";
     }
 }

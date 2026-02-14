@@ -8,32 +8,6 @@ $GithubUri = "https://github.com/Azure/azure-sdk-for-net"
 $PackageRepositoryUri = "https://www.nuget.org/packages"
 
 . "$PSScriptRoot/docs/Docs-ToC.ps1"
-
-$DependencyCalculationPackages = @(
-  "Azure.Core",
-  "Azure.ResourceManager"
-)
-
-function processTestProject($projPath) {
-  $cleanPath = $projPath -replace "^\$\(RepoRoot\)", ""
-
-  # Split the path into segments
-  $pathSegments = $cleanPath -split "[\\/]"
-
-  # Find the index of the 'tests' directory
-  $testsIndex = $pathSegments.IndexOf("tests")
-
-  if ($testsIndex -gt 0) {
-      # Reconstruct the path up to the directory just above 'tests'
-      $parentDirectory = ($pathSegments[0..($testsIndex - 1)] -join [System.IO.Path]::DirectorySeparatorChar)
-      return $parentDirectory
-  } else {
-      Write-Error "Unable to retrieve a package directory for this this test project: $projPath"
-      # If 'tests' is not found, return the original path (optional behavior)
-      $_
-  }
-}
-
 function Get-AllPackageInfoFromRepo($serviceDirectory)
 {
   $allPackageProps = @()
@@ -41,24 +15,42 @@ function Get-AllPackageInfoFromRepo($serviceDirectory)
   # Save-Package-Properties.ps1
   $shouldAddDevVersion = Get-Variable -Name 'addDevVersion' -ValueOnly -ErrorAction 'Ignore'
   $ServiceProj = Join-Path -Path $EngDir -ChildPath "service.proj"
-  Write-Host "Get-AllPackageInfoFromRepo::Executing msbuild"
-  Write-Host "dotnet msbuild /nologo /t:GetPackageInfo $ServiceProj /p:ServiceDirectory=$serviceDirectory /p:AddDevVersion=$shouldAddDevVersion"
+  $outputFilePath = Join-Path ([System.IO.Path]::GetTempPath()) "package-info-$([System.Guid]::NewGuid()).txt"
 
-  $msbuildOutput = dotnet msbuild `
+  Write-Host "dotnet msbuild /nologo /t:GetPackageInfo ""$ServiceProj"" /p:ServiceDirectory=$serviceDirectory /p:AddDevVersion=$shouldAddDevVersion /p:OutputProjectInfoListFilePath=""$outputFilePath"" -tl:off"
+
+  dotnet msbuild `
     /nologo `
     /t:GetPackageInfo `
-    $ServiceProj `
+    "$ServiceProj" `
     /p:ServiceDirectory=$serviceDirectory `
-    /p:AddDevVersion=$shouldAddDevVersion
+    /p:AddDevVersion=$shouldAddDevVersion `
+    /p:OutputProjectInfoListFilePath="$outputFilePath" `
+    -tl:off | Out-Host
 
-  foreach ($projectOutput in $msbuildOutput)
+  # Check if msbuild succeeded
+  if ($LASTEXITCODE -ne 0) {
+    # Clean up temp file before failing
+    if (Test-Path $outputFilePath) {
+      $null = Remove-Item $outputFilePath -Force -ErrorAction SilentlyContinue
+    }
+    throw "MSBuild failed with exit code $LASTEXITCODE"
+  }
+
+  $packageInfoLines = @()
+  if (Test-Path $outputFilePath) {
+    $packageInfoLines = Get-Content $outputFilePath | Where-Object { $_ -and $_.Trim() }
+    $null = Remove-Item $outputFilePath -Force -ErrorAction SilentlyContinue
+  }
+
+  foreach ($projectOutput in $packageInfoLines)
   {
     if (!$projectOutput) {
-      Write-Host "Get-AllPackageInfoFromRepo::projectOutput was null or empty, skipping"
+      Write-Verbose "Get-AllPackageInfoFromRepo::projectOutput was null or empty, skipping"
       continue
     }
 
-    $pkgPath, $serviceDirectory, $pkgName, $pkgVersion, $sdkType, $isNewSdk, $dllFolder = $projectOutput.Split(' ',[System.StringSplitOptions]::RemoveEmptyEntries).Trim("'")
+    $pkgPath, $serviceDirectory, $pkgName, $pkgVersion, $sdkType, $isNewSdk, $dllFolder = $projectOutput.Split("' '", [System.StringSplitOptions]::RemoveEmptyEntries).Trim("' ")
     if(!(Test-Path $pkgPath)) {
       Write-Host "Parsed package path `$pkgPath` does not exist so skipping the package line '$projectOutput'."
       continue
@@ -71,74 +63,9 @@ function Get-AllPackageInfoFromRepo($serviceDirectory)
     $pkgProp.IncludedForValidation = $false
     $pkgProp.DirectoryPath = ($pkgProp.DirectoryPath)
 
-    if ($pkgProp.Name -in $DependencyCalculationPackages -and $env:DISCOVER_DEPENDENT_PACKAGES) {
-      Write-Host "Calculating dependencies for $($pkgProp.Name)"
-      $outputFilePath = Join-Path $RepoRoot "$($pkgProp.Name)_dependencylist.txt"
-      $buildOutputPath = Join-Path $RepoRoot "$($pkgProp.Name)_dependencylistoutput.txt"
-
-      if (!(Test-Path $outputFilePath)) {
-        try {
-          $command = "dotnet build /t:ProjectDependsOn ./eng/service.proj /p:TestDependsOnDependency=`"$($pkgProp.Name)`" /p:IncludeSrc=false " +
-          "/p:IncludeStress=false /p:IncludeSamples=false /p:IncludePerf=false /p:RunApiCompat=false /p:InheritDocEnabled=false /p:BuildProjectReferences=false" +
-          " /p:OutputProjectFilePath=`"$outputFilePath`" > $buildOutputPath 2>&1"
-
-          Invoke-LoggedCommand $command | Out-Null
-        }
-        catch {
-            Write-Host "Failed calculating dependencies for $($pkgProp.Name). Exit code $LASTEXITCODE."
-            Write-Host "Dumping erroring build output."
-            Write-Host (Get-Content -Raw $buildOutputPath)
-            continue
-        }
-      }
-
-      $pkgRelPath = $pkgProp.DirectoryPath.Replace($RepoRoot, "").TrimStart("\/")
-
-      if (Test-Path $outputFilePath) {
-        $dependentProjects = Get-Content $outputFilePath
-        $testPackages = @{}
-
-        foreach ($projectLine in $dependentProjects) {
-          $testPackage = processTestProject($projectLine)
-          if ($testPackage -and $testPackage -ne $pkgRelPath) {
-            if ($testPackages[$testPackage]) {
-              $testPackages[$testPackage] += 1
-            }
-            else {
-              $testPackages[$testPackage] = 1
-            }
-          }
-        }
-
-        $pkgProp.AdditionalValidationPackages = $testPackages.Keys
-
-        Write-Host "Cleaning up $outputFilePath."
-      }
-    }
-
     $ciProps = $pkgProp.GetCIYmlForArtifact()
 
     if ($ciProps) {
-      # CheckAOTCompat is opt _in_, so we should default to false if not specified
-      $shouldAot = GetValueSafelyFrom-Yaml $ciProps.ParsedYml @("extends", "parameters", "CheckAOTCompat")
-      if ($null -ne $shouldAot) {
-        $parsedBool = $null
-        if ([bool]::TryParse($shouldAot, [ref]$parsedBool)) {
-          $pkgProp.CIParameters["CheckAOTCompat"] = $parsedBool
-        }
-
-        # when AOTCompat is true, there is an additional parameter we need to retrieve
-        $aotArtifacts = GetValueSafelyFrom-Yaml $ciProps.ParsedYml @("extends", "parameters", "AOTTestInputs")
-        if ($aotArtifacts) {
-          $aotArtifacts = $aotArtifacts | Where-Object { $_.ArtifactName -eq $pkgProp.ArtifactName }
-          $pkgProp.CIParameters["AOTTestInputs"] = $aotArtifacts
-        }
-      }
-      else {
-        $pkgProp.CIParameters["CheckAOTCompat"] = $false
-        $pkgProp.CIParameters["AOTTestInputs"] = @()
-      }
-
       # BuildSnippets is opt _out_, so we should default to true if not specified
       $shouldSnippet = GetValueSafelyFrom-Yaml $ciProps.ParsedYml @("extends", "parameters", "BuildSnippets")
       if ($null -ne $shouldSnippet) {
@@ -151,11 +78,68 @@ function Get-AllPackageInfoFromRepo($serviceDirectory)
         $pkgProp.CIParameters["BuildSnippets"] = $true
       }
     }
+    # if the package isn't associated with a CI.yml, we still want to set the defaults values for these parameters
+    # so that when we are checking the package set for which need to "Build Snippets"
+    else {
+      $pkgProp.CIParameters["BuildSnippets"] = $true
+    }
 
     $allPackageProps += $pkgProp
   }
 
   return $allPackageProps
+}
+
+function Get-dotnet-AdditionalValidationPackagesFromPackageSet($LocatedPackages, $diffObj, $AllPkgProps)
+{
+  $additionalValidationPackages = @()
+
+  $DependencyCalculationPackages = @(
+    "Azure.Core",
+    "Azure.ResourceManager",
+    "System.ClientModel"
+  )
+
+  $TestDependsOnDependencySet = $LocatedPackages | Where-Object { $_.Name -in $DependencyCalculationPackages }
+  $TestDependsOnDependency = $TestDependsOnDependencySet.Name -join " "
+
+  if (!$TestDependsOnDependency) {
+    return $additionalValidationPackages
+  }
+
+  Write-Host "Calculating dependencies for $($pkgProp.Name)"
+
+  $outputFilePath = Join-Path $RepoRoot "_dependencylist.txt"
+
+  $command = "dotnet build /t:ProjectDependsOn ./eng/service.proj /p:TestDependsOnDependency=`"$TestDependsOnDependency`" /p:TestDependsIncludePackageRootDirectoryOnly=true /p:IncludeSrc=false " +
+    "/p:IncludeStress=false /p:IncludeSamples=false /p:IncludePerf=false /p:RunApiCompat=false /p:InheritDocEnabled=false /p:BuildProjectReferences=false" +
+    " /p:OutputProjectFilePath=`"$outputFilePath`""
+
+  Invoke-LoggedMsbuildCommand $command
+
+  if (Test-Path $outputFilePath) {
+    $dependentProjects = Get-Content $outputFilePath
+
+    foreach ($packageRootPath in $dependentProjects) {
+      if (!$packageRootPath) {
+        Write-Verbose "Get-dotnet-AdditionalValidationPackagesFromPackageSet::dependentProjects Package root path is empty, skipping."
+        continue
+      }
+      $pkg = $AllPkgProps | Where-Object { $_.DirectoryPath -eq $packageRootPath }
+
+      if (!$pkg) {
+        Write-Verbose "Unable to find package for path $packageRootPath, skipping. Most likely a nested test project not directly under test."
+        continue
+      }
+
+      if ($pkg -and $LocatedPackages -notcontains $pkg) {
+        $pkg.IncludedForValidation = $true
+        $additionalValidationPackages += $pkg
+      }
+    }
+  }
+
+  return $additionalValidationPackages
 }
 
 # Returns the nuget publish status of a package id and version.
@@ -567,7 +551,7 @@ function Update-dotnet-GeneratedSdks([string]$PackageDirectoriesFile) {
     # Install autorest locally
     Invoke-LoggedCommand "npm ci --prefix $RepoRoot"
 
-    Write-Host "Running npm ci over emitter-package.json in a temp folder to prime the npm cache"
+    Write-Host "Running npm ci over legacy-emitter-package.json in a temp folder to prime the npm cache"
 
     $tempFolder = New-TemporaryFile
     $tempFolder | Remove-Item -Force
@@ -575,9 +559,9 @@ function Update-dotnet-GeneratedSdks([string]$PackageDirectoriesFile) {
 
     Push-Location $tempFolder
     try {
-        Copy-Item "$RepoRoot/eng/emitter-package.json" "package.json"
-        if(Test-Path "$RepoRoot/eng/emitter-package-lock.json") {
-            Copy-Item "$RepoRoot/eng/emitter-package-lock.json" "package-lock.json"
+        Copy-Item "$RepoRoot/eng/legacy-emitter-package.json" "package.json"
+        if(Test-Path "$RepoRoot/eng/legacy-emitter-package-lock.json") {
+            Copy-Item "$RepoRoot/eng/legacy-emitter-package-lock.json" "package-lock.json"
             Invoke-LoggedCommand "npm ci"
         } else {
           Invoke-LoggedCommand "npm install"
@@ -600,6 +584,15 @@ function Update-dotnet-GeneratedSdks([string]$PackageDirectoriesFile) {
 }
 
 function Get-dotnet-ApiviewStatusCheckRequirement($packageInfo) {
+  $version = [AzureEngSemanticVersion]::ParseVersionString($packageInfo.Version)
+  if ($null -eq $version) {
+    return $false
+  }
+  # Do not check APIView status for prerelease mgmt plane packages
+  if ($packageInfo.SdkType -eq "mgmt" -and $version.IsPrerelease) {
+    return $false
+  }
+
   if ($packageInfo.IsNewSdk -and ($packageInfo.SdkType -eq "client" -or $packageInfo.SdkType -eq "mgmt")) {
     return $true
   }

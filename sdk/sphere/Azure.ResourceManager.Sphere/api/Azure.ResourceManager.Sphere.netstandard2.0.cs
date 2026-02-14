@@ -1,5 +1,11 @@
 namespace Azure.ResourceManager.Sphere
 {
+    public partial class AzureResourceManagerSphereContext : System.ClientModel.Primitives.ModelReaderWriterContext
+    {
+        internal AzureResourceManagerSphereContext() { }
+        public static Azure.ResourceManager.Sphere.AzureResourceManagerSphereContext Default { get { throw null; } }
+        protected override bool TryGetTypeBuilderCore(System.Type type, out System.ClientModel.Primitives.ModelReaderWriterTypeBuilder builder) { throw null; }
+    }
     public partial class SphereCatalogCollection : Azure.ResourceManager.ArmCollection, System.Collections.Generic.IAsyncEnumerable<Azure.ResourceManager.Sphere.SphereCatalogResource>, System.Collections.Generic.IEnumerable<Azure.ResourceManager.Sphere.SphereCatalogResource>, System.Collections.IEnumerable
     {
         protected SphereCatalogCollection() { }
@@ -550,9 +556,7 @@ namespace Azure.ResourceManager.Sphere.Models
         public static Azure.ResourceManager.Sphere.Models.RegionalDataBoundary EU { get { throw null; } }
         public static Azure.ResourceManager.Sphere.Models.RegionalDataBoundary None { get { throw null; } }
         public bool Equals(Azure.ResourceManager.Sphere.Models.RegionalDataBoundary other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.Sphere.Models.RegionalDataBoundary left, Azure.ResourceManager.Sphere.Models.RegionalDataBoundary right) { throw null; }
         public static implicit operator Azure.ResourceManager.Sphere.Models.RegionalDataBoundary (string value) { throw null; }
@@ -579,9 +583,7 @@ namespace Azure.ResourceManager.Sphere.Models
         public static Azure.ResourceManager.Sphere.Models.SphereAllowCrashDumpCollectionStatus Disabled { get { throw null; } }
         public static Azure.ResourceManager.Sphere.Models.SphereAllowCrashDumpCollectionStatus Enabled { get { throw null; } }
         public bool Equals(Azure.ResourceManager.Sphere.Models.SphereAllowCrashDumpCollectionStatus other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.Sphere.Models.SphereAllowCrashDumpCollectionStatus left, Azure.ResourceManager.Sphere.Models.SphereAllowCrashDumpCollectionStatus right) { throw null; }
         public static implicit operator Azure.ResourceManager.Sphere.Models.SphereAllowCrashDumpCollectionStatus (string value) { throw null; }
@@ -597,9 +599,7 @@ namespace Azure.ResourceManager.Sphere.Models
         public static Azure.ResourceManager.Sphere.Models.SphereCapabilityType ApplicationDevelopment { get { throw null; } }
         public static Azure.ResourceManager.Sphere.Models.SphereCapabilityType FieldServicing { get { throw null; } }
         public bool Equals(Azure.ResourceManager.Sphere.Models.SphereCapabilityType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.Sphere.Models.SphereCapabilityType left, Azure.ResourceManager.Sphere.Models.SphereCapabilityType right) { throw null; }
         public static implicit operator Azure.ResourceManager.Sphere.Models.SphereCapabilityType (string value) { throw null; }
@@ -656,9 +656,7 @@ namespace Azure.ResourceManager.Sphere.Models
         public static Azure.ResourceManager.Sphere.Models.SphereCertificateStatus Inactive { get { throw null; } }
         public static Azure.ResourceManager.Sphere.Models.SphereCertificateStatus Revoked { get { throw null; } }
         public bool Equals(Azure.ResourceManager.Sphere.Models.SphereCertificateStatus other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.Sphere.Models.SphereCertificateStatus left, Azure.ResourceManager.Sphere.Models.SphereCertificateStatus right) { throw null; }
         public static implicit operator Azure.ResourceManager.Sphere.Models.SphereCertificateStatus (string value) { throw null; }
@@ -740,9 +738,7 @@ namespace Azure.ResourceManager.Sphere.Models
         public static Azure.ResourceManager.Sphere.Models.SphereImageType UpdateCertStore { get { throw null; } }
         public static Azure.ResourceManager.Sphere.Models.SphereImageType WifiFirmware { get { throw null; } }
         public bool Equals(Azure.ResourceManager.Sphere.Models.SphereImageType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.Sphere.Models.SphereImageType left, Azure.ResourceManager.Sphere.Models.SphereImageType right) { throw null; }
         public static implicit operator Azure.ResourceManager.Sphere.Models.SphereImageType (string value) { throw null; }
@@ -758,9 +754,7 @@ namespace Azure.ResourceManager.Sphere.Models
         public static Azure.ResourceManager.Sphere.Models.SphereOSFeedType Retail { get { throw null; } }
         public static Azure.ResourceManager.Sphere.Models.SphereOSFeedType RetailEval { get { throw null; } }
         public bool Equals(Azure.ResourceManager.Sphere.Models.SphereOSFeedType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.Sphere.Models.SphereOSFeedType left, Azure.ResourceManager.Sphere.Models.SphereOSFeedType right) { throw null; }
         public static implicit operator Azure.ResourceManager.Sphere.Models.SphereOSFeedType (string value) { throw null; }
@@ -792,9 +786,7 @@ namespace Azure.ResourceManager.Sphere.Models
         public static Azure.ResourceManager.Sphere.Models.SphereProvisioningState Succeeded { get { throw null; } }
         public static Azure.ResourceManager.Sphere.Models.SphereProvisioningState Updating { get { throw null; } }
         public bool Equals(Azure.ResourceManager.Sphere.Models.SphereProvisioningState other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.Sphere.Models.SphereProvisioningState left, Azure.ResourceManager.Sphere.Models.SphereProvisioningState right) { throw null; }
         public static implicit operator Azure.ResourceManager.Sphere.Models.SphereProvisioningState (string value) { throw null; }
@@ -810,9 +802,7 @@ namespace Azure.ResourceManager.Sphere.Models
         public static Azure.ResourceManager.Sphere.Models.SphereUpdatePolicy No3RdPartyAppUpdates { get { throw null; } }
         public static Azure.ResourceManager.Sphere.Models.SphereUpdatePolicy UpdateAll { get { throw null; } }
         public bool Equals(Azure.ResourceManager.Sphere.Models.SphereUpdatePolicy other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.Sphere.Models.SphereUpdatePolicy left, Azure.ResourceManager.Sphere.Models.SphereUpdatePolicy right) { throw null; }
         public static implicit operator Azure.ResourceManager.Sphere.Models.SphereUpdatePolicy (string value) { throw null; }

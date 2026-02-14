@@ -11,16 +11,29 @@ using System.Text.Json;
 
 namespace Azure.ResourceManager.Avs
 {
+    /// <summary></summary>
     public partial class WorkloadNetworkPublicIPResource : IJsonModel<WorkloadNetworkPublicIPData>
     {
+        private static IJsonModel<WorkloadNetworkPublicIPData> s_dataDeserializationInstance;
+
+        private static IJsonModel<WorkloadNetworkPublicIPData> DataDeserializationInstance => s_dataDeserializationInstance ??= new WorkloadNetworkPublicIPData();
+
+        /// <param name="writer"> The writer to serialize the model to. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
         void IJsonModel<WorkloadNetworkPublicIPData>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options) => ((IJsonModel<WorkloadNetworkPublicIPData>)Data).Write(writer, options);
 
-        WorkloadNetworkPublicIPData IJsonModel<WorkloadNetworkPublicIPData>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => ((IJsonModel<WorkloadNetworkPublicIPData>)Data).Create(ref reader, options);
+        /// <param name="reader"> The reader for deserializing the model. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
+        WorkloadNetworkPublicIPData IJsonModel<WorkloadNetworkPublicIPData>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => DataDeserializationInstance.Create(ref reader, options);
 
-        BinaryData IPersistableModel<WorkloadNetworkPublicIPData>.Write(ModelReaderWriterOptions options) => ModelReaderWriter.Write(Data, options);
+        /// <param name="options"> The client options for reading and writing models. </param>
+        BinaryData IPersistableModel<WorkloadNetworkPublicIPData>.Write(ModelReaderWriterOptions options) => ModelReaderWriter.Write<WorkloadNetworkPublicIPData>(Data, options, AzureResourceManagerAvsContext.Default);
 
-        WorkloadNetworkPublicIPData IPersistableModel<WorkloadNetworkPublicIPData>.Create(BinaryData data, ModelReaderWriterOptions options) => ModelReaderWriter.Read<WorkloadNetworkPublicIPData>(data, options);
+        /// <param name="data"> The binary data to be processed. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
+        WorkloadNetworkPublicIPData IPersistableModel<WorkloadNetworkPublicIPData>.Create(BinaryData data, ModelReaderWriterOptions options) => ModelReaderWriter.Read<WorkloadNetworkPublicIPData>(data, options, AzureResourceManagerAvsContext.Default);
 
-        string IPersistableModel<WorkloadNetworkPublicIPData>.GetFormatFromOptions(ModelReaderWriterOptions options) => ((IPersistableModel<WorkloadNetworkPublicIPData>)Data).GetFormatFromOptions(options);
+        /// <param name="options"> The client options for reading and writing models. </param>
+        string IPersistableModel<WorkloadNetworkPublicIPData>.GetFormatFromOptions(ModelReaderWriterOptions options) => DataDeserializationInstance.GetFormatFromOptions(options);
     }
 }

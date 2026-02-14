@@ -1,24 +1,23 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-extern alias DMBlobs;
 extern alias BaseBlobs;
-
+extern alias DMBlobs;
 using System;
-using System.Threading.Tasks;
-using Azure.Storage.Test;
-using Azure.Storage.Test.Shared;
-using Azure.Storage.DataMovement.Tests;
-using DMBlobs::Azure.Storage.DataMovement.Blobs;
-using BaseBlobs::Azure.Storage.Blobs;
-using BaseBlobs::Azure.Storage.Blobs.Specialized;
-using BaseBlobs::Azure.Storage.Blobs.Models;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using Azure.Core;
 using Azure.Core.TestFramework;
+using Azure.Storage.DataMovement.Tests;
+using Azure.Storage.Test;
+using Azure.Storage.Test.Shared;
+using BaseBlobs::Azure.Storage.Blobs;
+using BaseBlobs::Azure.Storage.Blobs.Models;
+using BaseBlobs::Azure.Storage.Blobs.Specialized;
+using DMBlobs::Azure.Storage.DataMovement.Blobs;
 using NUnit.Framework;
 using Metadata = System.Collections.Generic.IDictionary<string, string>;
-using System.Threading;
 
 namespace Azure.Storage.DataMovement.Blobs.Tests
 {
@@ -172,6 +171,7 @@ namespace Azure.Storage.DataMovement.Blobs.Tests
             {
                 options = new BlockBlobStorageResourceOptions
                 {
+                    AccessTier = default,
                     ContentDisposition = default,
                     ContentLanguage = default,
                     CacheControl = default,
@@ -211,7 +211,9 @@ namespace Azure.Storage.DataMovement.Blobs.Tests
                 Assert.IsNull(destinationProperties.ContentDisposition);
                 Assert.IsNull(destinationProperties.ContentLanguage);
                 Assert.IsNull(destinationProperties.CacheControl);
-                Assert.AreEqual(_defaultAccessTier.ToString(), destinationProperties.AccessTier);
+                // Because AccessTier is not preserved, the access tier value on the destination will
+                // default to what the storage account sets (normally AccessTier.Hot)
+                Assert.AreNotEqual(_defaultAccessTier.ToString(), destinationProperties.AccessTier);
                 Assert.That(destinationProperties.ContentType, Is.Not.EqualTo(_defaultContentType));
 
                 GetBlobTagResult destinationTags = await destinationClient.GetTagsAsync();

@@ -2,17 +2,17 @@
 // Licensed under the MIT License.
 
 using Azure.Projects.Core;
-using Azure.Projects.Storage;
 using Azure.Provisioning.EventGrid;
 using Azure.Provisioning.Expressions;
 using Azure.Provisioning.Resources;
 using Azure.Provisioning.Storage;
 
-namespace Azure.Projects.EventGrid;
+namespace Azure.Projects;
 
 internal class EventGridSystemTopicFeature : AzureProjectFeature
 {
-    internal const string EventGridTopicVersion = "2022-06-15";
+    internal static string EventGridTopicVersion =>
+        SystemTopic.ResourceVersions.V2022_06_15;
 
     public EventGridSystemTopicFeature(string topicName, StorageAccountFeature source, string topicType)
     {
@@ -21,7 +21,7 @@ internal class EventGridSystemTopicFeature : AzureProjectFeature
         Source = source;
     }
 
-    public string TopicName { get;  }
+    public string TopicName { get; }
     public string TopicType { get; }
     public StorageAccountFeature Source { get; }
 

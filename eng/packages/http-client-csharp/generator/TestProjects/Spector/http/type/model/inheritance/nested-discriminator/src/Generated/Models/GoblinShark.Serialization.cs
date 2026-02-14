@@ -8,13 +8,23 @@
 using System;
 using System.ClientModel.Primitives;
 using System.Text.Json;
-using Azure;
-using Azure.Core;
 
-namespace _Type.Model.Inheritance.NestedDiscriminator.Models
+namespace _Type.Model.Inheritance.NestedDiscriminator
 {
-    public partial class GoblinShark : IJsonModel<GoblinShark>
+    public partial class GoblinShark : Shark, IJsonModel<GoblinShark>
     {
+        internal GoblinShark() => throw null;
+
+        protected override Fish PersistableModelCreateCore(BinaryData data, ModelReaderWriterOptions options) => throw null;
+
+        protected override BinaryData PersistableModelWriteCore(ModelReaderWriterOptions options) => throw null;
+
+        BinaryData IPersistableModel<GoblinShark>.Write(ModelReaderWriterOptions options) => throw null;
+
+        GoblinShark IPersistableModel<GoblinShark>.Create(BinaryData data, ModelReaderWriterOptions options) => throw null;
+
+        string IPersistableModel<GoblinShark>.GetFormatFromOptions(ModelReaderWriterOptions options) => throw null;
+
         void IJsonModel<GoblinShark>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options) => throw null;
 
         protected override void JsonModelWriteCore(Utf8JsonWriter writer, ModelReaderWriterOptions options) => throw null;
@@ -22,20 +32,5 @@ namespace _Type.Model.Inheritance.NestedDiscriminator.Models
         GoblinShark IJsonModel<GoblinShark>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => throw null;
 
         protected override Fish JsonModelCreateCore(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => throw null;
-
-        BinaryData IPersistableModel<GoblinShark>.Write(ModelReaderWriterOptions options) => throw null;
-
-        protected override BinaryData PersistableModelWriteCore(ModelReaderWriterOptions options) => throw null;
-
-        GoblinShark IPersistableModel<GoblinShark>.Create(BinaryData data, ModelReaderWriterOptions options) => throw null;
-
-        protected override Fish PersistableModelCreateCore(BinaryData data, ModelReaderWriterOptions options) => throw null;
-
-        string IPersistableModel<GoblinShark>.GetFormatFromOptions(ModelReaderWriterOptions options) => throw null;
-
-        /// <param name="goblinShark"> The <see cref="GoblinShark"/> to serialize into <see cref="RequestContent"/>. </param>
-        public static implicit operator RequestContent(GoblinShark goblinShark) => throw null;
-
-        public static explicit operator GoblinShark(Response result) => throw null;
     }
 }

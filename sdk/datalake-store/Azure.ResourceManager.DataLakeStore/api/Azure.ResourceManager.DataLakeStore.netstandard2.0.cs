@@ -1,5 +1,11 @@
 namespace Azure.ResourceManager.DataLakeStore
 {
+    public partial class AzureResourceManagerDataLakeStoreContext : System.ClientModel.Primitives.ModelReaderWriterContext
+    {
+        internal AzureResourceManagerDataLakeStoreContext() { }
+        public static Azure.ResourceManager.DataLakeStore.AzureResourceManagerDataLakeStoreContext Default { get { throw null; } }
+        protected override bool TryGetTypeBuilderCore(System.Type type, out System.ClientModel.Primitives.ModelReaderWriterTypeBuilder builder) { throw null; }
+    }
     public partial class DataLakeStoreAccountCollection : Azure.ResourceManager.ArmCollection, System.Collections.Generic.IAsyncEnumerable<Azure.ResourceManager.DataLakeStore.Models.DataLakeStoreAccountBasicData>, System.Collections.Generic.IEnumerable<Azure.ResourceManager.DataLakeStore.Models.DataLakeStoreAccountBasicData>, System.Collections.IEnumerable
     {
         protected DataLakeStoreAccountCollection() { }
@@ -515,9 +521,7 @@ namespace Azure.ResourceManager.DataLakeStore.Models
         public DataLakeStoreResourceType(string value) { throw null; }
         public static Azure.ResourceManager.DataLakeStore.Models.DataLakeStoreResourceType MicrosoftDataLakeStoreAccounts { get { throw null; } }
         public bool Equals(Azure.ResourceManager.DataLakeStore.Models.DataLakeStoreResourceType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.DataLakeStore.Models.DataLakeStoreResourceType left, Azure.ResourceManager.DataLakeStore.Models.DataLakeStoreResourceType right) { throw null; }
         public static implicit operator Azure.ResourceManager.DataLakeStore.Models.DataLakeStoreResourceType (string value) { throw null; }
@@ -536,9 +540,7 @@ namespace Azure.ResourceManager.DataLakeStore.Models
         public static Azure.ResourceManager.DataLakeStore.Models.DataLakeStoreSubscriptionState Unregistered { get { throw null; } }
         public static Azure.ResourceManager.DataLakeStore.Models.DataLakeStoreSubscriptionState Warned { get { throw null; } }
         public bool Equals(Azure.ResourceManager.DataLakeStore.Models.DataLakeStoreSubscriptionState other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.DataLakeStore.Models.DataLakeStoreSubscriptionState left, Azure.ResourceManager.DataLakeStore.Models.DataLakeStoreSubscriptionState right) { throw null; }
         public static implicit operator Azure.ResourceManager.DataLakeStore.Models.DataLakeStoreSubscriptionState (string value) { throw null; }

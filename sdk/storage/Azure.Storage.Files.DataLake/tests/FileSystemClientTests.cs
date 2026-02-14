@@ -978,9 +978,13 @@ namespace Azure.Storage.Files.DataLake.Tests
             // Arrange
             await SetUpFileSystemForListing(test.FileSystem);
 
+            DataLakeGetPathsOptions options = new DataLakeGetPathsOptions
+            {
+                Recursive = true
+            };
+
             // Act
-            AsyncPageable<PathItem> response = test.FileSystem.GetPathsAsync(
-                recursive: true);
+            AsyncPageable<PathItem> response = test.FileSystem.GetPathsAsync(options);
             IList<PathItem> paths = await response.ToListAsync();
 
             // Assert
@@ -1004,9 +1008,13 @@ namespace Azure.Storage.Files.DataLake.Tests
             // Arrange
             await SetUpFileSystemForListing(test.FileSystem);
 
+            DataLakeGetPathsOptions options = new DataLakeGetPathsOptions
+            {
+                UserPrincipalName = true
+            };
+
             // Act
-            AsyncPageable<PathItem> response = test.FileSystem.GetPathsAsync(
-                userPrincipalName: true);
+            AsyncPageable<PathItem> response = test.FileSystem.GetPathsAsync(options);
             ;
             IList<PathItem> paths = await response.ToListAsync();
 
@@ -1028,9 +1036,13 @@ namespace Azure.Storage.Files.DataLake.Tests
             // Arrange
             await SetUpFileSystemForListing(test.FileSystem);
 
+            DataLakeGetPathsOptions options = new DataLakeGetPathsOptions
+            {
+                Path = "foo"
+            };
+
             // Act
-            AsyncPageable<PathItem> response = test.FileSystem.GetPathsAsync(
-                path: "foo");
+            AsyncPageable<PathItem> response = test.FileSystem.GetPathsAsync(options);
             IList<PathItem> paths = await response.ToListAsync();
 
             // Assert
@@ -1142,6 +1154,28 @@ namespace Azure.Storage.Files.DataLake.Tests
             Assert.NotNull(paths[0].CreatedOn);
             Assert.NotNull(paths[1].CreatedOn);
             Assert.NotNull(paths[2].CreatedOn);
+        }
+
+        [RecordedTest]
+        public async Task GetPathsAsync_BeginFrom()
+        {
+            await using DisposingFileSystem test = await GetNewFileSystem();
+
+            // Arrange
+            await SetUpFileSystemForListing(test.FileSystem);
+
+            DataLakeGetPathsOptions options = new DataLakeGetPathsOptions
+            {
+                Recursive = true,
+                StartFrom = "foo"
+            };
+
+            // Act
+            AsyncPageable<PathItem> response = test.FileSystem.GetPathsAsync(options);
+            IList<PathItem> paths = await response.ToListAsync();
+
+            // Assert
+            Assert.AreEqual(3, paths.Count);
         }
 
         [RecordedTest]
@@ -2819,9 +2853,8 @@ namespace Azure.Storage.Files.DataLake.Tests
             Assert.AreEqual(blobUri, dataLakeUriBuilder.ToUri());
         }
 
-        [Test]
+        [RecordedTest]
         [ServiceVersion(Min = DataLakeClientOptions.ServiceVersion.V2020_06_12)]
-        [PlaybackOnly("https://github.com/Azure/azure-sdk-for-net/issues/20923")]
         public async Task GetDeletedPathsAsync()
         {
             // Arrange
@@ -2861,9 +2894,8 @@ namespace Azure.Storage.Files.DataLake.Tests
             Assert.IsNotNull(paths[1].RemainingRetentionDays);
         }
 
-        [Test]
+        [RecordedTest]
         [ServiceVersion(Min = DataLakeClientOptions.ServiceVersion.V2020_06_12)]
-        [PlaybackOnly("https://github.com/Azure/azure-sdk-for-net/issues/20923")]
         public async Task GetDeletedPathsAsync_Path()
         {
             // Arrange
@@ -2890,9 +2922,8 @@ namespace Azure.Storage.Files.DataLake.Tests
             Assert.AreEqual($"{directoryName}/{fileName}", paths[0].Path);
         }
 
-        [Test]
+        [RecordedTest]
         [ServiceVersion(Min = DataLakeClientOptions.ServiceVersion.V2020_06_12)]
-        [PlaybackOnly("https://github.com/Azure/azure-sdk-for-net/issues/20923")]
         public async Task GetDeletedPathsAsync_Error()
         {
             // Arrange
@@ -2905,9 +2936,8 @@ namespace Azure.Storage.Files.DataLake.Tests
                 e => Assert.AreEqual("ContainerNotFound", e.ErrorCode));
         }
 
-        [Test]
+        [RecordedTest]
         [ServiceVersion(Min = DataLakeClientOptions.ServiceVersion.V2020_06_12)]
-        [PlaybackOnly("https://github.com/Azure/azure-sdk-for-net/issues/20923")]
         public async Task UndeletePathAsync()
         {
             // Arrange
@@ -2931,9 +2961,8 @@ namespace Azure.Storage.Files.DataLake.Tests
             await restoredPathClient.GetPropertiesAsync();
         }
 
-        [Test]
+        [RecordedTest]
         [ServiceVersion(Min = DataLakeClientOptions.ServiceVersion.V2020_06_12)]
-        [PlaybackOnly("https://github.com/Azure/azure-sdk-for-net/issues/20923")]
         public async Task UndeletePathAsync_Error()
         {
             // Arrange
@@ -2948,13 +2977,12 @@ namespace Azure.Storage.Files.DataLake.Tests
                 e => Assert.AreEqual("ContainerNotFound", e.ErrorCode));
         }
 
-        [Test]
+        [RecordedTest]
         [TestCase("!'();[]@&%=+$,#äÄöÖüÜß;")]
         [TestCase("%21%27%28%29%3B%5B%5D%40%26%25%3D%2B%24%2C%23äÄöÖüÜß%3B")]
         [TestCase(" my cool directory ")]
         [TestCase("directory")]
         [ServiceVersion(Min = DataLakeClientOptions.ServiceVersion.V2020_06_12)]
-        [PlaybackOnly("https://github.com/Azure/azure-sdk-for-net/issues/20923")]
         public async Task UndeletePathAsync_SpecialCharacters(string directoryName)
         {
             // Arrange
@@ -3399,9 +3427,9 @@ namespace Azure.Storage.Files.DataLake.Tests
                 GetOptions()));
 
             string stringToSign = null;
+            DataLakeGetUserDelegationKeyOptions getUserDelegationKeyOptions = new DataLakeGetUserDelegationKeyOptions(expiresOn: Recording.UtcNow.AddHours(1));
             Response<UserDelegationKey> userDelegationKeyResponse = await GetServiceClient_OAuth().GetUserDelegationKeyAsync(
-                startsOn: null,
-                expiresOn: Recording.UtcNow.AddHours(1));
+                options: getUserDelegationKeyOptions);
             UserDelegationKey userDelegationKey = userDelegationKeyResponse.Value;
 
             // Act
@@ -3445,9 +3473,9 @@ namespace Azure.Storage.Files.DataLake.Tests
             };
 
             string stringToSign = null;
+            DataLakeGetUserDelegationKeyOptions getUserDelegationKeyOptions = new DataLakeGetUserDelegationKeyOptions(expiresOn: Recording.UtcNow.AddHours(1));
             Response<UserDelegationKey> userDelegationKeyResponse = await GetServiceClient_OAuth().GetUserDelegationKeyAsync(
-                startsOn: null,
-                expiresOn: Recording.UtcNow.AddHours(1));
+                options: getUserDelegationKeyOptions);
             UserDelegationKey userDelegationKey = userDelegationKeyResponse.Value;
 
             // Act
@@ -3485,9 +3513,9 @@ namespace Azure.Storage.Files.DataLake.Tests
                 GetOptions()));
 
             string stringToSign = null;
+            DataLakeGetUserDelegationKeyOptions getUserDelegationKeyOptions = new DataLakeGetUserDelegationKeyOptions(expiresOn: Recording.UtcNow.AddHours(1));
             Response<UserDelegationKey> userDelegationKeyResponse = await GetServiceClient_OAuth().GetUserDelegationKeyAsync(
-                startsOn: null,
-                expiresOn: Recording.UtcNow.AddHours(1));
+                options: getUserDelegationKeyOptions);
             UserDelegationKey userDelegationKey = userDelegationKeyResponse.Value;
 
             // Act
@@ -3550,9 +3578,9 @@ namespace Azure.Storage.Files.DataLake.Tests
                 FileSystemName = null
             };
 
+            DataLakeGetUserDelegationKeyOptions getUserDelegationKeyOptions = new DataLakeGetUserDelegationKeyOptions(expiresOn: Recording.UtcNow.AddHours(1));
             Response<UserDelegationKey> userDelegationKeyResponse = await GetServiceClient_OAuth().GetUserDelegationKeyAsync(
-                startsOn: null,
-                expiresOn: Recording.UtcNow.AddHours(1));
+                options: getUserDelegationKeyOptions);
             UserDelegationKey userDelegationKey = userDelegationKeyResponse.Value;
 
             // Act
@@ -3596,9 +3624,9 @@ namespace Azure.Storage.Files.DataLake.Tests
                 FileSystemName = GetNewFileSystemName(), // different filesytem name
             };
 
+            DataLakeGetUserDelegationKeyOptions getUserDelegationKeyOptions = new DataLakeGetUserDelegationKeyOptions(expiresOn: Recording.UtcNow.AddHours(1));
             Response<UserDelegationKey> userDelegationKeyResponse = await GetServiceClient_OAuth().GetUserDelegationKeyAsync(
-                startsOn: null,
-                expiresOn: Recording.UtcNow.AddHours(1));
+                options: getUserDelegationKeyOptions);
             UserDelegationKey userDelegationKey = userDelegationKeyResponse.Value;
 
             // Act
@@ -3632,9 +3660,9 @@ namespace Azure.Storage.Files.DataLake.Tests
                 Path = GetNewFileName()
             };
 
+            DataLakeGetUserDelegationKeyOptions getUserDelegationKeyOptions = new DataLakeGetUserDelegationKeyOptions(expiresOn: Recording.UtcNow.AddHours(1));
             Response<UserDelegationKey> userDelegationKeyResponse = await GetServiceClient_OAuth().GetUserDelegationKeyAsync(
-                startsOn: null,
-                expiresOn: Recording.UtcNow.AddHours(1));
+                options: getUserDelegationKeyOptions);
             UserDelegationKey userDelegationKey = userDelegationKeyResponse.Value;
 
             // Act

@@ -1,3 +1,4 @@
-directory: specification/cognitiveservices/Language.AnalyzeText-authoring
-commit: e0c1c7b9c5be9f404c7c78edaa4fe4a6bc71eb32
+directory: specification/cognitiveservices/data-plane/LanguageAnalyzeTextAuthoring
+commit: 868cc52b339152e9a11f642f20aaeb246872ddf9
 repo: Azure/azure-rest-api-specs
+emitterPackageJsonPath: eng/azure-typespec-http-client-csharp-emitter-package.json

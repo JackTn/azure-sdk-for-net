@@ -1,5 +1,11 @@
 namespace Azure.ResourceManager.StoragePool
 {
+    public partial class AzureResourceManagerStoragePoolContext : System.ClientModel.Primitives.ModelReaderWriterContext
+    {
+        internal AzureResourceManagerStoragePoolContext() { }
+        public static Azure.ResourceManager.StoragePool.AzureResourceManagerStoragePoolContext Default { get { throw null; } }
+        protected override bool TryGetTypeBuilderCore(System.Type type, out System.ClientModel.Primitives.ModelReaderWriterTypeBuilder builder) { throw null; }
+    }
     public partial class DiskPoolCollection : Azure.ResourceManager.ArmCollection, System.Collections.Generic.IAsyncEnumerable<Azure.ResourceManager.StoragePool.DiskPoolResource>, System.Collections.Generic.IEnumerable<Azure.ResourceManager.StoragePool.DiskPoolResource>, System.Collections.IEnumerable
     {
         protected DiskPoolCollection() { }
@@ -219,9 +225,7 @@ namespace Azure.ResourceManager.StoragePool.Models
         public static Azure.ResourceManager.StoragePool.Models.DiskPoolIscsiTargetAclMode Dynamic { get { throw null; } }
         public static Azure.ResourceManager.StoragePool.Models.DiskPoolIscsiTargetAclMode Static { get { throw null; } }
         public bool Equals(Azure.ResourceManager.StoragePool.Models.DiskPoolIscsiTargetAclMode other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.StoragePool.Models.DiskPoolIscsiTargetAclMode left, Azure.ResourceManager.StoragePool.Models.DiskPoolIscsiTargetAclMode right) { throw null; }
         public static implicit operator Azure.ResourceManager.StoragePool.Models.DiskPoolIscsiTargetAclMode (string value) { throw null; }
@@ -285,9 +289,7 @@ namespace Azure.ResourceManager.StoragePool.Models
         public static Azure.ResourceManager.StoragePool.Models.DiskPoolIscsiTargetProvisioningState Succeeded { get { throw null; } }
         public static Azure.ResourceManager.StoragePool.Models.DiskPoolIscsiTargetProvisioningState Updating { get { throw null; } }
         public bool Equals(Azure.ResourceManager.StoragePool.Models.DiskPoolIscsiTargetProvisioningState other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.StoragePool.Models.DiskPoolIscsiTargetProvisioningState left, Azure.ResourceManager.StoragePool.Models.DiskPoolIscsiTargetProvisioningState right) { throw null; }
         public static implicit operator Azure.ResourceManager.StoragePool.Models.DiskPoolIscsiTargetProvisioningState (string value) { throw null; }
@@ -376,9 +378,7 @@ namespace Azure.ResourceManager.StoragePool.Models
         public static Azure.ResourceManager.StoragePool.Models.StoragePoolOperationalStatus Unknown { get { throw null; } }
         public static Azure.ResourceManager.StoragePool.Models.StoragePoolOperationalStatus Updating { get { throw null; } }
         public bool Equals(Azure.ResourceManager.StoragePool.Models.StoragePoolOperationalStatus other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.StoragePool.Models.StoragePoolOperationalStatus left, Azure.ResourceManager.StoragePool.Models.StoragePoolOperationalStatus right) { throw null; }
         public static implicit operator Azure.ResourceManager.StoragePool.Models.StoragePoolOperationalStatus (string value) { throw null; }

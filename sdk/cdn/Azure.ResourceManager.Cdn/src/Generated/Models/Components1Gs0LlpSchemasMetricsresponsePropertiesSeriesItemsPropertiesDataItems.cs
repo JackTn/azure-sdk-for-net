@@ -62,8 +62,10 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> Gets the date on. </summary>
+        [WirePath("dateTime")]
         public DateTimeOffset? DateOn { get; }
         /// <summary> Gets the value. </summary>
+        [WirePath("value")]
         public float? Value { get; }
     }
 }

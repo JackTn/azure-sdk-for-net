@@ -4,19 +4,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Azure.Storage.Test;
-using Azure.Storage.Queues.Models;
-using Azure.Storage.Queues.Tests;
-using NUnit.Framework;
-using Azure.Core;
-using Azure.Storage.Sas;
 using System.Text;
-using Moq;
-using Azure.Storage.Queues.Specialized;
-using Moq.Protected;
+using System.Threading;
+using System.Threading.Tasks;
+using Azure.Core;
 using Azure.Core.TestFramework;
 using Azure.Identity;
+using Azure.Storage.Queues.Models;
+using Azure.Storage.Queues.Specialized;
+using Azure.Storage.Queues.Tests;
+using Azure.Storage.Sas;
+using Azure.Storage.Test;
+using Moq;
+using Moq.Protected;
+using NUnit.Framework;
 
 namespace Azure.Storage.Queues.Test
 {
@@ -636,6 +637,54 @@ namespace Azure.Storage.Queues.Test
 
             // Assert
             Assert.IsNotNull(queueProperties);
+        }
+
+        [TestCase(0)]
+        [TestCase(5)]
+        [TestCase(12)]
+        [RecordedTest]
+        public async Task GetPropertiesAsync_ApproximateMessagesCountLong(int messageCount)
+        {
+            // Arrange
+            await using DisposingQueue test = await GetTestQueueAsync();
+
+            // Act
+            for (int i = 0; i < messageCount; i++)
+            {
+                await test.Queue.SendMessageAsync($"Message {i + 1}");
+            }
+
+            Response<Models.QueueProperties> queueProperties = await test.Queue.GetPropertiesAsync();
+
+            // Assert
+            Assert.IsNotNull(queueProperties);
+            Assert.AreEqual(messageCount, queueProperties.Value.ApproximateMessagesCount);
+            Assert.AreEqual(messageCount, queueProperties.Value.ApproximateMessagesCountLong);
+        }
+
+        [RecordedTest]
+        public async Task GetPropertiesAsync_ApproximateMessagesCountOverflow()
+        {
+            // Arrange
+            var mockQueue = new Mock<QueueClient>();
+            var mockResponse = new Mock<Response<Models.QueueProperties>>();
+
+            long msgCount = long.MaxValue;
+            var queueProperties = new Models.QueueProperties()
+            {
+                ApproximateMessagesCountLong = msgCount
+            };
+
+            mockResponse.Setup(r => r.Value).Returns(queueProperties);
+            mockQueue.Setup(q => q.GetPropertiesAsync(It.IsAny<CancellationToken>())).ReturnsAsync(mockResponse.Object);
+
+            // Act
+            var result = await mockQueue.Object.GetPropertiesAsync();
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.AreEqual(msgCount, result.Value.ApproximateMessagesCountLong);
+            Assert.DoesNotThrow(() => _ = result.Value.ApproximateMessagesCount);
         }
 
         [RecordedTest]
@@ -1842,7 +1891,7 @@ namespace Azure.Storage.Queues.Test
             string stringToSign = null;
 
             // Act
-            Uri sasUri =  queueClient.GenerateSasUri(permissions, expiresOn, out stringToSign);
+            Uri sasUri = queueClient.GenerateSasUri(permissions, expiresOn, out stringToSign);
 
             // Assert
             QueueSasBuilder sasBuilder = new QueueSasBuilder(permissions, expiresOn)

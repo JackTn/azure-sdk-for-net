@@ -10,11 +10,12 @@ pr:
       - eng/CredScanSuppression.json
 
 pool:
-  name: azsdk-pool-mms-win-2022-general
-  vmImage: windows-2022
+  name: $(WINDOWSPOOL)
+  demands: ImageOverride -equals $(WINDOWSVMIMAGE)
 
 variables:
   - template: templates/variables/globals.yml
+  - template: templates/variables/image.yml
 
 stages:
   - stage: AggregateReports
@@ -36,9 +37,11 @@ stages:
                 -NupkgFilesDestination 'nupkgFiles'
 
           - pwsh: |
+              $files = Get-ChildItem -Path "sdk/*/*/api/*.cs" -File
+              Write-Host "Found $($files.Count) public API surface files to spell check."
               ."eng/common/spelling/Invoke-Cspell.ps1" `
                 -CSpellConfigPath "./.vscode/cspell.json" `
-                -ScanGlobs "sdk/*/*/api/*.cs"
+                -FileList $files.FullName
             displayName: Check spelling of public API surface
             # Spelling errors in public api surface are not blockers yet but will
             # become blockers when this is rolled out to all services. For now, turn
@@ -144,15 +147,12 @@ stages:
     jobs:
       - job: ComplianceTools
         timeoutInMinutes: 120
+
         steps:
           - template: /eng/common/pipelines/templates/steps/policheck.yml
             parameters:
               ExclusionDataBaseFileName: "DotNetPoliCheckExclusion"
               PublishAnalysisLogs: false
-
-          - template: /eng/common/pipelines/templates/steps/credscan.yml
-            parameters:
-              BaselineFilePath: $(Build.sourcesdirectory)/eng/dotnet.gdnbaselines
 
       - job: APIScan
         timeoutInMinutes: 180

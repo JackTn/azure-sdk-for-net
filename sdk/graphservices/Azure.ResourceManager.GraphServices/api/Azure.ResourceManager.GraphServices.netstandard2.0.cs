@@ -1,5 +1,11 @@
 namespace Azure.ResourceManager.GraphServices
 {
+    public partial class AzureResourceManagerGraphServicesContext : System.ClientModel.Primitives.ModelReaderWriterContext
+    {
+        internal AzureResourceManagerGraphServicesContext() { }
+        public static Azure.ResourceManager.GraphServices.AzureResourceManagerGraphServicesContext Default { get { throw null; } }
+        protected override bool TryGetTypeBuilderCore(System.Type type, out System.ClientModel.Primitives.ModelReaderWriterTypeBuilder builder) { throw null; }
+    }
     public partial class GraphServicesAccountResource : Azure.ResourceManager.ArmResource, System.ClientModel.Primitives.IJsonModel<Azure.ResourceManager.GraphServices.GraphServicesAccountResourceData>, System.ClientModel.Primitives.IPersistableModel<Azure.ResourceManager.GraphServices.GraphServicesAccountResourceData>
     {
         public static readonly Azure.Core.ResourceType ResourceType;
@@ -124,9 +130,7 @@ namespace Azure.ResourceManager.GraphServices.Models
         public static Azure.ResourceManager.GraphServices.Models.GraphServicesProvisioningState Failed { get { throw null; } }
         public static Azure.ResourceManager.GraphServices.Models.GraphServicesProvisioningState Succeeded { get { throw null; } }
         public bool Equals(Azure.ResourceManager.GraphServices.Models.GraphServicesProvisioningState other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.GraphServices.Models.GraphServicesProvisioningState left, Azure.ResourceManager.GraphServices.Models.GraphServicesProvisioningState right) { throw null; }
         public static implicit operator Azure.ResourceManager.GraphServices.Models.GraphServicesProvisioningState (string value) { throw null; }

@@ -2,14 +2,45 @@
 // Licensed under the MIT License.
 
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure.Core;
+using Azure.Core.Pipeline;
 
 namespace Azure.Developer.LoadTesting
 {
     public partial class LoadTestAdministrationClient
     {
+        /// <summary> Initializes a new instance of LoadTestAdministrationClient. </summary>
+        /// <param name="endpoint"></param>
+        /// <param name="credential"> A credential used to authenticate to the service. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="endpoint"/> or <paramref name="credential"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="endpoint"/> is an empty string, and was expected to be non-empty. </exception>
+        public LoadTestAdministrationClient(Uri endpoint, TokenCredential credential) : this(endpoint, credential, new LoadTestingClientOptions())
+        {
+        }
+
+        /// <summary> Initializes a new instance of LoadTestAdministrationClient. </summary>
+        /// <param name="endpoint"></param>
+        /// <param name="credential"> A credential used to authenticate to the service. </param>
+        /// <param name="options"> The options for configuring the client. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="endpoint"/> or <paramref name="credential"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="endpoint"/> is an empty string, and was expected to be non-empty. </exception>
+        public LoadTestAdministrationClient(Uri endpoint, TokenCredential credential, LoadTestingClientOptions options)
+        {
+            Argument.AssertNotNull(endpoint, nameof(endpoint));
+            Argument.AssertNotNull(credential, nameof(credential));
+
+            options ??= new LoadTestingClientOptions();
+
+            _endpoint = endpoint;
+            _tokenCredential = credential;
+            Pipeline = HttpPipelineBuilder.Build(options, new HttpPipelinePolicy[] { new BearerTokenAuthenticationPolicy(_tokenCredential, AuthorizationScopes) });
+            _apiVersion = options.Version;
+            ClientDiagnostics = new ClientDiagnostics(options, true);
+        }
+
         /// <summary> Upload input file for a given test name. File size can&apos;t be more than 50 MB. Existing file with same name for the given test will be overwritten. File should be provided in the request body as application/octet-stream. </summary>
         /// <param name="waitUntil"> Defines how to use the LRO, if passed WaitUntil.Completed then waits for complete file validation</param>
         /// <param name="testId"> Unique name for the load test, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
@@ -104,12 +135,16 @@ namespace Azure.Developer.LoadTesting
         /// <param name="context"> The request context, which can override default behaviors of the client pipeline on a per-call basis. </param>
         /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
         /// <returns> The <see cref="AsyncPageable{T}"/> from the service containing a list of <see cref="BinaryData"/> objects. Details of the body schema for each item in the collection are in the Remarks section below. </returns>
-        /// <include file="Generated/Docs/LoadTestAdministrationClient.xml" path="doc/members/member[@name='GetTestsAsync(String,String,DateTimeOffset,DateTimeOffset,Int32,RequestContext)']/*" />
-        public virtual AsyncPageable<BinaryData> GetTestsAsync(string orderby = null, string search = null, DateTimeOffset? lastModifiedStartTime = null, DateTimeOffset? lastModifiedEndTime = null, RequestContext context = null)
+        public virtual AsyncPageable<BinaryData> GetTestsAsync(string orderby, string search, DateTimeOffset? lastModifiedStartTime, DateTimeOffset? lastModifiedEndTime, RequestContext context)
         {
-            HttpMessage FirstPageRequest(int? pageSizeHint) => CreateGetTestsRequest(orderby, search, lastModifiedStartTime, lastModifiedEndTime, pageSizeHint, context);
-            HttpMessage NextPageRequest(int? pageSizeHint, string nextLink) => CreateGetTestsNextPageRequest(nextLink, orderby, search, lastModifiedStartTime, lastModifiedEndTime, pageSizeHint, context);
-            return PageableHelpers.CreateAsyncPageable(FirstPageRequest, NextPageRequest, e => BinaryData.FromString(e.GetRawText()), ClientDiagnostics, _pipeline, "LoadTestAdministrationClient.GetTests", "value", "nextLink", context);
+            return new LoadTestAdministrationClientGetTestsAsyncCollectionResult(
+                this,
+                orderby,
+                search,
+                lastModifiedStartTime,
+                lastModifiedEndTime,
+                null,
+                context);
         }
 
         /// <summary> Get all load tests by the fully qualified resource Id e.g subscriptions/{subId}/resourceGroups/{rg}/providers/Microsoft.LoadTestService/loadtests/{resName}. </summary>
@@ -120,12 +155,178 @@ namespace Azure.Developer.LoadTesting
         /// <param name="context"> The request context, which can override default behaviors of the client pipeline on a per-call basis. </param>
         /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
         /// <returns> The <see cref="Pageable{T}"/> from the service containing a list of <see cref="BinaryData"/> objects. Details of the body schema for each item in the collection are in the Remarks section below. </returns>
-        /// <include file="Generated/Docs/LoadTestAdministrationClient.xml" path="doc/members/member[@name='GetTests(String,String,DateTimeOffset,DateTimeOffset,Int32,RequestContext)']/*" />
-        public virtual Pageable<BinaryData> GetTests(string orderby = null, string search = null, DateTimeOffset? lastModifiedStartTime = null, DateTimeOffset? lastModifiedEndTime = null, RequestContext context = null)
+        public virtual Pageable<BinaryData> GetTests(string orderby, string search, DateTimeOffset? lastModifiedStartTime, DateTimeOffset? lastModifiedEndTime, RequestContext context)
         {
-            HttpMessage FirstPageRequest(int? pageSizeHint) => CreateGetTestsRequest(orderby, search, lastModifiedStartTime, lastModifiedEndTime, pageSizeHint, context);
-            HttpMessage NextPageRequest(int? pageSizeHint, string nextLink) => CreateGetTestsNextPageRequest(nextLink, orderby, search, lastModifiedStartTime, lastModifiedEndTime, pageSizeHint, context);
-            return PageableHelpers.CreatePageable(FirstPageRequest, NextPageRequest, e => BinaryData.FromString(e.GetRawText()), ClientDiagnostics, _pipeline, "LoadTestAdministrationClient.GetTests", "value", "nextLink", context);
+            return new LoadTestAdministrationClientGetTestsCollectionResult(
+                this,
+                orderby,
+                search,
+                lastModifiedStartTime,
+                lastModifiedEndTime,
+                null,
+                context);
+        }
+
+        /// <summary>
+        /// Get all load tests by the fully qualified resource Id e.g
+        /// subscriptions/{subId}/resourceGroups/{rg}/providers/Microsoft.LoadTestService/loadtests/{resName}.
+        /// </summary>
+        /// <param name="orderby">
+        /// Sort on the supported fields in (field asc/desc) format. eg:
+        /// lastModifiedDateTime asc. Supported fields - lastModifiedDateTime
+        /// </param>
+        /// <param name="search">
+        /// Prefix based, case sensitive search on searchable fields - displayName,
+        /// createdBy. For example, to search for a test, with display name is Login Test,
+        /// the search parameter can be Login.
+        /// </param>
+        /// <param name="lastModifiedStartTime"> Start DateTime(RFC 3339 literal format) of the last updated time range to filter tests. </param>
+        /// <param name="lastModifiedEndTime"> End DateTime(RFC 3339 literal format) of the last updated time range to filter tests. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        public virtual AsyncPageable<LoadTest> GetTestsAsync(string orderby = null, string search = null, DateTimeOffset? lastModifiedStartTime = null, DateTimeOffset? lastModifiedEndTime = null, CancellationToken cancellationToken = default)
+        {
+            return new LoadTestAdministrationClientGetTestsAsyncCollectionResultOfT(
+                this,
+                orderby,
+                search,
+                lastModifiedStartTime,
+                lastModifiedEndTime,
+                null,
+                cancellationToken.ToRequestContext());
+        }
+
+        /// <summary>
+        /// Get all load tests by the fully qualified resource Id e.g
+        /// subscriptions/{subId}/resourceGroups/{rg}/providers/Microsoft.LoadTestService/loadtests/{resName}.
+        /// </summary>
+        /// <param name="orderby">
+        /// Sort on the supported fields in (field asc/desc) format. eg:
+        /// lastModifiedDateTime asc. Supported fields - lastModifiedDateTime
+        /// </param>
+        /// <param name="search">
+        /// Prefix based, case sensitive search on searchable fields - displayName,
+        /// createdBy. For example, to search for a test, with display name is Login Test,
+        /// the search parameter can be Login.
+        /// </param>
+        /// <param name="lastModifiedStartTime"> Start DateTime(RFC 3339 literal format) of the last updated time range to filter tests. </param>
+        /// <param name="lastModifiedEndTime"> End DateTime(RFC 3339 literal format) of the last updated time range to filter tests. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        public virtual Pageable<LoadTest> GetTests(string orderby = null, string search = null, DateTimeOffset? lastModifiedStartTime = null, DateTimeOffset? lastModifiedEndTime = null, CancellationToken cancellationToken = default)
+        {
+            return new LoadTestAdministrationClientGetTestsCollectionResultOfT(
+                this,
+                orderby,
+                search,
+                lastModifiedStartTime,
+                lastModifiedEndTime,
+                null,
+                cancellationToken.ToRequestContext());
+        }
+
+        /// <summary> List test profiles. </summary>
+        /// <param name="lastModifiedStartTime"> Start DateTime(RFC 3339 literal format) of the last updated time range to filter test profiles. </param>
+        /// <param name="lastModifiedEndTime"> End DateTime(RFC 3339 literal format) of the last updated time range to filter test profiles. </param>
+        /// <param name="testProfileIds"> Comma separated list of IDs of the test profiles to filter. </param>
+        /// <param name="testIds"> Comma separated list IDs of the tests which should be associated with the test profiles to fetch. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <remarks> Get all test profiles for the given filters. </remarks>
+        public virtual AsyncPageable<TestProfile> GetTestProfilesAsync(DateTimeOffset? lastModifiedStartTime = null, DateTimeOffset? lastModifiedEndTime = null, IEnumerable<string> testProfileIds = null, IEnumerable<string> testIds = null, CancellationToken cancellationToken = default)
+        {
+            return new LoadTestAdministrationClientGetTestProfilesAsyncCollectionResultOfT(
+                this,
+                null,
+                lastModifiedStartTime,
+                lastModifiedEndTime,
+                testProfileIds,
+                testIds,
+                cancellationToken.ToRequestContext());
+        }
+
+        /// <summary> List test profiles. </summary>
+        /// <param name="lastModifiedStartTime"> Start DateTime(RFC 3339 literal format) of the last updated time range to filter test profiles. </param>
+        /// <param name="lastModifiedEndTime"> End DateTime(RFC 3339 literal format) of the last updated time range to filter test profiles. </param>
+        /// <param name="testProfileIds"> Comma separated list of IDs of the test profiles to filter. </param>
+        /// <param name="testIds"> Comma separated list IDs of the tests which should be associated with the test profiles to fetch. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <remarks> Get all test profiles for the given filters. </remarks>
+        public virtual Pageable<TestProfile> GetTestProfiles(DateTimeOffset? lastModifiedStartTime = null, DateTimeOffset? lastModifiedEndTime = null, IEnumerable<string> testProfileIds = null, IEnumerable<string> testIds = null, CancellationToken cancellationToken = default)
+        {
+            return new LoadTestAdministrationClientGetTestProfilesCollectionResultOfT(
+                this,
+                null,
+                lastModifiedStartTime,
+                lastModifiedEndTime,
+                testProfileIds,
+                testIds,
+                cancellationToken.ToRequestContext());
+        }
+
+        /// <summary>
+        /// [Protocol Method] List test profiles.
+        /// <list type="bullet">
+        /// <item>
+        /// <description>
+        /// This <see href="https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/ProtocolMethods.md">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios.
+        /// </description>
+        /// </item>
+        /// <item>
+        /// <description>
+        /// Please try the simpler <see cref="GetTestProfilesAsync(DateTimeOffset?,DateTimeOffset?,IEnumerable{string},IEnumerable{string},CancellationToken)"/> convenience overload with strongly typed models first.
+        /// </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="lastModifiedStartTime"> Start DateTime(RFC 3339 literal format) of the last updated time range to filter test profiles. </param>
+        /// <param name="lastModifiedEndTime"> End DateTime(RFC 3339 literal format) of the last updated time range to filter test profiles. </param>
+        /// <param name="testProfileIds"> Comma separated list of IDs of the test profiles to filter. </param>
+        /// <param name="testIds"> Comma separated list IDs of the tests which should be associated with the test profiles to fetch. </param>
+        /// <param name="context"> The request context, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        /// <returns> The <see cref="AsyncPageable{T}"/> from the service containing a list of <see cref="BinaryData"/> objects. Details of the body schema for each item in the collection are in the Remarks section below. </returns>
+        public virtual AsyncPageable<BinaryData> GetTestProfilesAsync(DateTimeOffset? lastModifiedStartTime, DateTimeOffset? lastModifiedEndTime, IEnumerable<string> testProfileIds, IEnumerable<string> testIds, RequestContext context)
+        {
+            return new LoadTestAdministrationClientGetTestProfilesAsyncCollectionResult(
+                this,
+                null,
+                lastModifiedStartTime,
+                lastModifiedEndTime,
+                testProfileIds,
+                testIds,
+                context);
+        }
+
+        /// <summary>
+        /// [Protocol Method] List test profiles.
+        /// <list type="bullet">
+        /// <item>
+        /// <description>
+        /// This <see href="https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/ProtocolMethods.md">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios.
+        /// </description>
+        /// </item>
+        /// <item>
+        /// <description>
+        /// Please try the simpler <see cref="GetTestProfiles(DateTimeOffset?,DateTimeOffset?,IEnumerable{string},IEnumerable{string},CancellationToken)"/> convenience overload with strongly typed models first.
+        /// </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="lastModifiedStartTime"> Start DateTime(RFC 3339 literal format) of the last updated time range to filter test profiles. </param>
+        /// <param name="lastModifiedEndTime"> End DateTime(RFC 3339 literal format) of the last updated time range to filter test profiles. </param>
+        /// <param name="testProfileIds"> Comma separated list of IDs of the test profiles to filter. </param>
+        /// <param name="testIds"> Comma separated list IDs of the tests which should be associated with the test profiles to fetch. </param>
+        /// <param name="context"> The request context, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        /// <returns> The <see cref="Pageable{T}"/> from the service containing a list of <see cref="BinaryData"/> objects. Details of the body schema for each item in the collection are in the Remarks section below. </returns>
+        public virtual Pageable<BinaryData> GetTestProfiles(DateTimeOffset? lastModifiedStartTime, DateTimeOffset? lastModifiedEndTime, IEnumerable<string> testProfileIds, IEnumerable<string> testIds, RequestContext context)
+        {
+            return new LoadTestAdministrationClientGetTestProfilesCollectionResult(
+                this,
+                null,
+                lastModifiedStartTime,
+                lastModifiedEndTime,
+                testProfileIds,
+                testIds,
+                context);
         }
     }
 }

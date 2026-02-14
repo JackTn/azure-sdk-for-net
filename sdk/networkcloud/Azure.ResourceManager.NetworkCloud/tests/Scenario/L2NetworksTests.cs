@@ -7,14 +7,15 @@ using Azure.ResourceManager.NetworkCloud.Models;
 using Azure.ResourceManager.Resources;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Azure.ResourceManager.NetworkCloud.Tests.ScenarioTests
 {
     public class L2NetworksTests : NetworkCloudManagementTestBase
     {
-        public L2NetworksTests   (bool isAsync, RecordedTestMode mode) : base(isAsync, mode) {}
-        public L2NetworksTests  (bool isAsync) : base(isAsync) {}
+        public L2NetworksTests(bool isAsync, RecordedTestMode mode) : base(isAsync, mode) { }
+        public L2NetworksTests(bool isAsync) : base(isAsync) { }
 
         [Test, MaxTime(1800000)]
         [RecordedTest]
@@ -28,9 +29,9 @@ namespace Azure.ResourceManager.NetworkCloud.Tests.ScenarioTests
 
             // Create
             NetworkCloudL2NetworkData data = new NetworkCloudL2NetworkData(new AzureLocation(TestEnvironment.Location), new ExtendedLocation(TestEnvironment.ClusterExtendedLocation, "CustomLocation"), new ResourceIdentifier(TestEnvironment.L2IsolationDomainId))
-            {};
+            { };
             ArmOperation<NetworkCloudL2NetworkResource> l2NetworkResourceOp = await l2NetworkCollection.CreateOrUpdateAsync(WaitUntil.Completed, l2NetworkName, data);
-            Assert.AreEqual(l2NetworkResourceOp.Value.Data.Name ,l2NetworkName);
+            Assert.AreEqual(l2NetworkResourceOp.Value.Data.Name, l2NetworkName);
 
             // Get
             NetworkCloudL2NetworkResource getResult = await l2Network.GetAsync();
@@ -47,7 +48,7 @@ namespace Azure.ResourceManager.NetworkCloud.Tests.ScenarioTests
 
             // List by Subscription
             var listBySubscription = new List<NetworkCloudL2NetworkResource>();
-              await foreach (NetworkCloudL2NetworkResource item in SubscriptionResource.GetNetworkCloudL2NetworksAsync())
+            await foreach (NetworkCloudL2NetworkResource item in SubscriptionResource.GetNetworkCloudL2NetworksAsync())
             {
                 listBySubscription.Add(item);
             }
@@ -65,7 +66,7 @@ namespace Azure.ResourceManager.NetworkCloud.Tests.ScenarioTests
             Assert.AreEqual(updateResult.Data.Tags, patch.Tags);
 
             // Delete
-            var deleteResponse = await l2Network.DeleteAsync(WaitUntil.Completed);
+            var deleteResponse = await l2Network.DeleteAsync(WaitUntil.Completed, CancellationToken.None);
             Assert.IsTrue(deleteResponse.HasCompleted);
         }
     }

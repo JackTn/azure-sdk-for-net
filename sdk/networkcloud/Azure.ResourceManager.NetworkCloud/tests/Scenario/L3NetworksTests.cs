@@ -7,14 +7,15 @@ using Azure.ResourceManager.NetworkCloud.Models;
 using Azure.ResourceManager.Resources;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Azure.ResourceManager.NetworkCloud.Tests.ScenarioTests
 {
     public class L3NetworksTests : NetworkCloudManagementTestBase
     {
-        public L3NetworksTests   (bool isAsync, RecordedTestMode mode) : base(isAsync, mode) {}
-        public L3NetworksTests  (bool isAsync) : base(isAsync) {}
+        public L3NetworksTests(bool isAsync, RecordedTestMode mode) : base(isAsync, mode) { }
+        public L3NetworksTests(bool isAsync) : base(isAsync) { }
 
         [Test, MaxTime(1800000)]
         [RecordedTest]
@@ -33,7 +34,7 @@ namespace Azure.ResourceManager.NetworkCloud.Tests.ScenarioTests
                 IPv6ConnectedPrefix = TestEnvironment.L3Ipv6Prefix,
             };
             ArmOperation<NetworkCloudL3NetworkResource> NetworkCloudL3NetworkResourceOp = await l3NetworkCollection.CreateOrUpdateAsync(WaitUntil.Completed, l3NetworkName, data);
-            Assert.AreEqual(NetworkCloudL3NetworkResourceOp.Value.Data.Name ,l3NetworkName);
+            Assert.AreEqual(NetworkCloudL3NetworkResourceOp.Value.Data.Name, l3NetworkName);
 
             // Get
             NetworkCloudL3NetworkResource getResult = await l3Network.GetAsync();
@@ -50,7 +51,7 @@ namespace Azure.ResourceManager.NetworkCloud.Tests.ScenarioTests
 
             // List by Subscription
             var listBySubscription = new List<NetworkCloudL3NetworkResource>();
-              await foreach (NetworkCloudL3NetworkResource item in SubscriptionResource.GetNetworkCloudL3NetworksAsync())
+            await foreach (NetworkCloudL3NetworkResource item in SubscriptionResource.GetNetworkCloudL3NetworksAsync())
             {
                 listBySubscription.Add(item);
             }
@@ -68,7 +69,7 @@ namespace Azure.ResourceManager.NetworkCloud.Tests.ScenarioTests
             Assert.AreEqual(updateResult.Data.Tags, patch.Tags);
 
             // Delete
-            var deleteResponse = await l3Network.DeleteAsync(WaitUntil.Completed);
+            var deleteResponse = await l3Network.DeleteAsync(WaitUntil.Completed, CancellationToken.None);
             Assert.IsTrue(deleteResponse.HasCompleted);
         }
     }

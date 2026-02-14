@@ -1,5 +1,11 @@
 namespace Azure.ResourceManager.DevSpaces
 {
+    public partial class AzureResourceManagerDevSpacesContext : System.ClientModel.Primitives.ModelReaderWriterContext
+    {
+        internal AzureResourceManagerDevSpacesContext() { }
+        public static Azure.ResourceManager.DevSpaces.AzureResourceManagerDevSpacesContext Default { get { throw null; } }
+        protected override bool TryGetTypeBuilderCore(System.Type type, out System.ClientModel.Primitives.ModelReaderWriterTypeBuilder builder) { throw null; }
+    }
     public partial class ControllerCollection : Azure.ResourceManager.ArmCollection, System.Collections.Generic.IAsyncEnumerable<Azure.ResourceManager.DevSpaces.ControllerResource>, System.Collections.Generic.IEnumerable<Azure.ResourceManager.DevSpaces.ControllerResource>, System.Collections.IEnumerable
     {
         protected ControllerCollection() { }
@@ -172,9 +178,7 @@ namespace Azure.ResourceManager.DevSpaces.Models
         public DevSpacesSkuName(string value) { throw null; }
         public static Azure.ResourceManager.DevSpaces.Models.DevSpacesSkuName S1 { get { throw null; } }
         public bool Equals(Azure.ResourceManager.DevSpaces.Models.DevSpacesSkuName other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.DevSpaces.Models.DevSpacesSkuName left, Azure.ResourceManager.DevSpaces.Models.DevSpacesSkuName right) { throw null; }
         public static implicit operator Azure.ResourceManager.DevSpaces.Models.DevSpacesSkuName (string value) { throw null; }
@@ -189,9 +193,7 @@ namespace Azure.ResourceManager.DevSpaces.Models
         public DevSpacesSkuTier(string value) { throw null; }
         public static Azure.ResourceManager.DevSpaces.Models.DevSpacesSkuTier Standard { get { throw null; } }
         public bool Equals(Azure.ResourceManager.DevSpaces.Models.DevSpacesSkuTier other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.DevSpaces.Models.DevSpacesSkuTier left, Azure.ResourceManager.DevSpaces.Models.DevSpacesSkuTier right) { throw null; }
         public static implicit operator Azure.ResourceManager.DevSpaces.Models.DevSpacesSkuTier (string value) { throw null; }
@@ -244,9 +246,7 @@ namespace Azure.ResourceManager.DevSpaces.Models
         public static Azure.ResourceManager.DevSpaces.Models.ProvisioningState Succeeded { get { throw null; } }
         public static Azure.ResourceManager.DevSpaces.Models.ProvisioningState Updating { get { throw null; } }
         public bool Equals(Azure.ResourceManager.DevSpaces.Models.ProvisioningState other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.DevSpaces.Models.ProvisioningState left, Azure.ResourceManager.DevSpaces.Models.ProvisioningState right) { throw null; }
         public static implicit operator Azure.ResourceManager.DevSpaces.Models.ProvisioningState (string value) { throw null; }

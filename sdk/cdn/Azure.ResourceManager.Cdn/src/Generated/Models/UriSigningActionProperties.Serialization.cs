@@ -8,6 +8,8 @@
 using System;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Text.Json;
 using Azure.Core;
 
@@ -26,7 +28,7 @@ namespace Azure.ResourceManager.Cdn.Models
 
         /// <param name="writer"> The JSON writer. </param>
         /// <param name="options"> The client options for reading and writing models. </param>
-        protected virtual void JsonModelWriteCore(Utf8JsonWriter writer, ModelReaderWriterOptions options)
+        protected override void JsonModelWriteCore(Utf8JsonWriter writer, ModelReaderWriterOptions options)
         {
             var format = options.Format == "W" ? ((IPersistableModel<UriSigningActionProperties>)this).GetFormatFromOptions(options) : options.Format;
             if (format != "J")
@@ -34,8 +36,7 @@ namespace Azure.ResourceManager.Cdn.Models
                 throw new FormatException($"The model {nameof(UriSigningActionProperties)} does not support writing '{format}' format.");
             }
 
-            writer.WritePropertyName("typeName"u8);
-            writer.WriteStringValue(ActionType.ToString());
+            base.JsonModelWriteCore(writer, options);
             if (Optional.IsDefined(Algorithm))
             {
                 writer.WritePropertyName("algorithm"u8);
@@ -50,21 +51,6 @@ namespace Azure.ResourceManager.Cdn.Models
                     writer.WriteObjectValue(item, options);
                 }
                 writer.WriteEndArray();
-            }
-            if (options.Format != "W" && _serializedAdditionalRawData != null)
-            {
-                foreach (var item in _serializedAdditionalRawData)
-                {
-                    writer.WritePropertyName(item.Key);
-#if NET6_0_OR_GREATER
-				writer.WriteRawValue(item.Value);
-#else
-                    using (JsonDocument document = JsonDocument.Parse(item.Value, ModelSerializationExtensions.JsonDocumentOptions))
-                    {
-                        JsonSerializer.Serialize(writer, document.RootElement);
-                    }
-#endif
-                }
             }
         }
 
@@ -88,18 +74,13 @@ namespace Azure.ResourceManager.Cdn.Models
             {
                 return null;
             }
-            UriSigningActionType typeName = default;
             UriSigningAlgorithm? algorithm = default;
             IList<UriSigningParamIdentifier> parameterNameOverride = default;
+            DeliveryRuleActionParametersType typeName = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> rawDataDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
             {
-                if (property.NameEquals("typeName"u8))
-                {
-                    typeName = new UriSigningActionType(property.Value.GetString());
-                    continue;
-                }
                 if (property.NameEquals("algorithm"u8))
                 {
                     if (property.Value.ValueKind == JsonValueKind.Null)
@@ -123,13 +104,83 @@ namespace Azure.ResourceManager.Cdn.Models
                     parameterNameOverride = array;
                     continue;
                 }
+                if (property.NameEquals("typeName"u8))
+                {
+                    typeName = new DeliveryRuleActionParametersType(property.Value.GetString());
+                    continue;
+                }
                 if (options.Format != "W")
                 {
                     rawDataDictionary.Add(property.Name, BinaryData.FromString(property.Value.GetRawText()));
                 }
             }
             serializedAdditionalRawData = rawDataDictionary;
-            return new UriSigningActionProperties(typeName, algorithm, parameterNameOverride ?? new ChangeTrackingList<UriSigningParamIdentifier>(), serializedAdditionalRawData);
+            return new UriSigningActionProperties(typeName, serializedAdditionalRawData, algorithm, parameterNameOverride ?? new ChangeTrackingList<UriSigningParamIdentifier>());
+        }
+
+        private BinaryData SerializeBicep(ModelReaderWriterOptions options)
+        {
+            StringBuilder builder = new StringBuilder();
+            BicepModelReaderWriterOptions bicepOptions = options as BicepModelReaderWriterOptions;
+            IDictionary<string, string> propertyOverrides = null;
+            bool hasObjectOverride = bicepOptions != null && bicepOptions.PropertyOverrides.TryGetValue(this, out propertyOverrides);
+            bool hasPropertyOverride = false;
+            string propertyOverride = null;
+
+            builder.AppendLine("{");
+
+            hasPropertyOverride = hasObjectOverride && propertyOverrides.TryGetValue(nameof(Algorithm), out propertyOverride);
+            if (hasPropertyOverride)
+            {
+                builder.Append("  algorithm: ");
+                builder.AppendLine(propertyOverride);
+            }
+            else
+            {
+                if (Optional.IsDefined(Algorithm))
+                {
+                    builder.Append("  algorithm: ");
+                    builder.AppendLine($"'{Algorithm.Value.ToString()}'");
+                }
+            }
+
+            hasPropertyOverride = hasObjectOverride && propertyOverrides.TryGetValue(nameof(ParameterNameOverride), out propertyOverride);
+            if (hasPropertyOverride)
+            {
+                builder.Append("  parameterNameOverride: ");
+                builder.AppendLine(propertyOverride);
+            }
+            else
+            {
+                if (Optional.IsCollectionDefined(ParameterNameOverride))
+                {
+                    if (ParameterNameOverride.Any())
+                    {
+                        builder.Append("  parameterNameOverride: ");
+                        builder.AppendLine("[");
+                        foreach (var item in ParameterNameOverride)
+                        {
+                            BicepSerializationHelpers.AppendChildObject(builder, item, options, 4, true, "  parameterNameOverride: ");
+                        }
+                        builder.AppendLine("  ]");
+                    }
+                }
+            }
+
+            hasPropertyOverride = hasObjectOverride && propertyOverrides.TryGetValue(nameof(TypeName), out propertyOverride);
+            if (hasPropertyOverride)
+            {
+                builder.Append("  typeName: ");
+                builder.AppendLine(propertyOverride);
+            }
+            else
+            {
+                builder.Append("  typeName: ");
+                builder.AppendLine($"'{TypeName.ToString()}'");
+            }
+
+            builder.AppendLine("}");
+            return BinaryData.FromString(builder.ToString());
         }
 
         BinaryData IPersistableModel<UriSigningActionProperties>.Write(ModelReaderWriterOptions options)
@@ -139,7 +190,9 @@ namespace Azure.ResourceManager.Cdn.Models
             switch (format)
             {
                 case "J":
-                    return ModelReaderWriter.Write(this, options);
+                    return ModelReaderWriter.Write(this, options, AzureResourceManagerCdnContext.Default);
+                case "bicep":
+                    return SerializeBicep(options);
                 default:
                     throw new FormatException($"The model {nameof(UriSigningActionProperties)} does not support writing '{options.Format}' format.");
             }

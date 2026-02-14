@@ -37,7 +37,7 @@ namespace Azure.ResourceManager.MachineLearning.Models
                 {
                     writer.WritePropertyName(item.Key);
 #if NET6_0_OR_GREATER
-				writer.WriteRawValue(item.Value);
+                    writer.WriteRawValue(item.Value);
 #else
                     JsonSerializer.Serialize(writer, JsonDocument.Parse(item.Value.ToString()).RootElement);
 #endif
@@ -50,7 +50,7 @@ namespace Azure.ResourceManager.MachineLearning.Models
                 {
                     writer.WritePropertyName(item.Key);
 #if NET6_0_OR_GREATER
-				writer.WriteRawValue(item.Value);
+                    writer.WriteRawValue(item.Value);
 #else
                     using (JsonDocument document = JsonDocument.Parse(item.Value))
                     {
@@ -130,7 +130,7 @@ namespace Azure.ResourceManager.MachineLearning.Models
             switch (format)
             {
                 case "J":
-                    return ModelReaderWriter.Write(this, options);
+                    return ModelReaderWriter.Write(this, options, AzureResourceManagerMachineLearningContext.Default);
                 default:
                     throw new FormatException($"The model {nameof(MachineLearningPartialManagedServiceIdentity)} does not support '{options.Format}' format.");
             }

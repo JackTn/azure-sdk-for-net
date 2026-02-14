@@ -1,13 +1,13 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
-using System.Threading.Tasks;
-using NUnit.Framework;
-using Azure.Core.TestFramework;
-using Azure.ResourceManager.Resources.Models;
-using Azure.Core;
-using Azure.ResourceManager.DnsResolver.Models;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Azure.Core;
+using Azure.Core.TestFramework;
+using Azure.ResourceManager.DnsResolver.Models;
+using Azure.ResourceManager.Resources.Models;
+using NUnit.Framework;
 
 namespace Azure.ResourceManager.DnsResolver.Tests
 {
@@ -19,7 +19,7 @@ namespace Azure.ResourceManager.DnsResolver.Tests
         //private string _vnetId ;
         //private string _subnetId;
 
-        public DnsForwardingRulesetTests(bool async) : base(async)//, RecordedTestMode.Record)
+        public DnsForwardingRulesetTests(bool async) : base(async) // RecordedTestMode.Record)
         {
         }
 

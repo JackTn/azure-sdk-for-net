@@ -471,6 +471,31 @@ namespace Azure.Storage.Blobs.Test
             }
         }
 
+        [RecordedTest]
+        public async Task CreateAsync_PremiumPageBlobAccessTier()
+        {
+            BlobServiceClient premiumService = BlobsClientBuilder.GetServiceClient_PremiumBlobAccount_SharedKey();
+            await using DisposingContainer test = await GetTestContainerAsync(service: premiumService, premium: true);
+
+            // Arrange
+            PageBlobClient blob = await CreatePageBlobClientAsync(test.Container, Constants.KB);
+
+            PremiumPageBlobAccessTier accessTier = PremiumPageBlobAccessTier.P60;
+            PageBlobCreateOptions optionsAccessTier = new()
+            {
+                PremiumPageBlobAccessTier = accessTier
+            };
+
+            // Act
+            Response<BlobContentInfo> response = await blob.CreateAsync(
+                size: Constants.KB,
+                options: optionsAccessTier);
+
+            // Assert
+            BlobProperties properties = await blob.GetPropertiesAsync();
+            Assert.AreEqual(accessTier.ToString(), properties.AccessTier);
+        }
+
         /// <summary>
         /// Data for CreateAsync, GetPageRangesAsync, and GetPageRangesDiffAsync AccessConditions Fail tests.
         /// </summary>
@@ -3368,7 +3393,6 @@ namespace Azure.Storage.Blobs.Test
             }
         }
 
-        [Ignore("https://github.com/Azure/azure-sdk-for-net/issues/44324")]
         [RecordedTest]
         [ServiceVersion(Min = BlobClientOptions.ServiceVersion.V2024_08_04)]
         public async Task UploadPagesFromUriAsync_SourceErrorAndStatusCode()
@@ -3388,9 +3412,9 @@ namespace Azure.Storage.Blobs.Test
                 destBlob.UploadPagesFromUriAsync(sourceBlob.Uri, range, range),
                 e =>
                 {
-                    Assert.IsTrue(e.Message.Contains("CopySourceStatusCode: 409"));
-                    Assert.IsTrue(e.Message.Contains("CopySourceErrorCode: PublicAccessNotPermitted"));
-                    Assert.IsTrue(e.Message.Contains("CopySourceErrorMessage: Public access is not permitted on this storage account."));
+                    Assert.IsTrue(e.Message.Contains("CopySourceStatusCode: 401"));
+                    Assert.IsTrue(e.Message.Contains("CopySourceErrorCode: NoAuthenticationInformation"));
+                    Assert.IsTrue(e.Message.Contains("CopySourceErrorMessage: Server failed to authenticate the request. Please refer to the information in the www-authenticate header."));
                 });
         }
 
@@ -3455,8 +3479,6 @@ namespace Azure.Storage.Blobs.Test
             await using DisposingContainer test = await GetTestContainerAsync();
 
             // Arrange
-            await test.Container.SetAccessPolicyAsync(PublicAccessType.BlobContainer);
-
             var data = GetRandomBuffer(Constants.KB);
 
             using var stream = new MemoryStream(data);
@@ -3470,14 +3492,95 @@ namespace Azure.Storage.Blobs.Test
             await destBlob.CreateIfNotExistsAsync(Constants.KB);
             var range = new HttpRange(0, Constants.KB);
 
+            Uri sourceUri = sourceBlob.GenerateSasUri(BlobSasPermissions.Read, Recording.UtcNow.AddDays(1));
+
             // Act
             Response<PageInfo> response = await destBlob.UploadPagesFromUriAsync(
-                sourceUri: sourceBlob.Uri,
+                sourceUri: sourceUri,
                 sourceRange: range,
                 range: range);
 
             // Assert
             Assert.AreEqual(customerProvidedKey.EncryptionKeyHash, response.Value.EncryptionKeySha256);
+        }
+
+        [RecordedTest]
+        [ServiceVersion(Min = BlobClientOptions.ServiceVersion.V2026_04_06)]
+        [LiveOnly(Reason = "Encryption Key cannot be stored in recordings.")]
+        public async Task UploadPagesFromUriAsync_SourceCPK()
+        {
+            // Arrange
+            await using DisposingContainer test = await GetTestContainerAsync();
+            PageBlobClient sourceBlob = InstrumentClient(test.Container.GetPageBlobClient(GetNewBlobName()));
+            PageBlobClient destBlob = InstrumentClient(test.Container.GetPageBlobClient(GetNewBlobName()));
+
+            CustomerProvidedKey destCustomerProvidedKey = GetCustomerProvidedKey();
+            destBlob = destBlob.WithCustomerProvidedKey(destCustomerProvidedKey);
+            await destBlob.CreateIfNotExistsAsync(Constants.KB);
+
+            CustomerProvidedKey sourceCustomerProvidedKey = GetCustomerProvidedKey();
+            sourceBlob = sourceBlob.WithCustomerProvidedKey(sourceCustomerProvidedKey);
+            await sourceBlob.CreateIfNotExistsAsync(Constants.KB);
+            // Upload data to source blob
+            byte[] data = GetRandomBuffer(Constants.KB);
+            using Stream stream = new MemoryStream(data);
+            await sourceBlob.UploadPagesAsync(stream, 0);
+
+            // Act
+            PageBlobUploadPagesFromUriOptions options = new PageBlobUploadPagesFromUriOptions
+            {
+                SourceCustomerProvidedKey = sourceCustomerProvidedKey
+            };
+            Response<PageInfo> response = await destBlob.UploadPagesFromUriAsync(
+                sourceUri: sourceBlob.GenerateSasUri(BlobSasPermissions.Read, Recording.UtcNow.AddDays(1)),
+                sourceRange: new HttpRange(0, Constants.KB),
+                range: new HttpRange(0, Constants.KB),
+                options: options);
+
+            // Assert
+            Assert.AreEqual(destCustomerProvidedKey.EncryptionKeyHash, response.Value.EncryptionKeySha256);
+        }
+
+        [RecordedTest]
+        [ServiceVersion(Min = BlobClientOptions.ServiceVersion.V2026_04_06)]
+        [LiveOnly(Reason = "Encryption Key cannot be stored in recordings.")]
+        public async Task UploadPagesFromUriAsync_SourceCPK_Fail()
+        {
+            // Arrange
+            await using DisposingContainer test = await GetTestContainerAsync();
+            PageBlobClient sourceBlob = InstrumentClient(test.Container.GetPageBlobClient(GetNewBlobName()));
+            PageBlobClient destBlob = InstrumentClient(test.Container.GetPageBlobClient(GetNewBlobName()));
+
+            CustomerProvidedKey destCustomerProvidedKey = GetCustomerProvidedKey();
+            destBlob = destBlob.WithCustomerProvidedKey(destCustomerProvidedKey);
+            await destBlob.CreateIfNotExistsAsync(Constants.KB);
+
+            CustomerProvidedKey sourceCustomerProvidedKey = GetCustomerProvidedKey();
+            sourceBlob = sourceBlob.WithCustomerProvidedKey(sourceCustomerProvidedKey);
+            await sourceBlob.CreateIfNotExistsAsync(Constants.KB);
+            // Upload data to source blob
+            byte[] data = GetRandomBuffer(Constants.KB);
+            using Stream stream = new MemoryStream(data);
+            await sourceBlob.UploadPagesAsync(stream, 0);
+
+            // Act
+            PageBlobUploadPagesFromUriOptions options = new PageBlobUploadPagesFromUriOptions
+            {
+                // incorrectly use the dest CPK here
+                SourceCustomerProvidedKey = destCustomerProvidedKey
+            };
+            await TestHelper.AssertExpectedExceptionAsync<RequestFailedException>(
+                destBlob.UploadPagesFromUriAsync(
+                    sourceUri: sourceBlob.GenerateSasUri(BlobSasPermissions.Read, Recording.UtcNow.AddDays(1)),
+                    sourceRange: new HttpRange(0, Constants.KB),
+                    range: new HttpRange(0, Constants.KB),
+                    options: options),
+                e =>
+                {
+                    Assert.AreEqual(409, e.Status);
+                    Assert.AreEqual("CannotVerifyCopySource", e.ErrorCode);
+                    StringAssert.Contains("The given customer specified encryption does not match the encryption used to encrypt the blob.", e.Message);
+                });
         }
 
         [RecordedTest]

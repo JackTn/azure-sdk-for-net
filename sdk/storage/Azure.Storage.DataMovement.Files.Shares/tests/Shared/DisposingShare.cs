@@ -1,12 +1,11 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 extern alias BaseShares;
-
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Azure.Storage.Test.Shared;
 using BaseShares::Azure.Storage.Files.Shares;
 using BaseShares::Azure.Storage.Files.Shares.Models;
-using Azure.Storage.Test.Shared;
 
 namespace Azure.Storage.DataMovement.Files.Shares.Tests
 {
@@ -21,6 +20,17 @@ namespace Azure.Storage.DataMovement.Files.Shares.Tests
             BaseShares::Azure.Storage.Files.Shares.Models.ShareCreateOptions options = new()
             {
                 Metadata = metadata
+            };
+            await share.CreateIfNotExistsAsync(options);
+            return new DisposingShare(share);
+        }
+
+        public static async Task<DisposingShare> CreateNfsAsync(ShareClient share, IDictionary<string, string> metadata)
+        {
+            BaseShares::Azure.Storage.Files.Shares.Models.ShareCreateOptions options = new()
+            {
+                Metadata = metadata,
+                Protocols = ShareProtocols.Nfs
             };
             await share.CreateIfNotExistsAsync(options);
             return new DisposingShare(share);

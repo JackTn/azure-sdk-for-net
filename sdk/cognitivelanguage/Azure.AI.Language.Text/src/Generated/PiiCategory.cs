@@ -193,6 +193,32 @@ namespace Azure.AI.Language.Text
         private const string DateValue = "Date";
         private const string PersonValue = "Person";
         private const string AddressValue = "Address";
+        private const string DateOfBirthValue = "DateOfBirth";
+        private const string BankAccountNumberValue = "BankAccountNumber";
+        private const string PassportNumberValue = "PassportNumber";
+        private const string DriversLicenseNumberValue = "DriversLicenseNumber";
+        private const string NeighborhoodValue = "Neighborhood";
+        private const string SortCodeValue = "SortCode";
+        private const string PINValue = "PIN";
+        private const string VINValue = "VIN";
+        private const string VehicleIdentificationNumberValue = "VehicleIdentificationNumber";
+        private const string LicensePlateValue = "LicensePlate";
+        private const string KRPassportNumberValue = "KRPassportNumber";
+        private const string KRDriversLicenseNumberValue = "KRDriversLicenseNumber";
+        private const string KRSocialSecurityNumberValue = "KRSocialSecurityNumber";
+        private const string GovernmentIssuedIdValue = "GovernmentIssuedId";
+        private const string PasswordValue = "Password";
+        private const string NationalIdValue = "NationalId";
+        private const string ZipCodeValue = "ZipCode";
+        private const string CVVValue = "CVV";
+        private const string ExpirationDateValue = "ExpirationDate";
+        private const string CASocialIdentificationNumberValue = "CASocialIdentificationNumber";
+        private const string MedicareBeneficiaryIdValue = "USMedicareBeneficiaryId";
+        private const string LocationValue = "Location";
+        private const string CityValue = "City";
+        private const string StateValue = "State";
+        private const string AirportValue = "Airport";
+        private const string GPEValue = "GPE";
         private const string AllValue = "All";
         private const string DefaultValue = "Default";
 
@@ -200,7 +226,7 @@ namespace Azure.AI.Language.Text
         public static PiiCategory AbaRoutingNumber { get; } = new PiiCategory(AbaRoutingNumberValue);
         /// <summary> AR National Identity Number. </summary>
         public static PiiCategory ArNationalIdentityNumber { get; } = new PiiCategory(ArNationalIdentityNumberValue);
-        /// <summary> AT Identity Card. </summary>
+        /// <summary> AT Bank Account Number. </summary>
         public static PiiCategory AuBankAccountNumber { get; } = new PiiCategory(AuBankAccountNumberValue);
         /// <summary> AU Driver's License Number. </summary>
         public static PiiCategory AuDriversLicenseNumber { get; } = new PiiCategory(AuDriversLicenseNumberValue);
@@ -538,6 +564,58 @@ namespace Azure.AI.Language.Text
         public static PiiCategory Person { get; } = new PiiCategory(PersonValue);
         /// <summary> Address. </summary>
         public static PiiCategory Address { get; } = new PiiCategory(AddressValue);
+        /// <summary> Date Of Birth. </summary>
+        public static PiiCategory DateOfBirth { get; } = new PiiCategory(DateOfBirthValue);
+        /// <summary> Bank Account Number. </summary>
+        public static PiiCategory BankAccountNumber { get; } = new PiiCategory(BankAccountNumberValue);
+        /// <summary> Passport Number. </summary>
+        public static PiiCategory PassportNumber { get; } = new PiiCategory(PassportNumberValue);
+        /// <summary> Drivers License Number. </summary>
+        public static PiiCategory DriversLicenseNumber { get; } = new PiiCategory(DriversLicenseNumberValue);
+        /// <summary> Neighborhood. </summary>
+        public static PiiCategory Neighborhood { get; } = new PiiCategory(NeighborhoodValue);
+        /// <summary> Sort Code. 6-digit number used in the UK to identify a specific bank and branch where a bank account is held. </summary>
+        public static PiiCategory SortCode { get; } = new PiiCategory(SortCodeValue);
+        /// <summary> PIN. </summary>
+        public static PiiCategory PIN { get; } = new PiiCategory(PINValue);
+        /// <summary> VIN. </summary>
+        public static PiiCategory VIN { get; } = new PiiCategory(VINValue);
+        /// <summary> VIN. </summary>
+        public static PiiCategory VehicleIdentificationNumber { get; } = new PiiCategory(VehicleIdentificationNumberValue);
+        /// <summary> License Plate. </summary>
+        public static PiiCategory LicensePlate { get; } = new PiiCategory(LicensePlateValue);
+        /// <summary> KR Passport Number. </summary>
+        public static PiiCategory KRPassportNumber { get; } = new PiiCategory(KRPassportNumberValue);
+        /// <summary> KR Driver's License Number. </summary>
+        public static PiiCategory KRDriversLicenseNumber { get; } = new PiiCategory(KRDriversLicenseNumberValue);
+        /// <summary> KR Social Security Number. </summary>
+        public static PiiCategory KRSocialSecurityNumber { get; } = new PiiCategory(KRSocialSecurityNumberValue);
+        /// <summary> Government Issued ID. </summary>
+        public static PiiCategory GovernmentIssuedId { get; } = new PiiCategory(GovernmentIssuedIdValue);
+        /// <summary> Password. </summary>
+        public static PiiCategory Password { get; } = new PiiCategory(PasswordValue);
+        /// <summary> National Identification. </summary>
+        public static PiiCategory NationalId { get; } = new PiiCategory(NationalIdValue);
+        /// <summary> Zip Code. </summary>
+        public static PiiCategory ZipCode { get; } = new PiiCategory(ZipCodeValue);
+        /// <summary> Card Verification Value. </summary>
+        public static PiiCategory CVV { get; } = new PiiCategory(CVVValue);
+        /// <summary> Expiration Date. </summary>
+        public static PiiCategory ExpirationDate { get; } = new PiiCategory(ExpirationDateValue);
+        /// <summary> CA Social Identification Number. </summary>
+        public static PiiCategory CASocialIdentificationNumber { get; } = new PiiCategory(CASocialIdentificationNumberValue);
+        /// <summary> Medicare Beneficiary ID. </summary>
+        public static PiiCategory MedicareBeneficiaryId { get; } = new PiiCategory(MedicareBeneficiaryIdValue);
+        /// <summary> Location. </summary>
+        public static PiiCategory Location { get; } = new PiiCategory(LocationValue);
+        /// <summary> City. </summary>
+        public static PiiCategory City { get; } = new PiiCategory(CityValue);
+        /// <summary> State. </summary>
+        public static PiiCategory State { get; } = new PiiCategory(StateValue);
+        /// <summary> Airport. </summary>
+        public static PiiCategory Airport { get; } = new PiiCategory(AirportValue);
+        /// <summary> Geopolitical Entity. </summary>
+        public static PiiCategory GPE { get; } = new PiiCategory(GPEValue);
         /// <summary> All PII categories. </summary>
         public static PiiCategory All { get; } = new PiiCategory(AllValue);
         /// <summary> Default PII categories for the language. </summary>

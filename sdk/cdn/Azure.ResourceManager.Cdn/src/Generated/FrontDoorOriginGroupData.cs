@@ -66,34 +66,46 @@ namespace Azure.ResourceManager.Cdn
         /// <param name="healthProbeSettings"> Health probe settings to the origin that is used to determine the health of the origin. </param>
         /// <param name="trafficRestorationTimeInMinutes"> Time in minutes to shift the traffic to the endpoint gradually when an unhealthy endpoint comes healthy or a new endpoint is added. Default is 10 mins. This property is currently not supported. </param>
         /// <param name="sessionAffinityState"> Whether to allow session affinity on this host. Valid options are 'Enabled' or 'Disabled'. </param>
+        /// <param name="authentication"> Authentication settings for origin in origin group. </param>
         /// <param name="provisioningState"> Provisioning status. </param>
         /// <param name="deploymentStatus"></param>
         /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
-        internal FrontDoorOriginGroupData(ResourceIdentifier id, string name, ResourceType resourceType, SystemData systemData, string profileName, LoadBalancingSettings loadBalancingSettings, HealthProbeSettings healthProbeSettings, int? trafficRestorationTimeInMinutes, EnabledState? sessionAffinityState, FrontDoorProvisioningState? provisioningState, FrontDoorDeploymentStatus? deploymentStatus, IDictionary<string, BinaryData> serializedAdditionalRawData) : base(id, name, resourceType, systemData)
+        internal FrontDoorOriginGroupData(ResourceIdentifier id, string name, ResourceType resourceType, SystemData systemData, string profileName, LoadBalancingSettings loadBalancingSettings, HealthProbeSettings healthProbeSettings, int? trafficRestorationTimeInMinutes, EnabledState? sessionAffinityState, OriginAuthenticationProperties authentication, FrontDoorProvisioningState? provisioningState, FrontDoorDeploymentStatus? deploymentStatus, IDictionary<string, BinaryData> serializedAdditionalRawData) : base(id, name, resourceType, systemData)
         {
             ProfileName = profileName;
             LoadBalancingSettings = loadBalancingSettings;
             HealthProbeSettings = healthProbeSettings;
             TrafficRestorationTimeInMinutes = trafficRestorationTimeInMinutes;
             SessionAffinityState = sessionAffinityState;
+            Authentication = authentication;
             ProvisioningState = provisioningState;
             DeploymentStatus = deploymentStatus;
             _serializedAdditionalRawData = serializedAdditionalRawData;
         }
 
         /// <summary> The name of the profile which holds the origin group. </summary>
+        [WirePath("properties.profileName")]
         public string ProfileName { get; }
         /// <summary> Load balancing settings for a backend pool. </summary>
+        [WirePath("properties.loadBalancingSettings")]
         public LoadBalancingSettings LoadBalancingSettings { get; set; }
         /// <summary> Health probe settings to the origin that is used to determine the health of the origin. </summary>
+        [WirePath("properties.healthProbeSettings")]
         public HealthProbeSettings HealthProbeSettings { get; set; }
         /// <summary> Time in minutes to shift the traffic to the endpoint gradually when an unhealthy endpoint comes healthy or a new endpoint is added. Default is 10 mins. This property is currently not supported. </summary>
+        [WirePath("properties.trafficRestorationTimeToHealedOrNewEndpointsInMinutes")]
         public int? TrafficRestorationTimeInMinutes { get; set; }
         /// <summary> Whether to allow session affinity on this host. Valid options are 'Enabled' or 'Disabled'. </summary>
+        [WirePath("properties.sessionAffinityState")]
         public EnabledState? SessionAffinityState { get; set; }
+        /// <summary> Authentication settings for origin in origin group. </summary>
+        [WirePath("properties.authentication")]
+        public OriginAuthenticationProperties Authentication { get; set; }
         /// <summary> Provisioning status. </summary>
+        [WirePath("properties.provisioningState")]
         public FrontDoorProvisioningState? ProvisioningState { get; }
         /// <summary> Gets the deployment status. </summary>
+        [WirePath("properties.deploymentStatus")]
         public FrontDoorDeploymentStatus? DeploymentStatus { get; }
     }
 }

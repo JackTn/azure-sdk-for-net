@@ -68,12 +68,16 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> describes if the policy is in enabled state or disabled state. </summary>
+        [WirePath("enabledState")]
         public PolicyEnabledState? EnabledState { get; set; }
         /// <summary> Describes if it is in detection mode or prevention mode at policy level. </summary>
+        [WirePath("mode")]
         public PolicyMode? Mode { get; set; }
         /// <summary> If action type is redirect, this field represents the default redirect URL for the client. </summary>
+        [WirePath("defaultRedirectUrl")]
         public Uri DefaultRedirectUri { get; set; }
         /// <summary> If the action type is block, this field defines the default customer overridable http response status code. </summary>
+        [WirePath("defaultCustomBlockResponseStatusCode")]
         public PolicySettingsDefaultCustomBlockResponseStatusCode? DefaultCustomBlockResponseStatusCode { get; set; }
         /// <summary>
         /// If the action type is block, customer can override the response body. The body must be specified in base64 encoding.
@@ -105,6 +109,7 @@ namespace Azure.ResourceManager.Cdn.Models
         /// </list>
         /// </para>
         /// </summary>
+        [WirePath("defaultCustomBlockResponseBody")]
         public BinaryData DefaultCustomBlockResponseBody { get; set; }
     }
 }

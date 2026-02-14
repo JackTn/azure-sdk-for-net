@@ -131,8 +131,10 @@ namespace Azure.AI.OpenAI.Assistants
         public virtual System.Threading.Tasks.Task<Azure.Response<Azure.AI.OpenAI.Assistants.ThreadRun>> UpdateRunAsync(string threadId, string runId, System.Collections.Generic.IReadOnlyDictionary<string, string> metadata = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) { throw null; }
         public virtual Azure.Response<Azure.AI.OpenAI.Assistants.AssistantThread> UpdateThread(string threadId, System.Collections.Generic.IReadOnlyDictionary<string, string> metadata = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) { throw null; }
         public virtual System.Threading.Tasks.Task<Azure.Response<Azure.AI.OpenAI.Assistants.AssistantThread>> UpdateThreadAsync(string threadId, System.Collections.Generic.IReadOnlyDictionary<string, string> metadata = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) { throw null; }
+        public virtual Azure.Response<Azure.AI.OpenAI.Assistants.OpenAIFile> UploadFile(Azure.AI.OpenAI.Assistants.UploadFileRequest file, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) { throw null; }
         public virtual Azure.Response<Azure.AI.OpenAI.Assistants.OpenAIFile> UploadFile(System.IO.Stream data, Azure.AI.OpenAI.Assistants.OpenAIFilePurpose purpose, string filename = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) { throw null; }
         public virtual Azure.Response<Azure.AI.OpenAI.Assistants.OpenAIFile> UploadFile(string localFilePath, Azure.AI.OpenAI.Assistants.OpenAIFilePurpose purpose, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) { throw null; }
+        public virtual System.Threading.Tasks.Task<Azure.Response<Azure.AI.OpenAI.Assistants.OpenAIFile>> UploadFileAsync(Azure.AI.OpenAI.Assistants.UploadFileRequest file, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) { throw null; }
         public virtual System.Threading.Tasks.Task<Azure.Response<Azure.AI.OpenAI.Assistants.OpenAIFile>> UploadFileAsync(System.IO.Stream data, Azure.AI.OpenAI.Assistants.OpenAIFilePurpose purpose, string filename = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) { throw null; }
         public virtual System.Threading.Tasks.Task<Azure.Response<Azure.AI.OpenAI.Assistants.OpenAIFile>> UploadFileAsync(string localFilePath, Azure.AI.OpenAI.Assistants.OpenAIFilePurpose purpose, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) { throw null; }
     }
@@ -179,6 +181,7 @@ namespace Azure.AI.OpenAI.Assistants
         public static Azure.AI.OpenAI.Assistants.ThreadInitializationMessage ThreadInitializationMessage(Azure.AI.OpenAI.Assistants.MessageRole role = default(Azure.AI.OpenAI.Assistants.MessageRole), string content = null, System.Collections.Generic.IEnumerable<string> fileIds = null, System.Collections.Generic.IDictionary<string, string> metadata = null) { throw null; }
         public static Azure.AI.OpenAI.Assistants.ThreadMessage ThreadMessage(string id = null, System.DateTimeOffset createdAt = default(System.DateTimeOffset), string threadId = null, Azure.AI.OpenAI.Assistants.MessageRole role = default(Azure.AI.OpenAI.Assistants.MessageRole), System.Collections.Generic.IEnumerable<Azure.AI.OpenAI.Assistants.MessageContent> contentItems = null, string assistantId = null, string runId = null, System.Collections.Generic.IEnumerable<string> fileIds = null, System.Collections.Generic.IReadOnlyDictionary<string, string> metadata = null) { throw null; }
         public static Azure.AI.OpenAI.Assistants.ThreadRun ThreadRun(string id = null, string threadId = null, string assistantId = null, Azure.AI.OpenAI.Assistants.RunStatus status = default(Azure.AI.OpenAI.Assistants.RunStatus), Azure.AI.OpenAI.Assistants.RequiredAction requiredAction = null, Azure.AI.OpenAI.Assistants.RunError lastError = null, string model = null, string instructions = null, System.Collections.Generic.IEnumerable<Azure.AI.OpenAI.Assistants.ToolDefinition> tools = null, System.Collections.Generic.IEnumerable<string> fileIds = null, System.DateTimeOffset createdAt = default(System.DateTimeOffset), System.DateTimeOffset? expiresAt = default(System.DateTimeOffset?), System.DateTimeOffset? startedAt = default(System.DateTimeOffset?), System.DateTimeOffset? completedAt = default(System.DateTimeOffset?), System.DateTimeOffset? cancelledAt = default(System.DateTimeOffset?), System.DateTimeOffset? failedAt = default(System.DateTimeOffset?), System.Collections.Generic.IReadOnlyDictionary<string, string> metadata = null) { throw null; }
+        public static Azure.AI.OpenAI.Assistants.UploadFileRequest UploadFileRequest(System.IO.Stream data = null, Azure.AI.OpenAI.Assistants.OpenAIFilePurpose purpose = default(Azure.AI.OpenAI.Assistants.OpenAIFilePurpose), string filename = null) { throw null; }
     }
     public partial class AssistantThread : System.ClientModel.Primitives.IJsonModel<Azure.AI.OpenAI.Assistants.AssistantThread>, System.ClientModel.Primitives.IPersistableModel<Azure.AI.OpenAI.Assistants.AssistantThread>
     {
@@ -204,6 +207,12 @@ namespace Azure.AI.OpenAI.Assistants
         Azure.AI.OpenAI.Assistants.AssistantThreadCreationOptions System.ClientModel.Primitives.IPersistableModel<Azure.AI.OpenAI.Assistants.AssistantThreadCreationOptions>.Create(System.BinaryData data, System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
         string System.ClientModel.Primitives.IPersistableModel<Azure.AI.OpenAI.Assistants.AssistantThreadCreationOptions>.GetFormatFromOptions(System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
         System.BinaryData System.ClientModel.Primitives.IPersistableModel<Azure.AI.OpenAI.Assistants.AssistantThreadCreationOptions>.Write(System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+    }
+    public partial class AzureAIOpenAIAssistantsContext : System.ClientModel.Primitives.ModelReaderWriterContext
+    {
+        internal AzureAIOpenAIAssistantsContext() { }
+        public static Azure.AI.OpenAI.Assistants.AzureAIOpenAIAssistantsContext Default { get { throw null; } }
+        protected override bool TryGetTypeBuilderCore(System.Type type, out System.ClientModel.Primitives.ModelReaderWriterTypeBuilder builder) { throw null; }
     }
     public partial class CodeInterpreterToolDefinition : Azure.AI.OpenAI.Assistants.ToolDefinition, System.ClientModel.Primitives.IJsonModel<Azure.AI.OpenAI.Assistants.CodeInterpreterToolDefinition>, System.ClientModel.Primitives.IPersistableModel<Azure.AI.OpenAI.Assistants.CodeInterpreterToolDefinition>
     {
@@ -280,9 +289,7 @@ namespace Azure.AI.OpenAI.Assistants
         public static Azure.AI.OpenAI.Assistants.ListSortOrder Ascending { get { throw null; } }
         public static Azure.AI.OpenAI.Assistants.ListSortOrder Descending { get { throw null; } }
         public bool Equals(Azure.AI.OpenAI.Assistants.ListSortOrder other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.AI.OpenAI.Assistants.ListSortOrder left, Azure.AI.OpenAI.Assistants.ListSortOrder right) { throw null; }
         public static implicit operator Azure.AI.OpenAI.Assistants.ListSortOrder (string value) { throw null; }
@@ -332,9 +339,7 @@ namespace Azure.AI.OpenAI.Assistants
         public static Azure.AI.OpenAI.Assistants.MessageRole Assistant { get { throw null; } }
         public static Azure.AI.OpenAI.Assistants.MessageRole User { get { throw null; } }
         public bool Equals(Azure.AI.OpenAI.Assistants.MessageRole other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.AI.OpenAI.Assistants.MessageRole left, Azure.AI.OpenAI.Assistants.MessageRole right) { throw null; }
         public static implicit operator Azure.AI.OpenAI.Assistants.MessageRole (string value) { throw null; }
@@ -415,9 +420,7 @@ namespace Azure.AI.OpenAI.Assistants
         public static Azure.AI.OpenAI.Assistants.OpenAIFilePurpose FineTune { get { throw null; } }
         public static Azure.AI.OpenAI.Assistants.OpenAIFilePurpose FineTuneResults { get { throw null; } }
         public bool Equals(Azure.AI.OpenAI.Assistants.OpenAIFilePurpose other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.AI.OpenAI.Assistants.OpenAIFilePurpose left, Azure.AI.OpenAI.Assistants.OpenAIFilePurpose right) { throw null; }
         public static implicit operator Azure.AI.OpenAI.Assistants.OpenAIFilePurpose (string value) { throw null; }
@@ -505,9 +508,7 @@ namespace Azure.AI.OpenAI.Assistants
         public static Azure.AI.OpenAI.Assistants.RunStatus Queued { get { throw null; } }
         public static Azure.AI.OpenAI.Assistants.RunStatus RequiresAction { get { throw null; } }
         public bool Equals(Azure.AI.OpenAI.Assistants.RunStatus other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.AI.OpenAI.Assistants.RunStatus left, Azure.AI.OpenAI.Assistants.RunStatus right) { throw null; }
         public static implicit operator Azure.AI.OpenAI.Assistants.RunStatus (string value) { throw null; }
@@ -624,9 +625,7 @@ namespace Azure.AI.OpenAI.Assistants
         public static Azure.AI.OpenAI.Assistants.RunStepErrorCode RateLimitExceeded { get { throw null; } }
         public static Azure.AI.OpenAI.Assistants.RunStepErrorCode ServerError { get { throw null; } }
         public bool Equals(Azure.AI.OpenAI.Assistants.RunStepErrorCode other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.AI.OpenAI.Assistants.RunStepErrorCode left, Azure.AI.OpenAI.Assistants.RunStepErrorCode right) { throw null; }
         public static implicit operator Azure.AI.OpenAI.Assistants.RunStepErrorCode (string value) { throw null; }
@@ -691,9 +690,7 @@ namespace Azure.AI.OpenAI.Assistants
         public static Azure.AI.OpenAI.Assistants.RunStepStatus Failed { get { throw null; } }
         public static Azure.AI.OpenAI.Assistants.RunStepStatus InProgress { get { throw null; } }
         public bool Equals(Azure.AI.OpenAI.Assistants.RunStepStatus other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.AI.OpenAI.Assistants.RunStepStatus left, Azure.AI.OpenAI.Assistants.RunStepStatus right) { throw null; }
         public static implicit operator Azure.AI.OpenAI.Assistants.RunStepStatus (string value) { throw null; }
@@ -731,9 +728,7 @@ namespace Azure.AI.OpenAI.Assistants
         public static Azure.AI.OpenAI.Assistants.RunStepType MessageCreation { get { throw null; } }
         public static Azure.AI.OpenAI.Assistants.RunStepType ToolCalls { get { throw null; } }
         public bool Equals(Azure.AI.OpenAI.Assistants.RunStepType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.AI.OpenAI.Assistants.RunStepType left, Azure.AI.OpenAI.Assistants.RunStepType right) { throw null; }
         public static implicit operator Azure.AI.OpenAI.Assistants.RunStepType (string value) { throw null; }
@@ -853,6 +848,19 @@ namespace Azure.AI.OpenAI.Assistants
         Azure.AI.OpenAI.Assistants.UpdateAssistantOptions System.ClientModel.Primitives.IPersistableModel<Azure.AI.OpenAI.Assistants.UpdateAssistantOptions>.Create(System.BinaryData data, System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
         string System.ClientModel.Primitives.IPersistableModel<Azure.AI.OpenAI.Assistants.UpdateAssistantOptions>.GetFormatFromOptions(System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
         System.BinaryData System.ClientModel.Primitives.IPersistableModel<Azure.AI.OpenAI.Assistants.UpdateAssistantOptions>.Write(System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+    }
+    public partial class UploadFileRequest : System.ClientModel.Primitives.IJsonModel<Azure.AI.OpenAI.Assistants.UploadFileRequest>, System.ClientModel.Primitives.IPersistableModel<Azure.AI.OpenAI.Assistants.UploadFileRequest>
+    {
+        public UploadFileRequest(System.IO.Stream data, Azure.AI.OpenAI.Assistants.OpenAIFilePurpose purpose) { }
+        public System.IO.Stream Data { get { throw null; } }
+        public string Filename { get { throw null; } set { } }
+        public Azure.AI.OpenAI.Assistants.OpenAIFilePurpose Purpose { get { throw null; } }
+        protected virtual void JsonModelWriteCore(System.Text.Json.Utf8JsonWriter writer, System.ClientModel.Primitives.ModelReaderWriterOptions options) { }
+        Azure.AI.OpenAI.Assistants.UploadFileRequest System.ClientModel.Primitives.IJsonModel<Azure.AI.OpenAI.Assistants.UploadFileRequest>.Create(ref System.Text.Json.Utf8JsonReader reader, System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+        void System.ClientModel.Primitives.IJsonModel<Azure.AI.OpenAI.Assistants.UploadFileRequest>.Write(System.Text.Json.Utf8JsonWriter writer, System.ClientModel.Primitives.ModelReaderWriterOptions options) { }
+        Azure.AI.OpenAI.Assistants.UploadFileRequest System.ClientModel.Primitives.IPersistableModel<Azure.AI.OpenAI.Assistants.UploadFileRequest>.Create(System.BinaryData data, System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+        string System.ClientModel.Primitives.IPersistableModel<Azure.AI.OpenAI.Assistants.UploadFileRequest>.GetFormatFromOptions(System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+        System.BinaryData System.ClientModel.Primitives.IPersistableModel<Azure.AI.OpenAI.Assistants.UploadFileRequest>.Write(System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
     }
 }
 namespace Microsoft.Extensions.Azure

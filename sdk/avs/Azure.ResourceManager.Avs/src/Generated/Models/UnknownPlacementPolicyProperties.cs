@@ -10,22 +10,15 @@ using System.Collections.Generic;
 
 namespace Azure.ResourceManager.Avs.Models
 {
-    /// <summary> Unknown version of PlacementPolicyProperties. </summary>
     internal partial class UnknownPlacementPolicyProperties : PlacementPolicyProperties
     {
         /// <summary> Initializes a new instance of <see cref="UnknownPlacementPolicyProperties"/>. </summary>
-        /// <param name="policyType"> Placement Policy type. </param>
+        /// <param name="type"> Placement Policy type. </param>
         /// <param name="state"> Whether the placement policy is enabled or disabled. </param>
         /// <param name="displayName"> Display name of the placement policy. </param>
         /// <param name="provisioningState"> The provisioning state. </param>
-        /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
-        internal UnknownPlacementPolicyProperties(PlacementPolicyType policyType, PlacementPolicyState? state, string displayName, PlacementPolicyProvisioningState? provisioningState, IDictionary<string, BinaryData> serializedAdditionalRawData) : base(policyType, state, displayName, provisioningState, serializedAdditionalRawData)
-        {
-            PolicyType = policyType;
-        }
-
-        /// <summary> Initializes a new instance of <see cref="UnknownPlacementPolicyProperties"/> for deserialization. </summary>
-        internal UnknownPlacementPolicyProperties()
+        /// <param name="additionalBinaryDataProperties"> Keeps track of any properties unknown to the library. </param>
+        internal UnknownPlacementPolicyProperties(PlacementPolicyType @type, PlacementPolicyState? state, string displayName, PlacementPolicyProvisioningState? provisioningState, IDictionary<string, BinaryData> additionalBinaryDataProperties) : base(@type != default ? @type : "unknown", state, displayName, provisioningState, additionalBinaryDataProperties)
         {
         }
     }

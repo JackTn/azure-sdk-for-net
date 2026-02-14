@@ -8,13 +8,27 @@
 using System;
 using System.ClientModel.Primitives;
 using System.Text.Json;
-using Azure;
 using Azure.Core;
 
 namespace SpecialWords._Models
 {
     public partial class Else : IJsonModel<Else>
     {
+        internal Else() => throw null;
+
+        protected virtual Else PersistableModelCreateCore(BinaryData data, ModelReaderWriterOptions options) => throw null;
+
+        protected virtual BinaryData PersistableModelWriteCore(ModelReaderWriterOptions options) => throw null;
+
+        BinaryData IPersistableModel<Else>.Write(ModelReaderWriterOptions options) => throw null;
+
+        Else IPersistableModel<Else>.Create(BinaryData data, ModelReaderWriterOptions options) => throw null;
+
+        string IPersistableModel<Else>.GetFormatFromOptions(ModelReaderWriterOptions options) => throw null;
+
+        /// <param name="else"> The <see cref="Else"/> to serialize into <see cref="RequestContent"/>. </param>
+        public static implicit operator RequestContent(Else @else) => throw null;
+
         void IJsonModel<Else>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options) => throw null;
 
         protected virtual void JsonModelWriteCore(Utf8JsonWriter writer, ModelReaderWriterOptions options) => throw null;
@@ -22,20 +36,5 @@ namespace SpecialWords._Models
         Else IJsonModel<Else>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => throw null;
 
         protected virtual Else JsonModelCreateCore(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => throw null;
-
-        BinaryData IPersistableModel<Else>.Write(ModelReaderWriterOptions options) => throw null;
-
-        protected virtual BinaryData PersistableModelWriteCore(ModelReaderWriterOptions options) => throw null;
-
-        Else IPersistableModel<Else>.Create(BinaryData data, ModelReaderWriterOptions options) => throw null;
-
-        protected virtual Else PersistableModelCreateCore(BinaryData data, ModelReaderWriterOptions options) => throw null;
-
-        string IPersistableModel<Else>.GetFormatFromOptions(ModelReaderWriterOptions options) => throw null;
-
-        /// <param name="else"> The <see cref="Else"/> to serialize into <see cref="RequestContent"/>. </param>
-        public static implicit operator RequestContent(Else @else) => throw null;
-
-        public static explicit operator Else(Response result) => throw null;
     }
 }

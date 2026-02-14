@@ -66,12 +66,16 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> Gets the id. </summary>
+        [WirePath("id")]
         public string Id { get; }
         /// <summary> Gets the name. </summary>
+        [WirePath("name")]
         public string Name { get; }
         /// <summary> Gets the endpoint id. </summary>
+        [WirePath("endpointId")]
         public string EndpointId { get; }
         /// <summary> Gets the history. </summary>
+        [WirePath("history")]
         public bool? History { get; }
     }
 }

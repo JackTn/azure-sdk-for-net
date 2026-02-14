@@ -39,7 +39,7 @@ namespace Azure.ResourceManager.NetApp.Models
                 writer.WritePropertyName("replicationId"u8);
                 writer.WriteStringValue(ReplicationId);
             }
-            if (Optional.IsDefined(EndpointType))
+            if (options.Format != "W" && Optional.IsDefined(EndpointType))
             {
                 writer.WritePropertyName("endpointType"u8);
                 writer.WriteStringValue(EndpointType.Value.ToString());
@@ -63,6 +63,36 @@ namespace Azure.ResourceManager.NetApp.Models
             {
                 writer.WritePropertyName("remoteVolumeRegion"u8);
                 writer.WriteStringValue(RemoteVolumeRegion);
+            }
+            if (options.Format != "W" && Optional.IsCollectionDefined(DestinationReplications))
+            {
+                writer.WritePropertyName("destinationReplications"u8);
+                writer.WriteStartArray();
+                foreach (var item in DestinationReplications)
+                {
+                    writer.WriteObjectValue(item, options);
+                }
+                writer.WriteEndArray();
+            }
+            if (options.Format != "W" && Optional.IsDefined(ExternalReplicationSetupStatus))
+            {
+                writer.WritePropertyName("externalReplicationSetupStatus"u8);
+                writer.WriteStringValue(ExternalReplicationSetupStatus.Value.ToString());
+            }
+            if (options.Format != "W" && Optional.IsDefined(ExternalReplicationSetupInfo))
+            {
+                writer.WritePropertyName("externalReplicationSetupInfo"u8);
+                writer.WriteStringValue(ExternalReplicationSetupInfo);
+            }
+            if (options.Format != "W" && Optional.IsDefined(MirrorState))
+            {
+                writer.WritePropertyName("mirrorState"u8);
+                writer.WriteStringValue(MirrorState.Value.ToString());
+            }
+            if (options.Format != "W" && Optional.IsDefined(RelationshipStatus))
+            {
+                writer.WritePropertyName("relationshipStatus"u8);
+                writer.WriteStringValue(RelationshipStatus.Value.ToString());
             }
             if (options.Format != "W" && _serializedAdditionalRawData != null)
             {
@@ -107,6 +137,11 @@ namespace Azure.ResourceManager.NetApp.Models
             ResourceIdentifier remoteVolumeResourceId = default;
             RemotePath remotePath = default;
             string remoteVolumeRegion = default;
+            IReadOnlyList<NetAppDestinationReplication> destinationReplications = default;
+            ExternalReplicationSetupStatus? externalReplicationSetupStatus = default;
+            string externalReplicationSetupInfo = default;
+            NetAppMirrorState? mirrorState = default;
+            VolumeReplicationRelationshipStatus? relationshipStatus = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> rawDataDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
@@ -157,6 +192,52 @@ namespace Azure.ResourceManager.NetApp.Models
                     remoteVolumeRegion = property.Value.GetString();
                     continue;
                 }
+                if (property.NameEquals("destinationReplications"u8))
+                {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    List<NetAppDestinationReplication> array = new List<NetAppDestinationReplication>();
+                    foreach (var item in property.Value.EnumerateArray())
+                    {
+                        array.Add(NetAppDestinationReplication.DeserializeNetAppDestinationReplication(item, options));
+                    }
+                    destinationReplications = array;
+                    continue;
+                }
+                if (property.NameEquals("externalReplicationSetupStatus"u8))
+                {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    externalReplicationSetupStatus = new ExternalReplicationSetupStatus(property.Value.GetString());
+                    continue;
+                }
+                if (property.NameEquals("externalReplicationSetupInfo"u8))
+                {
+                    externalReplicationSetupInfo = property.Value.GetString();
+                    continue;
+                }
+                if (property.NameEquals("mirrorState"u8))
+                {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    mirrorState = new NetAppMirrorState(property.Value.GetString());
+                    continue;
+                }
+                if (property.NameEquals("relationshipStatus"u8))
+                {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    relationshipStatus = new VolumeReplicationRelationshipStatus(property.Value.GetString());
+                    continue;
+                }
                 if (options.Format != "W")
                 {
                     rawDataDictionary.Add(property.Name, BinaryData.FromString(property.Value.GetRawText()));
@@ -170,6 +251,11 @@ namespace Azure.ResourceManager.NetApp.Models
                 remoteVolumeResourceId,
                 remotePath,
                 remoteVolumeRegion,
+                destinationReplications ?? new ChangeTrackingList<NetAppDestinationReplication>(),
+                externalReplicationSetupStatus,
+                externalReplicationSetupInfo,
+                mirrorState,
+                relationshipStatus,
                 serializedAdditionalRawData);
         }
 
@@ -180,7 +266,7 @@ namespace Azure.ResourceManager.NetApp.Models
             switch (format)
             {
                 case "J":
-                    return ModelReaderWriter.Write(this, options);
+                    return ModelReaderWriter.Write(this, options, AzureResourceManagerNetAppContext.Default);
                 default:
                     throw new FormatException($"The model {nameof(NetAppReplicationObject)} does not support writing '{options.Format}' format.");
             }

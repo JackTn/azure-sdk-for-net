@@ -1,5 +1,11 @@
 namespace Azure.ResourceManager.MarketplaceOrdering
 {
+    public partial class AzureResourceManagerMarketplaceOrderingContext : System.ClientModel.Primitives.ModelReaderWriterContext
+    {
+        internal AzureResourceManagerMarketplaceOrderingContext() { }
+        public static Azure.ResourceManager.MarketplaceOrdering.AzureResourceManagerMarketplaceOrderingContext Default { get { throw null; } }
+        protected override bool TryGetTypeBuilderCore(System.Type type, out System.ClientModel.Primitives.ModelReaderWriterTypeBuilder builder) { throw null; }
+    }
     public partial class MarketplaceAgreementCollection : Azure.ResourceManager.ArmCollection
     {
         protected MarketplaceAgreementCollection() { }
@@ -120,9 +126,7 @@ namespace Azure.ResourceManager.MarketplaceOrdering.Models
         public AgreementOfferType(string value) { throw null; }
         public static Azure.ResourceManager.MarketplaceOrdering.Models.AgreementOfferType Virtualmachine { get { throw null; } }
         public bool Equals(Azure.ResourceManager.MarketplaceOrdering.Models.AgreementOfferType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.MarketplaceOrdering.Models.AgreementOfferType left, Azure.ResourceManager.MarketplaceOrdering.Models.AgreementOfferType right) { throw null; }
         public static implicit operator Azure.ResourceManager.MarketplaceOrdering.Models.AgreementOfferType (string value) { throw null; }

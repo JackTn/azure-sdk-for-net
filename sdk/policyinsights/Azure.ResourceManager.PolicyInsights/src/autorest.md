@@ -8,12 +8,11 @@ azure-arm: true
 csharp: true
 library-name: PolicyInsights
 namespace: Azure.ResourceManager.PolicyInsights
-require: https://github.com/Azure/azure-rest-api-specs/blob/05a9cdab363b8ec824094ee73950c04594325172/specification/policyinsights/resource-manager/readme.md
-tag: package-2022-09
+require: https://github.com/Azure/azure-rest-api-specs/blob/3a2e8e6a43b350ad88d5ff7cf2202a7064e06d2c/specification/policyinsights/resource-manager/readme.md
 output-folder: $(this-folder)/Generated
 clear-output-folder: true
 sample-gen:
-  output-folder: $(this-folder)/../samples/Generated
+  output-folder: $(this-folder)/../tests/Generated
   clear-output-folder: true
   skipped-operations:
   - PolicyEvents_ListQueryResultsForResourceGroupLevelPolicyAssignment
@@ -161,6 +160,7 @@ rename-mapping:
   RemediationDeployment.resourceLocation: -|azure-location
   TrackedResourceModificationDetails.deploymentId: -|arm-id
   PolicyTrackedResourcesResourceType: PolicyTrackedResourceType
+  PolicyEvaluationResult.evaluationDetails: CheckRestrictionEvaluationDetails
 
 models-to-treat-empty-string-as-null:
   - PolicyAssignmentSummary

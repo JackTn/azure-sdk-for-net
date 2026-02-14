@@ -63,8 +63,10 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> Resource ID. </summary>
+        [WirePath("id")]
         public ResourceIdentifier Id { get; set; }
         /// <summary> Whether the resource is active or inactive. </summary>
+        [WirePath("isActive")]
         public bool? IsActive { get; }
     }
 }

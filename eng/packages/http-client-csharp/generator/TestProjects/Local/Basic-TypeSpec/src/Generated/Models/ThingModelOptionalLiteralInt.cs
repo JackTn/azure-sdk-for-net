@@ -9,13 +9,12 @@ using System;
 using System.ComponentModel;
 using System.Globalization;
 
-namespace BasicTypeSpec.Models
+namespace BasicTypeSpec
 {
-    /// <summary> The ThingModel_optionalLiteralInt. </summary>
+    /// <summary></summary>
     public readonly partial struct ThingModelOptionalLiteralInt : IEquatable<ThingModelOptionalLiteralInt>
     {
         private readonly int _value;
-        /// <summary> 456. </summary>
         private const int _456Value = 456;
 
         /// <summary> Initializes a new instance of <see cref="ThingModelOptionalLiteralInt"/>. </summary>
@@ -25,7 +24,7 @@ namespace BasicTypeSpec.Models
             _value = value;
         }
 
-        /// <summary> 456. </summary>
+        /// <summary> Gets the _456. </summary>
         public static ThingModelOptionalLiteralInt _456 { get; } = new ThingModelOptionalLiteralInt(_456Value);
 
         /// <summary> Determines if two <see cref="ThingModelOptionalLiteralInt"/> values are the same. </summary>
@@ -42,11 +41,11 @@ namespace BasicTypeSpec.Models
         /// <param name="value"> The value. </param>
         public static implicit operator ThingModelOptionalLiteralInt(int value) => new ThingModelOptionalLiteralInt(value);
 
-        /// <param name="obj"> The object to compare. </param>
+        /// <inheritdoc/>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override bool Equals(object obj) => obj is ThingModelOptionalLiteralInt other && Equals(other);
 
-        /// <param name="other"> The instance to compare. </param>
+        /// <inheritdoc/>
         public bool Equals(ThingModelOptionalLiteralInt other) => Equals(_value, other._value);
 
         /// <inheritdoc/>

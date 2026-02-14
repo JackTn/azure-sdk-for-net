@@ -11,74 +11,23 @@ using System.Linq;
 
 namespace Azure.ResourceManager.StandbyPool.Models
 {
-    /// <summary>
-    /// Contains the counts of VMs in each power state in a given zone, fault domain, as known by the StandbyPool resource provider.
-    /// Note: any updates to pool resources outside of StandbyPoolRP (i.e deleting a VM through portal) are not reflected here.
-    /// Note: any resources in the Running state may still be installing extensions / not fully provisioned.
-    /// </summary>
+    /// <summary> Contains the counts of VMs in each power state in a given zone, fault domain, as known by the StandbyPool resource provider. Note: any resources in the Running state may still be installing extensions / not fully provisioned. </summary>
     public partial class StandbyVirtualMachineInstanceCountSummary
     {
-        /// <summary>
-        /// Keeps track of any properties unknown to the library.
-        /// <para>
-        /// To assign an object to the value of this property use <see cref="BinaryData.FromObjectAsJson{T}(T, System.Text.Json.JsonSerializerOptions?)"/>.
-        /// </para>
-        /// <para>
-        /// To assign an already formatted json string to this property use <see cref="BinaryData.FromString(string)"/>.
-        /// </para>
-        /// <para>
-        /// Examples:
-        /// <list type="bullet">
-        /// <item>
-        /// <term>BinaryData.FromObjectAsJson("foo")</term>
-        /// <description>Creates a payload of "foo".</description>
-        /// </item>
-        /// <item>
-        /// <term>BinaryData.FromString("\"foo\"")</term>
-        /// <description>Creates a payload of "foo".</description>
-        /// </item>
-        /// <item>
-        /// <term>BinaryData.FromObjectAsJson(new { key = "value" })</term>
-        /// <description>Creates a payload of { "key": "value" }.</description>
-        /// </item>
-        /// <item>
-        /// <term>BinaryData.FromString("{\"key\": \"value\"}")</term>
-        /// <description>Creates a payload of { "key": "value" }.</description>
-        /// </item>
-        /// </list>
-        /// </para>
-        /// </summary>
-        private IDictionary<string, BinaryData> _serializedAdditionalRawData;
+        /// <summary> Keeps track of any properties unknown to the library. </summary>
+        private protected readonly IDictionary<string, BinaryData> _additionalBinaryDataProperties;
 
         /// <summary> Initializes a new instance of <see cref="StandbyVirtualMachineInstanceCountSummary"/>. </summary>
-        /// <param name="instanceCountsByState"> The count of pooled resources in each state for the given zone. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="instanceCountsByState"/> is null. </exception>
-        internal StandbyVirtualMachineInstanceCountSummary(IEnumerable<PoolResourceStateCount> instanceCountsByState)
+        /// <param name="standbyVirtualMachineInstanceCountsByState"> The count of pooled virtual machines in each state for the given zone. </param>
+        internal StandbyVirtualMachineInstanceCountSummary(IEnumerable<PoolVirtualMachineStateCount> standbyVirtualMachineInstanceCountsByState)
         {
-            Argument.AssertNotNull(instanceCountsByState, nameof(instanceCountsByState));
-
-            InstanceCountsByState = instanceCountsByState.ToList();
+            StandbyVirtualMachineInstanceCountsByState = standbyVirtualMachineInstanceCountsByState.ToList();
         }
 
-        /// <summary> Initializes a new instance of <see cref="StandbyVirtualMachineInstanceCountSummary"/>. </summary>
-        /// <param name="zone"> The zone that the provided counts are in. This is null if zones are not enabled on the attached VMSS. </param>
-        /// <param name="instanceCountsByState"> The count of pooled resources in each state for the given zone. </param>
-        /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
-        internal StandbyVirtualMachineInstanceCountSummary(long? zone, IReadOnlyList<PoolResourceStateCount> instanceCountsByState, IDictionary<string, BinaryData> serializedAdditionalRawData)
-        {
-            Zone = zone;
-            InstanceCountsByState = instanceCountsByState;
-            _serializedAdditionalRawData = serializedAdditionalRawData;
-        }
-
-        /// <summary> Initializes a new instance of <see cref="StandbyVirtualMachineInstanceCountSummary"/> for deserialization. </summary>
-        internal StandbyVirtualMachineInstanceCountSummary()
-        {
-        }
-
-        /// <summary> The zone that the provided counts are in. This is null if zones are not enabled on the attached VMSS. </summary>
+        /// <summary> The zone that the provided counts are in. It will not have a value if zones are not enabled on the attached VMSS. </summary>
         public long? Zone { get; }
-        /// <summary> The count of pooled resources in each state for the given zone. </summary>
-        public IReadOnlyList<PoolResourceStateCount> InstanceCountsByState { get; }
+
+        /// <summary> The count of pooled virtual machines in each state for the given zone. </summary>
+        public IReadOnlyList<PoolVirtualMachineStateCount> StandbyVirtualMachineInstanceCountsByState { get; }
     }
 }

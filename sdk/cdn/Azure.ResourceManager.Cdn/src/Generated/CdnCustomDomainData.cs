@@ -86,22 +86,29 @@ namespace Azure.ResourceManager.Cdn
         }
 
         /// <summary> The host name of the custom domain. Must be a domain name. </summary>
+        [WirePath("properties.hostName")]
         public string HostName { get; set; }
         /// <summary> Resource status of the custom domain. </summary>
+        [WirePath("properties.resourceState")]
         public CustomDomainResourceState? ResourceState { get; }
         /// <summary> Provisioning status of the custom domain. </summary>
+        [WirePath("properties.customHttpsProvisioningState")]
         public CustomHttpsProvisioningState? CustomHttpsProvisioningState { get; }
         /// <summary> Provisioning substate shows the progress of custom HTTPS enabling/disabling process step by step. </summary>
+        [WirePath("properties.customHttpsProvisioningSubstate")]
         public CustomHttpsAvailabilityState? CustomHttpsAvailabilityState { get; }
         /// <summary>
         /// Certificate parameters for securing custom HTTPS
         /// Please note <see cref="Models.CustomDomainHttpsContent"/> is the base class. According to the scenario, a derived class of the base class might need to be assigned here, or this property needs to be casted to one of the possible derived classes.
         /// The available derived classes include <see cref="UserManagedHttpsContent"/> and <see cref="CdnManagedHttpsContent"/>.
         /// </summary>
+        [WirePath("properties.customHttpsParameters")]
         public CustomDomainHttpsContent CustomDomainHttpsContent { get; set; }
         /// <summary> Special validation or data may be required when delivering CDN to some regions due to local compliance reasons. E.g. ICP license number of a custom domain is required to deliver content in China. </summary>
+        [WirePath("properties.validationData")]
         public string ValidationData { get; set; }
         /// <summary> Provisioning status of Custom Https of the custom domain. </summary>
+        [WirePath("properties.provisioningState")]
         public CustomHttpsProvisioningState? ProvisioningState { get; }
     }
 }

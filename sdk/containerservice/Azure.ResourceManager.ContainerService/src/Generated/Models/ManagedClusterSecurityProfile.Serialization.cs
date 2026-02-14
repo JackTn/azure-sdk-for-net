@@ -8,6 +8,7 @@
 using System;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Text.Json;
 using Azure.Core;
@@ -55,6 +56,16 @@ namespace Azure.ResourceManager.ContainerService.Models
                 writer.WritePropertyName("imageCleaner"u8);
                 writer.WriteObjectValue(ImageCleaner, options);
             }
+            if (Optional.IsCollectionDefined(CustomCATrustCertificates))
+            {
+                writer.WritePropertyName("customCATrustCertificates"u8);
+                writer.WriteStartArray();
+                foreach (var item in CustomCATrustCertificates)
+                {
+                    writer.WriteBase64StringValue(item, "D");
+                }
+                writer.WriteEndArray();
+            }
             if (options.Format != "W" && _serializedAdditionalRawData != null)
             {
                 foreach (var item in _serializedAdditionalRawData)
@@ -96,6 +107,7 @@ namespace Azure.ResourceManager.ContainerService.Models
             ManagedClusterSecurityProfileKeyVaultKms azureKeyVaultKms = default;
             ManagedClusterSecurityProfileWorkloadIdentity workloadIdentity = default;
             ManagedClusterSecurityProfileImageCleaner imageCleaner = default;
+            IList<byte[]> customCATrustCertificates = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> rawDataDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
@@ -136,13 +148,33 @@ namespace Azure.ResourceManager.ContainerService.Models
                     imageCleaner = ManagedClusterSecurityProfileImageCleaner.DeserializeManagedClusterSecurityProfileImageCleaner(property.Value, options);
                     continue;
                 }
+                if (property.NameEquals("customCATrustCertificates"u8))
+                {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    List<byte[]> array = new List<byte[]>();
+                    foreach (var item in property.Value.EnumerateArray())
+                    {
+                        array.Add(item.GetBytesFromBase64("D"));
+                    }
+                    customCATrustCertificates = array;
+                    continue;
+                }
                 if (options.Format != "W")
                 {
                     rawDataDictionary.Add(property.Name, BinaryData.FromString(property.Value.GetRawText()));
                 }
             }
             serializedAdditionalRawData = rawDataDictionary;
-            return new ManagedClusterSecurityProfile(defender, azureKeyVaultKms, workloadIdentity, imageCleaner, serializedAdditionalRawData);
+            return new ManagedClusterSecurityProfile(
+                defender,
+                azureKeyVaultKms,
+                workloadIdentity,
+                imageCleaner,
+                customCATrustCertificates ?? new ChangeTrackingList<byte[]>(),
+                serializedAdditionalRawData);
         }
 
         private BinaryData SerializeBicep(ModelReaderWriterOptions options)
@@ -219,6 +251,34 @@ namespace Azure.ResourceManager.ContainerService.Models
                 }
             }
 
+            hasPropertyOverride = hasObjectOverride && propertyOverrides.TryGetValue(nameof(CustomCATrustCertificates), out propertyOverride);
+            if (hasPropertyOverride)
+            {
+                builder.Append("  customCATrustCertificates: ");
+                builder.AppendLine(propertyOverride);
+            }
+            else
+            {
+                if (Optional.IsCollectionDefined(CustomCATrustCertificates))
+                {
+                    if (CustomCATrustCertificates.Any())
+                    {
+                        builder.Append("  customCATrustCertificates: ");
+                        builder.AppendLine("[");
+                        foreach (var item in CustomCATrustCertificates)
+                        {
+                            if (item == null)
+                            {
+                                builder.Append("null");
+                                continue;
+                            }
+                            builder.AppendLine($"    '{item.ToString()}'");
+                        }
+                        builder.AppendLine("  ]");
+                    }
+                }
+            }
+
             builder.AppendLine("}");
             return BinaryData.FromString(builder.ToString());
         }
@@ -230,7 +290,7 @@ namespace Azure.ResourceManager.ContainerService.Models
             switch (format)
             {
                 case "J":
-                    return ModelReaderWriter.Write(this, options);
+                    return ModelReaderWriter.Write(this, options, AzureResourceManagerContainerServiceContext.Default);
                 case "bicep":
                     return SerializeBicep(options);
                 default:

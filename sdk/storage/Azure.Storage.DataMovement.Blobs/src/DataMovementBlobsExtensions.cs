@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using Azure.Storage.Blobs.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Azure.Storage.Blobs.Models;
 using Metadata = System.Collections.Generic.IDictionary<string, string>;
 using Tags = System.Collections.Generic.IDictionary<string, string>;
 
@@ -101,7 +101,7 @@ namespace Azure.Storage.DataMovement.Blobs
             ContentRange contentRange = !string.IsNullOrWhiteSpace(result?.Details?.ContentRange) ? ContentRange.Parse(result.Details.ContentRange) : default;
             if (contentRange != default)
             {
-                size = contentRange.Size;
+                size = contentRange.TotalResourceLength;
             }
 
             return new StorageResourceItemProperties()
@@ -155,7 +155,7 @@ namespace Azure.Storage.DataMovement.Blobs
             if (contentRange != default)
             {
                 range = ContentRange.ToHttpRange(contentRange);
-                size = contentRange.Size;
+                size = contentRange.TotalResourceLength;
             }
             else if (result.Details.ContentLength > 0)
             {
@@ -482,6 +482,7 @@ namespace Azure.Storage.DataMovement.Blobs
                     TagConditions = options?.DestinationConditions?.TagConditions,
                     LeaseId = options?.DestinationConditions?.LeaseId,
                 },
+                PremiumPageBlobAccessTier = GetAccessTier(options, sourceProperties?.RawProperties).ToPremiumPageBlobAccessTier(),
             };
         }
 
@@ -639,7 +640,7 @@ namespace Azure.Storage.DataMovement.Blobs
                 ContentType = (options?._isContentTypeSet ?? false)
                     ? options?.ContentType
                     : properties?.TryGetValue(DataMovementConstants.ResourceProperties.ContentType, out object contentType) == true
-                        ? (string) contentType
+                        ? (string)contentType
                         : default,
                 ContentEncoding = (options?._isContentEncodingSet ?? false)
                     ? options?.ContentEncoding
@@ -667,7 +668,7 @@ namespace Azure.Storage.DataMovement.Blobs
         private static AccessTier? GetAccessTier(
             BlobStorageResourceOptions options,
             IDictionary<string, object> properties)
-            => options?.AccessTier != default
+            => options?._isAccessTierSet ?? false
                 ? options?.AccessTier
                 : properties?.TryGetValue(DataMovementConstants.ResourceProperties.AccessTier, out object accessTierObject) == true
                     ? (AccessTier?)accessTierObject
@@ -682,5 +683,20 @@ namespace Azure.Storage.DataMovement.Blobs
                 : properties?.TryGetValue(DataMovementConstants.ResourceProperties.Metadata, out object metadataObject) == true
                     ? (Metadata)metadataObject
                     : default;
+
+        // Convert AccessTier to PremiumPageBlobAccessTier
+        // As long as it works. Do not set if the AccessTier is a BlockBlob tier
+        private static PremiumPageBlobAccessTier? ToPremiumPageBlobAccessTier(this AccessTier? accessTier)
+        {
+            if (accessTier != default &&
+                accessTier != AccessTier.Hot &&
+                accessTier != AccessTier.Cool &&
+                accessTier != AccessTier.Archive &&
+                accessTier != AccessTier.Cold)
+            {
+                return new PremiumPageBlobAccessTier(accessTier.ToString());
+            }
+            return default;
+        }
     }
 }

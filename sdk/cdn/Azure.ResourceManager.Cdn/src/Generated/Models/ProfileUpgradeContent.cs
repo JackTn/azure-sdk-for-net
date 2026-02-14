@@ -71,6 +71,7 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> Web Application Firewall (WAF) and security policy mapping for the profile upgrade. </summary>
+        [WirePath("wafMappingList")]
         public IList<ProfileChangeSkuWafMapping> WafMappingList { get; }
     }
 }

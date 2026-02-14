@@ -59,6 +59,7 @@ namespace Azure.ResourceManager.Cdn.Models
         /// <summary> Resource reference to the Azure Key Vault certificate. Expected to be in format of /subscriptions/{​​​​​​​​​subscriptionId}​​​​​​​​​/resourceGroups/{​​​​​​​​​resourceGroupName}​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​/providers/Microsoft.KeyVault/vaults/{vaultName}​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​/secrets/{certificateName}​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​. </summary>
         internal WritableSubResource SecretSource { get; set; }
         /// <summary> Gets or sets Id. </summary>
+        [WirePath("secretSource.id")]
         public ResourceIdentifier SecretSourceId
         {
             get => SecretSource is null ? default : SecretSource.Id;
@@ -71,18 +72,25 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> Version of the secret to be used. </summary>
+        [WirePath("secretVersion")]
         public string SecretVersion { get; set; }
         /// <summary> Whether to use the latest version for the certificate. </summary>
+        [WirePath("useLatestVersion")]
         public bool? UseLatestVersion { get; set; }
         /// <summary> Subject name in the certificate. </summary>
+        [WirePath("subject")]
         public string Subject { get; }
         /// <summary> Certificate expiration date. </summary>
+        [WirePath("expirationDate")]
         public DateTimeOffset? ExpiresOn { get; }
         /// <summary> Certificate issuing authority. </summary>
+        [WirePath("certificateAuthority")]
         public string CertificateAuthority { get; }
         /// <summary> The list of SANs. </summary>
+        [WirePath("subjectAlternativeNames")]
         public IList<string> SubjectAlternativeNames { get; }
         /// <summary> Certificate thumbprint. </summary>
+        [WirePath("thumbprint")]
         public string Thumbprint { get; }
     }
 }

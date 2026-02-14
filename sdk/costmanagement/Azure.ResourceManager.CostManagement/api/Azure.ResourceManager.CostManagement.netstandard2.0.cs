@@ -1,5 +1,11 @@
 namespace Azure.ResourceManager.CostManagement
 {
+    public partial class AzureResourceManagerCostManagementContext : System.ClientModel.Primitives.ModelReaderWriterContext
+    {
+        internal AzureResourceManagerCostManagementContext() { }
+        public static Azure.ResourceManager.CostManagement.AzureResourceManagerCostManagementContext Default { get { throw null; } }
+        protected override bool TryGetTypeBuilderCore(System.Type type, out System.ClientModel.Primitives.ModelReaderWriterTypeBuilder builder) { throw null; }
+    }
     public partial class CostManagementAlertCollection : Azure.ResourceManager.ArmCollection, System.Collections.Generic.IAsyncEnumerable<Azure.ResourceManager.CostManagement.CostManagementAlertResource>, System.Collections.Generic.IEnumerable<Azure.ResourceManager.CostManagement.CostManagementAlertResource>, System.Collections.IEnumerable
     {
         protected CostManagementAlertCollection() { }
@@ -467,9 +473,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.AccumulatedType False { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.AccumulatedType True { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.AccumulatedType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.AccumulatedType left, Azure.ResourceManager.CostManagement.Models.AccumulatedType right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.AccumulatedType (string value) { throw null; }
@@ -497,9 +501,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.AlertCriterion QuotaThresholdReached { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.AlertCriterion UsageThresholdExceeded { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.AlertCriterion other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.AlertCriterion left, Azure.ResourceManager.CostManagement.Models.AlertCriterion right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.AlertCriterion (string value) { throw null; }
@@ -565,9 +567,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.AlertTimeGrainType None { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.AlertTimeGrainType Quarterly { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.AlertTimeGrainType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.AlertTimeGrainType left, Azure.ResourceManager.CostManagement.Models.AlertTimeGrainType right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.AlertTimeGrainType (string value) { throw null; }
@@ -671,9 +671,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.BenefitRecommendationPeriodTerm P1Y { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.BenefitRecommendationPeriodTerm P3Y { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.BenefitRecommendationPeriodTerm other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.BenefitRecommendationPeriodTerm left, Azure.ResourceManager.CostManagement.Models.BenefitRecommendationPeriodTerm right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.BenefitRecommendationPeriodTerm (string value) { throw null; }
@@ -712,9 +710,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.BenefitRecommendationUsageGrain Hourly { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.BenefitRecommendationUsageGrain Monthly { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.BenefitRecommendationUsageGrain other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.BenefitRecommendationUsageGrain left, Azure.ResourceManager.CostManagement.Models.BenefitRecommendationUsageGrain right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.BenefitRecommendationUsageGrain (string value) { throw null; }
@@ -778,9 +774,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.BenefitUtilizationSummaryReportSchema UsageDate { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.BenefitUtilizationSummaryReportSchema UtilizedPercentage { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.BenefitUtilizationSummaryReportSchema other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.BenefitUtilizationSummaryReportSchema left, Azure.ResourceManager.CostManagement.Models.BenefitUtilizationSummaryReportSchema right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.BenefitUtilizationSummaryReportSchema (string value) { throw null; }
@@ -797,9 +791,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.BillingAccountBenefitKind Reservation { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.BillingAccountBenefitKind SavingsPlan { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.BillingAccountBenefitKind other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.BillingAccountBenefitKind left, Azure.ResourceManager.CostManagement.Models.BillingAccountBenefitKind right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.BillingAccountBenefitKind (string value) { throw null; }
@@ -831,9 +823,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.ComparisonOperatorType Contains { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.ComparisonOperatorType In { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.ComparisonOperatorType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.ComparisonOperatorType left, Azure.ResourceManager.CostManagement.Models.ComparisonOperatorType right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.ComparisonOperatorType (string value) { throw null; }
@@ -851,9 +841,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.CostManagementAlertCategory System { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.CostManagementAlertCategory Usage { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.CostManagementAlertCategory other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.CostManagementAlertCategory left, Azure.ResourceManager.CostManagement.Models.CostManagementAlertCategory right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.CostManagementAlertCategory (string value) { throw null; }
@@ -873,9 +861,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.CostManagementAlertOperator LessThanOrEqualTo { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.CostManagementAlertOperator None { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.CostManagementAlertOperator other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.CostManagementAlertOperator left, Azure.ResourceManager.CostManagement.Models.CostManagementAlertOperator right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.CostManagementAlertOperator (string value) { throw null; }
@@ -912,9 +898,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.CostManagementAlertSource Preset { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.CostManagementAlertSource User { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.CostManagementAlertSource other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.CostManagementAlertSource left, Azure.ResourceManager.CostManagement.Models.CostManagementAlertSource right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.CostManagementAlertSource (string value) { throw null; }
@@ -933,9 +917,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.CostManagementAlertStatus Overridden { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.CostManagementAlertStatus Resolved { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.CostManagementAlertStatus other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.CostManagementAlertStatus left, Azure.ResourceManager.CostManagement.Models.CostManagementAlertStatus right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.CostManagementAlertStatus (string value) { throw null; }
@@ -956,9 +938,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.CostManagementAlertType Quota { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.CostManagementAlertType XCloud { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.CostManagementAlertType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.CostManagementAlertType left, Azure.ResourceManager.CostManagement.Models.CostManagementAlertType right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.CostManagementAlertType (string value) { throw null; }
@@ -1022,9 +1002,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.CostManagementUnavailabilityReason AlreadyExists { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.CostManagementUnavailabilityReason Invalid { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.CostManagementUnavailabilityReason other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.CostManagementUnavailabilityReason left, Azure.ResourceManager.CostManagement.Models.CostManagementUnavailabilityReason right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.CostManagementUnavailabilityReason (string value) { throw null; }
@@ -1104,9 +1082,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public ExportFormatType(string value) { throw null; }
         public static Azure.ResourceManager.CostManagement.Models.ExportFormatType Csv { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.ExportFormatType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.ExportFormatType left, Azure.ResourceManager.CostManagement.Models.ExportFormatType right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.ExportFormatType (string value) { throw null; }
@@ -1171,9 +1147,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.ExportRunExecutionStatus Queued { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.ExportRunExecutionStatus Timeout { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.ExportRunExecutionStatus other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.ExportRunExecutionStatus left, Azure.ResourceManager.CostManagement.Models.ExportRunExecutionStatus right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.ExportRunExecutionStatus (string value) { throw null; }
@@ -1189,9 +1163,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.ExportRunExecutionType OnDemand { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.ExportRunExecutionType Scheduled { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.ExportRunExecutionType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.ExportRunExecutionType left, Azure.ResourceManager.CostManagement.Models.ExportRunExecutionType right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.ExportRunExecutionType (string value) { throw null; }
@@ -1222,9 +1194,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.ExportScheduleRecurrenceType Monthly { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.ExportScheduleRecurrenceType Weekly { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.ExportScheduleRecurrenceType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.ExportScheduleRecurrenceType left, Azure.ResourceManager.CostManagement.Models.ExportScheduleRecurrenceType right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.ExportScheduleRecurrenceType (string value) { throw null; }
@@ -1240,9 +1210,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.ExportScheduleStatusType Active { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.ExportScheduleStatusType Inactive { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.ExportScheduleStatusType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.ExportScheduleStatusType left, Azure.ResourceManager.CostManagement.Models.ExportScheduleStatusType right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.ExportScheduleStatusType (string value) { throw null; }
@@ -1271,9 +1239,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.ExportType AmortizedCost { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.ExportType Usage { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.ExportType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.ExportType left, Azure.ResourceManager.CostManagement.Models.ExportType right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.ExportType (string value) { throw null; }
@@ -1289,9 +1255,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.ExternalCloudProviderType ExternalBillingAccounts { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.ExternalCloudProviderType ExternalSubscriptions { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.ExternalCloudProviderType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.ExternalCloudProviderType left, Azure.ResourceManager.CostManagement.Models.ExternalCloudProviderType right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.ExternalCloudProviderType (string value) { throw null; }
@@ -1387,9 +1351,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public ForecastOperatorType(string value) { throw null; }
         public static Azure.ResourceManager.CostManagement.Models.ForecastOperatorType In { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.ForecastOperatorType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.ForecastOperatorType left, Azure.ResourceManager.CostManagement.Models.ForecastOperatorType right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.ForecastOperatorType (string value) { throw null; }
@@ -1421,9 +1383,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public ForecastTimeframe(string value) { throw null; }
         public static Azure.ResourceManager.CostManagement.Models.ForecastTimeframe Custom { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.ForecastTimeframe other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.ForecastTimeframe left, Azure.ResourceManager.CostManagement.Models.ForecastTimeframe right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.ForecastTimeframe (string value) { throw null; }
@@ -1452,9 +1412,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.ForecastType AmortizedCost { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.ForecastType Usage { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.ForecastType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.ForecastType left, Azure.ResourceManager.CostManagement.Models.ForecastType right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.ForecastType (string value) { throw null; }
@@ -1472,9 +1430,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.FunctionName PreTaxCost { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.FunctionName PreTaxCostUSD { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.FunctionName other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.FunctionName left, Azure.ResourceManager.CostManagement.Models.FunctionName right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.FunctionName (string value) { throw null; }
@@ -1489,9 +1445,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public FunctionType(string value) { throw null; }
         public static Azure.ResourceManager.CostManagement.Models.FunctionType Sum { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.FunctionType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.FunctionType left, Azure.ResourceManager.CostManagement.Models.FunctionType right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.FunctionType (string value) { throw null; }
@@ -1508,9 +1462,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.GrainContent Hourly { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.GrainContent Monthly { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.GrainContent other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.GrainContent left, Azure.ResourceManager.CostManagement.Models.GrainContent right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.GrainContent (string value) { throw null; }
@@ -1525,9 +1477,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public GranularityType(string value) { throw null; }
         public static Azure.ResourceManager.CostManagement.Models.GranularityType Daily { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.GranularityType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.GranularityType left, Azure.ResourceManager.CostManagement.Models.GranularityType right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.GranularityType (string value) { throw null; }
@@ -1560,9 +1510,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.LookBackPeriod Last60Days { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.LookBackPeriod Last7Days { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.LookBackPeriod other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.LookBackPeriod left, Azure.ResourceManager.CostManagement.Models.LookBackPeriod right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.LookBackPeriod (string value) { throw null; }
@@ -1608,9 +1556,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.OperationStatusType Failed { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.OperationStatusType Running { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.OperationStatusType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.OperationStatusType left, Azure.ResourceManager.CostManagement.Models.OperationStatusType right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.OperationStatusType (string value) { throw null; }
@@ -1650,9 +1596,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.QueryColumnType Dimension { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.QueryColumnType TagKey { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.QueryColumnType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.QueryColumnType left, Azure.ResourceManager.CostManagement.Models.QueryColumnType right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.QueryColumnType (string value) { throw null; }
@@ -1735,9 +1679,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public QueryOperatorType(string value) { throw null; }
         public static Azure.ResourceManager.CostManagement.Models.QueryOperatorType In { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.QueryOperatorType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.QueryOperatorType left, Azure.ResourceManager.CostManagement.Models.QueryOperatorType right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.QueryOperatorType (string value) { throw null; }
@@ -1873,9 +1815,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.ReportConfigSortingType Ascending { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.ReportConfigSortingType Descending { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.ReportConfigSortingType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.ReportConfigSortingType left, Azure.ResourceManager.CostManagement.Models.ReportConfigSortingType right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.ReportConfigSortingType (string value) { throw null; }
@@ -1903,9 +1843,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.ReportGranularityType Daily { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.ReportGranularityType Monthly { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.ReportGranularityType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.ReportGranularityType left, Azure.ResourceManager.CostManagement.Models.ReportGranularityType right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.ReportGranularityType (string value) { throw null; }
@@ -1923,9 +1861,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.ReportTimeframeType WeekToDate { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.ReportTimeframeType YearToDate { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.ReportTimeframeType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.ReportTimeframeType left, Azure.ResourceManager.CostManagement.Models.ReportTimeframeType right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.ReportTimeframeType (string value) { throw null; }
@@ -1950,9 +1886,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.ReservationReportSchema UsageDate { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.ReservationReportSchema UsedHours { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.ReservationReportSchema other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.ReservationReportSchema left, Azure.ResourceManager.CostManagement.Models.ReservationReportSchema right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.ReservationReportSchema (string value) { throw null; }
@@ -1991,9 +1925,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.ScheduledActionDaysOfWeek Tuesday { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.ScheduledActionDaysOfWeek Wednesday { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.ScheduledActionDaysOfWeek other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.ScheduledActionDaysOfWeek left, Azure.ResourceManager.CostManagement.Models.ScheduledActionDaysOfWeek right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.ScheduledActionDaysOfWeek (string value) { throw null; }
@@ -2008,9 +1940,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public ScheduledActionFileFormat(string value) { throw null; }
         public static Azure.ResourceManager.CostManagement.Models.ScheduledActionFileFormat Csv { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.ScheduledActionFileFormat other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.ScheduledActionFileFormat left, Azure.ResourceManager.CostManagement.Models.ScheduledActionFileFormat right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.ScheduledActionFileFormat (string value) { throw null; }
@@ -2026,9 +1956,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.ScheduledActionKind Email { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.ScheduledActionKind InsightAlert { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.ScheduledActionKind other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.ScheduledActionKind left, Azure.ResourceManager.CostManagement.Models.ScheduledActionKind right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.ScheduledActionKind (string value) { throw null; }
@@ -2045,9 +1973,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.ScheduledActionStatus Enabled { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.ScheduledActionStatus Expired { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.ScheduledActionStatus other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.ScheduledActionStatus left, Azure.ResourceManager.CostManagement.Models.ScheduledActionStatus right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.ScheduledActionStatus (string value) { throw null; }
@@ -2066,9 +1992,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.ScheduledActionWeeksOfMonth Second { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.ScheduledActionWeeksOfMonth Third { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.ScheduledActionWeeksOfMonth other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.ScheduledActionWeeksOfMonth left, Azure.ResourceManager.CostManagement.Models.ScheduledActionWeeksOfMonth right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.ScheduledActionWeeksOfMonth (string value) { throw null; }
@@ -2085,9 +2009,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.ScheduleFrequency Monthly { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.ScheduleFrequency Weekly { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.ScheduleFrequency other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.ScheduleFrequency left, Azure.ResourceManager.CostManagement.Models.ScheduleFrequency right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.ScheduleFrequency (string value) { throw null; }
@@ -2156,9 +2078,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.TimeframeType TheLastMonth { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.TimeframeType WeekToDate { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.TimeframeType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.TimeframeType left, Azure.ResourceManager.CostManagement.Models.TimeframeType right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.TimeframeType (string value) { throw null; }
@@ -2177,9 +2097,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.ViewChartType StackedColumn { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.ViewChartType Table { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.ViewChartType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.ViewChartType left, Azure.ResourceManager.CostManagement.Models.ViewChartType right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.ViewChartType (string value) { throw null; }
@@ -2208,9 +2126,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.ViewKpiType Budget { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.ViewKpiType Forecast { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.ViewKpiType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.ViewKpiType left, Azure.ResourceManager.CostManagement.Models.ViewKpiType right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.ViewKpiType (string value) { throw null; }
@@ -2227,9 +2143,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.ViewMetricType Ahub { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.ViewMetricType AmortizedCost { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.ViewMetricType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.ViewMetricType left, Azure.ResourceManager.CostManagement.Models.ViewMetricType right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.ViewMetricType (string value) { throw null; }
@@ -2257,9 +2171,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public static Azure.ResourceManager.CostManagement.Models.ViewPivotType Dimension { get { throw null; } }
         public static Azure.ResourceManager.CostManagement.Models.ViewPivotType TagKey { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.ViewPivotType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.ViewPivotType left, Azure.ResourceManager.CostManagement.Models.ViewPivotType right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.ViewPivotType (string value) { throw null; }
@@ -2274,9 +2186,7 @@ namespace Azure.ResourceManager.CostManagement.Models
         public ViewReportType(string value) { throw null; }
         public static Azure.ResourceManager.CostManagement.Models.ViewReportType Usage { get { throw null; } }
         public bool Equals(Azure.ResourceManager.CostManagement.Models.ViewReportType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.CostManagement.Models.ViewReportType left, Azure.ResourceManager.CostManagement.Models.ViewReportType right) { throw null; }
         public static implicit operator Azure.ResourceManager.CostManagement.Models.ViewReportType (string value) { throw null; }

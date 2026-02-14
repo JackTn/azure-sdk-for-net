@@ -1,5 +1,11 @@
 namespace Azure.ResourceManager.ManagedNetwork
 {
+    public partial class AzureResourceManagerManagedNetworkContext : System.ClientModel.Primitives.ModelReaderWriterContext
+    {
+        internal AzureResourceManagerManagedNetworkContext() { }
+        public static Azure.ResourceManager.ManagedNetwork.AzureResourceManagerManagedNetworkContext Default { get { throw null; } }
+        protected override bool TryGetTypeBuilderCore(System.Type type, out System.ClientModel.Primitives.ModelReaderWriterTypeBuilder builder) { throw null; }
+    }
     public partial class ManagedNetworkCollection : Azure.ResourceManager.ArmCollection, System.Collections.Generic.IAsyncEnumerable<Azure.ResourceManager.ManagedNetwork.ManagedNetworkResource>, System.Collections.Generic.IEnumerable<Azure.ResourceManager.ManagedNetwork.ManagedNetworkResource>, System.Collections.IEnumerable
     {
         protected ManagedNetworkCollection() { }
@@ -290,9 +296,7 @@ namespace Azure.ResourceManager.ManagedNetwork.Models
         public static Azure.ResourceManager.ManagedNetwork.Models.ConnectivityType HubAndSpokeTopology { get { throw null; } }
         public static Azure.ResourceManager.ManagedNetwork.Models.ConnectivityType MeshTopology { get { throw null; } }
         public bool Equals(Azure.ResourceManager.ManagedNetwork.Models.ConnectivityType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.ManagedNetwork.Models.ConnectivityType left, Azure.ResourceManager.ManagedNetwork.Models.ConnectivityType right) { throw null; }
         public static implicit operator Azure.ResourceManager.ManagedNetwork.Models.ConnectivityType (string value) { throw null; }
@@ -307,9 +311,7 @@ namespace Azure.ResourceManager.ManagedNetwork.Models
         public ManagedNetworkKind(string value) { throw null; }
         public static Azure.ResourceManager.ManagedNetwork.Models.ManagedNetworkKind Connectivity { get { throw null; } }
         public bool Equals(Azure.ResourceManager.ManagedNetwork.Models.ManagedNetworkKind other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.ManagedNetwork.Models.ManagedNetworkKind left, Azure.ResourceManager.ManagedNetwork.Models.ManagedNetworkKind right) { throw null; }
         public static implicit operator Azure.ResourceManager.ManagedNetwork.Models.ManagedNetworkKind (string value) { throw null; }
@@ -352,9 +354,7 @@ namespace Azure.ResourceManager.ManagedNetwork.Models
         public static Azure.ResourceManager.ManagedNetwork.Models.ProvisioningState Succeeded { get { throw null; } }
         public static Azure.ResourceManager.ManagedNetwork.Models.ProvisioningState Updating { get { throw null; } }
         public bool Equals(Azure.ResourceManager.ManagedNetwork.Models.ProvisioningState other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.ManagedNetwork.Models.ProvisioningState left, Azure.ResourceManager.ManagedNetwork.Models.ProvisioningState right) { throw null; }
         public static implicit operator Azure.ResourceManager.ManagedNetwork.Models.ProvisioningState (string value) { throw null; }

@@ -64,11 +64,8 @@ namespace Azure.Provisioning.ServiceBus
         public static Azure.Provisioning.ServiceBus.ServiceBusBuiltInRole AzureServiceBusDataReceiver { get { throw null; } }
         public static Azure.Provisioning.ServiceBus.ServiceBusBuiltInRole AzureServiceBusDataSender { get { throw null; } }
         public bool Equals(Azure.Provisioning.ServiceBus.ServiceBusBuiltInRole other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object? obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public static string GetBuiltInRoleName(Azure.Provisioning.ServiceBus.ServiceBusBuiltInRole value) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Provisioning.ServiceBus.ServiceBusBuiltInRole left, Azure.Provisioning.ServiceBus.ServiceBusBuiltInRole right) { throw null; }
         public static implicit operator Azure.Provisioning.ServiceBus.ServiceBusBuiltInRole (string value) { throw null; }
@@ -113,7 +110,6 @@ namespace Azure.Provisioning.ServiceBus
         public Azure.Provisioning.Resources.SystemData SystemData { get { throw null; } }
         protected override void DefineProvisionableProperties() { }
         public static Azure.Provisioning.ServiceBus.ServiceBusDisasterRecovery FromExisting(string bicepIdentifier, string? resourceVersion = null) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override Azure.Provisioning.Primitives.ResourceNameRequirements GetResourceNameRequirements() { throw null; }
         public static partial class ResourceVersions
         {
@@ -218,7 +214,6 @@ namespace Azure.Provisioning.ServiceBus
         public Azure.Provisioning.Authorization.RoleAssignment CreateRoleAssignment(Azure.Provisioning.ServiceBus.ServiceBusBuiltInRole role, Azure.Provisioning.Roles.UserAssignedIdentity identity) { throw null; }
         protected override void DefineProvisionableProperties() { }
         public static Azure.Provisioning.ServiceBus.ServiceBusNamespace FromExisting(string bicepIdentifier, string? resourceVersion = null) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override Azure.Provisioning.Primitives.ResourceNameRequirements GetResourceNameRequirements() { throw null; }
         public static partial class ResourceVersions
         {
@@ -241,10 +236,11 @@ namespace Azure.Provisioning.ServiceBus
         protected override void DefineProvisionableProperties() { }
         public static Azure.Provisioning.ServiceBus.ServiceBusNamespaceAuthorizationRule FromExisting(string bicepIdentifier, string? resourceVersion = null) { throw null; }
         public Azure.Provisioning.ServiceBus.ServiceBusAccessKeys GetKeys() { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override Azure.Provisioning.Primitives.ResourceNameRequirements GetResourceNameRequirements() { throw null; }
         public static partial class ResourceVersions
         {
+            public static readonly string V2014_09_01;
+            public static readonly string V2015_08_01;
             public static readonly string V2017_04_01;
             public static readonly string V2021_11_01;
             public static readonly string V2024_01_01;
@@ -392,10 +388,11 @@ namespace Azure.Provisioning.ServiceBus
         public Azure.Provisioning.BicepValue<System.DateTimeOffset> UpdatedOn { get { throw null; } }
         protected override void DefineProvisionableProperties() { }
         public static Azure.Provisioning.ServiceBus.ServiceBusQueue FromExisting(string bicepIdentifier, string? resourceVersion = null) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override Azure.Provisioning.Primitives.ResourceNameRequirements GetResourceNameRequirements() { throw null; }
         public static partial class ResourceVersions
         {
+            public static readonly string V2014_09_01;
+            public static readonly string V2015_08_01;
             public static readonly string V2017_04_01;
             public static readonly string V2021_11_01;
             public static readonly string V2024_01_01;
@@ -413,10 +410,11 @@ namespace Azure.Provisioning.ServiceBus
         protected override void DefineProvisionableProperties() { }
         public static Azure.Provisioning.ServiceBus.ServiceBusQueueAuthorizationRule FromExisting(string bicepIdentifier, string? resourceVersion = null) { throw null; }
         public Azure.Provisioning.ServiceBus.ServiceBusAccessKeys GetKeys() { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override Azure.Provisioning.Primitives.ResourceNameRequirements GetResourceNameRequirements() { throw null; }
         public static partial class ResourceVersions
         {
+            public static readonly string V2014_09_01;
+            public static readonly string V2015_08_01;
             public static readonly string V2017_04_01;
             public static readonly string V2021_11_01;
             public static readonly string V2024_01_01;
@@ -438,6 +436,8 @@ namespace Azure.Provisioning.ServiceBus
         public static Azure.Provisioning.ServiceBus.ServiceBusRule FromExisting(string bicepIdentifier, string? resourceVersion = null) { throw null; }
         public static partial class ResourceVersions
         {
+            public static readonly string V2014_09_01;
+            public static readonly string V2015_08_01;
             public static readonly string V2017_04_01;
             public static readonly string V2021_11_01;
             public static readonly string V2024_01_01;
@@ -500,10 +500,11 @@ namespace Azure.Provisioning.ServiceBus
         public Azure.Provisioning.BicepValue<System.DateTimeOffset> UpdatedOn { get { throw null; } }
         protected override void DefineProvisionableProperties() { }
         public static Azure.Provisioning.ServiceBus.ServiceBusSubscription FromExisting(string bicepIdentifier, string? resourceVersion = null) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override Azure.Provisioning.Primitives.ResourceNameRequirements GetResourceNameRequirements() { throw null; }
         public static partial class ResourceVersions
         {
+            public static readonly string V2014_09_01;
+            public static readonly string V2015_08_01;
             public static readonly string V2017_04_01;
             public static readonly string V2021_11_01;
             public static readonly string V2024_01_01;
@@ -536,10 +537,11 @@ namespace Azure.Provisioning.ServiceBus
         public Azure.Provisioning.BicepValue<System.DateTimeOffset> UpdatedOn { get { throw null; } }
         protected override void DefineProvisionableProperties() { }
         public static Azure.Provisioning.ServiceBus.ServiceBusTopic FromExisting(string bicepIdentifier, string? resourceVersion = null) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override Azure.Provisioning.Primitives.ResourceNameRequirements GetResourceNameRequirements() { throw null; }
         public static partial class ResourceVersions
         {
+            public static readonly string V2014_09_01;
+            public static readonly string V2015_08_01;
             public static readonly string V2017_04_01;
             public static readonly string V2021_11_01;
             public static readonly string V2024_01_01;
@@ -557,10 +559,11 @@ namespace Azure.Provisioning.ServiceBus
         protected override void DefineProvisionableProperties() { }
         public static Azure.Provisioning.ServiceBus.ServiceBusTopicAuthorizationRule FromExisting(string bicepIdentifier, string? resourceVersion = null) { throw null; }
         public Azure.Provisioning.ServiceBus.ServiceBusAccessKeys GetKeys() { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override Azure.Provisioning.Primitives.ResourceNameRequirements GetResourceNameRequirements() { throw null; }
         public static partial class ResourceVersions
         {
+            public static readonly string V2014_09_01;
+            public static readonly string V2015_08_01;
             public static readonly string V2017_04_01;
             public static readonly string V2021_11_01;
             public static readonly string V2024_01_01;

@@ -102,6 +102,7 @@ namespace Azure.ResourceManager.Cdn
         /// <summary> The pricing tier (defines Azure Front Door Standard or Premium or a CDN provider, feature list and rate) of the profile. </summary>
         internal CdnSku Sku { get; set; }
         /// <summary> Name of the pricing tier. </summary>
+        [WirePath("sku.name")]
         public CdnSkuName? SkuName
         {
             get => Sku is null ? default : Sku.Name;
@@ -114,20 +115,28 @@ namespace Azure.ResourceManager.Cdn
         }
 
         /// <summary> Kind of the profile. Used by portal to differentiate traditional CDN profile and new AFD profile. </summary>
+        [WirePath("kind")]
         public string Kind { get; }
         /// <summary> Managed service identity (system assigned and/or user assigned identities). </summary>
+        [WirePath("identity")]
         public ManagedServiceIdentity Identity { get; set; }
         /// <summary> Resource status of the profile. </summary>
+        [WirePath("properties.resourceState")]
         public ProfileResourceState? ResourceState { get; }
         /// <summary> Provisioning status of the profile. </summary>
+        [WirePath("properties.provisioningState")]
         public ProfileProvisioningState? ProvisioningState { get; }
         /// <summary> Key-Value pair representing additional properties for profiles. </summary>
+        [WirePath("properties.extendedProperties")]
         public IReadOnlyDictionary<string, string> ExtendedProperties { get; }
         /// <summary> The Id of the frontdoor. </summary>
+        [WirePath("properties.frontDoorId")]
         public Guid? FrontDoorId { get; }
         /// <summary> Send and receive timeout on forwarding request to the origin. When timeout is reached, the request fails and returns. </summary>
+        [WirePath("properties.originResponseTimeoutSeconds")]
         public int? OriginResponseTimeoutSeconds { get; set; }
         /// <summary> Defines rules that scrub sensitive fields in the Azure Front Door profile logs. </summary>
+        [WirePath("properties.logScrubbing")]
         public ProfileLogScrubbing LogScrubbing { get; set; }
     }
 }

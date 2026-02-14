@@ -9,12 +9,25 @@ using System;
 using System.ClientModel.Primitives;
 using System.Text.Json;
 using Azure;
-using Azure.Core;
 
-namespace _Type.Property.Nullable.Models
+namespace _Type.Property.Nullable
 {
     public partial class DurationProperty : IJsonModel<DurationProperty>
     {
+        internal DurationProperty() => throw null;
+
+        protected virtual DurationProperty PersistableModelCreateCore(BinaryData data, ModelReaderWriterOptions options) => throw null;
+
+        protected virtual BinaryData PersistableModelWriteCore(ModelReaderWriterOptions options) => throw null;
+
+        BinaryData IPersistableModel<DurationProperty>.Write(ModelReaderWriterOptions options) => throw null;
+
+        DurationProperty IPersistableModel<DurationProperty>.Create(BinaryData data, ModelReaderWriterOptions options) => throw null;
+
+        string IPersistableModel<DurationProperty>.GetFormatFromOptions(ModelReaderWriterOptions options) => throw null;
+
+        public static explicit operator DurationProperty(Response response) => throw null;
+
         void IJsonModel<DurationProperty>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options) => throw null;
 
         protected virtual void JsonModelWriteCore(Utf8JsonWriter writer, ModelReaderWriterOptions options) => throw null;
@@ -22,20 +35,5 @@ namespace _Type.Property.Nullable.Models
         DurationProperty IJsonModel<DurationProperty>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => throw null;
 
         protected virtual DurationProperty JsonModelCreateCore(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => throw null;
-
-        BinaryData IPersistableModel<DurationProperty>.Write(ModelReaderWriterOptions options) => throw null;
-
-        protected virtual BinaryData PersistableModelWriteCore(ModelReaderWriterOptions options) => throw null;
-
-        DurationProperty IPersistableModel<DurationProperty>.Create(BinaryData data, ModelReaderWriterOptions options) => throw null;
-
-        protected virtual DurationProperty PersistableModelCreateCore(BinaryData data, ModelReaderWriterOptions options) => throw null;
-
-        string IPersistableModel<DurationProperty>.GetFormatFromOptions(ModelReaderWriterOptions options) => throw null;
-
-        /// <param name="durationProperty"> The <see cref="DurationProperty"/> to serialize into <see cref="RequestContent"/>. </param>
-        public static implicit operator RequestContent(DurationProperty durationProperty) => throw null;
-
-        public static explicit operator DurationProperty(Response result) => throw null;
     }
 }

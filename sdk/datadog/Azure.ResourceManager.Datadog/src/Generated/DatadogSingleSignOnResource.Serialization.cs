@@ -11,16 +11,19 @@ using System.Text.Json;
 
 namespace Azure.ResourceManager.Datadog
 {
-    public partial class DatadogSingleSignOnResource : IJsonModel<DatadogSingleSignOnResourceData>
+    public partial class DatadogSingleSignOnResource : IJsonModel<DatadogSingleSignOnData>
     {
-        void IJsonModel<DatadogSingleSignOnResourceData>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options) => ((IJsonModel<DatadogSingleSignOnResourceData>)Data).Write(writer, options);
+        private static DatadogSingleSignOnData s_dataDeserializationInstance;
+        private static DatadogSingleSignOnData DataDeserializationInstance => s_dataDeserializationInstance ??= new();
 
-        DatadogSingleSignOnResourceData IJsonModel<DatadogSingleSignOnResourceData>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => ((IJsonModel<DatadogSingleSignOnResourceData>)Data).Create(ref reader, options);
+        void IJsonModel<DatadogSingleSignOnData>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options) => ((IJsonModel<DatadogSingleSignOnData>)Data).Write(writer, options);
 
-        BinaryData IPersistableModel<DatadogSingleSignOnResourceData>.Write(ModelReaderWriterOptions options) => ModelReaderWriter.Write(Data, options);
+        DatadogSingleSignOnData IJsonModel<DatadogSingleSignOnData>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => ((IJsonModel<DatadogSingleSignOnData>)DataDeserializationInstance).Create(ref reader, options);
 
-        DatadogSingleSignOnResourceData IPersistableModel<DatadogSingleSignOnResourceData>.Create(BinaryData data, ModelReaderWriterOptions options) => ModelReaderWriter.Read<DatadogSingleSignOnResourceData>(data, options);
+        BinaryData IPersistableModel<DatadogSingleSignOnData>.Write(ModelReaderWriterOptions options) => ModelReaderWriter.Write<DatadogSingleSignOnData>(Data, options, AzureResourceManagerDatadogContext.Default);
 
-        string IPersistableModel<DatadogSingleSignOnResourceData>.GetFormatFromOptions(ModelReaderWriterOptions options) => ((IPersistableModel<DatadogSingleSignOnResourceData>)Data).GetFormatFromOptions(options);
+        DatadogSingleSignOnData IPersistableModel<DatadogSingleSignOnData>.Create(BinaryData data, ModelReaderWriterOptions options) => ModelReaderWriter.Read<DatadogSingleSignOnData>(data, options, AzureResourceManagerDatadogContext.Default);
+
+        string IPersistableModel<DatadogSingleSignOnData>.GetFormatFromOptions(ModelReaderWriterOptions options) => ((IPersistableModel<DatadogSingleSignOnData>)DataDeserializationInstance).GetFormatFromOptions(options);
     }
 }

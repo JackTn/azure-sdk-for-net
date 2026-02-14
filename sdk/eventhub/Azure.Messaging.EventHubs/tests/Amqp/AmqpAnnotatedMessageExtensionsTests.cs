@@ -44,7 +44,7 @@ namespace Azure.Messaging.EventHubs.Tests
 
             foreach (var property in getterSetterProperties)
             {
-                Assert.That(knownMembers.Contains(property.Name), $"The property: { property.Name } of AmqpAnnotatedMessage is not being cloned.");
+                Assert.That(knownMembers.Contains(property.Name), $"The property: {property.Name} of AmqpAnnotatedMessage is not being cloned.");
             }
         }
 
@@ -73,7 +73,7 @@ namespace Azure.Messaging.EventHubs.Tests
 
             foreach (var property in getterSetterProperties)
             {
-                Assert.That(knownMembers.Contains(property.Name), $"The property: { property.Name } of AmqpMessageHeader is not being cloned.");
+                Assert.That(knownMembers.Contains(property.Name), $"The property: {property.Name} of AmqpMessageHeader is not being cloned.");
             }
         }
 
@@ -110,7 +110,7 @@ namespace Azure.Messaging.EventHubs.Tests
 
             foreach (var property in getterSetterProperties)
             {
-                Assert.That(knownMembers.Contains(property.Name), $"The property: { property.Name } of AmqpMessageProperties is not being cloned.");
+                Assert.That(knownMembers.Contains(property.Name), $"The property: {property.Name} of AmqpMessageProperties is not being cloned.");
             }
         }
 
@@ -138,7 +138,7 @@ namespace Azure.Messaging.EventHubs.Tests
 
             foreach (var headerProperty in typeof(AmqpMessageHeader).GetProperties(BindingFlags.Public | BindingFlags.GetProperty))
             {
-                Assert.That(headerProperty.GetValue(clone), Is.EqualTo(headerProperty.GetValue(source)), $"The header property: { headerProperty.Name } should match.");
+                Assert.That(headerProperty.GetValue(clone), Is.EqualTo(headerProperty.GetValue(source)), $"The header property: {headerProperty.Name} should match.");
             }
 
             // Properties
@@ -148,7 +148,7 @@ namespace Azure.Messaging.EventHubs.Tests
 
             foreach (var propertiesProperty in typeof(AmqpMessageProperties).GetProperties(BindingFlags.Public | BindingFlags.GetProperty))
             {
-                Assert.That(propertiesProperty.GetValue(clone), Is.EqualTo(propertiesProperty.GetValue(source)), $"The message property: { propertiesProperty.Name } should match.");
+                Assert.That(propertiesProperty.GetValue(clone), Is.EqualTo(propertiesProperty.GetValue(source)), $"The message property: {propertiesProperty.Name} should match.");
             }
 
             // Footer
@@ -279,7 +279,7 @@ namespace Azure.Messaging.EventHubs.Tests
             {
                 AmqpMessageBodyType.Sequence => AmqpMessageBody.FromSequence(new[] { new List<object> { 1, 2, 3 } }),
                 AmqpMessageBodyType.Value => AmqpMessageBody.FromValue("This is a value"),
-                _ => throw new ArgumentException($"Unsupported body type { bodyType }", nameof(bodyType))
+                _ => throw new ArgumentException($"Unsupported body type {bodyType}", nameof(bodyType))
             };
 
             var message = new AmqpAnnotatedMessage(body);
@@ -432,6 +432,121 @@ namespace Azure.Messaging.EventHubs.Tests
 
             message.SetEnqueuedTime(enqueueTime);
             Assert.That(message.GetEnqueuedTime(), Is.EqualTo(enqueueTime), "The enqueue time should match.");
+        }
+
+        /// <summary>
+        ///   Verifies functionality of the <see cref="AmqpAnnotatedMessageExtensions.GetMessageAnnotationNormalizedValue" />
+        ///   method.
+        /// </summary>
+        ///
+        [Test]
+        public void GetMessageAnnotationNormalizedValueReturnsNullWhenNoAnnotations()
+        {
+            var message = new AmqpAnnotatedMessage(AmqpMessageBody.FromData([ReadOnlyMemory<byte>.Empty]));
+            var value = message.GetMessageAnnotationNormalizedValue("anyKey");
+            Assert.That(value, Is.Null, "A missing annotation section should return null.");
+        }
+
+        /// <summary>
+        ///   Verifies functionality of the <see cref="AmqpAnnotatedMessageExtensions.GetMessageAnnotationNormalizedValue" />
+        ///   method for enqueued time normalization.
+        /// </summary>
+        ///
+        [Test]
+        public void GetMessageAnnotationNormalizedValueNormalizesEnqueuedTime()
+        {
+            var key = AmqpProperty.EnqueuedTime.ToString();
+            var expected = new DateTimeOffset(2024, 5, 19, 12, 0, 0, TimeSpan.Zero);
+            var message = new AmqpAnnotatedMessage(AmqpMessageBody.FromData([ReadOnlyMemory<byte>.Empty]));
+            message.MessageAnnotations.Add(key, expected.UtcDateTime);
+
+            var value = message.GetMessageAnnotationNormalizedValue(key);
+            Assert.That(value, Is.EqualTo(expected), "The enqueued time should be normalized to DateTimeOffset.");
+        }
+
+        /// <summary>
+        ///   Verifies functionality of the <see cref="AmqpAnnotatedMessageExtensions.GetMessageAnnotationNormalizedValue" />
+        ///   method for sequence number normalization.
+        /// </summary>
+        ///
+        [Test]
+        [TestCase(42, 42L)]
+        [TestCase(12345L, 12345L)]
+        [TestCase("12345", 12345L)]
+        public void GetMessageAnnotationNormalizedValueNormalizesSequenceNumber(object input,
+                                                                                long expected)
+        {
+            var key = AmqpProperty.SequenceNumber.ToString();
+            var message = new AmqpAnnotatedMessage(AmqpMessageBody.FromData([ReadOnlyMemory<byte>.Empty]));
+            message.MessageAnnotations.Add(key, input);
+
+            var value = message.GetMessageAnnotationNormalizedValue(key);
+            Assert.That(value, Is.EqualTo(expected), "The sequence number should be normalized to long.");
+        }
+
+        /// <summary>
+        ///   Verifies functionality of the <see cref="AmqpAnnotatedMessageExtensions.GetMessageAnnotationNormalizedValue" />
+        ///   method for AmqpMessageId normalization.
+        /// </summary>
+        ///
+        [Test]
+        public void GetMessageAnnotationNormalizedValueNormalizesAmqpMessageId()
+        {
+            var key = "customId";
+            var id = new AmqpMessageId("id-123");
+            var message = new AmqpAnnotatedMessage(AmqpMessageBody.FromData([ReadOnlyMemory<byte>.Empty]));
+            message.MessageAnnotations.Add(key, id);
+
+            var value = message.GetMessageAnnotationNormalizedValue(key);
+            Assert.That(value, Is.EqualTo(id.ToString()), "The AmqpMessageId should be normalized to string.");
+        }
+
+        /// <summary>
+        ///   Verifies functionality of the <see cref="AmqpAnnotatedMessageExtensions.GetMessageAnnotationNormalizedValue" />
+        ///   method for AmqpAddress normalization.
+        /// </summary>
+        ///
+        [Test]
+        public void GetMessageAnnotationNormalizedValueNormalizesAmqpAddress()
+        {
+            var key = "customAddress";
+            var address = new AmqpAddress("amqps://test");
+            var message = new AmqpAnnotatedMessage(AmqpMessageBody.FromData([ReadOnlyMemory<byte>.Empty]));
+            message.MessageAnnotations.Add(key, address);
+
+            var value = message.GetMessageAnnotationNormalizedValue(key);
+            Assert.That(value, Is.EqualTo(address.ToString()), "The AmqpAddress should be normalized to string.");
+        }
+
+        /// <summary>
+        ///   Verifies functionality of the <see cref="AmqpAnnotatedMessageExtensions.GetMessageAnnotationNormalizedValue" />
+        ///   method for pass through of other types.
+        /// </summary>
+        ///
+        [Test]
+        public void GetMessageAnnotationNormalizedValueReturnsRawValueForOtherTypes()
+        {
+            var key = "customInt";
+            var message = new AmqpAnnotatedMessage(AmqpMessageBody.FromData([ReadOnlyMemory<byte>.Empty]));
+            message.MessageAnnotations.Add(key, 42);
+
+            var value = message.GetMessageAnnotationNormalizedValue(key);
+            Assert.That(value, Is.EqualTo(42), "Other types should be returned as-is.");
+        }
+
+        /// <summary>
+        ///   Verifies functionality of the <see cref="AmqpAnnotatedMessageExtensions.GetMessageAnnotationNormalizedValue" />
+        ///   method when the key is not present.
+        /// </summary>
+        ///
+        [Test]
+        public void GetMessageAnnotationNormalizedValueReturnsNullWhenKeyNotPresent()
+        {
+            var message = new AmqpAnnotatedMessage(AmqpMessageBody.FromData([ReadOnlyMemory<byte>.Empty]));
+            message.MessageAnnotations.Add("someKey", "someValue");
+
+            var value = message.GetMessageAnnotationNormalizedValue("otherKey");
+            Assert.That(value, Is.Null, "A missing key should return null.");
         }
 
         /// <summary>

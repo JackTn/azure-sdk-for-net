@@ -1,5 +1,11 @@
 namespace Azure.ResourceManager.ChangeAnalysis
 {
+    public partial class AzureResourceManagerChangeAnalysisContext : System.ClientModel.Primitives.ModelReaderWriterContext
+    {
+        internal AzureResourceManagerChangeAnalysisContext() { }
+        public static Azure.ResourceManager.ChangeAnalysis.AzureResourceManagerChangeAnalysisContext Default { get { throw null; } }
+        protected override bool TryGetTypeBuilderCore(System.Type type, out System.ClientModel.Primitives.ModelReaderWriterTypeBuilder builder) { throw null; }
+    }
     public static partial class ChangeAnalysisExtensions
     {
         public static Azure.Pageable<Azure.ResourceManager.ChangeAnalysis.Models.DetectedChangeData> GetChangesByResourceGroup(this Azure.ResourceManager.Resources.ResourceGroupResource resourceGroupResource, System.DateTimeOffset startTime, System.DateTimeOffset endTime, string skipToken = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) { throw null; }
@@ -69,9 +75,7 @@ namespace Azure.ResourceManager.ChangeAnalysis.Models
         public static Azure.ResourceManager.ChangeAnalysis.Models.ChangeType Remove { get { throw null; } }
         public static Azure.ResourceManager.ChangeAnalysis.Models.ChangeType Update { get { throw null; } }
         public bool Equals(Azure.ResourceManager.ChangeAnalysis.Models.ChangeType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.ChangeAnalysis.Models.ChangeType left, Azure.ResourceManager.ChangeAnalysis.Models.ChangeType right) { throw null; }
         public static implicit operator Azure.ResourceManager.ChangeAnalysis.Models.ChangeType (string value) { throw null; }
@@ -118,9 +122,7 @@ namespace Azure.ResourceManager.ChangeAnalysis.Models
         public static Azure.ResourceManager.ChangeAnalysis.Models.PropertyChangeLevel Noisy { get { throw null; } }
         public static Azure.ResourceManager.ChangeAnalysis.Models.PropertyChangeLevel Normal { get { throw null; } }
         public bool Equals(Azure.ResourceManager.ChangeAnalysis.Models.PropertyChangeLevel other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.ChangeAnalysis.Models.PropertyChangeLevel left, Azure.ResourceManager.ChangeAnalysis.Models.PropertyChangeLevel right) { throw null; }
         public static implicit operator Azure.ResourceManager.ChangeAnalysis.Models.PropertyChangeLevel (string value) { throw null; }

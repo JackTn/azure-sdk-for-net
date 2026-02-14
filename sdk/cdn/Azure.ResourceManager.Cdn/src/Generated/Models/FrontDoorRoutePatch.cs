@@ -88,12 +88,15 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> The name of the endpoint which holds the route. </summary>
+        [WirePath("properties.endpointName")]
         public string EndpointName { get; }
         /// <summary> Domains referenced by this endpoint. </summary>
+        [WirePath("properties.customDomains")]
         public IList<FrontDoorActivatedResourceInfo> CustomDomains { get; }
         /// <summary> A reference to the origin group. </summary>
         internal WritableSubResource OriginGroup { get; set; }
         /// <summary> Gets or sets Id. </summary>
+        [WirePath("properties.originGroup.id")]
         public ResourceIdentifier OriginGroupId
         {
             get => OriginGroup is null ? default : OriginGroup.Id;
@@ -106,22 +109,31 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> A directory path on the origin that AzureFrontDoor can use to retrieve content from, e.g. contoso.cloudapp.net/originpath. </summary>
+        [WirePath("properties.originPath")]
         public string OriginPath { get; set; }
         /// <summary> rule sets referenced by this endpoint. </summary>
+        [WirePath("properties.ruleSets")]
         public IList<WritableSubResource> RuleSets { get; }
         /// <summary> List of supported protocols for this route. </summary>
+        [WirePath("properties.supportedProtocols")]
         public IList<FrontDoorEndpointProtocol> SupportedProtocols { get; }
         /// <summary> The route patterns of the rule. </summary>
+        [WirePath("properties.patternsToMatch")]
         public IList<string> PatternsToMatch { get; }
         /// <summary> The caching configuration for this route. To disable caching, do not provide a cacheConfiguration object. </summary>
+        [WirePath("properties.cacheConfiguration")]
         public FrontDoorRouteCacheConfiguration CacheConfiguration { get; set; }
         /// <summary> Protocol this rule will use when forwarding traffic to backends. </summary>
+        [WirePath("properties.forwardingProtocol")]
         public ForwardingProtocol? ForwardingProtocol { get; set; }
         /// <summary> whether this route will be linked to the default endpoint domain. </summary>
+        [WirePath("properties.linkToDefaultDomain")]
         public LinkToDefaultDomain? LinkToDefaultDomain { get; set; }
         /// <summary> Whether to automatically redirect HTTP traffic to HTTPS traffic. Note that this is a easy way to set up this rule and it will be the first rule that gets executed. </summary>
+        [WirePath("properties.httpsRedirect")]
         public HttpsRedirect? HttpsRedirect { get; set; }
         /// <summary> Whether to enable use of this rule. Permitted values are 'Enabled' or 'Disabled'. </summary>
+        [WirePath("properties.enabledState")]
         public EnabledState? EnabledState { get; set; }
     }
 }

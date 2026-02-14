@@ -65,10 +65,13 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> Type of response errors for real user requests for which origin will be deemed unhealthy. </summary>
+        [WirePath("responseBasedDetectedErrorTypes")]
         public ResponseBasedDetectedErrorType? ResponseBasedDetectedErrorType { get; set; }
         /// <summary> The percentage of failed requests in the sample where failover should trigger. </summary>
+        [WirePath("responseBasedFailoverThresholdPercentage")]
         public int? ResponseBasedFailoverThresholdPercentage { get; set; }
         /// <summary> The list of Http status code ranges that are considered as server errors for origin and it is marked as unhealthy. </summary>
+        [WirePath("httpErrorRanges")]
         public IList<HttpErrorRange> HttpErrorRanges { get; }
     }
 }

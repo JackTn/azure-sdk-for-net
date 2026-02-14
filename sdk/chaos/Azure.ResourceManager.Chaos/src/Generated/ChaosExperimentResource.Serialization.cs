@@ -11,16 +11,29 @@ using System.Text.Json;
 
 namespace Azure.ResourceManager.Chaos
 {
+    /// <summary></summary>
     public partial class ChaosExperimentResource : IJsonModel<ChaosExperimentData>
     {
+        private static IJsonModel<ChaosExperimentData> s_dataDeserializationInstance;
+
+        private static IJsonModel<ChaosExperimentData> DataDeserializationInstance => s_dataDeserializationInstance ??= new ChaosExperimentData();
+
+        /// <param name="writer"> The writer to serialize the model to. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
         void IJsonModel<ChaosExperimentData>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options) => ((IJsonModel<ChaosExperimentData>)Data).Write(writer, options);
 
-        ChaosExperimentData IJsonModel<ChaosExperimentData>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => ((IJsonModel<ChaosExperimentData>)Data).Create(ref reader, options);
+        /// <param name="reader"> The reader for deserializing the model. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
+        ChaosExperimentData IJsonModel<ChaosExperimentData>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => DataDeserializationInstance.Create(ref reader, options);
 
-        BinaryData IPersistableModel<ChaosExperimentData>.Write(ModelReaderWriterOptions options) => ModelReaderWriter.Write(Data, options);
+        /// <param name="options"> The client options for reading and writing models. </param>
+        BinaryData IPersistableModel<ChaosExperimentData>.Write(ModelReaderWriterOptions options) => ModelReaderWriter.Write<ChaosExperimentData>(Data, options, AzureResourceManagerChaosContext.Default);
 
-        ChaosExperimentData IPersistableModel<ChaosExperimentData>.Create(BinaryData data, ModelReaderWriterOptions options) => ModelReaderWriter.Read<ChaosExperimentData>(data, options);
+        /// <param name="data"> The binary data to be processed. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
+        ChaosExperimentData IPersistableModel<ChaosExperimentData>.Create(BinaryData data, ModelReaderWriterOptions options) => ModelReaderWriter.Read<ChaosExperimentData>(data, options, AzureResourceManagerChaosContext.Default);
 
-        string IPersistableModel<ChaosExperimentData>.GetFormatFromOptions(ModelReaderWriterOptions options) => ((IPersistableModel<ChaosExperimentData>)Data).GetFormatFromOptions(options);
+        /// <param name="options"> The client options for reading and writing models. </param>
+        string IPersistableModel<ChaosExperimentData>.GetFormatFromOptions(ModelReaderWriterOptions options) => DataDeserializationInstance.GetFormatFromOptions(options);
     }
 }

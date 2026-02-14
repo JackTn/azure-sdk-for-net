@@ -1,5 +1,11 @@
 namespace Azure.ResourceManager.ExtendedLocations
 {
+    public partial class AzureResourceManagerExtendedLocationsContext : System.ClientModel.Primitives.ModelReaderWriterContext
+    {
+        internal AzureResourceManagerExtendedLocationsContext() { }
+        public static Azure.ResourceManager.ExtendedLocations.AzureResourceManagerExtendedLocationsContext Default { get { throw null; } }
+        protected override bool TryGetTypeBuilderCore(System.Type type, out System.ClientModel.Primitives.ModelReaderWriterTypeBuilder builder) { throw null; }
+    }
     public partial class CustomLocationCollection : Azure.ResourceManager.ArmCollection, System.Collections.Generic.IAsyncEnumerable<Azure.ResourceManager.ExtendedLocations.CustomLocationResource>, System.Collections.Generic.IEnumerable<Azure.ResourceManager.ExtendedLocations.CustomLocationResource>, System.Collections.IEnumerable
     {
         protected CustomLocationCollection() { }
@@ -146,9 +152,7 @@ namespace Azure.ResourceManager.ExtendedLocations.Models
         public CustomLocationHostType(string value) { throw null; }
         public static Azure.ResourceManager.ExtendedLocations.Models.CustomLocationHostType Kubernetes { get { throw null; } }
         public bool Equals(Azure.ResourceManager.ExtendedLocations.Models.CustomLocationHostType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.ExtendedLocations.Models.CustomLocationHostType left, Azure.ResourceManager.ExtendedLocations.Models.CustomLocationHostType right) { throw null; }
         public static implicit operator Azure.ResourceManager.ExtendedLocations.Models.CustomLocationHostType (string value) { throw null; }

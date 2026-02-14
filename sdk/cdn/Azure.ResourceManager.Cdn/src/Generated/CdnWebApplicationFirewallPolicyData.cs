@@ -104,10 +104,12 @@ namespace Azure.ResourceManager.Cdn
         }
 
         /// <summary> Gets a unique read-only string that changes whenever the resource is updated. </summary>
+        [WirePath("etag")]
         public ETag? ETag { get; set; }
         /// <summary> The pricing tier (defines a CDN provider, feature list and rate) of the CdnWebApplicationFirewallPolicy. </summary>
         internal CdnSku Sku { get; set; }
         /// <summary> Name of the pricing tier. </summary>
+        [WirePath("sku.name")]
         public CdnSkuName? SkuName
         {
             get => Sku is null ? default : Sku.Name;
@@ -120,10 +122,12 @@ namespace Azure.ResourceManager.Cdn
         }
 
         /// <summary> Describes  policySettings for policy. </summary>
+        [WirePath("properties.policySettings")]
         public WafPolicySettings PolicySettings { get; set; }
         /// <summary> Describes rate limit rules inside the policy. </summary>
         internal RateLimitRuleList RateLimitSettings { get; set; }
         /// <summary> List of rules. </summary>
+        [WirePath("properties.rateLimitRules.rules")]
         public IList<RateLimitRule> RateLimitRules
         {
             get
@@ -137,6 +141,7 @@ namespace Azure.ResourceManager.Cdn
         /// <summary> Describes custom rules inside the policy. </summary>
         internal CustomRuleList CustomSettings { get; set; }
         /// <summary> List of rules. </summary>
+        [WirePath("properties.customRules.rules")]
         public IList<CustomRule> CustomRules
         {
             get
@@ -150,6 +155,7 @@ namespace Azure.ResourceManager.Cdn
         /// <summary> Describes managed rules inside the policy. </summary>
         internal ManagedRuleSetList ManagedRules { get; set; }
         /// <summary> List of rule sets. </summary>
+        [WirePath("properties.managedRules.managedRuleSets")]
         public IList<WafPolicyManagedRuleSet> ManagedRuleSets
         {
             get
@@ -161,12 +167,16 @@ namespace Azure.ResourceManager.Cdn
         }
 
         /// <summary> Describes Azure CDN endpoints associated with this Web Application Firewall policy. </summary>
+        [WirePath("properties.endpointLinks")]
         public IReadOnlyList<SubResource> EndpointLinks { get; }
         /// <summary> Key-Value pair representing additional properties for Web Application Firewall policy. </summary>
+        [WirePath("properties.extendedProperties")]
         public IDictionary<string, string> ExtendedProperties { get; }
         /// <summary> Provisioning state of the WebApplicationFirewallPolicy. </summary>
+        [WirePath("properties.provisioningState")]
         public WebApplicationFirewallPolicyProvisioningState? ProvisioningState { get; }
         /// <summary> Resource status of the policy. </summary>
+        [WirePath("properties.resourceState")]
         public PolicyResourceState? ResourceState { get; }
     }
 }

@@ -1,5 +1,11 @@
 namespace Azure.ResourceManager.HDInsight
 {
+    public partial class AzureResourceManagerHDInsightContext : System.ClientModel.Primitives.ModelReaderWriterContext
+    {
+        internal AzureResourceManagerHDInsightContext() { }
+        public static Azure.ResourceManager.HDInsight.AzureResourceManagerHDInsightContext Default { get { throw null; } }
+        protected override bool TryGetTypeBuilderCore(System.Type type, out System.ClientModel.Primitives.ModelReaderWriterTypeBuilder builder) { throw null; }
+    }
     public partial class HDInsightApplicationCollection : Azure.ResourceManager.ArmCollection, System.Collections.Generic.IAsyncEnumerable<Azure.ResourceManager.HDInsight.HDInsightApplicationResource>, System.Collections.Generic.IEnumerable<Azure.ResourceManager.HDInsight.HDInsightApplicationResource>, System.Collections.IEnumerable
     {
         protected HDInsightApplicationCollection() { }
@@ -388,9 +394,7 @@ namespace Azure.ResourceManager.HDInsight.Models
         public AuthenticationDirectoryType(string value) { throw null; }
         public static Azure.ResourceManager.HDInsight.Models.AuthenticationDirectoryType ActiveDirectory { get { throw null; } }
         public bool Equals(Azure.ResourceManager.HDInsight.Models.AuthenticationDirectoryType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.HDInsight.Models.AuthenticationDirectoryType left, Azure.ResourceManager.HDInsight.Models.AuthenticationDirectoryType right) { throw null; }
         public static implicit operator Azure.ResourceManager.HDInsight.Models.AuthenticationDirectoryType (string value) { throw null; }
@@ -423,6 +427,19 @@ namespace Azure.ResourceManager.HDInsight.Models
         Azure.ResourceManager.HDInsight.Models.ConnectivityEndpoint System.ClientModel.Primitives.IPersistableModel<Azure.ResourceManager.HDInsight.Models.ConnectivityEndpoint>.Create(System.BinaryData data, System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
         string System.ClientModel.Primitives.IPersistableModel<Azure.ResourceManager.HDInsight.Models.ConnectivityEndpoint>.GetFormatFromOptions(System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
         System.BinaryData System.ClientModel.Primitives.IPersistableModel<Azure.ResourceManager.HDInsight.Models.ConnectivityEndpoint>.Write(System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+    }
+    public partial class EntraUserInfo : System.ClientModel.Primitives.IJsonModel<Azure.ResourceManager.HDInsight.Models.EntraUserInfo>, System.ClientModel.Primitives.IPersistableModel<Azure.ResourceManager.HDInsight.Models.EntraUserInfo>
+    {
+        public EntraUserInfo() { }
+        public string DisplayName { get { throw null; } set { } }
+        public string ObjectId { get { throw null; } set { } }
+        public string Upn { get { throw null; } set { } }
+        protected virtual void JsonModelWriteCore(System.Text.Json.Utf8JsonWriter writer, System.ClientModel.Primitives.ModelReaderWriterOptions options) { }
+        Azure.ResourceManager.HDInsight.Models.EntraUserInfo System.ClientModel.Primitives.IJsonModel<Azure.ResourceManager.HDInsight.Models.EntraUserInfo>.Create(ref System.Text.Json.Utf8JsonReader reader, System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+        void System.ClientModel.Primitives.IJsonModel<Azure.ResourceManager.HDInsight.Models.EntraUserInfo>.Write(System.Text.Json.Utf8JsonWriter writer, System.ClientModel.Primitives.ModelReaderWriterOptions options) { }
+        Azure.ResourceManager.HDInsight.Models.EntraUserInfo System.ClientModel.Primitives.IPersistableModel<Azure.ResourceManager.HDInsight.Models.EntraUserInfo>.Create(System.BinaryData data, System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+        string System.ClientModel.Primitives.IPersistableModel<Azure.ResourceManager.HDInsight.Models.EntraUserInfo>.GetFormatFromOptions(System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
+        System.BinaryData System.ClientModel.Primitives.IPersistableModel<Azure.ResourceManager.HDInsight.Models.EntraUserInfo>.Write(System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
     }
     public partial class ExcludedServicesConfig : System.ClientModel.Primitives.IJsonModel<Azure.ResourceManager.HDInsight.Models.ExcludedServicesConfig>, System.ClientModel.Primitives.IPersistableModel<Azure.ResourceManager.HDInsight.Models.ExcludedServicesConfig>
     {
@@ -523,9 +540,7 @@ namespace Azure.ResourceManager.HDInsight.Models
         public static Azure.ResourceManager.HDInsight.Models.HDInsightAsyncOperationState InProgress { get { throw null; } }
         public static Azure.ResourceManager.HDInsight.Models.HDInsightAsyncOperationState Succeeded { get { throw null; } }
         public bool Equals(Azure.ResourceManager.HDInsight.Models.HDInsightAsyncOperationState other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.HDInsight.Models.HDInsightAsyncOperationState left, Azure.ResourceManager.HDInsight.Models.HDInsightAsyncOperationState right) { throw null; }
         public static implicit operator Azure.ResourceManager.HDInsight.Models.HDInsightAsyncOperationState (string value) { throw null; }
@@ -885,6 +900,7 @@ namespace Azure.ResourceManager.HDInsight.Models
         internal HDInsightClusterGatewaySettings() { }
         public bool? IsCredentialEnabled { get { throw null; } }
         public string Password { get { throw null; } }
+        public System.Collections.Generic.IList<Azure.ResourceManager.HDInsight.Models.EntraUserInfo> RestAuthEntraUsers { get { throw null; } }
         public string UserName { get { throw null; } }
         Azure.ResourceManager.HDInsight.Models.HDInsightClusterGatewaySettings System.ClientModel.Primitives.IJsonModel<Azure.ResourceManager.HDInsight.Models.HDInsightClusterGatewaySettings>.Create(ref System.Text.Json.Utf8JsonReader reader, System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
         void System.ClientModel.Primitives.IJsonModel<Azure.ResourceManager.HDInsight.Models.HDInsightClusterGatewaySettings>.Write(System.Text.Json.Utf8JsonWriter writer, System.ClientModel.Primitives.ModelReaderWriterOptions options) { }
@@ -989,9 +1005,7 @@ namespace Azure.ResourceManager.HDInsight.Models
         public static Azure.ResourceManager.HDInsight.Models.HDInsightClusterProvisioningState InProgress { get { throw null; } }
         public static Azure.ResourceManager.HDInsight.Models.HDInsightClusterProvisioningState Succeeded { get { throw null; } }
         public bool Equals(Azure.ResourceManager.HDInsight.Models.HDInsightClusterProvisioningState other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.HDInsight.Models.HDInsightClusterProvisioningState left, Azure.ResourceManager.HDInsight.Models.HDInsightClusterProvisioningState right) { throw null; }
         public static implicit operator Azure.ResourceManager.HDInsight.Models.HDInsightClusterProvisioningState (string value) { throw null; }
@@ -1035,6 +1049,7 @@ namespace Azure.ResourceManager.HDInsight.Models
         public HDInsightClusterUpdateGatewaySettingsContent() { }
         public bool? IsCredentialEnabled { get { throw null; } set { } }
         public string Password { get { throw null; } set { } }
+        public System.Collections.Generic.IList<Azure.ResourceManager.HDInsight.Models.EntraUserInfo> RestAuthEntraUsers { get { throw null; } }
         public string UserName { get { throw null; } set { } }
         protected virtual void JsonModelWriteCore(System.Text.Json.Utf8JsonWriter writer, System.ClientModel.Primitives.ModelReaderWriterOptions options) { }
         Azure.ResourceManager.HDInsight.Models.HDInsightClusterUpdateGatewaySettingsContent System.ClientModel.Primitives.IJsonModel<Azure.ResourceManager.HDInsight.Models.HDInsightClusterUpdateGatewaySettingsContent>.Create(ref System.Text.Json.Utf8JsonReader reader, System.ClientModel.Primitives.ModelReaderWriterOptions options) { throw null; }
@@ -1096,9 +1111,7 @@ namespace Azure.ResourceManager.HDInsight.Models
         public static Azure.ResourceManager.HDInsight.Models.HDInsightDayOfWeek Tuesday { get { throw null; } }
         public static Azure.ResourceManager.HDInsight.Models.HDInsightDayOfWeek Wednesday { get { throw null; } }
         public bool Equals(Azure.ResourceManager.HDInsight.Models.HDInsightDayOfWeek other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.HDInsight.Models.HDInsightDayOfWeek left, Azure.ResourceManager.HDInsight.Models.HDInsightDayOfWeek right) { throw null; }
         public static implicit operator Azure.ResourceManager.HDInsight.Models.HDInsightDayOfWeek (string value) { throw null; }
@@ -1145,9 +1158,7 @@ namespace Azure.ResourceManager.HDInsight.Models
         public static Azure.ResourceManager.HDInsight.Models.HDInsightFilterMode Include { get { throw null; } }
         public static Azure.ResourceManager.HDInsight.Models.HDInsightFilterMode Recommend { get { throw null; } }
         public bool Equals(Azure.ResourceManager.HDInsight.Models.HDInsightFilterMode other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.HDInsight.Models.HDInsightFilterMode left, Azure.ResourceManager.HDInsight.Models.HDInsightFilterMode right) { throw null; }
         public static implicit operator Azure.ResourceManager.HDInsight.Models.HDInsightFilterMode (string value) { throw null; }
@@ -1231,9 +1242,7 @@ namespace Azure.ResourceManager.HDInsight.Models
         public static Azure.ResourceManager.HDInsight.Models.HDInsightOSType Linux { get { throw null; } }
         public static Azure.ResourceManager.HDInsight.Models.HDInsightOSType Windows { get { throw null; } }
         public bool Equals(Azure.ResourceManager.HDInsight.Models.HDInsightOSType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.HDInsight.Models.HDInsightOSType left, Azure.ResourceManager.HDInsight.Models.HDInsightOSType right) { throw null; }
         public static implicit operator Azure.ResourceManager.HDInsight.Models.HDInsightOSType (string value) { throw null; }
@@ -1253,9 +1262,7 @@ namespace Azure.ResourceManager.HDInsight.Models
         public static Azure.ResourceManager.HDInsight.Models.HDInsightPrivateEndpointConnectionProvisioningState Succeeded { get { throw null; } }
         public static Azure.ResourceManager.HDInsight.Models.HDInsightPrivateEndpointConnectionProvisioningState Updating { get { throw null; } }
         public bool Equals(Azure.ResourceManager.HDInsight.Models.HDInsightPrivateEndpointConnectionProvisioningState other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.HDInsight.Models.HDInsightPrivateEndpointConnectionProvisioningState left, Azure.ResourceManager.HDInsight.Models.HDInsightPrivateEndpointConnectionProvisioningState right) { throw null; }
         public static implicit operator Azure.ResourceManager.HDInsight.Models.HDInsightPrivateEndpointConnectionProvisioningState (string value) { throw null; }
@@ -1271,9 +1278,7 @@ namespace Azure.ResourceManager.HDInsight.Models
         public static Azure.ResourceManager.HDInsight.Models.HDInsightPrivateIPAllocationMethod Dynamic { get { throw null; } }
         public static Azure.ResourceManager.HDInsight.Models.HDInsightPrivateIPAllocationMethod Static { get { throw null; } }
         public bool Equals(Azure.ResourceManager.HDInsight.Models.HDInsightPrivateIPAllocationMethod other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.HDInsight.Models.HDInsightPrivateIPAllocationMethod left, Azure.ResourceManager.HDInsight.Models.HDInsightPrivateIPAllocationMethod right) { throw null; }
         public static implicit operator Azure.ResourceManager.HDInsight.Models.HDInsightPrivateIPAllocationMethod (string value) { throw null; }
@@ -1308,9 +1313,7 @@ namespace Azure.ResourceManager.HDInsight.Models
         public static Azure.ResourceManager.HDInsight.Models.HDInsightPrivateLinkConfigurationProvisioningState InProgress { get { throw null; } }
         public static Azure.ResourceManager.HDInsight.Models.HDInsightPrivateLinkConfigurationProvisioningState Succeeded { get { throw null; } }
         public bool Equals(Azure.ResourceManager.HDInsight.Models.HDInsightPrivateLinkConfigurationProvisioningState other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.HDInsight.Models.HDInsightPrivateLinkConfigurationProvisioningState left, Azure.ResourceManager.HDInsight.Models.HDInsightPrivateLinkConfigurationProvisioningState right) { throw null; }
         public static implicit operator Azure.ResourceManager.HDInsight.Models.HDInsightPrivateLinkConfigurationProvisioningState (string value) { throw null; }
@@ -1341,9 +1344,7 @@ namespace Azure.ResourceManager.HDInsight.Models
         public static Azure.ResourceManager.HDInsight.Models.HDInsightPrivateLinkServiceConnectionStatus Rejected { get { throw null; } }
         public static Azure.ResourceManager.HDInsight.Models.HDInsightPrivateLinkServiceConnectionStatus Removed { get { throw null; } }
         public bool Equals(Azure.ResourceManager.HDInsight.Models.HDInsightPrivateLinkServiceConnectionStatus other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.HDInsight.Models.HDInsightPrivateLinkServiceConnectionStatus left, Azure.ResourceManager.HDInsight.Models.HDInsightPrivateLinkServiceConnectionStatus right) { throw null; }
         public static implicit operator Azure.ResourceManager.HDInsight.Models.HDInsightPrivateLinkServiceConnectionStatus (string value) { throw null; }
@@ -1359,9 +1360,7 @@ namespace Azure.ResourceManager.HDInsight.Models
         public static Azure.ResourceManager.HDInsight.Models.HDInsightPrivateLinkState Disabled { get { throw null; } }
         public static Azure.ResourceManager.HDInsight.Models.HDInsightPrivateLinkState Enabled { get { throw null; } }
         public bool Equals(Azure.ResourceManager.HDInsight.Models.HDInsightPrivateLinkState other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.HDInsight.Models.HDInsightPrivateLinkState left, Azure.ResourceManager.HDInsight.Models.HDInsightPrivateLinkState right) { throw null; }
         public static implicit operator Azure.ResourceManager.HDInsight.Models.HDInsightPrivateLinkState (string value) { throw null; }
@@ -1377,9 +1376,7 @@ namespace Azure.ResourceManager.HDInsight.Models
         public static Azure.ResourceManager.HDInsight.Models.HDInsightResourceProviderConnection Inbound { get { throw null; } }
         public static Azure.ResourceManager.HDInsight.Models.HDInsightResourceProviderConnection Outbound { get { throw null; } }
         public bool Equals(Azure.ResourceManager.HDInsight.Models.HDInsightResourceProviderConnection other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.HDInsight.Models.HDInsightResourceProviderConnection left, Azure.ResourceManager.HDInsight.Models.HDInsightResourceProviderConnection right) { throw null; }
         public static implicit operator Azure.ResourceManager.HDInsight.Models.HDInsightResourceProviderConnection (string value) { throw null; }
@@ -1394,9 +1391,7 @@ namespace Azure.ResourceManager.HDInsight.Models
         public HDInsightRoleName(string value) { throw null; }
         public static Azure.ResourceManager.HDInsight.Models.HDInsightRoleName Workernode { get { throw null; } }
         public bool Equals(Azure.ResourceManager.HDInsight.Models.HDInsightRoleName other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.HDInsight.Models.HDInsightRoleName left, Azure.ResourceManager.HDInsight.Models.HDInsightRoleName right) { throw null; }
         public static implicit operator Azure.ResourceManager.HDInsight.Models.HDInsightRoleName (string value) { throw null; }
@@ -1462,9 +1457,7 @@ namespace Azure.ResourceManager.HDInsight.Models
         public static Azure.ResourceManager.HDInsight.Models.HDInsightTier Premium { get { throw null; } }
         public static Azure.ResourceManager.HDInsight.Models.HDInsightTier Standard { get { throw null; } }
         public bool Equals(Azure.ResourceManager.HDInsight.Models.HDInsightTier other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.HDInsight.Models.HDInsightTier left, Azure.ResourceManager.HDInsight.Models.HDInsightTier right) { throw null; }
         public static implicit operator Azure.ResourceManager.HDInsight.Models.HDInsightTier (string value) { throw null; }
@@ -1571,9 +1564,7 @@ namespace Azure.ResourceManager.HDInsight.Models
         public static Azure.ResourceManager.HDInsight.Models.JsonWebKeyEncryptionAlgorithm RsaOaep { get { throw null; } }
         public static Azure.ResourceManager.HDInsight.Models.JsonWebKeyEncryptionAlgorithm RsaOaep256 { get { throw null; } }
         public bool Equals(Azure.ResourceManager.HDInsight.Models.JsonWebKeyEncryptionAlgorithm other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.HDInsight.Models.JsonWebKeyEncryptionAlgorithm left, Azure.ResourceManager.HDInsight.Models.JsonWebKeyEncryptionAlgorithm right) { throw null; }
         public static implicit operator Azure.ResourceManager.HDInsight.Models.JsonWebKeyEncryptionAlgorithm (string value) { throw null; }
@@ -1601,9 +1592,7 @@ namespace Azure.ResourceManager.HDInsight.Models
         public static Azure.ResourceManager.HDInsight.Models.OutboundDependenciesManagedType External { get { throw null; } }
         public static Azure.ResourceManager.HDInsight.Models.OutboundDependenciesManagedType Managed { get { throw null; } }
         public bool Equals(Azure.ResourceManager.HDInsight.Models.OutboundDependenciesManagedType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.HDInsight.Models.OutboundDependenciesManagedType left, Azure.ResourceManager.HDInsight.Models.OutboundDependenciesManagedType right) { throw null; }
         public static implicit operator Azure.ResourceManager.HDInsight.Models.OutboundDependenciesManagedType (string value) { throw null; }

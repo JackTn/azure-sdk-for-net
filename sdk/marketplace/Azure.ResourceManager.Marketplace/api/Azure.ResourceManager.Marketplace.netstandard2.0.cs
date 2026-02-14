@@ -1,5 +1,11 @@
 namespace Azure.ResourceManager.Marketplace
 {
+    public partial class AzureResourceManagerMarketplaceContext : System.ClientModel.Primitives.ModelReaderWriterContext
+    {
+        internal AzureResourceManagerMarketplaceContext() { }
+        public static Azure.ResourceManager.Marketplace.AzureResourceManagerMarketplaceContext Default { get { throw null; } }
+        protected override bool TryGetTypeBuilderCore(System.Type type, out System.ClientModel.Primitives.ModelReaderWriterTypeBuilder builder) { throw null; }
+    }
     public partial class MarketplaceAdminApprovalRequestCollection : Azure.ResourceManager.ArmCollection, System.Collections.Generic.IAsyncEnumerable<Azure.ResourceManager.Marketplace.MarketplaceAdminApprovalRequestResource>, System.Collections.Generic.IEnumerable<Azure.ResourceManager.Marketplace.MarketplaceAdminApprovalRequestResource>, System.Collections.IEnumerable
     {
         protected MarketplaceAdminApprovalRequestCollection() { }
@@ -531,9 +537,7 @@ namespace Azure.ResourceManager.Marketplace.Models
         public static Azure.ResourceManager.Marketplace.Models.MarketplaceAdminAction Approved { get { throw null; } }
         public static Azure.ResourceManager.Marketplace.Models.MarketplaceAdminAction Rejected { get { throw null; } }
         public bool Equals(Azure.ResourceManager.Marketplace.Models.MarketplaceAdminAction other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.Marketplace.Models.MarketplaceAdminAction left, Azure.ResourceManager.Marketplace.Models.MarketplaceAdminAction right) { throw null; }
         public static implicit operator Azure.ResourceManager.Marketplace.Models.MarketplaceAdminAction (string value) { throw null; }
@@ -561,9 +565,7 @@ namespace Azure.ResourceManager.Marketplace.Models
         public static Azure.ResourceManager.Marketplace.Models.MarketplaceRuleType PrivateProducts { get { throw null; } }
         public static Azure.ResourceManager.Marketplace.Models.MarketplaceRuleType TermsAndCondition { get { throw null; } }
         public bool Equals(Azure.ResourceManager.Marketplace.Models.MarketplaceRuleType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.Marketplace.Models.MarketplaceRuleType left, Azure.ResourceManager.Marketplace.Models.MarketplaceRuleType right) { throw null; }
         public static implicit operator Azure.ResourceManager.Marketplace.Models.MarketplaceRuleType (string value) { throw null; }
@@ -596,9 +598,7 @@ namespace Azure.ResourceManager.Marketplace.Models
         public static Azure.ResourceManager.Marketplace.Models.MarketplaceSubscriptionState PastDue { get { throw null; } }
         public static Azure.ResourceManager.Marketplace.Models.MarketplaceSubscriptionState Warned { get { throw null; } }
         public bool Equals(Azure.ResourceManager.Marketplace.Models.MarketplaceSubscriptionState other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.Marketplace.Models.MarketplaceSubscriptionState left, Azure.ResourceManager.Marketplace.Models.MarketplaceSubscriptionState right) { throw null; }
         public static implicit operator Azure.ResourceManager.Marketplace.Models.MarketplaceSubscriptionState (string value) { throw null; }
@@ -707,9 +707,7 @@ namespace Azure.ResourceManager.Marketplace.Models
         public static Azure.ResourceManager.Marketplace.Models.PrivateStoreAvailability Disabled { get { throw null; } }
         public static Azure.ResourceManager.Marketplace.Models.PrivateStoreAvailability Enabled { get { throw null; } }
         public bool Equals(Azure.ResourceManager.Marketplace.Models.PrivateStoreAvailability other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.Marketplace.Models.PrivateStoreAvailability left, Azure.ResourceManager.Marketplace.Models.PrivateStoreAvailability right) { throw null; }
         public static implicit operator Azure.ResourceManager.Marketplace.Models.PrivateStoreAvailability (string value) { throw null; }
@@ -784,9 +782,7 @@ namespace Azure.ResourceManager.Marketplace.Models
         public static Azure.ResourceManager.Marketplace.Models.PrivateStoreOperation DeletePrivateStoreOffer { get { throw null; } }
         public static Azure.ResourceManager.Marketplace.Models.PrivateStoreOperation Ping { get { throw null; } }
         public bool Equals(Azure.ResourceManager.Marketplace.Models.PrivateStoreOperation other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.Marketplace.Models.PrivateStoreOperation left, Azure.ResourceManager.Marketplace.Models.PrivateStoreOperation right) { throw null; }
         public static implicit operator Azure.ResourceManager.Marketplace.Models.PrivateStoreOperation (string value) { throw null; }
@@ -820,9 +816,7 @@ namespace Azure.ResourceManager.Marketplace.Models
         public static Azure.ResourceManager.Marketplace.Models.PrivateStorePlanAccessibility Public { get { throw null; } }
         public static Azure.ResourceManager.Marketplace.Models.PrivateStorePlanAccessibility Unknown { get { throw null; } }
         public bool Equals(Azure.ResourceManager.Marketplace.Models.PrivateStorePlanAccessibility other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.Marketplace.Models.PrivateStorePlanAccessibility left, Azure.ResourceManager.Marketplace.Models.PrivateStorePlanAccessibility right) { throw null; }
         public static implicit operator Azure.ResourceManager.Marketplace.Models.PrivateStorePlanAccessibility (string value) { throw null; }
@@ -856,9 +850,7 @@ namespace Azure.ResourceManager.Marketplace.Models
         public static Azure.ResourceManager.Marketplace.Models.PrivateStorePlanStatus Pending { get { throw null; } }
         public static Azure.ResourceManager.Marketplace.Models.PrivateStorePlanStatus Rejected { get { throw null; } }
         public bool Equals(Azure.ResourceManager.Marketplace.Models.PrivateStorePlanStatus other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.Marketplace.Models.PrivateStorePlanStatus left, Azure.ResourceManager.Marketplace.Models.PrivateStorePlanStatus right) { throw null; }
         public static implicit operator Azure.ResourceManager.Marketplace.Models.PrivateStorePlanStatus (string value) { throw null; }

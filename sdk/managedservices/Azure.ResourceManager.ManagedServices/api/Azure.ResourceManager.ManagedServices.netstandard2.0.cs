@@ -1,5 +1,11 @@
 namespace Azure.ResourceManager.ManagedServices
 {
+    public partial class AzureResourceManagerManagedServicesContext : System.ClientModel.Primitives.ModelReaderWriterContext
+    {
+        internal AzureResourceManagerManagedServicesContext() { }
+        public static Azure.ResourceManager.ManagedServices.AzureResourceManagerManagedServicesContext Default { get { throw null; } }
+        protected override bool TryGetTypeBuilderCore(System.Type type, out System.ClientModel.Primitives.ModelReaderWriterTypeBuilder builder) { throw null; }
+    }
     public static partial class ManagedServicesExtensions
     {
         public static Azure.Response<Azure.ResourceManager.ManagedServices.ManagedServicesMarketplaceRegistrationResource> GetManagedServicesMarketplaceRegistration(this Azure.ResourceManager.ArmClient client, Azure.Core.ResourceIdentifier scope, string marketplaceIdentifier, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) { throw null; }
@@ -287,9 +293,7 @@ namespace Azure.ResourceManager.ManagedServices.Models
         public static Azure.ResourceManager.ManagedServices.Models.ManagedServicesProvisioningState Succeeded { get { throw null; } }
         public static Azure.ResourceManager.ManagedServices.Models.ManagedServicesProvisioningState Updating { get { throw null; } }
         public bool Equals(Azure.ResourceManager.ManagedServices.Models.ManagedServicesProvisioningState other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.ManagedServices.Models.ManagedServicesProvisioningState left, Azure.ResourceManager.ManagedServices.Models.ManagedServicesProvisioningState right) { throw null; }
         public static implicit operator Azure.ResourceManager.ManagedServices.Models.ManagedServicesProvisioningState (string value) { throw null; }
@@ -368,9 +372,7 @@ namespace Azure.ResourceManager.ManagedServices.Models
         public static Azure.ResourceManager.ManagedServices.Models.MultiFactorAuthProvider Azure { get { throw null; } }
         public static Azure.ResourceManager.ManagedServices.Models.MultiFactorAuthProvider None { get { throw null; } }
         public bool Equals(Azure.ResourceManager.ManagedServices.Models.MultiFactorAuthProvider other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.ManagedServices.Models.MultiFactorAuthProvider left, Azure.ResourceManager.ManagedServices.Models.MultiFactorAuthProvider right) { throw null; }
         public static implicit operator Azure.ResourceManager.ManagedServices.Models.MultiFactorAuthProvider (string value) { throw null; }

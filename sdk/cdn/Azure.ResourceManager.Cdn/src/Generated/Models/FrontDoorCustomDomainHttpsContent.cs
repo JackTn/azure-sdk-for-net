@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using Azure.Core;
+using Azure.ResourceManager.Resources.Models;
 
 namespace Azure.ResourceManager.Cdn.Models
 {
@@ -55,13 +56,17 @@ namespace Azure.ResourceManager.Cdn.Models
 
         /// <summary> Initializes a new instance of <see cref="FrontDoorCustomDomainHttpsContent"/>. </summary>
         /// <param name="certificateType"> Defines the source of the SSL certificate. </param>
-        /// <param name="minimumTlsVersion"> TLS protocol version that will be used for Https. </param>
+        /// <param name="cipherSuiteSetType"> cipher suite set type that will be used for Https. </param>
+        /// <param name="minimumTlsVersion"> TLS protocol version that will be used for Https when cipherSuiteSetType is Customized. </param>
+        /// <param name="customizedCipherSuiteSet"> Customized cipher suites object that will be used for Https when cipherSuiteSetType is Customized. </param>
         /// <param name="secret"> Resource reference to the secret. ie. subs/rg/profile/secret. </param>
         /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
-        internal FrontDoorCustomDomainHttpsContent(FrontDoorCertificateType certificateType, FrontDoorMinimumTlsVersion? minimumTlsVersion, FrontDoorCustomDomainHttpsContentSecret secret, IDictionary<string, BinaryData> serializedAdditionalRawData)
+        internal FrontDoorCustomDomainHttpsContent(FrontDoorCertificateType certificateType, AfdCipherSuiteSetType? cipherSuiteSetType, FrontDoorMinimumTlsVersion? minimumTlsVersion, FrontDoorCustomDomainHttpsCustomizedCipherSuiteSet customizedCipherSuiteSet, WritableSubResource secret, IDictionary<string, BinaryData> serializedAdditionalRawData)
         {
             CertificateType = certificateType;
+            CipherSuiteSetType = cipherSuiteSetType;
             MinimumTlsVersion = minimumTlsVersion;
+            CustomizedCipherSuiteSet = customizedCipherSuiteSet;
             Secret = secret;
             _serializedAdditionalRawData = serializedAdditionalRawData;
         }
@@ -72,19 +77,28 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> Defines the source of the SSL certificate. </summary>
+        [WirePath("certificateType")]
         public FrontDoorCertificateType CertificateType { get; set; }
-        /// <summary> TLS protocol version that will be used for Https. </summary>
+        /// <summary> cipher suite set type that will be used for Https. </summary>
+        [WirePath("cipherSuiteSetType")]
+        public AfdCipherSuiteSetType? CipherSuiteSetType { get; set; }
+        /// <summary> TLS protocol version that will be used for Https when cipherSuiteSetType is Customized. </summary>
+        [WirePath("minimumTlsVersion")]
         public FrontDoorMinimumTlsVersion? MinimumTlsVersion { get; set; }
+        /// <summary> Customized cipher suites object that will be used for Https when cipherSuiteSetType is Customized. </summary>
+        [WirePath("customizedCipherSuiteSet")]
+        public FrontDoorCustomDomainHttpsCustomizedCipherSuiteSet CustomizedCipherSuiteSet { get; set; }
         /// <summary> Resource reference to the secret. ie. subs/rg/profile/secret. </summary>
-        internal FrontDoorCustomDomainHttpsContentSecret Secret { get; set; }
-        /// <summary> Resource ID. </summary>
+        internal WritableSubResource Secret { get; set; }
+        /// <summary> Gets or sets Id. </summary>
+        [WirePath("secret.id")]
         public ResourceIdentifier SecretId
         {
             get => Secret is null ? default : Secret.Id;
             set
             {
                 if (Secret is null)
-                    Secret = new FrontDoorCustomDomainHttpsContentSecret();
+                    Secret = new WritableSubResource();
                 Secret.Id = value;
             }
         }

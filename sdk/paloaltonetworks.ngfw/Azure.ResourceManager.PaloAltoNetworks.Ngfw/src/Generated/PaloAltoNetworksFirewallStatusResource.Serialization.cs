@@ -11,16 +11,29 @@ using System.Text.Json;
 
 namespace Azure.ResourceManager.PaloAltoNetworks.Ngfw
 {
+    /// <summary></summary>
     public partial class PaloAltoNetworksFirewallStatusResource : IJsonModel<PaloAltoNetworksFirewallStatusData>
     {
+        private static IJsonModel<PaloAltoNetworksFirewallStatusData> s_dataDeserializationInstance;
+
+        private static IJsonModel<PaloAltoNetworksFirewallStatusData> DataDeserializationInstance => s_dataDeserializationInstance ??= new PaloAltoNetworksFirewallStatusData();
+
+        /// <param name="writer"> The writer to serialize the model to. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
         void IJsonModel<PaloAltoNetworksFirewallStatusData>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options) => ((IJsonModel<PaloAltoNetworksFirewallStatusData>)Data).Write(writer, options);
 
-        PaloAltoNetworksFirewallStatusData IJsonModel<PaloAltoNetworksFirewallStatusData>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => ((IJsonModel<PaloAltoNetworksFirewallStatusData>)Data).Create(ref reader, options);
+        /// <param name="reader"> The reader for deserializing the model. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
+        PaloAltoNetworksFirewallStatusData IJsonModel<PaloAltoNetworksFirewallStatusData>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => DataDeserializationInstance.Create(ref reader, options);
 
-        BinaryData IPersistableModel<PaloAltoNetworksFirewallStatusData>.Write(ModelReaderWriterOptions options) => ModelReaderWriter.Write(Data, options);
+        /// <param name="options"> The client options for reading and writing models. </param>
+        BinaryData IPersistableModel<PaloAltoNetworksFirewallStatusData>.Write(ModelReaderWriterOptions options) => ModelReaderWriter.Write<PaloAltoNetworksFirewallStatusData>(Data, options, AzureResourceManagerPaloAltoNetworksNgfwContext.Default);
 
-        PaloAltoNetworksFirewallStatusData IPersistableModel<PaloAltoNetworksFirewallStatusData>.Create(BinaryData data, ModelReaderWriterOptions options) => ModelReaderWriter.Read<PaloAltoNetworksFirewallStatusData>(data, options);
+        /// <param name="data"> The binary data to be processed. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
+        PaloAltoNetworksFirewallStatusData IPersistableModel<PaloAltoNetworksFirewallStatusData>.Create(BinaryData data, ModelReaderWriterOptions options) => ModelReaderWriter.Read<PaloAltoNetworksFirewallStatusData>(data, options, AzureResourceManagerPaloAltoNetworksNgfwContext.Default);
 
-        string IPersistableModel<PaloAltoNetworksFirewallStatusData>.GetFormatFromOptions(ModelReaderWriterOptions options) => ((IPersistableModel<PaloAltoNetworksFirewallStatusData>)Data).GetFormatFromOptions(options);
+        /// <param name="options"> The client options for reading and writing models. </param>
+        string IPersistableModel<PaloAltoNetworksFirewallStatusData>.GetFormatFromOptions(ModelReaderWriterOptions options) => DataDeserializationInstance.GetFormatFromOptions(options);
     }
 }

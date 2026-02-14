@@ -53,25 +53,28 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> Initializes a new instance of <see cref="MigrateResult"/>. </summary>
-        /// <param name="id"> Resource ID. </param>
+        /// <param name="resourceId"> Resource ID. </param>
         /// <param name="migrateResultType"> Resource type. </param>
         /// <param name="migratedProfileResourceId"> Arm resource id of the migrated profile. </param>
         /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
-        internal MigrateResult(string id, string migrateResultType, WritableSubResource migratedProfileResourceId, IDictionary<string, BinaryData> serializedAdditionalRawData)
+        internal MigrateResult(ResourceIdentifier resourceId, string migrateResultType, WritableSubResource migratedProfileResourceId, IDictionary<string, BinaryData> serializedAdditionalRawData)
         {
-            Id = id;
+            ResourceId = resourceId;
             MigrateResultType = migrateResultType;
             MigratedProfileResourceId = migratedProfileResourceId;
             _serializedAdditionalRawData = serializedAdditionalRawData;
         }
 
         /// <summary> Resource ID. </summary>
-        public string Id { get; }
+        [WirePath("id")]
+        public ResourceIdentifier ResourceId { get; }
         /// <summary> Resource type. </summary>
+        [WirePath("type")]
         public string MigrateResultType { get; }
         /// <summary> Arm resource id of the migrated profile. </summary>
         internal WritableSubResource MigratedProfileResourceId { get; }
         /// <summary> Gets or sets Id. </summary>
+        [WirePath("properties.migratedProfileResourceId.id")]
         public ResourceIdentifier MigratedProfileResourceIdId
         {
             get => MigratedProfileResourceId?.Id;

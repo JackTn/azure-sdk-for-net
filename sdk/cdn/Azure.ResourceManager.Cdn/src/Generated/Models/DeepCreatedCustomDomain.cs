@@ -74,10 +74,13 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> Custom domain name. </summary>
+        [WirePath("name")]
         public string Name { get; }
         /// <summary> The host name of the custom domain. Must be a domain name. </summary>
+        [WirePath("properties.hostName")]
         public string HostName { get; }
         /// <summary> Special validation or data may be required when delivering CDN to some regions due to local compliance reasons. E.g. ICP license number of a custom domain is required to deliver content in China. </summary>
+        [WirePath("properties.validationData")]
         public string ValidationData { get; }
     }
 }

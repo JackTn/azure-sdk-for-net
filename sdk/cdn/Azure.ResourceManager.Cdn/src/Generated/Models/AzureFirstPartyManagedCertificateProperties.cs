@@ -45,20 +45,26 @@ namespace Azure.ResourceManager.Cdn.Models
         /// <summary> Resource reference to the Azure Key Vault certificate. Expected to be in format of /subscriptions/{​​​​​​​​​subscriptionId}​​​​​​​​​/resourceGroups/{​​​​​​​​​resourceGroupName}​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​/providers/Microsoft.KeyVault/vaults/{vaultName}​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​/secrets/{certificateName}​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​. </summary>
         internal WritableSubResource SecretSource { get; }
         /// <summary> Gets or sets Id. </summary>
+        [WirePath("secretSource.id")]
         public ResourceIdentifier SecretSourceId
         {
             get => SecretSource?.Id;
         }
 
         /// <summary> Subject name in the certificate. </summary>
+        [WirePath("subject")]
         public string Subject { get; }
         /// <summary> Certificate expiration date. </summary>
+        [WirePath("expirationDate")]
         public string ExpirationDate { get; }
         /// <summary> Certificate issuing authority. </summary>
+        [WirePath("certificateAuthority")]
         public string CertificateAuthority { get; }
         /// <summary> The list of SANs. </summary>
+        [WirePath("subjectAlternativeNames")]
         public IList<string> SubjectAlternativeNames { get; }
         /// <summary> Certificate thumbprint. </summary>
+        [WirePath("thumbprint")]
         public string Thumbprint { get; }
     }
 }

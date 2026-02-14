@@ -2,13 +2,7 @@
 // Licensed under the MIT License.
 
 using System;
-using System.Collections.Generic;
-using System.Data;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using Azure.Identity;
-using Azure.ResourceManager;
 
 namespace Azure.Provisioning.Generator.Model;
 
@@ -104,7 +98,7 @@ public abstract partial class Specification : ModelBase
         // Create the assembly dir
         string? path = GetNamespacePath();
         Directory.CreateDirectory(path);
-        File.WriteAllText(Path.Combine(path, "Changelog.md"),
+        File.WriteAllText(Path.Combine(path, "CHANGELOG.md"),
             $"""
                 # Release History
 
@@ -116,7 +110,7 @@ public abstract partial class Specification : ModelBase
                 """);
         File.WriteAllText(Path.Combine(path, "README.md"),
             $"""
-                # {Namespace} client library for .NET
+                # {string.Join(' ', Namespace!.Split('.'))} client library for .NET
 
                 {Namespace} simplifies declarative resource provisioning in .NET.
 
@@ -127,7 +121,7 @@ public abstract partial class Specification : ModelBase
                 Install the client library for .NET with [NuGet](https://www.nuget.org/ ):
 
                 ```dotnetcli
-                dotnet add package {Namespace}
+                dotnet add package {Namespace} --prerelease
                 ```
 
                 ### Prerequisites
@@ -189,11 +183,9 @@ public abstract partial class Specification : ModelBase
                     <NoWarn>CS1591</NoWarn>
                   </PropertyGroup>
 
-                  <!-- TODO: Consider adding DataPlane dependencies here like:
                   <ItemGroup>
-                    <PackageReference Include="Azure.Storage.Blobs" />
+                    <PackageReference Include="Azure.Provisioning" />
                   </ItemGroup>
-                  -->
 
                 </Project>
                 """);

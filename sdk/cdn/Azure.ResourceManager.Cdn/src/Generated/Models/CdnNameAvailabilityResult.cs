@@ -64,10 +64,13 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> Indicates whether the name is available. </summary>
+        [WirePath("nameAvailable")]
         public bool? NameAvailable { get; }
         /// <summary> The reason why the name is not available. </summary>
+        [WirePath("reason")]
         public string Reason { get; }
         /// <summary> The detailed error message describing why the name is not available. </summary>
+        [WirePath("message")]
         public string Message { get; }
     }
 }

@@ -6,8 +6,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
-using Azure.Projects.AppConfiguration;
 using Azure.Projects.Core;
 using Azure.Provisioning;
 using Azure.Provisioning.Expressions;
@@ -65,7 +63,7 @@ public partial class ProjectInfrastructure
         });
 
         // setup project identity
-        Identity = new UserAssignedIdentity("projectIdentity")
+        Identity = new UserAssignedIdentity("projectIdentity", UserAssignedIdentity.ResourceVersions.V2023_01_31)
         {
             Name = ProjectId
         };
@@ -80,9 +78,9 @@ public partial class ProjectInfrastructure
 
     public ProjectInfrastructure(string? projectId = default)
         : this(new AppConfigConnectionStore(), projectId)
-    {}
+    { }
 
-    public T AddFeature<T>(T feature) where T: AzureProjectFeature
+    public T AddFeature<T>(T feature) where T : AzureProjectFeature
     {
         feature.EmitFeatures(this);
         return feature;

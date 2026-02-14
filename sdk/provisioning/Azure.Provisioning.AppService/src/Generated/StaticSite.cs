@@ -93,7 +93,9 @@ public partial class StaticSite : ProvisionableResource
     private ManagedServiceIdentity? _identity;
 
     /// <summary>
-    /// Kind of resource.
+    /// Kind of resource. If the resource is an app, you can refer to
+    /// https://github.com/Azure/app-service-linux-docs/blob/master/Things_You_Should_Know/kind_property.md#app-service-resource-kind-reference
+    /// for details supported values for kind.
     /// </summary>
     public BicepValue<string> Kind 
     {
@@ -271,11 +273,11 @@ public partial class StaticSite : ProvisionableResource
     /// <summary>
     /// User provided function apps registered with the static site.
     /// </summary>
-    public BicepList<StaticSiteUserProvidedFunctionAppData> UserProvidedFunctionApps 
+    public BicepList<StaticSiteUserProvidedFunctionApp> UserFunctionApps 
     {
-        get { Initialize(); return _userProvidedFunctionApps!; }
+        get { Initialize(); return _userFunctionApps!; }
     }
-    private BicepList<StaticSiteUserProvidedFunctionAppData>? _userProvidedFunctionApps;
+    private BicepList<StaticSiteUserProvidedFunctionApp>? _userFunctionApps;
 
     /// <summary>
     /// Creates a new StaticSite.
@@ -288,7 +290,7 @@ public partial class StaticSite : ProvisionableResource
     /// </param>
     /// <param name="resourceVersion">Version of the StaticSite.</param>
     public StaticSite(string bicepIdentifier, string? resourceVersion = default)
-        : base(bicepIdentifier, "Microsoft.Web/staticSites", resourceVersion ?? "2024-04-01")
+        : base(bicepIdentifier, "Microsoft.Web/staticSites", resourceVersion ?? "2025-03-01")
     {
     }
 
@@ -297,6 +299,7 @@ public partial class StaticSite : ProvisionableResource
     /// </summary>
     protected override void DefineProvisionableProperties()
     {
+        base.DefineProvisionableProperties();
         _name = DefineProperty<string>("Name", ["name"], isRequired: true);
         _location = DefineProperty<AzureLocation>("Location", ["location"], isRequired: true);
         _allowConfigFileUpdates = DefineProperty<bool>("AllowConfigFileUpdates", ["properties", "allowConfigFileUpdates"]);
@@ -322,14 +325,27 @@ public partial class StaticSite : ProvisionableResource
         _linkedBackends = DefineListProperty<StaticSiteLinkedBackendInfo>("LinkedBackends", ["properties", "linkedBackends"], isOutput: true);
         _privateEndpointConnections = DefineListProperty<ResponseMessageEnvelopeRemotePrivateEndpointConnection>("PrivateEndpointConnections", ["properties", "privateEndpointConnections"], isOutput: true);
         _systemData = DefineModelProperty<SystemData>("SystemData", ["systemData"], isOutput: true);
-        _userProvidedFunctionApps = DefineListProperty<StaticSiteUserProvidedFunctionAppData>("UserProvidedFunctionApps", ["properties", "userProvidedFunctionApps"], isOutput: true);
+        _userFunctionApps = DefineListProperty<StaticSiteUserProvidedFunctionApp>("UserFunctionApps", ["properties", "userProvidedFunctionApps"], isOutput: true);
+        DefineAdditionalProperties();
     }
+
+    private partial void DefineAdditionalProperties();
 
     /// <summary>
     /// Supported StaticSite resource versions.
     /// </summary>
     public static class ResourceVersions
     {
+        /// <summary>
+        /// 2025-03-01.
+        /// </summary>
+        public static readonly string V2025_03_01 = "2025-03-01";
+
+        /// <summary>
+        /// 2024-11-01.
+        /// </summary>
+        public static readonly string V2024_11_01 = "2024-11-01";
+
         /// <summary>
         /// 2024-04-01.
         /// </summary>

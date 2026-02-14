@@ -4,18 +4,22 @@
 using System;
 using Azure.Core;
 using Azure.Core.TestFramework;
+using Azure.Core.TestFramework.Models;
+using Azure.Identity;
+using Azure.ResourceManager.Models;
 using Azure.ResourceManager.NetworkCloud.Models;
 using Azure.ResourceManager.Resources;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Azure.ResourceManager.NetworkCloud.Tests.ScenarioTests
 {
     public class NetworkCloudClustersTests : NetworkCloudManagementTestBase
     {
-        public NetworkCloudClustersTests(bool isAsync, RecordedTestMode mode) : base(isAsync, mode) {}
-        public NetworkCloudClustersTests(bool isAsync) : base(isAsync) {}
+        public NetworkCloudClustersTests(bool isAsync, RecordedTestMode mode) : base(isAsync, mode) { }
+        public NetworkCloudClustersTests(bool isAsync) : base(isAsync) { }
 
         [Test]
         [RecordedTest]
@@ -25,7 +29,7 @@ namespace Azure.ResourceManager.NetworkCloud.Tests.ScenarioTests
             NetworkCloudClusterCollection clusterCollection = ResourceGroupResource.GetNetworkCloudClusters();
 
             // Create
-            var createCreds = new AdministrativeCredentials("password","username", null);
+            var createCreds = new AdministrativeCredentials("password", "username", null);
             NetworkCloudClusterData data = new NetworkCloudClusterData
             (
                 new AzureLocation(TestEnvironment.Location),
@@ -41,7 +45,8 @@ namespace Azure.ResourceManager.NetworkCloud.Tests.ScenarioTests
             )
             {
                 AnalyticsWorkspaceId = new ResourceIdentifier(TestEnvironment.LawId),
-                ClusterServicePrincipal = new ServicePrincipalInformation("12345678-1234-1234-1234-123456789012", "00000008-0004-0004-0004-000000000012", "80000000-4000-4000-4000-120000000000"){
+                ClusterServicePrincipal = new ServicePrincipalInformation("12345678-1234-1234-1234-123456789012", "00000008-0004-0004-0004-000000000012", "80000000-4000-4000-4000-120000000000")
+                {
                     Password = "password"
                 },
                 ComputeDeploymentThreshold = new ValidationThreshold(ValidationThresholdGrouping.PerCluster, ValidationThresholdType.PercentSuccess, 90),
@@ -73,6 +78,31 @@ namespace Azure.ResourceManager.NetworkCloud.Tests.ScenarioTests
                             },
                         },
                     },
+                },
+                AnalyticsOutputSettings = new AnalyticsOutputSettings
+                {
+                    AnalyticsWorkspaceId = new ResourceIdentifier(TestEnvironment.LawId),
+                    AssociatedIdentity = new ManagedServiceIdentitySelector
+                    {
+                        IdentityType = ManagedServiceIdentitySelectorType.UserAssignedIdentity,
+                        UserAssignedIdentityResourceId = new ResourceIdentifier(TestEnvironment.UserAssignedIdentity)
+                    }
+                },
+                CommandOutputSettings = new CommandOutputSettings
+                {
+                    AssociatedIdentity = new ManagedServiceIdentitySelector
+                    {
+                        IdentityType = ManagedServiceIdentitySelectorType.UserAssignedIdentity,
+                        UserAssignedIdentityResourceId = new ResourceIdentifier(TestEnvironment.UserAssignedIdentity)
+                    },
+                    ContainerUri = new Uri(TestEnvironment.ContainerUri),
+                },
+                Identity = new ManagedServiceIdentity(ManagedServiceIdentityType.UserAssigned)
+                {
+                    UserAssignedIdentities =
+                    {
+                        [new ResourceIdentifier(TestEnvironment.UserAssignedIdentity)] = new UserAssignedIdentity()
+                    }
                 },
                 Tags =
                 {
@@ -118,7 +148,7 @@ namespace Azure.ResourceManager.NetworkCloud.Tests.ScenarioTests
             Assert.IsNotEmpty(listBySubscription);
 
             // Patch Upgrade Strategy
-             NetworkCloudClusterPatch patch2 = new NetworkCloudClusterPatch()
+            NetworkCloudClusterPatch patch2 = new NetworkCloudClusterPatch()
             {
                 Tags =
                 {
@@ -134,6 +164,33 @@ namespace Azure.ResourceManager.NetworkCloud.Tests.ScenarioTests
             var strategyResult = await clusterResource.UpdateAsync(WaitUntil.Completed, patch2);
             Assert.IsNotNull(strategyResult.Value);
 
+            // Patch Secret Archive Settings
+            NetworkCloudClusterPatch patch3 = new NetworkCloudClusterPatch()
+            {
+                SecretArchiveSettings = new SecretArchiveSettings
+                {
+                    VaultUri = new Uri(TestEnvironment.VaultUri),
+                }
+            };
+            var secretArchiveResult = await clusterResource.UpdateAsync(WaitUntil.Completed, patch3);
+            Assert.IsNotNull(secretArchiveResult.Value);
+
+            // Patch VulnerabilityScanningContainerScan
+            try
+            {
+                NetworkCloudClusterPatch patch4 = new NetworkCloudClusterPatch()
+                {
+                    VulnerabilityScanningContainerScan = VulnerabilityScanningSettingsContainerScan.Enabled
+                };
+                var vulnerabilityScanResult = await clusterResource.UpdateAsync(WaitUntil.Completed, patch4);
+                Assert.IsNotNull(vulnerabilityScanResult.Value);
+            }
+            catch (Exception ex)
+            {
+                StringAssert.Contains("cluster conditions do not pass validation for cluster", ex.Message);
+                StringAssert.Contains("ClusterDeployedCondition is not True", ex.Message);
+            }
+
             // Cluster Update Version
             try
             {
@@ -143,14 +200,26 @@ namespace Azure.ResourceManager.NetworkCloud.Tests.ScenarioTests
             catch (Exception ex)
             {
                 // special case: if the cluster was never deployed, version update (CUVA) is not allowed
-                // once the API bug is resolved this can be used. Until then, will compare 2 strings instead
-                // StringAssert.Contains($"cluster conditions do not pass validation for cluster {clusterName}: ClusterDeployedCondition is not True", ex.Message);
-                StringAssert.Contains("cluster conditions do not pass validation for cluster", ex.Message);
-                StringAssert.Contains("ClusterDeployedCondition is not True", ex.Message);
+                StringAssert.Contains($"cluster conditions do not pass validation for cluster {clusterName}: ClusterDeployedCondition is not True", ex.Message);
+            }
+
+            // Continue Cluster Update Version
+            try
+            {
+                ClusterContinueUpdateVersionContent continueUpdateContent = new ClusterContinueUpdateVersionContent
+                {
+                    MachineGroupTargetingMode = ClusterContinueUpdateVersionMachineGroupTargetingMode.AlphaByRack
+                };
+                var updatedClusterResult = await clusterResource.ContinueUpdateVersionAsync(WaitUntil.Completed, continueUpdateContent);
+            }
+            catch (Exception ex)
+            {
+                // special case: if the cluster was never deployed, version update (CUVA) is not allowed
+                StringAssert.Contains($"cluster {clusterName} does not have suitable conditions to continue to update", ex.Message);
             }
 
             // Delete
-            var deleteResult = await clusterResource.DeleteAsync(WaitUntil.Completed);
+            var deleteResult = await clusterResource.DeleteAsync(WaitUntil.Completed, CancellationToken.None);
             Assert.IsTrue(deleteResult.HasCompleted);
         }
     }

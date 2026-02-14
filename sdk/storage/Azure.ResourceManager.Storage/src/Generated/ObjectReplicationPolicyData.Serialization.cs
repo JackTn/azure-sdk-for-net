@@ -76,6 +76,11 @@ namespace Azure.ResourceManager.Storage
                 writer.WritePropertyName("metrics"u8);
                 writer.WriteObjectValue(Metrics, options);
             }
+            if (Optional.IsDefined(PriorityReplication))
+            {
+                writer.WritePropertyName("priorityReplication"u8);
+                writer.WriteObjectValue(PriorityReplication, options);
+            }
             writer.WriteEndObject();
         }
 
@@ -109,6 +114,7 @@ namespace Azure.ResourceManager.Storage
             string destinationAccount = default;
             IList<ObjectReplicationPolicyRule> rules = default;
             ObjectReplicationPolicyPropertiesMetrics metrics = default;
+            ObjectReplicationPolicyPropertiesPriorityReplication priorityReplication = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> rawDataDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
@@ -134,7 +140,7 @@ namespace Azure.ResourceManager.Storage
                     {
                         continue;
                     }
-                    systemData = JsonSerializer.Deserialize<SystemData>(property.Value.GetRawText());
+                    systemData = ModelReaderWriter.Read<SystemData>(new BinaryData(Encoding.UTF8.GetBytes(property.Value.GetRawText())), ModelSerializationExtensions.WireOptions, AzureResourceManagerStorageContext.Default);
                     continue;
                 }
                 if (property.NameEquals("properties"u8))
@@ -193,6 +199,15 @@ namespace Azure.ResourceManager.Storage
                             metrics = ObjectReplicationPolicyPropertiesMetrics.DeserializeObjectReplicationPolicyPropertiesMetrics(property0.Value, options);
                             continue;
                         }
+                        if (property0.NameEquals("priorityReplication"u8))
+                        {
+                            if (property0.Value.ValueKind == JsonValueKind.Null)
+                            {
+                                continue;
+                            }
+                            priorityReplication = ObjectReplicationPolicyPropertiesPriorityReplication.DeserializeObjectReplicationPolicyPropertiesPriorityReplication(property0.Value, options);
+                            continue;
+                        }
                     }
                     continue;
                 }
@@ -213,6 +228,7 @@ namespace Azure.ResourceManager.Storage
                 destinationAccount,
                 rules ?? new ChangeTrackingList<ObjectReplicationPolicyRule>(),
                 metrics,
+                priorityReplication,
                 serializedAdditionalRawData);
         }
 
@@ -410,6 +426,26 @@ namespace Azure.ResourceManager.Storage
                 }
             }
 
+            hasPropertyOverride = hasObjectOverride && propertyOverrides.TryGetValue("IsPriorityReplicationEnabled", out propertyOverride);
+            if (hasPropertyOverride)
+            {
+                builder.Append("    priorityReplication: ");
+                builder.AppendLine("{");
+                builder.AppendLine("      priorityReplication: {");
+                builder.Append("        enabled: ");
+                builder.AppendLine(propertyOverride);
+                builder.AppendLine("      }");
+                builder.AppendLine("    }");
+            }
+            else
+            {
+                if (Optional.IsDefined(PriorityReplication))
+                {
+                    builder.Append("    priorityReplication: ");
+                    BicepSerializationHelpers.AppendChildObject(builder, PriorityReplication, options, 4, false, "    priorityReplication: ");
+                }
+            }
+
             builder.AppendLine("  }");
             builder.AppendLine("}");
             return BinaryData.FromString(builder.ToString());
@@ -422,7 +458,7 @@ namespace Azure.ResourceManager.Storage
             switch (format)
             {
                 case "J":
-                    return ModelReaderWriter.Write(this, options);
+                    return ModelReaderWriter.Write(this, options, AzureResourceManagerStorageContext.Default);
                 case "bicep":
                     return SerializeBicep(options);
                 default:

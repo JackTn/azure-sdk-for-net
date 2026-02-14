@@ -3,15 +3,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Globalization;
-using System.Security.Cryptography;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Security.Cryptography;
 using System.Text;
-using Azure.Core.Pipeline;
-using Azure.Core;
-using System.Collections.Specialized;
 using System.Threading.Tasks;
+using Azure.Core;
+using Azure.Core.Pipeline;
 
 namespace Azure.Compute.Batch.Custom
 {
@@ -37,7 +37,8 @@ namespace Azure.Compute.Batch.Custom
         public BatchNamedKeyCredentialPolicy(AzureNamedKeyCredential credentials)
         {
             var (name, key) = credentials;
-            AccountName = name; ;
+            AccountName = name;
+            ;
             SetAccountKey(key);
         }
 
@@ -120,7 +121,7 @@ namespace Azure.Compute.Batch.Custom
             {
                 if (header.Name.StartsWith(Constants.HeaderNames.OCPPrefix, StringComparison.OrdinalIgnoreCase))
                 {
-                    headers.Add(new HttpHeader(header.Name.ToLowerInvariant(), header.Value,null));
+                    headers.Add(new HttpHeader(header.Name.ToLowerInvariant(), header.Value));
                 }
             }
 

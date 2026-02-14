@@ -8,17 +8,20 @@ azure-arm: true
 title: communication
 namespace: Azure.ResourceManager.Communication
 # default tag is a preview version
-require: https://github.com/Azure/azure-rest-api-specs/blob/5a281cf0d538de6dad0c70eda7ee901c60a11e6b/specification/communication/resource-manager/readme.md#tag-package-2023-04
+require: https://github.com/Azure/azure-rest-api-specs/blob/59930ee61698523269281dc9df36815620cb3d6e/specification/communication/resource-manager/readme.md#tag-package-2025-09-01
 output-folder: $(this-folder)/Generated
 clear-output-folder: true
 sample-gen:
-  output-folder: $(this-folder)/../samples/Generated
+  output-folder: $(this-folder)/../tests/Generated
   clear-output-folder: true
 skip-csproj: true
 modelerfour:
   flatten-payloads: false
 use-model-reader-writer: true
 enable-bicep-serialization: true
+
+#mgmt-debug:
+#  show-serialized-names: true
 
 override-operation-name:
   CommunicationServices_CheckNameAvailability: CheckCommunicationNameAvailability
@@ -76,8 +79,13 @@ rename-mapping:
   DnsRecord: VerificationDnsRecord
   DomainsProvisioningState: DomainProvisioningState
   ProvisioningState: CommunicationServiceProvisioningState
-  SuppressionListResource.properties.createdTimeStamp: -|date-time
-  SuppressionListResource.properties.lastUpdatedTimeStamp: -|date-time
+  SuppressionListResource.properties.createdTimeStamp: LastUpdatedOn|date-time
+  SuppressionListResource.properties.lastUpdatedTimeStamp: CreatedOn|date-time
+  CommunicationServiceResource.properties.disableLocalAuth: IsLocalAuthDisabled
+  SmtpUsernameResource: CommunicationSmtpUsername
+  SuppressionListAddressResource: EmailSuppressionListAddress
+  SuppressionListResource: EmailSuppressionList
+  PublicNetworkAccess: CommunicationPublicNetworkAccess
 
 directive:
  - from: types.json

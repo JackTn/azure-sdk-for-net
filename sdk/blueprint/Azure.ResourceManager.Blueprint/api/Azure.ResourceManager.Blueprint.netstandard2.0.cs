@@ -118,6 +118,12 @@ namespace Azure.ResourceManager.Blueprint
         public virtual Azure.Response<Azure.ResourceManager.Blueprint.Models.WhoIsBlueprintContract> WhoIsBlueprint(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) { throw null; }
         public virtual System.Threading.Tasks.Task<Azure.Response<Azure.ResourceManager.Blueprint.Models.WhoIsBlueprintContract>> WhoIsBlueprintAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) { throw null; }
     }
+    public partial class AzureResourceManagerBlueprintContext : System.ClientModel.Primitives.ModelReaderWriterContext
+    {
+        internal AzureResourceManagerBlueprintContext() { }
+        public static Azure.ResourceManager.Blueprint.AzureResourceManagerBlueprintContext Default { get { throw null; } }
+        protected override bool TryGetTypeBuilderCore(System.Type type, out System.ClientModel.Primitives.ModelReaderWriterTypeBuilder builder) { throw null; }
+    }
     public partial class BlueprintArtifactCollection : Azure.ResourceManager.ArmCollection, System.Collections.Generic.IAsyncEnumerable<Azure.ResourceManager.Blueprint.BlueprintArtifactResource>, System.Collections.Generic.IEnumerable<Azure.ResourceManager.Blueprint.BlueprintArtifactResource>, System.Collections.IEnumerable
     {
         protected BlueprintArtifactCollection() { }
@@ -360,9 +366,7 @@ namespace Azure.ResourceManager.Blueprint.Models
         public static Azure.ResourceManager.Blueprint.Models.AssignmentDeleteBehavior All { get { throw null; } }
         public static Azure.ResourceManager.Blueprint.Models.AssignmentDeleteBehavior None { get { throw null; } }
         public bool Equals(Azure.ResourceManager.Blueprint.Models.AssignmentDeleteBehavior other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.Blueprint.Models.AssignmentDeleteBehavior left, Azure.ResourceManager.Blueprint.Models.AssignmentDeleteBehavior right) { throw null; }
         public static implicit operator Azure.ResourceManager.Blueprint.Models.AssignmentDeleteBehavior (string value) { throw null; }
@@ -419,9 +423,7 @@ namespace Azure.ResourceManager.Blueprint.Models
         public static Azure.ResourceManager.Blueprint.Models.AssignmentLockMode AllResourcesReadOnly { get { throw null; } }
         public static Azure.ResourceManager.Blueprint.Models.AssignmentLockMode None { get { throw null; } }
         public bool Equals(Azure.ResourceManager.Blueprint.Models.AssignmentLockMode other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.Blueprint.Models.AssignmentLockMode left, Azure.ResourceManager.Blueprint.Models.AssignmentLockMode right) { throw null; }
         public static implicit operator Azure.ResourceManager.Blueprint.Models.AssignmentLockMode (string value) { throw null; }
@@ -458,9 +460,7 @@ namespace Azure.ResourceManager.Blueprint.Models
         public static Azure.ResourceManager.Blueprint.Models.AssignmentProvisioningState Validating { get { throw null; } }
         public static Azure.ResourceManager.Blueprint.Models.AssignmentProvisioningState Waiting { get { throw null; } }
         public bool Equals(Azure.ResourceManager.Blueprint.Models.AssignmentProvisioningState other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.Blueprint.Models.AssignmentProvisioningState left, Azure.ResourceManager.Blueprint.Models.AssignmentProvisioningState right) { throw null; }
         public static implicit operator Azure.ResourceManager.Blueprint.Models.AssignmentProvisioningState (string value) { throw null; }
@@ -521,9 +521,7 @@ namespace Azure.ResourceManager.Blueprint.Models
         public static Azure.ResourceManager.Blueprint.Models.BlueprintTargetScope ManagementGroup { get { throw null; } }
         public static Azure.ResourceManager.Blueprint.Models.BlueprintTargetScope Subscription { get { throw null; } }
         public bool Equals(Azure.ResourceManager.Blueprint.Models.BlueprintTargetScope other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.Blueprint.Models.BlueprintTargetScope left, Azure.ResourceManager.Blueprint.Models.BlueprintTargetScope right) { throw null; }
         public static implicit operator Azure.ResourceManager.Blueprint.Models.BlueprintTargetScope (string value) { throw null; }
@@ -554,9 +552,7 @@ namespace Azure.ResourceManager.Blueprint.Models
         public static Azure.ResourceManager.Blueprint.Models.ManagedServiceIdentityType SystemAssigned { get { throw null; } }
         public static Azure.ResourceManager.Blueprint.Models.ManagedServiceIdentityType UserAssigned { get { throw null; } }
         public bool Equals(Azure.ResourceManager.Blueprint.Models.ManagedServiceIdentityType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.Blueprint.Models.ManagedServiceIdentityType left, Azure.ResourceManager.Blueprint.Models.ManagedServiceIdentityType right) { throw null; }
         public static implicit operator Azure.ResourceManager.Blueprint.Models.ManagedServiceIdentityType (string value) { throw null; }
@@ -695,9 +691,7 @@ namespace Azure.ResourceManager.Blueprint.Models
         public static Azure.ResourceManager.Blueprint.Models.TemplateParameterType SecureString { get { throw null; } }
         public static Azure.ResourceManager.Blueprint.Models.TemplateParameterType String { get { throw null; } }
         public bool Equals(Azure.ResourceManager.Blueprint.Models.TemplateParameterType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.Blueprint.Models.TemplateParameterType left, Azure.ResourceManager.Blueprint.Models.TemplateParameterType right) { throw null; }
         public static implicit operator Azure.ResourceManager.Blueprint.Models.TemplateParameterType (string value) { throw null; }

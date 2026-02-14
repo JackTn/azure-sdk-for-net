@@ -71,6 +71,7 @@ namespace Azure.ResourceManager.RedisEnterprise
         /// <param name="systemData"> The systemData. </param>
         /// <param name="tags"> The tags. </param>
         /// <param name="location"> The location. </param>
+        /// <param name="kind"> Distinguishes the kind of cluster. Read-only. </param>
         /// <param name="sku"> The SKU to create, which affects price, performance, and features. </param>
         /// <param name="zones"> The Availability Zones where this cluster will be deployed. </param>
         /// <param name="identity"> The identity of the resource. </param>
@@ -83,9 +84,11 @@ namespace Azure.ResourceManager.RedisEnterprise
         /// <param name="resourceState"> Current resource status of the cluster. </param>
         /// <param name="redisVersion"> Version of redis the cluster supports, e.g. '6'. </param>
         /// <param name="privateEndpointConnections"> List of private endpoint connections associated with the specified Redis Enterprise cluster. </param>
+        /// <param name="publicNetworkAccess"> Whether or not public network traffic can access the Redis cluster. Only 'Enabled' or 'Disabled' can be set. null is returned only for clusters created using an old API version which do not have this property and cannot be set. </param>
         /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
-        internal RedisEnterpriseClusterData(ResourceIdentifier id, string name, ResourceType resourceType, SystemData systemData, IDictionary<string, string> tags, AzureLocation location, RedisEnterpriseSku sku, IList<string> zones, ManagedServiceIdentity identity, RedisEnterpriseHighAvailability? highAvailability, RedisEnterpriseTlsVersion? minimumTlsVersion, ClusterPropertiesEncryption encryption, string hostName, RedisEnterpriseProvisioningStatus? provisioningState, RedisEnterpriseRedundancyMode? redundancyMode, RedisEnterpriseClusterResourceState? resourceState, string redisVersion, IReadOnlyList<RedisEnterprisePrivateEndpointConnectionData> privateEndpointConnections, IDictionary<string, BinaryData> serializedAdditionalRawData) : base(id, name, resourceType, systemData, tags, location)
+        internal RedisEnterpriseClusterData(ResourceIdentifier id, string name, ResourceType resourceType, SystemData systemData, IDictionary<string, string> tags, AzureLocation location, RedisEnterpriseKind? kind, RedisEnterpriseSku sku, IList<string> zones, ManagedServiceIdentity identity, RedisEnterpriseHighAvailability? highAvailability, RedisEnterpriseTlsVersion? minimumTlsVersion, ClusterPropertiesEncryption encryption, string hostName, RedisEnterpriseProvisioningStatus? provisioningState, RedisEnterpriseRedundancyMode? redundancyMode, RedisEnterpriseClusterResourceState? resourceState, string redisVersion, IReadOnlyList<RedisEnterprisePrivateEndpointConnectionData> privateEndpointConnections, RedisEnterprisePublicNetworkAccess? publicNetworkAccess, IDictionary<string, BinaryData> serializedAdditionalRawData) : base(id, name, resourceType, systemData, tags, location)
         {
+            Kind = kind;
             Sku = sku;
             Zones = zones;
             Identity = identity;
@@ -98,6 +101,7 @@ namespace Azure.ResourceManager.RedisEnterprise
             ResourceState = resourceState;
             RedisVersion = redisVersion;
             PrivateEndpointConnections = privateEndpointConnections;
+            PublicNetworkAccess = publicNetworkAccess;
             _serializedAdditionalRawData = serializedAdditionalRawData;
         }
 
@@ -106,6 +110,9 @@ namespace Azure.ResourceManager.RedisEnterprise
         {
         }
 
+        /// <summary> Distinguishes the kind of cluster. Read-only. </summary>
+        [WirePath("kind")]
+        public RedisEnterpriseKind? Kind { get; }
         /// <summary> The SKU to create, which affects price, performance, and features. </summary>
         [WirePath("sku")]
         public RedisEnterpriseSku Sku { get; set; }
@@ -154,5 +161,8 @@ namespace Azure.ResourceManager.RedisEnterprise
         /// <summary> List of private endpoint connections associated with the specified Redis Enterprise cluster. </summary>
         [WirePath("properties.privateEndpointConnections")]
         public IReadOnlyList<RedisEnterprisePrivateEndpointConnectionData> PrivateEndpointConnections { get; }
+        /// <summary> Whether or not public network traffic can access the Redis cluster. Only 'Enabled' or 'Disabled' can be set. null is returned only for clusters created using an old API version which do not have this property and cannot be set. </summary>
+        [WirePath("properties.publicNetworkAccess")]
+        public RedisEnterprisePublicNetworkAccess? PublicNetworkAccess { get; set; }
     }
 }

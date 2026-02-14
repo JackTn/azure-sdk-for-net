@@ -32,7 +32,7 @@ namespace Azure.ResourceManager.NotificationHubs.Models
                 {
                     writer.WritePropertyName(item.Key);
 #if NET6_0_OR_GREATER
-				writer.WriteRawValue(item.Value);
+                    writer.WriteRawValue(item.Value);
 #else
                     using (JsonDocument document = JsonDocument.Parse(item.Value))
                     {
@@ -90,7 +90,7 @@ namespace Azure.ResourceManager.NotificationHubs.Models
             switch (format)
             {
                 case "J":
-                    return ModelReaderWriter.Write(this, options);
+                    return ModelReaderWriter.Write(this, options, AzureResourceManagerNotificationHubsContext.Default);
                 default:
                     throw new FormatException($"The model {nameof(SharedAccessAuthorizationRuleCreateOrUpdateContent)} does not support writing '{options.Format}' format.");
             }

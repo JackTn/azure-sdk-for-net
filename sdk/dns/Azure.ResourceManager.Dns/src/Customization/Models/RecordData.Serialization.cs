@@ -207,7 +207,7 @@ namespace Azure.ResourceManager.Dns
                 {
                     writer.WritePropertyName(item.Key);
 #if NET6_0_OR_GREATER
-				writer.WriteRawValue(item.Value);
+                    writer.WriteRawValue(item.Value);
 #else
                     using (JsonDocument document = JsonDocument.Parse(item.Value))
                     {
@@ -296,7 +296,7 @@ namespace Azure.ResourceManager.Dns
                     {
                         continue;
                     }
-                    systemData = JsonSerializer.Deserialize<ResourceManager.Models.SystemData>(property.Value.ToString());
+                    systemData = JsonSerializer.Deserialize<ResourceManager.Models.SystemData>(property.Value.GetRawText());
                     continue;
                 }
                 if (property.NameEquals("properties"u8))
@@ -574,7 +574,7 @@ namespace Azure.ResourceManager.Dns
             switch (format)
             {
                 case "J":
-                    return ModelReaderWriter.Write(this, options);
+                    return ModelReaderWriter.Write(this, options, AzureResourceManagerDnsContext.Default);
                 default:
                     throw new FormatException($"The model {nameof(DnsRecordData)} does not support '{options.Format}' format.");
             }

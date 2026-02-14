@@ -8,110 +8,40 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Azure;
 using Azure.Core;
 using Azure.Core.Pipeline;
+using Azure.ResourceManager;
+using Azure.ResourceManager.RecoveryServicesDataReplication;
 using Azure.ResourceManager.RecoveryServicesDataReplication.Models;
+using Azure.ResourceManager.Resources;
 
 namespace Azure.ResourceManager.RecoveryServicesDataReplication.Mocking
 {
-    /// <summary> A class to add extension methods to ResourceGroupResource. </summary>
+    /// <summary> A class to add extension methods to <see cref="ResourceGroupResource"/>. </summary>
     public partial class MockableRecoveryServicesDataReplicationResourceGroupResource : ArmResource
     {
-        private ClientDiagnostics _defaultClientDiagnostics;
-        private AzureSiteRecoveryManagementServiceAPIRestOperations _defaultRestClient;
+        private ClientDiagnostics _deploymentPreflightOperationsClientDiagnostics;
+        private DeploymentPreflightOperations _deploymentPreflightOperationsRestClient;
 
-        /// <summary> Initializes a new instance of the <see cref="MockableRecoveryServicesDataReplicationResourceGroupResource"/> class for mocking. </summary>
+        /// <summary> Initializes a new instance of MockableRecoveryServicesDataReplicationResourceGroupResource for mocking. </summary>
         protected MockableRecoveryServicesDataReplicationResourceGroupResource()
         {
         }
 
-        /// <summary> Initializes a new instance of the <see cref="MockableRecoveryServicesDataReplicationResourceGroupResource"/> class. </summary>
+        /// <summary> Initializes a new instance of <see cref="MockableRecoveryServicesDataReplicationResourceGroupResource"/> class. </summary>
         /// <param name="client"> The client parameters to use in these operations. </param>
         /// <param name="id"> The identifier of the resource that is the target of operations. </param>
         internal MockableRecoveryServicesDataReplicationResourceGroupResource(ArmClient client, ResourceIdentifier id) : base(client, id)
         {
         }
 
-        private ClientDiagnostics DefaultClientDiagnostics => _defaultClientDiagnostics ??= new ClientDiagnostics("Azure.ResourceManager.RecoveryServicesDataReplication", ProviderConstants.DefaultProviderNamespace, Diagnostics);
-        private AzureSiteRecoveryManagementServiceAPIRestOperations DefaultRestClient => _defaultRestClient ??= new AzureSiteRecoveryManagementServiceAPIRestOperations(Pipeline, Diagnostics.ApplicationId, Endpoint);
+        private ClientDiagnostics DeploymentPreflightOperationsClientDiagnostics => _deploymentPreflightOperationsClientDiagnostics ??= new ClientDiagnostics("Azure.ResourceManager.RecoveryServicesDataReplication.Mocking", ProviderConstants.DefaultProviderNamespace, Diagnostics);
 
-        private string GetApiVersionOrNull(ResourceType resourceType)
-        {
-            TryGetApiVersion(resourceType, out string apiVersion);
-            return apiVersion;
-        }
+        private DeploymentPreflightOperations DeploymentPreflightOperationsRestClient => _deploymentPreflightOperationsRestClient ??= new DeploymentPreflightOperations(DeploymentPreflightOperationsClientDiagnostics, Pipeline, Endpoint, "2024-09-01");
 
-        /// <summary> Gets a collection of DataReplicationFabricResources in the ResourceGroupResource. </summary>
-        /// <returns> An object representing collection of DataReplicationFabricResources and their operations over a DataReplicationFabricResource. </returns>
-        public virtual DataReplicationFabricCollection GetDataReplicationFabrics()
-        {
-            return GetCachedClient(client => new DataReplicationFabricCollection(client, Id));
-        }
-
-        /// <summary>
-        /// Gets the details of the fabric.
-        /// <list type="bullet">
-        /// <item>
-        /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataReplication/replicationFabrics/{fabricName}</description>
-        /// </item>
-        /// <item>
-        /// <term>Operation Id</term>
-        /// <description>Fabric_Get</description>
-        /// </item>
-        /// <item>
-        /// <term>Default Api Version</term>
-        /// <description>2021-02-16-preview</description>
-        /// </item>
-        /// <item>
-        /// <term>Resource</term>
-        /// <description><see cref="DataReplicationFabricResource"/></description>
-        /// </item>
-        /// </list>
-        /// </summary>
-        /// <param name="fabricName"> The fabric name. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="fabricName"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="fabricName"/> is an empty string, and was expected to be non-empty. </exception>
-        [ForwardsClientCalls]
-        public virtual async Task<Response<DataReplicationFabricResource>> GetDataReplicationFabricAsync(string fabricName, CancellationToken cancellationToken = default)
-        {
-            return await GetDataReplicationFabrics().GetAsync(fabricName, cancellationToken).ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// Gets the details of the fabric.
-        /// <list type="bullet">
-        /// <item>
-        /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataReplication/replicationFabrics/{fabricName}</description>
-        /// </item>
-        /// <item>
-        /// <term>Operation Id</term>
-        /// <description>Fabric_Get</description>
-        /// </item>
-        /// <item>
-        /// <term>Default Api Version</term>
-        /// <description>2021-02-16-preview</description>
-        /// </item>
-        /// <item>
-        /// <term>Resource</term>
-        /// <description><see cref="DataReplicationFabricResource"/></description>
-        /// </item>
-        /// </list>
-        /// </summary>
-        /// <param name="fabricName"> The fabric name. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="fabricName"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="fabricName"/> is an empty string, and was expected to be non-empty. </exception>
-        [ForwardsClientCalls]
-        public virtual Response<DataReplicationFabricResource> GetDataReplicationFabric(string fabricName, CancellationToken cancellationToken = default)
-        {
-            return GetDataReplicationFabrics().Get(fabricName, cancellationToken);
-        }
-
-        /// <summary> Gets a collection of DataReplicationVaultResources in the ResourceGroupResource. </summary>
-        /// <returns> An object representing collection of DataReplicationVaultResources and their operations over a DataReplicationVaultResource. </returns>
+        /// <summary> Gets a collection of DataReplicationVaults in the <see cref="ResourceGroupResource"/>. </summary>
+        /// <returns> An object representing collection of DataReplicationVaults and their operations over a DataReplicationVaultResource. </returns>
         public virtual DataReplicationVaultCollection GetDataReplicationVaults()
         {
             return GetCachedClient(client => new DataReplicationVaultCollection(client, Id));
@@ -121,20 +51,16 @@ namespace Azure.ResourceManager.RecoveryServicesDataReplication.Mocking
         /// Gets the details of the vault.
         /// <list type="bullet">
         /// <item>
-        /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataReplication/replicationVaults/{vaultName}</description>
+        /// <term> Request Path. </term>
+        /// <description> /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataReplication/replicationVaults/{vaultName}. </description>
         /// </item>
         /// <item>
-        /// <term>Operation Id</term>
-        /// <description>Vault_Get</description>
+        /// <term> Operation Id. </term>
+        /// <description> Vault_Get. </description>
         /// </item>
         /// <item>
-        /// <term>Default Api Version</term>
-        /// <description>2021-02-16-preview</description>
-        /// </item>
-        /// <item>
-        /// <term>Resource</term>
-        /// <description><see cref="DataReplicationVaultResource"/></description>
+        /// <term> Default Api Version. </term>
+        /// <description> 2024-09-01. </description>
         /// </item>
         /// </list>
         /// </summary>
@@ -145,6 +71,8 @@ namespace Azure.ResourceManager.RecoveryServicesDataReplication.Mocking
         [ForwardsClientCalls]
         public virtual async Task<Response<DataReplicationVaultResource>> GetDataReplicationVaultAsync(string vaultName, CancellationToken cancellationToken = default)
         {
+            Argument.AssertNotNullOrEmpty(vaultName, nameof(vaultName));
+
             return await GetDataReplicationVaults().GetAsync(vaultName, cancellationToken).ConfigureAwait(false);
         }
 
@@ -152,20 +80,16 @@ namespace Azure.ResourceManager.RecoveryServicesDataReplication.Mocking
         /// Gets the details of the vault.
         /// <list type="bullet">
         /// <item>
-        /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataReplication/replicationVaults/{vaultName}</description>
+        /// <term> Request Path. </term>
+        /// <description> /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataReplication/replicationVaults/{vaultName}. </description>
         /// </item>
         /// <item>
-        /// <term>Operation Id</term>
-        /// <description>Vault_Get</description>
+        /// <term> Operation Id. </term>
+        /// <description> Vault_Get. </description>
         /// </item>
         /// <item>
-        /// <term>Default Api Version</term>
-        /// <description>2021-02-16-preview</description>
-        /// </item>
-        /// <item>
-        /// <term>Resource</term>
-        /// <description><see cref="DataReplicationVaultResource"/></description>
+        /// <term> Default Api Version. </term>
+        /// <description> 2024-09-01. </description>
         /// </item>
         /// </list>
         /// </summary>
@@ -176,40 +100,117 @@ namespace Azure.ResourceManager.RecoveryServicesDataReplication.Mocking
         [ForwardsClientCalls]
         public virtual Response<DataReplicationVaultResource> GetDataReplicationVault(string vaultName, CancellationToken cancellationToken = default)
         {
+            Argument.AssertNotNullOrEmpty(vaultName, nameof(vaultName));
+
             return GetDataReplicationVaults().Get(vaultName, cancellationToken);
         }
 
+        /// <summary> Gets a collection of DataReplicationFabrics in the <see cref="ResourceGroupResource"/>. </summary>
+        /// <returns> An object representing collection of DataReplicationFabrics and their operations over a DataReplicationFabricResource. </returns>
+        public virtual DataReplicationFabricCollection GetDataReplicationFabrics()
+        {
+            return GetCachedClient(client => new DataReplicationFabricCollection(client, Id));
+        }
+
         /// <summary>
-        /// Performs resource deployment validation.
+        /// Gets the details of the fabric.
         /// <list type="bullet">
         /// <item>
-        /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataReplication/deployments/{deploymentId}/preflight</description>
+        /// <term> Request Path. </term>
+        /// <description> /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataReplication/replicationFabrics/{fabricName}. </description>
         /// </item>
         /// <item>
-        /// <term>Operation Id</term>
-        /// <description>DeploymentPreflight</description>
+        /// <term> Operation Id. </term>
+        /// <description> Fabric_Get. </description>
         /// </item>
         /// <item>
-        /// <term>Default Api Version</term>
-        /// <description>2021-02-16-preview</description>
+        /// <term> Default Api Version. </term>
+        /// <description> 2024-09-01. </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="fabricName"> The fabric name. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="fabricName"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="fabricName"/> is an empty string, and was expected to be non-empty. </exception>
+        [ForwardsClientCalls]
+        public virtual async Task<Response<DataReplicationFabricResource>> GetDataReplicationFabricAsync(string fabricName, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(fabricName, nameof(fabricName));
+
+            return await GetDataReplicationFabrics().GetAsync(fabricName, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Gets the details of the fabric.
+        /// <list type="bullet">
+        /// <item>
+        /// <term> Request Path. </term>
+        /// <description> /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataReplication/replicationFabrics/{fabricName}. </description>
+        /// </item>
+        /// <item>
+        /// <term> Operation Id. </term>
+        /// <description> Fabric_Get. </description>
+        /// </item>
+        /// <item>
+        /// <term> Default Api Version. </term>
+        /// <description> 2024-09-01. </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="fabricName"> The fabric name. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="fabricName"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="fabricName"/> is an empty string, and was expected to be non-empty. </exception>
+        [ForwardsClientCalls]
+        public virtual Response<DataReplicationFabricResource> GetDataReplicationFabric(string fabricName, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(fabricName, nameof(fabricName));
+
+            return GetDataReplicationFabrics().Get(fabricName, cancellationToken);
+        }
+
+        /// <summary>
+        /// Performs resource deployment preflight validation.
+        /// <list type="bullet">
+        /// <item>
+        /// <term> Request Path. </term>
+        /// <description> /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataReplication/deployments/{deploymentId}/preflight. </description>
+        /// </item>
+        /// <item>
+        /// <term> Operation Id. </term>
+        /// <description> DeploymentPreflight_Post. </description>
+        /// </item>
+        /// <item>
+        /// <term> Default Api Version. </term>
+        /// <description> 2024-09-01. </description>
         /// </item>
         /// </list>
         /// </summary>
         /// <param name="deploymentId"> Deployment Id. </param>
         /// <param name="body"> Deployment preflight model. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentException"> <paramref name="deploymentId"/> is an empty string, and was expected to be non-empty. </exception>
         /// <exception cref="ArgumentNullException"> <paramref name="deploymentId"/> is null. </exception>
-        public virtual async Task<Response<DeploymentPreflightModel>> DeploymentPreflightAsync(string deploymentId, DeploymentPreflightModel body = null, CancellationToken cancellationToken = default)
+        /// <exception cref="ArgumentException"> <paramref name="deploymentId"/> is an empty string, and was expected to be non-empty. </exception>
+        public virtual async Task<Response<DeploymentPreflight>> PerformDeploymentPreflightValidationAsync(string deploymentId, DeploymentPreflight body = default, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNullOrEmpty(deploymentId, nameof(deploymentId));
 
-            using var scope = DefaultClientDiagnostics.CreateScope("MockableRecoveryServicesDataReplicationResourceGroupResource.DeploymentPreflight");
+            using DiagnosticScope scope = DeploymentPreflightOperationsClientDiagnostics.CreateScope("MockableRecoveryServicesDataReplicationResourceGroupResource.PerformDeploymentPreflightValidation");
             scope.Start();
             try
             {
-                var response = await DefaultRestClient.DeploymentPreflightAsync(Id.SubscriptionId, Id.ResourceGroupName, deploymentId, body, cancellationToken).ConfigureAwait(false);
+                RequestContext context = new RequestContext
+                {
+                    CancellationToken = cancellationToken
+                };
+                HttpMessage message = DeploymentPreflightOperationsRestClient.CreatePerformDeploymentPreflightValidationRequest(Guid.Parse(Id.SubscriptionId), Id.ResourceGroupName, deploymentId, DeploymentPreflight.ToRequestContent(body), context);
+                Response result = await Pipeline.ProcessMessageAsync(message, context).ConfigureAwait(false);
+                Response<DeploymentPreflight> response = Response.FromValue(DeploymentPreflight.FromResponse(result), result);
+                if (response.Value == null)
+                {
+                    throw new RequestFailedException(response.GetRawResponse());
+                }
                 return response;
             }
             catch (Exception e)
@@ -220,36 +221,46 @@ namespace Azure.ResourceManager.RecoveryServicesDataReplication.Mocking
         }
 
         /// <summary>
-        /// Performs resource deployment validation.
+        /// Performs resource deployment preflight validation.
         /// <list type="bullet">
         /// <item>
-        /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataReplication/deployments/{deploymentId}/preflight</description>
+        /// <term> Request Path. </term>
+        /// <description> /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataReplication/deployments/{deploymentId}/preflight. </description>
         /// </item>
         /// <item>
-        /// <term>Operation Id</term>
-        /// <description>DeploymentPreflight</description>
+        /// <term> Operation Id. </term>
+        /// <description> DeploymentPreflight_Post. </description>
         /// </item>
         /// <item>
-        /// <term>Default Api Version</term>
-        /// <description>2021-02-16-preview</description>
+        /// <term> Default Api Version. </term>
+        /// <description> 2024-09-01. </description>
         /// </item>
         /// </list>
         /// </summary>
         /// <param name="deploymentId"> Deployment Id. </param>
         /// <param name="body"> Deployment preflight model. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentException"> <paramref name="deploymentId"/> is an empty string, and was expected to be non-empty. </exception>
         /// <exception cref="ArgumentNullException"> <paramref name="deploymentId"/> is null. </exception>
-        public virtual Response<DeploymentPreflightModel> DeploymentPreflight(string deploymentId, DeploymentPreflightModel body = null, CancellationToken cancellationToken = default)
+        /// <exception cref="ArgumentException"> <paramref name="deploymentId"/> is an empty string, and was expected to be non-empty. </exception>
+        public virtual Response<DeploymentPreflight> PerformDeploymentPreflightValidation(string deploymentId, DeploymentPreflight body = default, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNullOrEmpty(deploymentId, nameof(deploymentId));
 
-            using var scope = DefaultClientDiagnostics.CreateScope("MockableRecoveryServicesDataReplicationResourceGroupResource.DeploymentPreflight");
+            using DiagnosticScope scope = DeploymentPreflightOperationsClientDiagnostics.CreateScope("MockableRecoveryServicesDataReplicationResourceGroupResource.PerformDeploymentPreflightValidation");
             scope.Start();
             try
             {
-                var response = DefaultRestClient.DeploymentPreflight(Id.SubscriptionId, Id.ResourceGroupName, deploymentId, body, cancellationToken);
+                RequestContext context = new RequestContext
+                {
+                    CancellationToken = cancellationToken
+                };
+                HttpMessage message = DeploymentPreflightOperationsRestClient.CreatePerformDeploymentPreflightValidationRequest(Guid.Parse(Id.SubscriptionId), Id.ResourceGroupName, deploymentId, DeploymentPreflight.ToRequestContent(body), context);
+                Response result = Pipeline.ProcessMessage(message, context);
+                Response<DeploymentPreflight> response = Response.FromValue(DeploymentPreflight.FromResponse(result), result);
+                if (response.Value == null)
+                {
+                    throw new RequestFailedException(response.GetRawResponse());
+                }
                 return response;
             }
             catch (Exception e)

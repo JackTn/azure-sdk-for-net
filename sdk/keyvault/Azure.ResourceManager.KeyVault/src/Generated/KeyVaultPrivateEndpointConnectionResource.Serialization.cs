@@ -11,16 +11,29 @@ using System.Text.Json;
 
 namespace Azure.ResourceManager.KeyVault
 {
+    /// <summary></summary>
     public partial class KeyVaultPrivateEndpointConnectionResource : IJsonModel<KeyVaultPrivateEndpointConnectionData>
     {
+        private static IJsonModel<KeyVaultPrivateEndpointConnectionData> s_dataDeserializationInstance;
+
+        private static IJsonModel<KeyVaultPrivateEndpointConnectionData> DataDeserializationInstance => s_dataDeserializationInstance ??= new KeyVaultPrivateEndpointConnectionData();
+
+        /// <param name="writer"> The writer to serialize the model to. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
         void IJsonModel<KeyVaultPrivateEndpointConnectionData>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options) => ((IJsonModel<KeyVaultPrivateEndpointConnectionData>)Data).Write(writer, options);
 
-        KeyVaultPrivateEndpointConnectionData IJsonModel<KeyVaultPrivateEndpointConnectionData>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => ((IJsonModel<KeyVaultPrivateEndpointConnectionData>)Data).Create(ref reader, options);
+        /// <param name="reader"> The reader for deserializing the model. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
+        KeyVaultPrivateEndpointConnectionData IJsonModel<KeyVaultPrivateEndpointConnectionData>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => DataDeserializationInstance.Create(ref reader, options);
 
-        BinaryData IPersistableModel<KeyVaultPrivateEndpointConnectionData>.Write(ModelReaderWriterOptions options) => ModelReaderWriter.Write(Data, options);
+        /// <param name="options"> The client options for reading and writing models. </param>
+        BinaryData IPersistableModel<KeyVaultPrivateEndpointConnectionData>.Write(ModelReaderWriterOptions options) => ModelReaderWriter.Write<KeyVaultPrivateEndpointConnectionData>(Data, options, AzureResourceManagerKeyVaultContext.Default);
 
-        KeyVaultPrivateEndpointConnectionData IPersistableModel<KeyVaultPrivateEndpointConnectionData>.Create(BinaryData data, ModelReaderWriterOptions options) => ModelReaderWriter.Read<KeyVaultPrivateEndpointConnectionData>(data, options);
+        /// <param name="data"> The binary data to be processed. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
+        KeyVaultPrivateEndpointConnectionData IPersistableModel<KeyVaultPrivateEndpointConnectionData>.Create(BinaryData data, ModelReaderWriterOptions options) => ModelReaderWriter.Read<KeyVaultPrivateEndpointConnectionData>(data, options, AzureResourceManagerKeyVaultContext.Default);
 
-        string IPersistableModel<KeyVaultPrivateEndpointConnectionData>.GetFormatFromOptions(ModelReaderWriterOptions options) => ((IPersistableModel<KeyVaultPrivateEndpointConnectionData>)Data).GetFormatFromOptions(options);
+        /// <param name="options"> The client options for reading and writing models. </param>
+        string IPersistableModel<KeyVaultPrivateEndpointConnectionData>.GetFormatFromOptions(ModelReaderWriterOptions options) => DataDeserializationInstance.GetFormatFromOptions(options);
     }
 }

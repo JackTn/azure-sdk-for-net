@@ -1,5 +1,11 @@
 namespace Azure.ResourceManager.DeviceUpdate
 {
+    public partial class AzureResourceManagerDeviceUpdateContext : System.ClientModel.Primitives.ModelReaderWriterContext
+    {
+        internal AzureResourceManagerDeviceUpdateContext() { }
+        public static Azure.ResourceManager.DeviceUpdate.AzureResourceManagerDeviceUpdateContext Default { get { throw null; } }
+        protected override bool TryGetTypeBuilderCore(System.Type type, out System.ClientModel.Primitives.ModelReaderWriterTypeBuilder builder) { throw null; }
+    }
     public partial class DeviceUpdateAccountCollection : Azure.ResourceManager.ArmCollection, System.Collections.Generic.IAsyncEnumerable<Azure.ResourceManager.DeviceUpdate.DeviceUpdateAccountResource>, System.Collections.Generic.IEnumerable<Azure.ResourceManager.DeviceUpdate.DeviceUpdateAccountResource>, System.Collections.IEnumerable
     {
         protected DeviceUpdateAccountCollection() { }
@@ -355,9 +361,7 @@ namespace Azure.ResourceManager.DeviceUpdate.Models
         public static Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdateAccountLocationRole Failover { get { throw null; } }
         public static Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdateAccountLocationRole Primary { get { throw null; } }
         public bool Equals(Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdateAccountLocationRole other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdateAccountLocationRole left, Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdateAccountLocationRole right) { throw null; }
         public static implicit operator Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdateAccountLocationRole (string value) { throw null; }
@@ -445,9 +449,7 @@ namespace Azure.ResourceManager.DeviceUpdate.Models
         public static Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdateNameUnavailableReason AlreadyExists { get { throw null; } }
         public static Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdateNameUnavailableReason Invalid { get { throw null; } }
         public bool Equals(Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdateNameUnavailableReason other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdateNameUnavailableReason left, Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdateNameUnavailableReason right) { throw null; }
         public static implicit operator Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdateNameUnavailableReason (string value) { throw null; }
@@ -480,9 +482,7 @@ namespace Azure.ResourceManager.DeviceUpdate.Models
         public static Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdatePrivateEndpointConnectionProvisioningState Failed { get { throw null; } }
         public static Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdatePrivateEndpointConnectionProvisioningState Succeeded { get { throw null; } }
         public bool Equals(Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdatePrivateEndpointConnectionProvisioningState other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdatePrivateEndpointConnectionProvisioningState left, Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdatePrivateEndpointConnectionProvisioningState right) { throw null; }
         public static implicit operator Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdatePrivateEndpointConnectionProvisioningState (string value) { throw null; }
@@ -500,9 +500,7 @@ namespace Azure.ResourceManager.DeviceUpdate.Models
         public static Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdatePrivateEndpointConnectionProxyProvisioningState Failed { get { throw null; } }
         public static Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdatePrivateEndpointConnectionProxyProvisioningState Succeeded { get { throw null; } }
         public bool Equals(Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdatePrivateEndpointConnectionProxyProvisioningState other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdatePrivateEndpointConnectionProxyProvisioningState left, Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdatePrivateEndpointConnectionProxyProvisioningState right) { throw null; }
         public static implicit operator Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdatePrivateEndpointConnectionProxyProvisioningState (string value) { throw null; }
@@ -519,9 +517,7 @@ namespace Azure.ResourceManager.DeviceUpdate.Models
         public static Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdatePrivateEndpointServiceConnectionStatus Pending { get { throw null; } }
         public static Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdatePrivateEndpointServiceConnectionStatus Rejected { get { throw null; } }
         public bool Equals(Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdatePrivateEndpointServiceConnectionStatus other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdatePrivateEndpointServiceConnectionStatus left, Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdatePrivateEndpointServiceConnectionStatus right) { throw null; }
         public static implicit operator Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdatePrivateEndpointServiceConnectionStatus (string value) { throw null; }
@@ -553,9 +549,7 @@ namespace Azure.ResourceManager.DeviceUpdate.Models
         public static Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdatePrivateLinkProvisioningState Failed { get { throw null; } }
         public static Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdatePrivateLinkProvisioningState Succeeded { get { throw null; } }
         public bool Equals(Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdatePrivateLinkProvisioningState other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdatePrivateLinkProvisioningState left, Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdatePrivateLinkProvisioningState right) { throw null; }
         public static implicit operator Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdatePrivateLinkProvisioningState (string value) { throw null; }
@@ -615,9 +609,7 @@ namespace Azure.ResourceManager.DeviceUpdate.Models
         public static Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdateProvisioningState Failed { get { throw null; } }
         public static Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdateProvisioningState Succeeded { get { throw null; } }
         public bool Equals(Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdateProvisioningState other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdateProvisioningState left, Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdateProvisioningState right) { throw null; }
         public static implicit operator Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdateProvisioningState (string value) { throw null; }
@@ -633,9 +625,7 @@ namespace Azure.ResourceManager.DeviceUpdate.Models
         public static Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdatePublicNetworkAccess Disabled { get { throw null; } }
         public static Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdatePublicNetworkAccess Enabled { get { throw null; } }
         public bool Equals(Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdatePublicNetworkAccess other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdatePublicNetworkAccess left, Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdatePublicNetworkAccess right) { throw null; }
         public static implicit operator Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdatePublicNetworkAccess (string value) { throw null; }
@@ -670,9 +660,7 @@ namespace Azure.ResourceManager.DeviceUpdate.Models
         public static Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdateSku Free { get { throw null; } }
         public static Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdateSku Standard { get { throw null; } }
         public bool Equals(Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdateSku other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdateSku left, Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdateSku right) { throw null; }
         public static implicit operator Azure.ResourceManager.DeviceUpdate.Models.DeviceUpdateSku (string value) { throw null; }
@@ -687,9 +675,7 @@ namespace Azure.ResourceManager.DeviceUpdate.Models
         public DiagnosticStorageAuthenticationType(string value) { throw null; }
         public static Azure.ResourceManager.DeviceUpdate.Models.DiagnosticStorageAuthenticationType KeyBased { get { throw null; } }
         public bool Equals(Azure.ResourceManager.DeviceUpdate.Models.DiagnosticStorageAuthenticationType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.DeviceUpdate.Models.DiagnosticStorageAuthenticationType left, Azure.ResourceManager.DeviceUpdate.Models.DiagnosticStorageAuthenticationType right) { throw null; }
         public static implicit operator Azure.ResourceManager.DeviceUpdate.Models.DiagnosticStorageAuthenticationType (string value) { throw null; }

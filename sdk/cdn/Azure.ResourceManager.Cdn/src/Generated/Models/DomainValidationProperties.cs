@@ -62,8 +62,10 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> Challenge used for DNS TXT record or file based validation. </summary>
+        [WirePath("validationToken")]
         public string ValidationToken { get; }
         /// <summary> The date time that the token expires. </summary>
+        [WirePath("expirationDate")]
         public DateTimeOffset? ExpiresOn { get; }
     }
 }

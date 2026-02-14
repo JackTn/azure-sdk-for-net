@@ -41,7 +41,6 @@ namespace Azure.Security.KeyVault.Keys
         public static Azure.Security.KeyVault.Keys.Cryptography.DecryptParameters DecryptParameters(Azure.Security.KeyVault.Keys.Cryptography.EncryptionAlgorithm algorithm, byte[] ciphertext, byte[] iv = null, byte[] authenticationTag = null, byte[] additionalAuthenticatedData = null) { throw null; }
         public static Azure.Security.KeyVault.Keys.Cryptography.DecryptResult DecryptResult(string keyId = null, byte[] plaintext = null, Azure.Security.KeyVault.Keys.Cryptography.EncryptionAlgorithm algorithm = default(Azure.Security.KeyVault.Keys.Cryptography.EncryptionAlgorithm)) { throw null; }
         public static Azure.Security.KeyVault.Keys.Cryptography.EncryptParameters EncryptParameters(Azure.Security.KeyVault.Keys.Cryptography.EncryptionAlgorithm algorithm, byte[] plaintext, byte[] iv = null, byte[] additionalAuthenticatedData = null) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public static Azure.Security.KeyVault.Keys.Cryptography.EncryptResult EncryptResult(string keyId, byte[] ciphertext, Azure.Security.KeyVault.Keys.Cryptography.EncryptionAlgorithm algorithm) { throw null; }
         public static Azure.Security.KeyVault.Keys.Cryptography.EncryptResult EncryptResult(string keyId = null, byte[] ciphertext = null, Azure.Security.KeyVault.Keys.Cryptography.EncryptionAlgorithm algorithm = default(Azure.Security.KeyVault.Keys.Cryptography.EncryptionAlgorithm), byte[] iv = null, byte[] authenticatedTag = null, byte[] additionalAuthenticatedData = null) { throw null; }
         public static Azure.Security.KeyVault.Keys.Cryptography.SignResult SignResult(string keyId = null, byte[] signature = null, Azure.Security.KeyVault.Keys.Cryptography.SignatureAlgorithm algorithm = default(Azure.Security.KeyVault.Keys.Cryptography.SignatureAlgorithm)) { throw null; }
@@ -103,6 +102,14 @@ namespace Azure.Security.KeyVault.Keys
         public System.Security.Cryptography.ECDsa ToECDsa(bool includePrivateParameters = false) { throw null; }
         public System.Security.Cryptography.RSA ToRSA(bool includePrivateParameters = false) { throw null; }
     }
+    public partial class KeyAttestation
+    {
+        public KeyAttestation() { }
+        public System.ReadOnlyMemory<byte> CertificatePemFile { get { throw null; } }
+        public System.ReadOnlyMemory<byte> PrivateKeyAttestation { get { throw null; } }
+        public System.ReadOnlyMemory<byte> PublicKeyAttestation { get { throw null; } }
+        public string Version { get { throw null; } }
+    }
     public partial class KeyClient
     {
         protected KeyClient() { }
@@ -126,6 +133,8 @@ namespace Azure.Security.KeyVault.Keys
         public virtual Azure.AsyncPageable<Azure.Security.KeyVault.Keys.DeletedKey> GetDeletedKeysAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) { throw null; }
         public virtual Azure.Response<Azure.Security.KeyVault.Keys.KeyVaultKey> GetKey(string name, string version = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) { throw null; }
         public virtual System.Threading.Tasks.Task<Azure.Response<Azure.Security.KeyVault.Keys.KeyVaultKey>> GetKeyAsync(string name, string version = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) { throw null; }
+        public virtual Azure.Response<Azure.Security.KeyVault.Keys.KeyVaultKey> GetKeyAttestation(string name, string version = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) { throw null; }
+        public virtual System.Threading.Tasks.Task<Azure.Response<Azure.Security.KeyVault.Keys.KeyVaultKey>> GetKeyAttestationAsync(string name, string version = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) { throw null; }
         public virtual Azure.Response<Azure.Security.KeyVault.Keys.KeyRotationPolicy> GetKeyRotationPolicy(string keyName, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) { throw null; }
         public virtual System.Threading.Tasks.Task<Azure.Response<Azure.Security.KeyVault.Keys.KeyRotationPolicy>> GetKeyRotationPolicyAsync(string keyName, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) { throw null; }
         public virtual Azure.Pageable<Azure.Security.KeyVault.Keys.KeyProperties> GetPropertiesOfKeys(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) { throw null; }
@@ -159,7 +168,7 @@ namespace Azure.Security.KeyVault.Keys
     }
     public partial class KeyClientOptions : Azure.Core.ClientOptions
     {
-        public KeyClientOptions(Azure.Security.KeyVault.Keys.KeyClientOptions.ServiceVersion version = Azure.Security.KeyVault.Keys.KeyClientOptions.ServiceVersion.V7_5) { }
+        public KeyClientOptions(Azure.Security.KeyVault.Keys.KeyClientOptions.ServiceVersion version = Azure.Security.KeyVault.Keys.KeyClientOptions.ServiceVersion.V2025_07_01) { }
         public bool DisableChallengeResourceVerification { get { throw null; } set { } }
         public Azure.Security.KeyVault.Keys.KeyClientOptions.ServiceVersion Version { get { throw null; } }
         public enum ServiceVersion
@@ -170,6 +179,8 @@ namespace Azure.Security.KeyVault.Keys
             V7_3 = 3,
             V7_4 = 4,
             V7_5 = 5,
+            V7_6 = 6,
+            V2025_07_01 = 7,
         }
     }
     [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
@@ -183,9 +194,7 @@ namespace Azure.Security.KeyVault.Keys
         public static Azure.Security.KeyVault.Keys.KeyCurveName P384 { get { throw null; } }
         public static Azure.Security.KeyVault.Keys.KeyCurveName P521 { get { throw null; } }
         public bool Equals(Azure.Security.KeyVault.Keys.KeyCurveName other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Security.KeyVault.Keys.KeyCurveName left, Azure.Security.KeyVault.Keys.KeyCurveName right) { throw null; }
         public static implicit operator Azure.Security.KeyVault.Keys.KeyCurveName (string value) { throw null; }
@@ -202,9 +211,7 @@ namespace Azure.Security.KeyVault.Keys
         public static Azure.Security.KeyVault.Keys.KeyExportEncryptionAlgorithm RsaAesKeyWrap256 { get { throw null; } }
         public static Azure.Security.KeyVault.Keys.KeyExportEncryptionAlgorithm RsaAesKeyWrap384 { get { throw null; } }
         public bool Equals(Azure.Security.KeyVault.Keys.KeyExportEncryptionAlgorithm other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Security.KeyVault.Keys.KeyExportEncryptionAlgorithm left, Azure.Security.KeyVault.Keys.KeyExportEncryptionAlgorithm right) { throw null; }
         public static implicit operator Azure.Security.KeyVault.Keys.KeyExportEncryptionAlgorithm (string value) { throw null; }
@@ -215,7 +222,6 @@ namespace Azure.Security.KeyVault.Keys
     {
         public static Azure.Security.KeyVault.Keys.DeletedKey DeletedKey(Azure.Security.KeyVault.Keys.KeyProperties properties, Azure.Security.KeyVault.Keys.JsonWebKey key, System.Uri recoveryId = null, System.DateTimeOffset? deletedOn = default(System.DateTimeOffset?), System.DateTimeOffset? scheduledPurgeDate = default(System.DateTimeOffset?)) { throw null; }
         public static Azure.Security.KeyVault.Keys.JsonWebKey JsonWebKey(Azure.Security.KeyVault.Keys.KeyType keyType, string id = null, System.Collections.Generic.IEnumerable<Azure.Security.KeyVault.Keys.KeyOperation> keyOps = null, Azure.Security.KeyVault.Keys.KeyCurveName? curveName = default(Azure.Security.KeyVault.Keys.KeyCurveName?), byte[] d = null, byte[] dp = null, byte[] dq = null, byte[] e = null, byte[] k = null, byte[] n = null, byte[] p = null, byte[] q = null, byte[] qi = null, byte[] t = null, byte[] x = null, byte[] y = null) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public static Azure.Security.KeyVault.Keys.KeyProperties KeyProperties(System.Uri id, System.Uri vaultUri, string name, string version, bool managed, System.DateTimeOffset? createdOn, System.DateTimeOffset? updatedOn, string recoveryLevel) { throw null; }
         public static Azure.Security.KeyVault.Keys.KeyProperties KeyProperties(System.Uri id = null, System.Uri vaultUri = null, string name = null, string version = null, bool managed = false, System.DateTimeOffset? createdOn = default(System.DateTimeOffset?), System.DateTimeOffset? updatedOn = default(System.DateTimeOffset?), string recoveryLevel = null, int? recoverableDays = default(int?)) { throw null; }
         public static Azure.Security.KeyVault.Keys.KeyRotationPolicy KeyRotationPolicy(System.Uri id = null, System.DateTimeOffset? createdOn = default(System.DateTimeOffset?), System.DateTimeOffset? updatedOn = default(System.DateTimeOffset?)) { throw null; }
@@ -236,9 +242,7 @@ namespace Azure.Security.KeyVault.Keys
         public static Azure.Security.KeyVault.Keys.KeyOperation Verify { get { throw null; } }
         public static Azure.Security.KeyVault.Keys.KeyOperation WrapKey { get { throw null; } }
         public bool Equals(Azure.Security.KeyVault.Keys.KeyOperation other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Security.KeyVault.Keys.KeyOperation left, Azure.Security.KeyVault.Keys.KeyOperation right) { throw null; }
         public static implicit operator Azure.Security.KeyVault.Keys.KeyOperation (string value) { throw null; }
@@ -249,6 +253,7 @@ namespace Azure.Security.KeyVault.Keys
     {
         public KeyProperties(string name) { }
         public KeyProperties(System.Uri id) { }
+        public Azure.Security.KeyVault.Keys.KeyAttestation Attestation { get { throw null; } }
         public System.DateTimeOffset? CreatedOn { get { throw null; } }
         public bool? Enabled { get { throw null; } set { } }
         public System.DateTimeOffset? ExpiresOn { get { throw null; } set { } }
@@ -298,9 +303,7 @@ namespace Azure.Security.KeyVault.Keys
         public static Azure.Security.KeyVault.Keys.KeyRotationPolicyAction Notify { get { throw null; } }
         public static Azure.Security.KeyVault.Keys.KeyRotationPolicyAction Rotate { get { throw null; } }
         public bool Equals(Azure.Security.KeyVault.Keys.KeyRotationPolicyAction other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Security.KeyVault.Keys.KeyRotationPolicyAction left, Azure.Security.KeyVault.Keys.KeyRotationPolicyAction right) { throw null; }
         public static implicit operator Azure.Security.KeyVault.Keys.KeyRotationPolicyAction (string value) { throw null; }
@@ -320,9 +323,7 @@ namespace Azure.Security.KeyVault.Keys
         public static Azure.Security.KeyVault.Keys.KeyType Rsa { get { throw null; } }
         public static Azure.Security.KeyVault.Keys.KeyType RsaHsm { get { throw null; } }
         public bool Equals(Azure.Security.KeyVault.Keys.KeyType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Security.KeyVault.Keys.KeyType left, Azure.Security.KeyVault.Keys.KeyType right) { throw null; }
         public static implicit operator Azure.Security.KeyVault.Keys.KeyType (string value) { throw null; }
@@ -350,11 +351,8 @@ namespace Azure.Security.KeyVault.Keys
         public System.Uri VaultUri { get { throw null; } }
         public string Version { get { throw null; } }
         public bool Equals(Azure.Security.KeyVault.Keys.KeyVaultKeyIdentifier other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override string ToString() { throw null; }
         public static bool TryCreate(System.Uri id, out Azure.Security.KeyVault.Keys.KeyVaultKeyIdentifier identifier) { throw null; }
     }
@@ -429,7 +427,7 @@ namespace Azure.Security.KeyVault.Keys.Cryptography
     }
     public partial class CryptographyClientOptions : Azure.Core.ClientOptions
     {
-        public CryptographyClientOptions(Azure.Security.KeyVault.Keys.Cryptography.CryptographyClientOptions.ServiceVersion version = Azure.Security.KeyVault.Keys.Cryptography.CryptographyClientOptions.ServiceVersion.V7_5) { }
+        public CryptographyClientOptions(Azure.Security.KeyVault.Keys.Cryptography.CryptographyClientOptions.ServiceVersion version = Azure.Security.KeyVault.Keys.Cryptography.CryptographyClientOptions.ServiceVersion.V2025_07_01) { }
         public bool DisableChallengeResourceVerification { get { throw null; } set { } }
         public Azure.Security.KeyVault.Keys.Cryptography.CryptographyClientOptions.ServiceVersion Version { get { throw null; } }
         public enum ServiceVersion
@@ -440,6 +438,8 @@ namespace Azure.Security.KeyVault.Keys.Cryptography
             V7_3 = 3,
             V7_4 = 4,
             V7_5 = 5,
+            V7_6 = 6,
+            V2025_07_01 = 7,
         }
     }
     public partial class DecryptParameters
@@ -489,9 +489,7 @@ namespace Azure.Security.KeyVault.Keys.Cryptography
         public static Azure.Security.KeyVault.Keys.Cryptography.EncryptionAlgorithm RsaOaep { get { throw null; } }
         public static Azure.Security.KeyVault.Keys.Cryptography.EncryptionAlgorithm RsaOaep256 { get { throw null; } }
         public bool Equals(Azure.Security.KeyVault.Keys.Cryptography.EncryptionAlgorithm other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Security.KeyVault.Keys.Cryptography.EncryptionAlgorithm left, Azure.Security.KeyVault.Keys.Cryptography.EncryptionAlgorithm right) { throw null; }
         public static implicit operator Azure.Security.KeyVault.Keys.Cryptography.EncryptionAlgorithm (string value) { throw null; }
@@ -547,19 +545,17 @@ namespace Azure.Security.KeyVault.Keys.Cryptography
         public static Azure.Security.KeyVault.Keys.Cryptography.KeyWrapAlgorithm A128KW { get { throw null; } }
         public static Azure.Security.KeyVault.Keys.Cryptography.KeyWrapAlgorithm A192KW { get { throw null; } }
         public static Azure.Security.KeyVault.Keys.Cryptography.KeyWrapAlgorithm A256KW { get { throw null; } }
+        public static Azure.Security.KeyVault.Keys.Cryptography.KeyWrapAlgorithm CkmAesKeyWrap { get { throw null; } }
+        public static Azure.Security.KeyVault.Keys.Cryptography.KeyWrapAlgorithm CkmAesKeyWrapPad { get { throw null; } }
         public static Azure.Security.KeyVault.Keys.Cryptography.KeyWrapAlgorithm Rsa15 { get { throw null; } }
         public static Azure.Security.KeyVault.Keys.Cryptography.KeyWrapAlgorithm RsaOaep { get { throw null; } }
         public static Azure.Security.KeyVault.Keys.Cryptography.KeyWrapAlgorithm RsaOaep256 { get { throw null; } }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public bool Equals(Azure.Security.KeyVault.Keys.Cryptography.KeyWrapAlgorithm other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Security.KeyVault.Keys.Cryptography.KeyWrapAlgorithm left, Azure.Security.KeyVault.Keys.Cryptography.KeyWrapAlgorithm right) { throw null; }
         public static implicit operator Azure.Security.KeyVault.Keys.Cryptography.KeyWrapAlgorithm (string value) { throw null; }
         public static bool operator !=(Azure.Security.KeyVault.Keys.Cryptography.KeyWrapAlgorithm left, Azure.Security.KeyVault.Keys.Cryptography.KeyWrapAlgorithm right) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override string ToString() { throw null; }
     }
     public partial class LocalCryptographyClientOptions : Azure.Core.ClientOptions
@@ -593,6 +589,9 @@ namespace Azure.Security.KeyVault.Keys.Cryptography
         public static Azure.Security.KeyVault.Keys.Cryptography.SignatureAlgorithm ES256K { get { throw null; } }
         public static Azure.Security.KeyVault.Keys.Cryptography.SignatureAlgorithm ES384 { get { throw null; } }
         public static Azure.Security.KeyVault.Keys.Cryptography.SignatureAlgorithm ES512 { get { throw null; } }
+        public static Azure.Security.KeyVault.Keys.Cryptography.SignatureAlgorithm HS256 { get { throw null; } }
+        public static Azure.Security.KeyVault.Keys.Cryptography.SignatureAlgorithm HS384 { get { throw null; } }
+        public static Azure.Security.KeyVault.Keys.Cryptography.SignatureAlgorithm HS512 { get { throw null; } }
         public static Azure.Security.KeyVault.Keys.Cryptography.SignatureAlgorithm PS256 { get { throw null; } }
         public static Azure.Security.KeyVault.Keys.Cryptography.SignatureAlgorithm PS384 { get { throw null; } }
         public static Azure.Security.KeyVault.Keys.Cryptography.SignatureAlgorithm PS512 { get { throw null; } }
@@ -600,9 +599,7 @@ namespace Azure.Security.KeyVault.Keys.Cryptography
         public static Azure.Security.KeyVault.Keys.Cryptography.SignatureAlgorithm RS384 { get { throw null; } }
         public static Azure.Security.KeyVault.Keys.Cryptography.SignatureAlgorithm RS512 { get { throw null; } }
         public bool Equals(Azure.Security.KeyVault.Keys.Cryptography.SignatureAlgorithm other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Security.KeyVault.Keys.Cryptography.SignatureAlgorithm left, Azure.Security.KeyVault.Keys.Cryptography.SignatureAlgorithm right) { throw null; }
         public static implicit operator Azure.Security.KeyVault.Keys.Cryptography.SignatureAlgorithm (string value) { throw null; }

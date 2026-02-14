@@ -10,19 +10,12 @@ using System.Collections.Generic;
 
 namespace Azure.ResourceManager.Chaos.Models
 {
-    /// <summary> Unknown version of ChaosTargetFilter. </summary>
     internal partial class UnknownChaosTargetFilter : ChaosTargetFilter
     {
         /// <summary> Initializes a new instance of <see cref="UnknownChaosTargetFilter"/>. </summary>
-        /// <param name="filterType"> Enum that discriminates between filter types. Currently only `Simple` type is supported. </param>
-        /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
-        internal UnknownChaosTargetFilter(FilterType filterType, IDictionary<string, BinaryData> serializedAdditionalRawData) : base(filterType, serializedAdditionalRawData)
-        {
-            FilterType = filterType;
-        }
-
-        /// <summary> Initializes a new instance of <see cref="UnknownChaosTargetFilter"/> for deserialization. </summary>
-        internal UnknownChaosTargetFilter()
+        /// <param name="type"> Chaos target filter discriminator type. </param>
+        /// <param name="additionalBinaryDataProperties"> Keeps track of any properties unknown to the library. </param>
+        internal UnknownChaosTargetFilter(FilterType @type, IDictionary<string, BinaryData> additionalBinaryDataProperties) : base(@type != default ? @type : "unknown", additionalBinaryDataProperties)
         {
         }
     }

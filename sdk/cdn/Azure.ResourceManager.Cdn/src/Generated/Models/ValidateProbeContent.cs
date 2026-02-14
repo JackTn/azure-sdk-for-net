@@ -70,6 +70,7 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> The probe URL to validate. </summary>
+        [WirePath("probeURL")]
         public Uri ProbeUri { get; }
     }
 }

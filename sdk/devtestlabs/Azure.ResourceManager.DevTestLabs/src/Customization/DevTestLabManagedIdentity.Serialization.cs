@@ -50,7 +50,7 @@ namespace Azure.ResourceManager.DevTestLabs.Models
                 {
                     writer.WritePropertyName(item.Key);
 #if NET6_0_OR_GREATER
-				writer.WriteRawValue(item.Value);
+                    writer.WriteRawValue(item.Value);
 #else
                     using (JsonDocument document = JsonDocument.Parse(item.Value))
                     {
@@ -142,7 +142,7 @@ namespace Azure.ResourceManager.DevTestLabs.Models
             switch (format)
             {
                 case "J":
-                    return ModelReaderWriter.Write(this, options);
+                    return ModelReaderWriter.Write(this, options, AzureResourceManagerDevTestLabsContext.Default);
                 default:
                     throw new FormatException($"The model {nameof(DevTestLabManagedIdentity)} does not support '{options.Format}' format.");
             }

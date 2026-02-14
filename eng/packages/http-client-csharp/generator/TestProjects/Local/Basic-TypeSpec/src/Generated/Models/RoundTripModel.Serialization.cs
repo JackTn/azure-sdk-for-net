@@ -9,19 +9,82 @@ using System;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Azure;
 using Azure.Core;
-using BasicTypeSpec;
 
-namespace BasicTypeSpec.Models
+namespace BasicTypeSpec
 {
-    /// <summary></summary>
+    /// <summary> this is a roundtrip model. </summary>
+    [JsonConverter(typeof(RoundTripModelConverter))]
     public partial class RoundTripModel : IJsonModel<RoundTripModel>
     {
+        /// <summary> Initializes a new instance of <see cref="RoundTripModel"/> for deserialization. </summary>
         internal RoundTripModel()
         {
         }
 
+        /// <param name="data"> The data to parse. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
+        protected virtual RoundTripModel PersistableModelCreateCore(BinaryData data, ModelReaderWriterOptions options)
+        {
+            string format = options.Format == "W" ? ((IPersistableModel<RoundTripModel>)this).GetFormatFromOptions(options) : options.Format;
+            switch (format)
+            {
+                case "J":
+                    using (JsonDocument document = JsonDocument.Parse(data, ModelSerializationExtensions.JsonDocumentOptions))
+                    {
+                        return DeserializeRoundTripModel(document.RootElement, options);
+                    }
+                default:
+                    throw new FormatException($"The model {nameof(RoundTripModel)} does not support reading '{options.Format}' format.");
+            }
+        }
+
+        /// <param name="options"> The client options for reading and writing models. </param>
+        protected virtual BinaryData PersistableModelWriteCore(ModelReaderWriterOptions options)
+        {
+            string format = options.Format == "W" ? ((IPersistableModel<RoundTripModel>)this).GetFormatFromOptions(options) : options.Format;
+            switch (format)
+            {
+                case "J":
+                    return ModelReaderWriter.Write(this, options, BasicTypeSpecContext.Default);
+                default:
+                    throw new FormatException($"The model {nameof(RoundTripModel)} does not support writing '{options.Format}' format.");
+            }
+        }
+
+        /// <param name="options"> The client options for reading and writing models. </param>
+        BinaryData IPersistableModel<RoundTripModel>.Write(ModelReaderWriterOptions options) => PersistableModelWriteCore(options);
+
+        /// <param name="data"> The data to parse. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
+        RoundTripModel IPersistableModel<RoundTripModel>.Create(BinaryData data, ModelReaderWriterOptions options) => PersistableModelCreateCore(data, options);
+
+        /// <param name="options"> The client options for reading and writing models. </param>
+        string IPersistableModel<RoundTripModel>.GetFormatFromOptions(ModelReaderWriterOptions options) => "J";
+
+        /// <param name="roundTripModel"> The <see cref="RoundTripModel"/> to serialize into <see cref="RequestContent"/>. </param>
+        public static implicit operator RequestContent(RoundTripModel roundTripModel)
+        {
+            if (roundTripModel == null)
+            {
+                return null;
+            }
+            Utf8JsonRequestContent content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue(roundTripModel, ModelSerializationExtensions.WireOptions);
+            return content;
+        }
+
+        /// <param name="response"> The <see cref="Response"/> to deserialize the <see cref="RoundTripModel"/> from. </param>
+        public static explicit operator RoundTripModel(Response response)
+        {
+            using JsonDocument document = JsonDocument.Parse(response.Content, ModelSerializationExtensions.JsonDocumentOptions);
+            return DeserializeRoundTripModel(document.RootElement, ModelSerializationExtensions.WireOptions);
+        }
+
+        /// <param name="writer"> The JSON writer. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
         void IJsonModel<RoundTripModel>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options)
         {
             writer.WriteStartObject();
@@ -265,6 +328,8 @@ namespace BasicTypeSpec.Models
             }
         }
 
+        /// <param name="reader"> The JSON reader. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
         RoundTripModel IJsonModel<RoundTripModel>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => JsonModelCreateCore(ref reader, options);
 
         /// <param name="reader"> The JSON reader. </param>
@@ -280,6 +345,8 @@ namespace BasicTypeSpec.Models
             return DeserializeRoundTripModel(document.RootElement, options);
         }
 
+        /// <param name="element"> The JSON element to deserialize. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
         internal static RoundTripModel DeserializeRoundTripModel(JsonElement element, ModelReaderWriterOptions options)
         {
             if (element.ValueKind == JsonValueKind.Null)
@@ -600,60 +667,26 @@ namespace BasicTypeSpec.Models
                 additionalBinaryDataProperties);
         }
 
-        BinaryData IPersistableModel<RoundTripModel>.Write(ModelReaderWriterOptions options) => PersistableModelWriteCore(options);
-
-        /// <param name="options"> The client options for reading and writing models. </param>
-        protected virtual BinaryData PersistableModelWriteCore(ModelReaderWriterOptions options)
+        internal partial class RoundTripModelConverter : JsonConverter<RoundTripModel>
         {
-            string format = options.Format == "W" ? ((IPersistableModel<RoundTripModel>)this).GetFormatFromOptions(options) : options.Format;
-            switch (format)
+            /// <summary> Writes the JSON representation of the model. </summary>
+            /// <param name="writer"> The writer. </param>
+            /// <param name="model"> The model to write. </param>
+            /// <param name="options"> The serialization options. </param>
+            public override void Write(Utf8JsonWriter writer, RoundTripModel model, JsonSerializerOptions options)
             {
-                case "J":
-                    return ModelReaderWriter.Write(this, options);
-                default:
-                    throw new FormatException($"The model {nameof(RoundTripModel)} does not support writing '{options.Format}' format.");
+                writer.WriteObjectValue<IJsonModel<RoundTripModel>>(model, ModelSerializationExtensions.WireOptions);
             }
-        }
 
-        RoundTripModel IPersistableModel<RoundTripModel>.Create(BinaryData data, ModelReaderWriterOptions options) => PersistableModelCreateCore(data, options);
-
-        /// <param name="data"> The data to parse. </param>
-        /// <param name="options"> The client options for reading and writing models. </param>
-        protected virtual RoundTripModel PersistableModelCreateCore(BinaryData data, ModelReaderWriterOptions options)
-        {
-            string format = options.Format == "W" ? ((IPersistableModel<RoundTripModel>)this).GetFormatFromOptions(options) : options.Format;
-            switch (format)
+            /// <summary> Reads the JSON representation and converts into the model. </summary>
+            /// <param name="reader"> The reader. </param>
+            /// <param name="typeToConvert"> The type to convert. </param>
+            /// <param name="options"> The serialization options. </param>
+            public override RoundTripModel Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
             {
-                case "J":
-                    using (JsonDocument document = JsonDocument.Parse(data))
-                    {
-                        return DeserializeRoundTripModel(document.RootElement, options);
-                    }
-                default:
-                    throw new FormatException($"The model {nameof(RoundTripModel)} does not support reading '{options.Format}' format.");
+                using JsonDocument document = JsonDocument.ParseValue(ref reader);
+                return DeserializeRoundTripModel(document.RootElement, ModelSerializationExtensions.WireOptions);
             }
-        }
-
-        string IPersistableModel<RoundTripModel>.GetFormatFromOptions(ModelReaderWriterOptions options) => "J";
-
-        /// <param name="roundTripModel"> The <see cref="RoundTripModel"/> to serialize into <see cref="RequestContent"/>. </param>
-        public static implicit operator RequestContent(RoundTripModel roundTripModel)
-        {
-            if (roundTripModel == null)
-            {
-                return null;
-            }
-            Utf8JsonBinaryContent content = new Utf8JsonBinaryContent();
-            content.JsonWriter.WriteObjectValue(roundTripModel, ModelSerializationExtensions.WireOptions);
-            return content;
-        }
-
-        /// <param name="result"> The <see cref="Response"/> to deserialize the <see cref="RoundTripModel"/> from. </param>
-        public static explicit operator RoundTripModel(Response result)
-        {
-            using Response response = result;
-            using JsonDocument document = JsonDocument.Parse(response.Content);
-            return DeserializeRoundTripModel(document.RootElement, ModelSerializationExtensions.WireOptions);
         }
     }
 }

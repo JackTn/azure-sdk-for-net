@@ -1,5 +1,11 @@
 namespace Azure.ResourceManager.Subscription
 {
+    public partial class AzureResourceManagerSubscriptionContext : System.ClientModel.Primitives.ModelReaderWriterContext
+    {
+        internal AzureResourceManagerSubscriptionContext() { }
+        public static Azure.ResourceManager.Subscription.AzureResourceManagerSubscriptionContext Default { get { throw null; } }
+        protected override bool TryGetTypeBuilderCore(System.Type type, out System.ClientModel.Primitives.ModelReaderWriterTypeBuilder builder) { throw null; }
+    }
     public partial class BillingAccountPolicyCollection : Azure.ResourceManager.ArmCollection
     {
         protected BillingAccountPolicyCollection() { }
@@ -193,9 +199,7 @@ namespace Azure.ResourceManager.Subscription.Models
         public static Azure.ResourceManager.Subscription.Models.AcceptOwnershipProvisioningState Pending { get { throw null; } }
         public static Azure.ResourceManager.Subscription.Models.AcceptOwnershipProvisioningState Succeeded { get { throw null; } }
         public bool Equals(Azure.ResourceManager.Subscription.Models.AcceptOwnershipProvisioningState other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.Subscription.Models.AcceptOwnershipProvisioningState left, Azure.ResourceManager.Subscription.Models.AcceptOwnershipProvisioningState right) { throw null; }
         public static implicit operator Azure.ResourceManager.Subscription.Models.AcceptOwnershipProvisioningState (string value) { throw null; }
@@ -225,9 +229,7 @@ namespace Azure.ResourceManager.Subscription.Models
         public static Azure.ResourceManager.Subscription.Models.AcceptOwnershipState Expired { get { throw null; } }
         public static Azure.ResourceManager.Subscription.Models.AcceptOwnershipState Pending { get { throw null; } }
         public bool Equals(Azure.ResourceManager.Subscription.Models.AcceptOwnershipState other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.Subscription.Models.AcceptOwnershipState left, Azure.ResourceManager.Subscription.Models.AcceptOwnershipState right) { throw null; }
         public static implicit operator Azure.ResourceManager.Subscription.Models.AcceptOwnershipState (string value) { throw null; }
@@ -396,9 +398,7 @@ namespace Azure.ResourceManager.Subscription.Models
         public static Azure.ResourceManager.Subscription.Models.SubscriptionProvisioningState Failed { get { throw null; } }
         public static Azure.ResourceManager.Subscription.Models.SubscriptionProvisioningState Succeeded { get { throw null; } }
         public bool Equals(Azure.ResourceManager.Subscription.Models.SubscriptionProvisioningState other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.Subscription.Models.SubscriptionProvisioningState left, Azure.ResourceManager.Subscription.Models.SubscriptionProvisioningState right) { throw null; }
         public static implicit operator Azure.ResourceManager.Subscription.Models.SubscriptionProvisioningState (string value) { throw null; }
@@ -414,9 +414,7 @@ namespace Azure.ResourceManager.Subscription.Models
         public static Azure.ResourceManager.Subscription.Models.SubscriptionWorkload DevTest { get { throw null; } }
         public static Azure.ResourceManager.Subscription.Models.SubscriptionWorkload Production { get { throw null; } }
         public bool Equals(Azure.ResourceManager.Subscription.Models.SubscriptionWorkload other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.Subscription.Models.SubscriptionWorkload left, Azure.ResourceManager.Subscription.Models.SubscriptionWorkload right) { throw null; }
         public static implicit operator Azure.ResourceManager.Subscription.Models.SubscriptionWorkload (string value) { throw null; }

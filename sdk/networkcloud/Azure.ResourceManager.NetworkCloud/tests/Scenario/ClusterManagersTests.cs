@@ -3,18 +3,21 @@
 
 using Azure.Core;
 using Azure.Core.TestFramework;
+using Azure.Identity;
+using Azure.ResourceManager.Models;
 using Azure.ResourceManager.NetworkCloud.Models;
 using Azure.ResourceManager.Resources;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Azure.ResourceManager.NetworkCloud.Tests.ScenarioTests
 {
     public class ClusterManagersTests : NetworkCloudManagementTestBase
     {
-        public ClusterManagersTests(bool isAsync, RecordedTestMode mode) : base(isAsync, mode) {}
-        public ClusterManagersTests(bool isAsync) : base(isAsync) {}
+        public ClusterManagersTests(bool isAsync, RecordedTestMode mode) : base(isAsync, mode) { }
+        public ClusterManagersTests(bool isAsync) : base(isAsync) { }
 
         // updated from Test to RecordedTest per pipeline recommendation
         [RecordedTest]
@@ -26,6 +29,7 @@ namespace Azure.ResourceManager.NetworkCloud.Tests.ScenarioTests
             // Create
             var createData = new NetworkCloudClusterManagerData(new AzureLocation(TestEnvironment.Location), new ResourceIdentifier(TestEnvironment.SubnetId))
             {
+                Identity = new ManagedServiceIdentity(ManagedServiceIdentityType.SystemAssigned),
                 Tags = {
                     ["DisableFabricIntegration"] = "true"
                 }
@@ -35,13 +39,14 @@ namespace Azure.ResourceManager.NetworkCloud.Tests.ScenarioTests
             Assert.AreEqual(createResult.Value.Data.Tags["DisableFabricIntegration"], createData.Tags["DisableFabricIntegration"]);
 
             // Get
-            var getResult =await clusterManagerCollection.GetAsync(clusterManagerName);
+            var getResult = await clusterManagerCollection.GetAsync(clusterManagerName);
             Assert.AreEqual(getResult.Value.Data.Name, clusterManagerName);
             NetworkCloudClusterManagerResource clusterManagerResource = Client.GetNetworkCloudClusterManagerResource(getResult.Value.Data.Id);
 
             // Update
             var newTags = new NetworkCloudClusterManagerPatch()
             {
+                Identity = new ManagedServiceIdentity(ManagedServiceIdentityType.SystemAssigned),
                 Tags = {
                     ["DisableFabricIntegration"] = "true",
                     ["PatchTag"] = "patchTag",
@@ -68,7 +73,7 @@ namespace Azure.ResourceManager.NetworkCloud.Tests.ScenarioTests
             Assert.IsNotEmpty(listBySubscription);
 
             // Delete
-            var deleteResult = await clusterManagerResource.DeleteAsync(WaitUntil.Completed);
+            var deleteResult = await clusterManagerResource.DeleteAsync(WaitUntil.Completed, CancellationToken.None);
             Assert.IsTrue(deleteResult.HasCompleted);
         }
     }

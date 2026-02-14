@@ -8,6 +8,7 @@
 using System;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
+using System.Text;
 using System.Text.Json;
 using Azure.Core;
 
@@ -26,7 +27,7 @@ namespace Azure.ResourceManager.Cdn.Models
 
         /// <param name="writer"> The JSON writer. </param>
         /// <param name="options"> The client options for reading and writing models. </param>
-        protected virtual void JsonModelWriteCore(Utf8JsonWriter writer, ModelReaderWriterOptions options)
+        protected override void JsonModelWriteCore(Utf8JsonWriter writer, ModelReaderWriterOptions options)
         {
             var format = options.Format == "W" ? ((IPersistableModel<RouteConfigurationOverrideActionProperties>)this).GetFormatFromOptions(options) : options.Format;
             if (format != "J")
@@ -34,8 +35,7 @@ namespace Azure.ResourceManager.Cdn.Models
                 throw new FormatException($"The model {nameof(RouteConfigurationOverrideActionProperties)} does not support writing '{format}' format.");
             }
 
-            writer.WritePropertyName("typeName"u8);
-            writer.WriteStringValue(ActionType.ToString());
+            base.JsonModelWriteCore(writer, options);
             if (Optional.IsDefined(OriginGroupOverride))
             {
                 if (OriginGroupOverride != null)
@@ -52,21 +52,6 @@ namespace Azure.ResourceManager.Cdn.Models
             {
                 writer.WritePropertyName("cacheConfiguration"u8);
                 writer.WriteObjectValue(CacheConfiguration, options);
-            }
-            if (options.Format != "W" && _serializedAdditionalRawData != null)
-            {
-                foreach (var item in _serializedAdditionalRawData)
-                {
-                    writer.WritePropertyName(item.Key);
-#if NET6_0_OR_GREATER
-				writer.WriteRawValue(item.Value);
-#else
-                    using (JsonDocument document = JsonDocument.Parse(item.Value, ModelSerializationExtensions.JsonDocumentOptions))
-                    {
-                        JsonSerializer.Serialize(writer, document.RootElement);
-                    }
-#endif
-                }
             }
         }
 
@@ -90,18 +75,13 @@ namespace Azure.ResourceManager.Cdn.Models
             {
                 return null;
             }
-            RouteConfigurationOverrideActionType typeName = default;
             OriginGroupOverride originGroupOverride = default;
             CacheConfiguration cacheConfiguration = default;
+            DeliveryRuleActionParametersType typeName = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> rawDataDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
             {
-                if (property.NameEquals("typeName"u8))
-                {
-                    typeName = new RouteConfigurationOverrideActionType(property.Value.GetString());
-                    continue;
-                }
                 if (property.NameEquals("originGroupOverride"u8))
                 {
                     if (property.Value.ValueKind == JsonValueKind.Null)
@@ -121,13 +101,75 @@ namespace Azure.ResourceManager.Cdn.Models
                     cacheConfiguration = CacheConfiguration.DeserializeCacheConfiguration(property.Value, options);
                     continue;
                 }
+                if (property.NameEquals("typeName"u8))
+                {
+                    typeName = new DeliveryRuleActionParametersType(property.Value.GetString());
+                    continue;
+                }
                 if (options.Format != "W")
                 {
                     rawDataDictionary.Add(property.Name, BinaryData.FromString(property.Value.GetRawText()));
                 }
             }
             serializedAdditionalRawData = rawDataDictionary;
-            return new RouteConfigurationOverrideActionProperties(typeName, originGroupOverride, cacheConfiguration, serializedAdditionalRawData);
+            return new RouteConfigurationOverrideActionProperties(typeName, serializedAdditionalRawData, originGroupOverride, cacheConfiguration);
+        }
+
+        private BinaryData SerializeBicep(ModelReaderWriterOptions options)
+        {
+            StringBuilder builder = new StringBuilder();
+            BicepModelReaderWriterOptions bicepOptions = options as BicepModelReaderWriterOptions;
+            IDictionary<string, string> propertyOverrides = null;
+            bool hasObjectOverride = bicepOptions != null && bicepOptions.PropertyOverrides.TryGetValue(this, out propertyOverrides);
+            bool hasPropertyOverride = false;
+            string propertyOverride = null;
+
+            builder.AppendLine("{");
+
+            hasPropertyOverride = hasObjectOverride && propertyOverrides.TryGetValue(nameof(OriginGroupOverride), out propertyOverride);
+            if (hasPropertyOverride)
+            {
+                builder.Append("  originGroupOverride: ");
+                builder.AppendLine(propertyOverride);
+            }
+            else
+            {
+                if (Optional.IsDefined(OriginGroupOverride))
+                {
+                    builder.Append("  originGroupOverride: ");
+                    BicepSerializationHelpers.AppendChildObject(builder, OriginGroupOverride, options, 2, false, "  originGroupOverride: ");
+                }
+            }
+
+            hasPropertyOverride = hasObjectOverride && propertyOverrides.TryGetValue(nameof(CacheConfiguration), out propertyOverride);
+            if (hasPropertyOverride)
+            {
+                builder.Append("  cacheConfiguration: ");
+                builder.AppendLine(propertyOverride);
+            }
+            else
+            {
+                if (Optional.IsDefined(CacheConfiguration))
+                {
+                    builder.Append("  cacheConfiguration: ");
+                    BicepSerializationHelpers.AppendChildObject(builder, CacheConfiguration, options, 2, false, "  cacheConfiguration: ");
+                }
+            }
+
+            hasPropertyOverride = hasObjectOverride && propertyOverrides.TryGetValue(nameof(TypeName), out propertyOverride);
+            if (hasPropertyOverride)
+            {
+                builder.Append("  typeName: ");
+                builder.AppendLine(propertyOverride);
+            }
+            else
+            {
+                builder.Append("  typeName: ");
+                builder.AppendLine($"'{TypeName.ToString()}'");
+            }
+
+            builder.AppendLine("}");
+            return BinaryData.FromString(builder.ToString());
         }
 
         BinaryData IPersistableModel<RouteConfigurationOverrideActionProperties>.Write(ModelReaderWriterOptions options)
@@ -137,7 +179,9 @@ namespace Azure.ResourceManager.Cdn.Models
             switch (format)
             {
                 case "J":
-                    return ModelReaderWriter.Write(this, options);
+                    return ModelReaderWriter.Write(this, options, AzureResourceManagerCdnContext.Default);
+                case "bicep":
+                    return SerializeBicep(options);
                 default:
                     throw new FormatException($"The model {nameof(RouteConfigurationOverrideActionProperties)} does not support writing '{options.Format}' format.");
             }

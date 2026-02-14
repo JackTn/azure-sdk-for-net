@@ -1,5 +1,11 @@
 namespace Azure.ResourceManager.PrivateDns
 {
+    public partial class AzureResourceManagerPrivateDnsContext : System.ClientModel.Primitives.ModelReaderWriterContext
+    {
+        internal AzureResourceManagerPrivateDnsContext() { }
+        public static Azure.ResourceManager.PrivateDns.AzureResourceManagerPrivateDnsContext Default { get { throw null; } }
+        protected override bool TryGetTypeBuilderCore(System.Type type, out System.ClientModel.Primitives.ModelReaderWriterTypeBuilder builder) { throw null; }
+    }
     public partial class PrivateDnsAaaaRecordCollection : Azure.ResourceManager.ArmCollection, System.Collections.Generic.IAsyncEnumerable<Azure.ResourceManager.PrivateDns.PrivateDnsAaaaRecordResource>, System.Collections.Generic.IEnumerable<Azure.ResourceManager.PrivateDns.PrivateDnsAaaaRecordResource>, System.Collections.IEnumerable
     {
         protected PrivateDnsAaaaRecordCollection() { }
@@ -539,7 +545,6 @@ namespace Azure.ResourceManager.PrivateDns.Models
     {
         public static Azure.ResourceManager.PrivateDns.PrivateDnsZoneData PrivateDnsZoneData(Azure.Core.ResourceIdentifier id = null, string name = null, Azure.Core.ResourceType resourceType = default(Azure.Core.ResourceType), Azure.ResourceManager.Models.SystemData systemData = null, System.Collections.Generic.IDictionary<string, string> tags = null, Azure.Core.AzureLocation location = default(Azure.Core.AzureLocation), Azure.ETag? etag = default(Azure.ETag?), long? maxNumberOfRecords = default(long?), long? numberOfRecords = default(long?), long? maxNumberOfVirtualNetworkLinks = default(long?), long? numberOfVirtualNetworkLinks = default(long?), long? maxNumberOfVirtualNetworkLinksWithRegistration = default(long?), long? numberOfVirtualNetworkLinksWithRegistration = default(long?), Azure.ResourceManager.PrivateDns.Models.PrivateDnsProvisioningState? privateDnsProvisioningState = default(Azure.ResourceManager.PrivateDns.Models.PrivateDnsProvisioningState?), string internalId = null) { throw null; }
         public static Azure.ResourceManager.PrivateDns.VirtualNetworkLinkData VirtualNetworkLinkData(Azure.Core.ResourceIdentifier id = null, string name = null, Azure.Core.ResourceType resourceType = default(Azure.Core.ResourceType), Azure.ResourceManager.Models.SystemData systemData = null, System.Collections.Generic.IDictionary<string, string> tags = null, Azure.Core.AzureLocation location = default(Azure.Core.AzureLocation), Azure.ETag? etag = default(Azure.ETag?), Azure.Core.ResourceIdentifier virtualNetworkId = null, bool? registrationEnabled = default(bool?), Azure.ResourceManager.PrivateDns.Models.PrivateDnsResolutionPolicy? privateDnsResolutionPolicy = default(Azure.ResourceManager.PrivateDns.Models.PrivateDnsResolutionPolicy?), Azure.ResourceManager.PrivateDns.Models.VirtualNetworkLinkState? virtualNetworkLinkState = default(Azure.ResourceManager.PrivateDns.Models.VirtualNetworkLinkState?), Azure.ResourceManager.PrivateDns.Models.PrivateDnsProvisioningState? privateDnsProvisioningState = default(Azure.ResourceManager.PrivateDns.Models.PrivateDnsProvisioningState?)) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public static Azure.ResourceManager.PrivateDns.VirtualNetworkLinkData VirtualNetworkLinkData(Azure.Core.ResourceIdentifier id, string name, Azure.Core.ResourceType resourceType, Azure.ResourceManager.Models.SystemData systemData, System.Collections.Generic.IDictionary<string, string> tags, Azure.Core.AzureLocation location, Azure.ETag? etag, Azure.Core.ResourceIdentifier virtualNetworkId, bool? registrationEnabled, Azure.ResourceManager.PrivateDns.Models.VirtualNetworkLinkState? virtualNetworkLinkState, Azure.ResourceManager.PrivateDns.Models.PrivateDnsProvisioningState? privateDnsProvisioningState) { throw null; }
     }
     public partial class PrivateDnsAaaaRecordInfo : System.ClientModel.Primitives.IJsonModel<Azure.ResourceManager.PrivateDns.Models.PrivateDnsAaaaRecordInfo>, System.ClientModel.Primitives.IPersistableModel<Azure.ResourceManager.PrivateDns.Models.PrivateDnsAaaaRecordInfo>
@@ -589,9 +594,7 @@ namespace Azure.ResourceManager.PrivateDns.Models
         public static Azure.ResourceManager.PrivateDns.Models.PrivateDnsProvisioningState Succeeded { get { throw null; } }
         public static Azure.ResourceManager.PrivateDns.Models.PrivateDnsProvisioningState Updating { get { throw null; } }
         public bool Equals(Azure.ResourceManager.PrivateDns.Models.PrivateDnsProvisioningState other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.PrivateDns.Models.PrivateDnsProvisioningState left, Azure.ResourceManager.PrivateDns.Models.PrivateDnsProvisioningState right) { throw null; }
         public static implicit operator Azure.ResourceManager.PrivateDns.Models.PrivateDnsProvisioningState (string value) { throw null; }
@@ -618,9 +621,7 @@ namespace Azure.ResourceManager.PrivateDns.Models
         public static Azure.ResourceManager.PrivateDns.Models.PrivateDnsResolutionPolicy Default { get { throw null; } }
         public static Azure.ResourceManager.PrivateDns.Models.PrivateDnsResolutionPolicy NxDomainRedirect { get { throw null; } }
         public bool Equals(Azure.ResourceManager.PrivateDns.Models.PrivateDnsResolutionPolicy other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.PrivateDns.Models.PrivateDnsResolutionPolicy left, Azure.ResourceManager.PrivateDns.Models.PrivateDnsResolutionPolicy right) { throw null; }
         public static implicit operator Azure.ResourceManager.PrivateDns.Models.PrivateDnsResolutionPolicy (string value) { throw null; }
@@ -678,9 +679,7 @@ namespace Azure.ResourceManager.PrivateDns.Models
         public static Azure.ResourceManager.PrivateDns.Models.VirtualNetworkLinkState Completed { get { throw null; } }
         public static Azure.ResourceManager.PrivateDns.Models.VirtualNetworkLinkState InProgress { get { throw null; } }
         public bool Equals(Azure.ResourceManager.PrivateDns.Models.VirtualNetworkLinkState other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.ResourceManager.PrivateDns.Models.VirtualNetworkLinkState left, Azure.ResourceManager.PrivateDns.Models.VirtualNetworkLinkState right) { throw null; }
         public static implicit operator Azure.ResourceManager.PrivateDns.Models.VirtualNetworkLinkState (string value) { throw null; }

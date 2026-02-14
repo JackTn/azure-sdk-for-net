@@ -66,10 +66,13 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> The delivery region of the ip address group. </summary>
+        [WirePath("deliveryRegion")]
         public string DeliveryRegion { get; set; }
         /// <summary> The list of ip v4 addresses. </summary>
+        [WirePath("ipv4Addresses")]
         public IList<CidrIPAddress> IPv4Addresses { get; }
         /// <summary> The list of ip v6 addresses. </summary>
+        [WirePath("ipv6Addresses")]
         public IList<CidrIPAddress> IPv6Addresses { get; }
     }
 }

@@ -7,77 +7,44 @@
 
 using System;
 using System.Collections.Generic;
-using Azure.Core;
+using Azure.ResourceManager.OracleDatabase;
 
 namespace Azure.ResourceManager.OracleDatabase.Models
 {
     /// <summary> Private Ip Addresses filter. </summary>
     public partial class PrivateIPAddressesContent
     {
-        /// <summary>
-        /// Keeps track of any properties unknown to the library.
-        /// <para>
-        /// To assign an object to the value of this property use <see cref="BinaryData.FromObjectAsJson{T}(T, System.Text.Json.JsonSerializerOptions?)"/>.
-        /// </para>
-        /// <para>
-        /// To assign an already formatted json string to this property use <see cref="BinaryData.FromString(string)"/>.
-        /// </para>
-        /// <para>
-        /// Examples:
-        /// <list type="bullet">
-        /// <item>
-        /// <term>BinaryData.FromObjectAsJson("foo")</term>
-        /// <description>Creates a payload of "foo".</description>
-        /// </item>
-        /// <item>
-        /// <term>BinaryData.FromString("\"foo\"")</term>
-        /// <description>Creates a payload of "foo".</description>
-        /// </item>
-        /// <item>
-        /// <term>BinaryData.FromObjectAsJson(new { key = "value" })</term>
-        /// <description>Creates a payload of { "key": "value" }.</description>
-        /// </item>
-        /// <item>
-        /// <term>BinaryData.FromString("{\"key\": \"value\"}")</term>
-        /// <description>Creates a payload of { "key": "value" }.</description>
-        /// </item>
-        /// </list>
-        /// </para>
-        /// </summary>
-        private IDictionary<string, BinaryData> _serializedAdditionalRawData;
+        /// <summary> Keeps track of any properties unknown to the library. </summary>
+        private protected readonly IDictionary<string, BinaryData> _additionalBinaryDataProperties;
 
         /// <summary> Initializes a new instance of <see cref="PrivateIPAddressesContent"/>. </summary>
-        /// <param name="subnetId"> Subnet OCID. </param>
-        /// <param name="vnicId"> VCN OCID. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="subnetId"/> or <paramref name="vnicId"/> is null. </exception>
-        public PrivateIPAddressesContent(ResourceIdentifier subnetId, ResourceIdentifier vnicId)
+        /// <param name="subnetOcid"> Subnet OCID. </param>
+        /// <param name="vnicOcid"> VCN OCID. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="subnetOcid"/> or <paramref name="vnicOcid"/> is null. </exception>
+        public PrivateIPAddressesContent(string subnetOcid, string vnicOcid)
         {
-            Argument.AssertNotNull(subnetId, nameof(subnetId));
-            Argument.AssertNotNull(vnicId, nameof(vnicId));
+            Argument.AssertNotNull(subnetOcid, nameof(subnetOcid));
+            Argument.AssertNotNull(vnicOcid, nameof(vnicOcid));
 
-            SubnetId = subnetId;
-            VnicId = vnicId;
+            SubnetOcid = subnetOcid;
+            VnicOcid = vnicOcid;
         }
 
         /// <summary> Initializes a new instance of <see cref="PrivateIPAddressesContent"/>. </summary>
-        /// <param name="subnetId"> Subnet OCID. </param>
-        /// <param name="vnicId"> VCN OCID. </param>
-        /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
-        internal PrivateIPAddressesContent(ResourceIdentifier subnetId, ResourceIdentifier vnicId, IDictionary<string, BinaryData> serializedAdditionalRawData)
+        /// <param name="subnetOcid"> Subnet OCID. </param>
+        /// <param name="vnicOcid"> VCN OCID. </param>
+        /// <param name="additionalBinaryDataProperties"> Keeps track of any properties unknown to the library. </param>
+        internal PrivateIPAddressesContent(string subnetOcid, string vnicOcid, IDictionary<string, BinaryData> additionalBinaryDataProperties)
         {
-            SubnetId = subnetId;
-            VnicId = vnicId;
-            _serializedAdditionalRawData = serializedAdditionalRawData;
-        }
-
-        /// <summary> Initializes a new instance of <see cref="PrivateIPAddressesContent"/> for deserialization. </summary>
-        internal PrivateIPAddressesContent()
-        {
+            SubnetOcid = subnetOcid;
+            VnicOcid = vnicOcid;
+            _additionalBinaryDataProperties = additionalBinaryDataProperties;
         }
 
         /// <summary> Subnet OCID. </summary>
-        public ResourceIdentifier SubnetId { get; }
+        public string SubnetOcid { get; }
+
         /// <summary> VCN OCID. </summary>
-        public ResourceIdentifier VnicId { get; }
+        public string VnicOcid { get; }
     }
 }

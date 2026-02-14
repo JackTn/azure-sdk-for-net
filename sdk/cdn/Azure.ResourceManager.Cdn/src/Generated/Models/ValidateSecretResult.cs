@@ -62,8 +62,10 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> The validation status. </summary>
+        [WirePath("status")]
         public ValidationStatus? Status { get; }
         /// <summary> Detailed error message. </summary>
+        [WirePath("message")]
         public string Message { get; }
     }
 }

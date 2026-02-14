@@ -9,6 +9,7 @@
     <IncludeSamples Condition="'$(IncludeSamples)' == ''">true</IncludeSamples>
     <IncludePerf Condition="'$(IncludePerf)' == ''">true</IncludePerf>
     <IncludeStress Condition="'$(IncludeStress)' == ''">true</IncludeStress>
+    <IncludeSourceGeneration Condition="'$(IncludeSourceGeneration)' == ''">false</IncludeSourceGeneration>
     <IncludeIntegrationTests Condition="'$(IncludeIntegrationTests)' == ''">true</IncludeIntegrationTests>
     <IncludeSamplesApplications Condition="'$(IncludeSamplesApplications)' == ''">true</IncludeSamplesApplications>
     <IncludeSamplesApplications Condition="'$(ServiceDirectory)' != '*' or '$(IncludeSamples)' == 'false'">false</IncludeSamplesApplications>
@@ -50,6 +51,7 @@
     <PerfProjects Include="..\sdk\$(ServiceDirectory)\$(Project)\perf\**\*.csproj" />
     <StressProjects Include="..\sdk\$(ServiceDirectory)\$(Project)\stress\**\*.csproj" />
     <SampleApplications Include="..\samples\**\*.csproj" />
+    <SourceGenerationProjects Include="..\sdk\$(ServiceDirectory)\$(Project)\gen\**\*.csproj" />
     <SrcProjects Include="..\sdk\$(ServiceDirectory)\$(Project)\src\**\*.csproj" Exclude="@(TestProjects);@(SamplesProjects);@(PerfProjects);@(StressProjects)" />
     <ProjectReference Include="@(TestProjects)" Exclude="@(MgmtExcludePaths)" Condition="'$(IncludeTests)' == 'true'" />
     <ProjectReference Include="@(SamplesProjects)" Exclude="@(MgmtExcludePaths)" Condition="'$(IncludeSamples)' == 'true'" />
@@ -57,6 +59,7 @@
     <ProjectReference Include="@(StressProjects)" Exclude="@(MgmtExcludePaths)" Condition="'$(IncludeStress)' == 'true'" />
     <ProjectReference Include="@(SampleApplications)" Exclude="@(MgmtExcludePaths)" Condition="'$(IncludeSamplesApplications)' == 'true'"/>
     <ProjectReference Include="@(SrcProjects)" Exclude="@(MgmtExcludePaths)" Condition="'$(IncludeSrc)' == 'true'" />
+    <ProjectReference Include="@(SourceGenerationProjects)" Exclude="@(MgmtExcludePaths)" Condition="'$(IncludeSourceGeneration)' == 'true'" />
   </ItemGroup>
 
   <Import Project="..\sdk\$(ServiceDirectory)\*.projects" />
@@ -64,6 +67,7 @@
 
   <ItemGroup Condition="'$(ProjectListOverrideFile)' != '' and '$(EnableOverrideExclusions)' != ''">
     <TestProjects Include="..\sdk\$(ServiceDirectory)\$(Project)\tests\**\*.csproj" Exclude="@(MgmtExcludePaths)" />
+    <SourceGenerationProjects Include="..\sdk\$(ServiceDirectory)\$(Project)\gen\**\*.csproj" Exclude="@(MgmtExcludePaths)" />
     <SamplesProjects Include="..\sdk\$(ServiceDirectory)\$(Project)\samples\**\*.csproj;..\sdk\$(ServiceDirectory)\samples\**\*.csproj" Exclude="@(MgmtExcludePaths)" />
     <PerfProjects Include="..\sdk\$(ServiceDirectory)\$(Project)\perf\**\*.csproj" Exclude="@(MgmtExcludePaths)" />
     <StressProjects Include="..\sdk\$(ServiceDirectory)\$(Project)\stress\**\*.csproj" Exclude="@(MgmtExcludePaths)"/>
@@ -79,6 +83,7 @@
     <ProjectReference Remove="@(SrcProjects)" Condition="'$(IncludeSrc)' == 'false'" />
     <ProjectReference Remove="@(IntegrationTestProjects)" Condition="'$(IncludeIntegrationTests)' == 'false'" />
     <ProjectReference Remove="@(SharedProjects)" Condition="'$(IncludeSrc)' == 'false'" />
+    <ProjectReference Remove="@(SourceGenerationProjects)" Condition="'$(IncludeSourceGeneration)' == 'false'" />
   </ItemGroup>
 
   <!-- Remove all projects except the ones included by the SDKType filter -->
@@ -94,9 +99,22 @@
   </Target>
 
 
-  <Target Name="GenerateCode">
+  <Target Name="InstallTspClient">
+    <MSBuild Projects="@(ProjectReference)"
+             Targets="InstallTspClient"
+             BuildInParallel="false"
+             SkipNonexistentProjects="false"
+             SkipNonexistentTargets="true" />
+  </Target>
+
+  <Target Name="BuildPlugin">
+    <Exec Command="dotnet build $(MSBuildThisFileDirectory)packages\plugins\client\Client.Plugin\" />
+  </Target>
+
+  <Target Name="GenerateCode" DependsOnTargets="InstallTspClient;BuildPlugin">
     <MSBuild Projects="@(ProjectReference)"
              Targets="GenerateCode"
+             Properties="SkipTspClientInstall=true"
              BuildInParallel="$(BuildInParallel)"
              SkipNonexistentProjects="false"
              SkipNonexistentTargets="true" />
@@ -128,7 +146,20 @@
             Targets="GetPackageInfo"
             BuildInParallel="$(BuildInParallel)"
             SkipNonexistentProjects="false"
-            SkipNonexistentTargets="true" />
+            SkipNonexistentTargets="true">
+      <Output ItemName="PackageInfoLines" TaskParameter="TargetOutputs" />
+    </MSBuild>
+
+    <!-- Deduplicate package info lines -->
+    <RemoveDuplicates Inputs="@(PackageInfoLines)">
+      <Output TaskParameter="Filtered" ItemName="PackageInfoLinesFiltered"/>
+    </RemoveDuplicates>
+
+    <!-- Write aggregated package info to file if OutputProjectInfoListFilePath is specified -->
+    <WriteLinesToFile Condition="'$(OutputProjectInfoListFilePath)' != ''"
+                      File="$(OutputProjectInfoListFilePath)"
+                      Lines="@(PackageInfoLinesFiltered)"
+                      Overwrite="true" />
   </Target>
 
   <Target Name="GetCodeGenProjects">
@@ -158,13 +189,13 @@
             SkipNonexistentTargets="true">
       <Output ItemName="ProjectsToInclude" TaskParameter="TargetOutputs"/>
     </MSBuild>
-    <RemoveDuplicates Inputs="@(ProjectsToInclude->Replace($(RepoRoot), ''))">
+    <RemoveDuplicates Inputs="@(ProjectsToInclude)">
       <Output TaskParameter="Filtered" ItemName="ProjectsToIncludeFitered"/>
     </RemoveDuplicates>
     <Message Text="Write to file $(OutputProjectFilePath)" Importance="high"/>
-    <Message Text="%24%28RepoRoot%29%(ProjectsToIncludeFitered.Identity)" Importance="high"/>
+    <Message Text="%(ProjectsToIncludeFitered.Identity)" Importance="high"/>
     <ItemGroup>
-      <_WriteToLines Include="%24%28RepoRoot%29%(ProjectsToIncludeFitered.Identity)" />
+      <_WriteToLines Include="%(ProjectsToIncludeFitered.Identity)" />
     </ItemGroup>
     <WriteLinesToFile File="$(OutputProjectFilePath)" Lines="@(_WriteToLines)" />
   </Target>

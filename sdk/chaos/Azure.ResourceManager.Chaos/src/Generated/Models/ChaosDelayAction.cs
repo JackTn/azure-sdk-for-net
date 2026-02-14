@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using Azure.ResourceManager.Chaos;
 
 namespace Azure.ResourceManager.Chaos.Models
 {
@@ -17,28 +18,21 @@ namespace Azure.ResourceManager.Chaos.Models
         /// <param name="name"> String that represents a Capability URN. </param>
         /// <param name="duration"> ISO8601 formatted string that represents a duration. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="name"/> is null. </exception>
-        public ChaosDelayAction(string name, TimeSpan duration) : base(name)
+        public ChaosDelayAction(string name, TimeSpan duration) : base(name, ExperimentActionType.Delay)
         {
             Argument.AssertNotNull(name, nameof(name));
 
             Duration = duration;
-            ActionType = "delay";
         }
 
         /// <summary> Initializes a new instance of <see cref="ChaosDelayAction"/>. </summary>
-        /// <param name="actionType"> Enum that discriminates between action models. </param>
         /// <param name="name"> String that represents a Capability URN. </param>
-        /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
+        /// <param name="type"> Chaos experiment action discriminator type. </param>
+        /// <param name="additionalBinaryDataProperties"> Keeps track of any properties unknown to the library. </param>
         /// <param name="duration"> ISO8601 formatted string that represents a duration. </param>
-        internal ChaosDelayAction(string actionType, string name, IDictionary<string, BinaryData> serializedAdditionalRawData, TimeSpan duration) : base(actionType, name, serializedAdditionalRawData)
+        internal ChaosDelayAction(string name, ExperimentActionType @type, IDictionary<string, BinaryData> additionalBinaryDataProperties, TimeSpan duration) : base(name, @type, additionalBinaryDataProperties)
         {
             Duration = duration;
-            ActionType = actionType ?? "delay";
-        }
-
-        /// <summary> Initializes a new instance of <see cref="ChaosDelayAction"/> for deserialization. </summary>
-        internal ChaosDelayAction()
-        {
         }
 
         /// <summary> ISO8601 formatted string that represents a duration. </summary>

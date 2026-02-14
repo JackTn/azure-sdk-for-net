@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Azure.ResourceManager.Chaos;
 
 namespace Azure.ResourceManager.Chaos.Models
 {
@@ -18,34 +19,23 @@ namespace Azure.ResourceManager.Chaos.Models
         /// <param name="id"> String of the selector ID. </param>
         /// <param name="targets"> List of Target references. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="id"/> or <paramref name="targets"/> is null. </exception>
-        public ChaosTargetListSelector(string id, IEnumerable<ChaosTargetReference> targets) : base(id)
+        public ChaosTargetListSelector(string id, IEnumerable<ChaosTargetReference> targets) : base(id, SelectorType.List)
         {
             Argument.AssertNotNull(id, nameof(id));
             Argument.AssertNotNull(targets, nameof(targets));
 
             Targets = targets.ToList();
-            SelectorType = SelectorType.List;
         }
 
         /// <summary> Initializes a new instance of <see cref="ChaosTargetListSelector"/>. </summary>
-        /// <param name="selectorType"> Enum of the selector type. </param>
         /// <param name="id"> String of the selector ID. </param>
-        /// <param name="filter">
-        /// Model that represents available filter types that can be applied to a targets list.
-        /// Please note <see cref="ChaosTargetFilter"/> is the base class. According to the scenario, a derived class of the base class might need to be assigned here, or this property needs to be casted to one of the possible derived classes.
-        /// The available derived classes include <see cref="ChaosTargetSimpleFilter"/>.
-        /// </param>
-        /// <param name="additionalProperties"> Additional Properties. </param>
+        /// <param name="type"> Chaos target selector discriminator type. </param>
+        /// <param name="filter"> Model that represents available filter types that can be applied to a targets list. </param>
+        /// <param name="additionalBinaryDataProperties"> Keeps track of any properties unknown to the library. </param>
         /// <param name="targets"> List of Target references. </param>
-        internal ChaosTargetListSelector(SelectorType selectorType, string id, ChaosTargetFilter filter, IDictionary<string, BinaryData> additionalProperties, IList<ChaosTargetReference> targets) : base(selectorType, id, filter, additionalProperties)
+        internal ChaosTargetListSelector(string id, SelectorType @type, ChaosTargetFilter filter, IDictionary<string, BinaryData> additionalBinaryDataProperties, IList<ChaosTargetReference> targets) : base(id, @type, filter, additionalBinaryDataProperties)
         {
             Targets = targets;
-            SelectorType = selectorType;
-        }
-
-        /// <summary> Initializes a new instance of <see cref="ChaosTargetListSelector"/> for deserialization. </summary>
-        internal ChaosTargetListSelector()
-        {
         }
 
         /// <summary> List of Target references. </summary>

@@ -76,6 +76,7 @@ namespace Azure.Provisioning.KubernetesConfiguration
             public static readonly string V2022_07_01;
             public static readonly string V2022_11_01;
             public static readonly string V2023_05_01;
+            public static readonly string V2024_11_01;
         }
     }
     public partial class KubernetesClusterExtensionScope : Azure.Provisioning.Primitives.ProvisionableConstruct
@@ -112,11 +113,8 @@ namespace Azure.Provisioning.KubernetesConfiguration
         public static Azure.Provisioning.KubernetesConfiguration.KubernetesConfigurationBuiltInRole AzureContainerStorageOwner { get { throw null; } }
         public static Azure.Provisioning.KubernetesConfiguration.KubernetesConfigurationBuiltInRole KubernetesExtensionContributor { get { throw null; } }
         public bool Equals(Azure.Provisioning.KubernetesConfiguration.KubernetesConfigurationBuiltInRole other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object? obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public static string GetBuiltInRoleName(Azure.Provisioning.KubernetesConfiguration.KubernetesConfigurationBuiltInRole value) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Provisioning.KubernetesConfiguration.KubernetesConfigurationBuiltInRole left, Azure.Provisioning.KubernetesConfiguration.KubernetesConfigurationBuiltInRole right) { throw null; }
         public static implicit operator Azure.Provisioning.KubernetesConfiguration.KubernetesConfigurationBuiltInRole (string value) { throw null; }
@@ -218,6 +216,7 @@ namespace Azure.Provisioning.KubernetesConfiguration
             public static readonly string V2022_07_01;
             public static readonly string V2022_11_01;
             public static readonly string V2023_05_01;
+            public static readonly string V2024_11_01;
         }
     }
     public partial class KubernetesGitRepository : Azure.Provisioning.Primitives.ProvisionableConstruct

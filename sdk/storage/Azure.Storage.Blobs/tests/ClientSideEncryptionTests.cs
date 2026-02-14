@@ -375,7 +375,10 @@ namespace Azure.Storage.Blobs.Test
                 // compare data
                 Assert.AreEqual(expectedEncryptedData, encryptedData);
 
-                var asBlockBlob = InstrumentClient(disposable.Container.GetBlockBlobClient(blobName));
+                // can't get a block blob client with CSE enabled. Get fresh client without CSE options.
+                BlockBlobClient asBlockBlob = InstrumentClient(BlobsClientBuilder.GetServiceClient_SharedKey()
+                    .GetBlobContainerClient(disposable.Container.Name)
+                    .GetBlockBlobClient(blobName));
                 BlockList list = (await asBlockBlob.GetBlockListAsync()).Value;
                 if (list.CommittedBlocks.Count() > 1)
                 {
@@ -634,7 +637,8 @@ namespace Azure.Storage.Blobs.Test
                     if (IsAsync)
                     {
                         await blobStream.CopyToAsync(stream, bufferSize, s_cancellationToken);
-                    } else
+                    }
+                    else
                     {
                         blobStream.CopyTo(stream, bufferSize);
                     }
@@ -984,8 +988,8 @@ namespace Azure.Storage.Blobs.Test
         }
 
 #pragma warning disable CS0618 // obsolete
-        [TestCase(ClientSideEncryptionVersion.V1_0, Constants.MB, 64*Constants.KB)]
-        [TestCase(ClientSideEncryptionVersion.V2_0,  Constants.MB, 64 * Constants.KB)]
+        [TestCase(ClientSideEncryptionVersion.V1_0, Constants.MB, 64 * Constants.KB)]
+        [TestCase(ClientSideEncryptionVersion.V2_0, Constants.MB, 64 * Constants.KB)]
         [LiveOnly] // need access to keyvault service && cannot seed content encryption key
 #pragma warning restore CS0618 // obsolete
         public async Task RoundtripWithKeyvaultProviderOpenRead(ClientSideEncryptionVersion version, long dataSize, int bufferSize)
@@ -1004,7 +1008,7 @@ namespace Azure.Storage.Blobs.Test
                 await blob.UploadAsync(new MemoryStream(data), cancellationToken: s_cancellationToken);
 
                 var downloadStream = new MemoryStream();
-                using var blobStream = await blob.OpenReadAsync(new BlobOpenReadOptions(false) { BufferSize = bufferSize});
+                using var blobStream = await blob.OpenReadAsync(new BlobOpenReadOptions(false) { BufferSize = bufferSize });
                 await blobStream.CopyToAsync(downloadStream);
 
                 Assert.AreEqual(data, downloadStream.ToArray());
@@ -1366,7 +1370,7 @@ namespace Azure.Storage.Blobs.Test
         {
             long compareValue = (long)Int32.MaxValue + 1; //Increase max int32 by one
             ContentRange contentRange = ContentRange.Parse($"bytes 0 {compareValue} {compareValue}");
-            Assert.AreEqual((long)Int32.MaxValue + 1, contentRange.Size);
+            Assert.AreEqual((long)Int32.MaxValue + 1, contentRange.TotalResourceLength);
             Assert.AreEqual(0, contentRange.Start);
             Assert.AreEqual((long)Int32.MaxValue + 1, contentRange.End);
         }

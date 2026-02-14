@@ -1,5 +1,11 @@
 namespace Azure.Data.SchemaRegistry
 {
+    public partial class AzureDataSchemaRegistryContext : System.ClientModel.Primitives.ModelReaderWriterContext
+    {
+        internal AzureDataSchemaRegistryContext() { }
+        public static Azure.Data.SchemaRegistry.AzureDataSchemaRegistryContext Default { get { throw null; } }
+        protected override bool TryGetTypeBuilderCore(System.Type type, out System.ClientModel.Primitives.ModelReaderWriterTypeBuilder builder) { throw null; }
+    }
     [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
     public readonly partial struct SchemaFormat : System.IEquatable<Azure.Data.SchemaRegistry.SchemaFormat>
     {
@@ -10,9 +16,7 @@ namespace Azure.Data.SchemaRegistry
         public static Azure.Data.SchemaRegistry.SchemaFormat Custom { get { throw null; } }
         public static Azure.Data.SchemaRegistry.SchemaFormat Json { get { throw null; } }
         public bool Equals(Azure.Data.SchemaRegistry.SchemaFormat other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Data.SchemaRegistry.SchemaFormat left, Azure.Data.SchemaRegistry.SchemaFormat right) { throw null; }
         public static implicit operator Azure.Data.SchemaRegistry.SchemaFormat (string value) { throw null; }
@@ -56,9 +60,7 @@ namespace Azure.Data.SchemaRegistry
     }
     public static partial class SchemaRegistryModelFactory
     {
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public static Azure.Data.SchemaRegistry.SchemaProperties SchemaProperties(Azure.Data.SchemaRegistry.SchemaFormat format, string schemaId) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public static Azure.Data.SchemaRegistry.SchemaProperties SchemaProperties(Azure.Data.SchemaRegistry.SchemaFormat format, string schemaId, string groupName, string name) { throw null; }
         public static Azure.Data.SchemaRegistry.SchemaProperties SchemaProperties(Azure.Data.SchemaRegistry.SchemaFormat format, string schemaId, string groupName, string name, int version) { throw null; }
         public static Azure.Data.SchemaRegistry.SchemaRegistrySchema SchemaRegistrySchema(Azure.Data.SchemaRegistry.SchemaProperties properties, string definition) { throw null; }
@@ -99,5 +101,13 @@ namespace Azure.Data.SchemaRegistry.Serialization
         public SchemaRegistrySerializerOptions() { }
         public Azure.Data.SchemaRegistry.SchemaFormat Format { get { throw null; } set { } }
         public Azure.Core.Serialization.ObjectSerializer Serializer { get { throw null; } set { } }
+    }
+}
+namespace Microsoft.Extensions.Azure
+{
+    public static partial class SchemaRegistryClientBuilderExtensions
+    {
+        public static Azure.Core.Extensions.IAzureClientBuilder<Azure.Data.SchemaRegistry.SchemaRegistryClient, Azure.Data.SchemaRegistry.SchemaRegistryClientOptions> AddSchemaRegistryClient<TBuilder>(this TBuilder builder, string fullyQualifiedNamespace) where TBuilder : Azure.Core.Extensions.IAzureClientFactoryBuilderWithCredential { throw null; }
+        public static Azure.Core.Extensions.IAzureClientBuilder<Azure.Data.SchemaRegistry.SchemaRegistryClient, Azure.Data.SchemaRegistry.SchemaRegistryClientOptions> AddSchemaRegistryClient<TBuilder, TConfiguration>(this TBuilder builder, TConfiguration configuration) where TBuilder : Azure.Core.Extensions.IAzureClientFactoryBuilderWithConfiguration<TConfiguration> { throw null; }
     }
 }

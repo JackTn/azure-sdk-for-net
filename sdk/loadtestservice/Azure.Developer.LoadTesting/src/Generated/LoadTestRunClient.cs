@@ -6,89 +6,62 @@
 #nullable disable
 
 using System;
+using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
-using Autorest.CSharp.Core;
+using Azure;
 using Azure.Core;
 using Azure.Core.Pipeline;
 
 namespace Azure.Developer.LoadTesting
 {
-    // Data plane generated client.
-    /// <summary> The LoadTestRun service client. </summary>
+    /// <summary> The LoadTestRunClient. </summary>
     public partial class LoadTestRunClient
     {
-        private static readonly string[] AuthorizationScopes = new string[] { "https://cnt-prod.loadtesting.azure.com/.default" };
-        private readonly TokenCredential _tokenCredential;
-        private readonly HttpPipeline _pipeline;
         private readonly Uri _endpoint;
+        /// <summary> A credential used to authenticate to the service. </summary>
+        private readonly TokenCredential _tokenCredential;
+        private static readonly string[] AuthorizationScopes = new string[] { "https://cnt-prod.loadtesting.azure.com/.default" };
         private readonly string _apiVersion;
-
-        /// <summary> The ClientDiagnostics is used to provide tracing support for the client library. </summary>
-        internal ClientDiagnostics ClientDiagnostics { get; }
-
-        /// <summary> The HTTP pipeline for sending and receiving REST requests and responses. </summary>
-        public virtual HttpPipeline Pipeline => _pipeline;
 
         /// <summary> Initializes a new instance of LoadTestRunClient for mocking. </summary>
         protected LoadTestRunClient()
         {
         }
 
-        /// <summary> Initializes a new instance of LoadTestRunClient. </summary>
-        /// <param name="endpoint"> URL to perform data plane API operations on the resource. </param>
-        /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="endpoint"/> or <paramref name="credential"/> is null. </exception>
-        public LoadTestRunClient(Uri endpoint, TokenCredential credential) : this(endpoint, credential, new LoadTestingClientOptions())
-        {
-        }
+        /// <summary> The HTTP pipeline for sending and receiving REST requests and responses. </summary>
+        public virtual HttpPipeline Pipeline { get; }
 
-        /// <summary> Initializes a new instance of LoadTestRunClient. </summary>
-        /// <param name="endpoint"> URL to perform data plane API operations on the resource. </param>
-        /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
-        /// <param name="options"> The options for configuring the client. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="endpoint"/> or <paramref name="credential"/> is null. </exception>
-        public LoadTestRunClient(Uri endpoint, TokenCredential credential, LoadTestingClientOptions options)
-        {
-            Argument.AssertNotNull(endpoint, nameof(endpoint));
-            Argument.AssertNotNull(credential, nameof(credential));
-            options ??= new LoadTestingClientOptions();
-
-            ClientDiagnostics = new ClientDiagnostics(options, true);
-            _tokenCredential = credential;
-            _pipeline = HttpPipelineBuilder.Build(options, Array.Empty<HttpPipelinePolicy>(), new HttpPipelinePolicy[] { new BearerTokenAuthenticationPolicy(_tokenCredential, AuthorizationScopes) }, new ResponseClassifier());
-            _endpoint = endpoint;
-            _apiVersion = options.Version;
-        }
+        /// <summary> The ClientDiagnostics is used to provide tracing support for the client library. </summary>
+        internal ClientDiagnostics ClientDiagnostics { get; }
 
         /// <summary>
-        /// [Protocol Method] Create and start a new test run with the given name.
+        /// [Protocol Method] Create and start a new test run with the given test run Id.
         /// <list type="bullet">
         /// <item>
-        /// <description>
-        /// This <see href="https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/ProtocolMethods.md">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios.
-        /// </description>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
         /// </item>
         /// </list>
         /// </summary>
-        /// <param name="testRunId"> Unique name for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="testRunId"> Unique test run identifier for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
         /// <param name="content"> The content to send as the body of the request. </param>
-        /// <param name="oldTestRunId"> Existing test run identifier that should be rerun, if this is provided, the test will run with the JMX file, configuration and app components from the existing test run. You can override the configuration values for new test run in the request body. </param>
-        /// <param name="context"> The request context, which can override default behaviors of the client pipeline on a per-call basis. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> or <paramref name="content"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <param name="oldTestRunId">
+        /// Existing test run identifier that should be rerun, if this is provided, the
+        /// test will run with the JMX file, configuration and app components from the
+        /// existing test run. You can override the configuration values for new test run
+        /// in the request body.
+        /// </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
         /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
         /// <returns> The response returned from the service. </returns>
-        internal virtual async Task<Response> CreateOrUpdateTestRunAsync(string testRunId, RequestContent content, string oldTestRunId = null, RequestContext context = null)
+        internal virtual Response CreateOrUpdateTestRun(string testRunId, RequestContent content, string oldTestRunId = default, RequestContext context = null)
         {
-            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
-            Argument.AssertNotNull(content, nameof(content));
-
-            using var scope = ClientDiagnostics.CreateScope("LoadTestRunClient.CreateOrUpdateTestRun");
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.CreateOrUpdateTestRun");
             scope.Start();
             try
             {
                 using HttpMessage message = CreateCreateOrUpdateTestRunRequest(testRunId, content, oldTestRunId, context);
-                return await _pipeline.ProcessMessageAsync(message, context).ConfigureAwait(false);
+                return Pipeline.ProcessMessage(message, context);
             }
             catch (Exception e)
             {
@@ -98,34 +71,32 @@ namespace Azure.Developer.LoadTesting
         }
 
         /// <summary>
-        /// [Protocol Method] Create and start a new test run with the given name.
+        /// [Protocol Method] Create and start a new test run with the given test run Id.
         /// <list type="bullet">
         /// <item>
-        /// <description>
-        /// This <see href="https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/ProtocolMethods.md">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios.
-        /// </description>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
         /// </item>
         /// </list>
         /// </summary>
-        /// <param name="testRunId"> Unique name for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="testRunId"> Unique test run identifier for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
         /// <param name="content"> The content to send as the body of the request. </param>
-        /// <param name="oldTestRunId"> Existing test run identifier that should be rerun, if this is provided, the test will run with the JMX file, configuration and app components from the existing test run. You can override the configuration values for new test run in the request body. </param>
-        /// <param name="context"> The request context, which can override default behaviors of the client pipeline on a per-call basis. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> or <paramref name="content"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <param name="oldTestRunId">
+        /// Existing test run identifier that should be rerun, if this is provided, the
+        /// test will run with the JMX file, configuration and app components from the
+        /// existing test run. You can override the configuration values for new test run
+        /// in the request body.
+        /// </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
         /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
         /// <returns> The response returned from the service. </returns>
-        internal virtual Response CreateOrUpdateTestRun(string testRunId, RequestContent content, string oldTestRunId = null, RequestContext context = null)
+        internal virtual async Task<Response> CreateOrUpdateTestRunAsync(string testRunId, RequestContent content, string oldTestRunId = default, RequestContext context = null)
         {
-            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
-            Argument.AssertNotNull(content, nameof(content));
-
-            using var scope = ClientDiagnostics.CreateScope("LoadTestRunClient.CreateOrUpdateTestRun");
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.CreateOrUpdateTestRun");
             scope.Start();
             try
             {
                 using HttpMessage message = CreateCreateOrUpdateTestRunRequest(testRunId, content, oldTestRunId, context);
-                return _pipeline.ProcessMessage(message, context);
+                return await Pipeline.ProcessMessageAsync(message, context).ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -135,499 +106,34 @@ namespace Azure.Developer.LoadTesting
         }
 
         /// <summary>
-        /// [Protocol Method] Get test run details by name.
+        /// [Protocol Method] Add an app component to a test run by providing the resource Id, name and type.
         /// <list type="bullet">
         /// <item>
-        /// <description>
-        /// This <see href="https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/ProtocolMethods.md">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios.
-        /// </description>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
         /// </item>
         /// </list>
         /// </summary>
-        /// <param name="testRunId"> Unique name for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
-        /// <param name="context"> The request context, which can override default behaviors of the client pipeline on a per-call basis. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
-        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
-        /// <returns> The response returned from the service. </returns>
-        /// <include file="Docs/LoadTestRunClient.xml" path="doc/members/member[@name='GetTestRunAsync(string,RequestContext)']/*" />
-        public virtual async Task<Response> GetTestRunAsync(string testRunId, RequestContext context = null)
-        {
-            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
-
-            using var scope = ClientDiagnostics.CreateScope("LoadTestRunClient.GetTestRun");
-            scope.Start();
-            try
-            {
-                using HttpMessage message = CreateGetTestRunRequest(testRunId, context);
-                return await _pipeline.ProcessMessageAsync(message, context).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// [Protocol Method] Get test run details by name.
-        /// <list type="bullet">
-        /// <item>
-        /// <description>
-        /// This <see href="https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/ProtocolMethods.md">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios.
-        /// </description>
-        /// </item>
-        /// </list>
-        /// </summary>
-        /// <param name="testRunId"> Unique name for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
-        /// <param name="context"> The request context, which can override default behaviors of the client pipeline on a per-call basis. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
-        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
-        /// <returns> The response returned from the service. </returns>
-        /// <include file="Docs/LoadTestRunClient.xml" path="doc/members/member[@name='GetTestRun(string,RequestContext)']/*" />
-        public virtual Response GetTestRun(string testRunId, RequestContext context = null)
-        {
-            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
-
-            using var scope = ClientDiagnostics.CreateScope("LoadTestRunClient.GetTestRun");
-            scope.Start();
-            try
-            {
-                using HttpMessage message = CreateGetTestRunRequest(testRunId, context);
-                return _pipeline.ProcessMessage(message, context);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// [Protocol Method] Delete a test run by its name.
-        /// <list type="bullet">
-        /// <item>
-        /// <description>
-        /// This <see href="https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/ProtocolMethods.md">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios.
-        /// </description>
-        /// </item>
-        /// </list>
-        /// </summary>
-        /// <param name="testRunId"> Unique name for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
-        /// <param name="context"> The request context, which can override default behaviors of the client pipeline on a per-call basis. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
-        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
-        /// <returns> The response returned from the service. </returns>
-        /// <include file="Docs/LoadTestRunClient.xml" path="doc/members/member[@name='DeleteTestRunAsync(string,RequestContext)']/*" />
-        public virtual async Task<Response> DeleteTestRunAsync(string testRunId, RequestContext context = null)
-        {
-            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
-
-            using var scope = ClientDiagnostics.CreateScope("LoadTestRunClient.DeleteTestRun");
-            scope.Start();
-            try
-            {
-                using HttpMessage message = CreateDeleteTestRunRequest(testRunId, context);
-                return await _pipeline.ProcessMessageAsync(message, context).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// [Protocol Method] Delete a test run by its name.
-        /// <list type="bullet">
-        /// <item>
-        /// <description>
-        /// This <see href="https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/ProtocolMethods.md">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios.
-        /// </description>
-        /// </item>
-        /// </list>
-        /// </summary>
-        /// <param name="testRunId"> Unique name for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
-        /// <param name="context"> The request context, which can override default behaviors of the client pipeline on a per-call basis. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
-        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
-        /// <returns> The response returned from the service. </returns>
-        /// <include file="Docs/LoadTestRunClient.xml" path="doc/members/member[@name='DeleteTestRun(string,RequestContext)']/*" />
-        public virtual Response DeleteTestRun(string testRunId, RequestContext context = null)
-        {
-            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
-
-            using var scope = ClientDiagnostics.CreateScope("LoadTestRunClient.DeleteTestRun");
-            scope.Start();
-            try
-            {
-                using HttpMessage message = CreateDeleteTestRunRequest(testRunId, context);
-                return _pipeline.ProcessMessage(message, context);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// [Protocol Method] Get test run file by file name.
-        /// <list type="bullet">
-        /// <item>
-        /// <description>
-        /// This <see href="https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/ProtocolMethods.md">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios.
-        /// </description>
-        /// </item>
-        /// </list>
-        /// </summary>
-        /// <param name="testRunId"> Unique name for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
-        /// <param name="fileName"> Test run file name with file extension. </param>
-        /// <param name="context"> The request context, which can override default behaviors of the client pipeline on a per-call basis. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> or <paramref name="fileName"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> or <paramref name="fileName"/> is an empty string, and was expected to be non-empty. </exception>
-        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
-        /// <returns> The response returned from the service. </returns>
-        /// <include file="Docs/LoadTestRunClient.xml" path="doc/members/member[@name='GetTestRunFileAsync(string,string,RequestContext)']/*" />
-        public virtual async Task<Response> GetTestRunFileAsync(string testRunId, string fileName, RequestContext context = null)
-        {
-            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
-            Argument.AssertNotNullOrEmpty(fileName, nameof(fileName));
-
-            using var scope = ClientDiagnostics.CreateScope("LoadTestRunClient.GetTestRunFile");
-            scope.Start();
-            try
-            {
-                using HttpMessage message = CreateGetTestRunFileRequest(testRunId, fileName, context);
-                return await _pipeline.ProcessMessageAsync(message, context).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// [Protocol Method] Get test run file by file name.
-        /// <list type="bullet">
-        /// <item>
-        /// <description>
-        /// This <see href="https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/ProtocolMethods.md">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios.
-        /// </description>
-        /// </item>
-        /// </list>
-        /// </summary>
-        /// <param name="testRunId"> Unique name for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
-        /// <param name="fileName"> Test run file name with file extension. </param>
-        /// <param name="context"> The request context, which can override default behaviors of the client pipeline on a per-call basis. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> or <paramref name="fileName"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> or <paramref name="fileName"/> is an empty string, and was expected to be non-empty. </exception>
-        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
-        /// <returns> The response returned from the service. </returns>
-        /// <include file="Docs/LoadTestRunClient.xml" path="doc/members/member[@name='GetTestRunFile(string,string,RequestContext)']/*" />
-        public virtual Response GetTestRunFile(string testRunId, string fileName, RequestContext context = null)
-        {
-            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
-            Argument.AssertNotNullOrEmpty(fileName, nameof(fileName));
-
-            using var scope = ClientDiagnostics.CreateScope("LoadTestRunClient.GetTestRunFile");
-            scope.Start();
-            try
-            {
-                using HttpMessage message = CreateGetTestRunFileRequest(testRunId, fileName, context);
-                return _pipeline.ProcessMessage(message, context);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// [Protocol Method] Stop test run by name.
-        /// <list type="bullet">
-        /// <item>
-        /// <description>
-        /// This <see href="https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/ProtocolMethods.md">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios.
-        /// </description>
-        /// </item>
-        /// </list>
-        /// </summary>
-        /// <param name="testRunId"> Unique name for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
-        /// <param name="context"> The request context, which can override default behaviors of the client pipeline on a per-call basis. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
-        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
-        /// <returns> The response returned from the service. </returns>
-        /// <include file="Docs/LoadTestRunClient.xml" path="doc/members/member[@name='StopTestRunAsync(string,RequestContext)']/*" />
-        public virtual async Task<Response> StopTestRunAsync(string testRunId, RequestContext context = null)
-        {
-            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
-
-            using var scope = ClientDiagnostics.CreateScope("LoadTestRunClient.StopTestRun");
-            scope.Start();
-            try
-            {
-                using HttpMessage message = CreateStopTestRunRequest(testRunId, context);
-                return await _pipeline.ProcessMessageAsync(message, context).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// [Protocol Method] Stop test run by name.
-        /// <list type="bullet">
-        /// <item>
-        /// <description>
-        /// This <see href="https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/ProtocolMethods.md">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios.
-        /// </description>
-        /// </item>
-        /// </list>
-        /// </summary>
-        /// <param name="testRunId"> Unique name for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
-        /// <param name="context"> The request context, which can override default behaviors of the client pipeline on a per-call basis. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
-        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
-        /// <returns> The response returned from the service. </returns>
-        /// <include file="Docs/LoadTestRunClient.xml" path="doc/members/member[@name='StopTestRun(string,RequestContext)']/*" />
-        public virtual Response StopTestRun(string testRunId, RequestContext context = null)
-        {
-            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
-
-            using var scope = ClientDiagnostics.CreateScope("LoadTestRunClient.StopTestRun");
-            scope.Start();
-            try
-            {
-                using HttpMessage message = CreateStopTestRunRequest(testRunId, context);
-                return _pipeline.ProcessMessage(message, context);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// [Protocol Method] List the metric namespaces for a load test run.
-        /// <list type="bullet">
-        /// <item>
-        /// <description>
-        /// This <see href="https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/ProtocolMethods.md">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios.
-        /// </description>
-        /// </item>
-        /// </list>
-        /// </summary>
-        /// <param name="testRunId"> Unique name for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
-        /// <param name="context"> The request context, which can override default behaviors of the client pipeline on a per-call basis. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
-        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
-        /// <returns> The response returned from the service. </returns>
-        /// <include file="Docs/LoadTestRunClient.xml" path="doc/members/member[@name='GetMetricNamespacesAsync(string,RequestContext)']/*" />
-        public virtual async Task<Response> GetMetricNamespacesAsync(string testRunId, RequestContext context = null)
-        {
-            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
-
-            using var scope = ClientDiagnostics.CreateScope("LoadTestRunClient.GetMetricNamespaces");
-            scope.Start();
-            try
-            {
-                using HttpMessage message = CreateGetMetricNamespacesRequest(testRunId, context);
-                return await _pipeline.ProcessMessageAsync(message, context).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// [Protocol Method] List the metric namespaces for a load test run.
-        /// <list type="bullet">
-        /// <item>
-        /// <description>
-        /// This <see href="https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/ProtocolMethods.md">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios.
-        /// </description>
-        /// </item>
-        /// </list>
-        /// </summary>
-        /// <param name="testRunId"> Unique name for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
-        /// <param name="context"> The request context, which can override default behaviors of the client pipeline on a per-call basis. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
-        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
-        /// <returns> The response returned from the service. </returns>
-        /// <include file="Docs/LoadTestRunClient.xml" path="doc/members/member[@name='GetMetricNamespaces(string,RequestContext)']/*" />
-        public virtual Response GetMetricNamespaces(string testRunId, RequestContext context = null)
-        {
-            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
-
-            using var scope = ClientDiagnostics.CreateScope("LoadTestRunClient.GetMetricNamespaces");
-            scope.Start();
-            try
-            {
-                using HttpMessage message = CreateGetMetricNamespacesRequest(testRunId, context);
-                return _pipeline.ProcessMessage(message, context);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// [Protocol Method] List the metric definitions for a load test run.
-        /// <list type="bullet">
-        /// <item>
-        /// <description>
-        /// This <see href="https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/ProtocolMethods.md">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios.
-        /// </description>
-        /// </item>
-        /// </list>
-        /// </summary>
-        /// <param name="testRunId"> Unique name for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
-        /// <param name="metricNamespace"> Metric namespace to query metric definitions for. </param>
-        /// <param name="context"> The request context, which can override default behaviors of the client pipeline on a per-call basis. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> or <paramref name="metricNamespace"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
-        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
-        /// <returns> The response returned from the service. </returns>
-        /// <include file="Docs/LoadTestRunClient.xml" path="doc/members/member[@name='GetMetricDefinitionsAsync(string,string,RequestContext)']/*" />
-        public virtual async Task<Response> GetMetricDefinitionsAsync(string testRunId, string metricNamespace, RequestContext context = null)
-        {
-            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
-            Argument.AssertNotNull(metricNamespace, nameof(metricNamespace));
-
-            using var scope = ClientDiagnostics.CreateScope("LoadTestRunClient.GetMetricDefinitions");
-            scope.Start();
-            try
-            {
-                using HttpMessage message = CreateGetMetricDefinitionsRequest(testRunId, metricNamespace, context);
-                return await _pipeline.ProcessMessageAsync(message, context).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// [Protocol Method] List the metric definitions for a load test run.
-        /// <list type="bullet">
-        /// <item>
-        /// <description>
-        /// This <see href="https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/ProtocolMethods.md">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios.
-        /// </description>
-        /// </item>
-        /// </list>
-        /// </summary>
-        /// <param name="testRunId"> Unique name for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
-        /// <param name="metricNamespace"> Metric namespace to query metric definitions for. </param>
-        /// <param name="context"> The request context, which can override default behaviors of the client pipeline on a per-call basis. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> or <paramref name="metricNamespace"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
-        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
-        /// <returns> The response returned from the service. </returns>
-        /// <include file="Docs/LoadTestRunClient.xml" path="doc/members/member[@name='GetMetricDefinitions(string,string,RequestContext)']/*" />
-        public virtual Response GetMetricDefinitions(string testRunId, string metricNamespace, RequestContext context = null)
-        {
-            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
-            Argument.AssertNotNull(metricNamespace, nameof(metricNamespace));
-
-            using var scope = ClientDiagnostics.CreateScope("LoadTestRunClient.GetMetricDefinitions");
-            scope.Start();
-            try
-            {
-                using HttpMessage message = CreateGetMetricDefinitionsRequest(testRunId, metricNamespace, context);
-                return _pipeline.ProcessMessage(message, context);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// [Protocol Method] Associate an app component (collection of azure resources) to a test run
-        /// <list type="bullet">
-        /// <item>
-        /// <description>
-        /// This <see href="https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/ProtocolMethods.md">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios.
-        /// </description>
-        /// </item>
-        /// </list>
-        /// </summary>
-        /// <param name="testRunId"> Unique name for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
         /// <param name="content"> The content to send as the body of the request. </param>
-        /// <param name="context"> The request context, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> or <paramref name="content"/> is null. </exception>
         /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
         /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
         /// <returns> The response returned from the service. </returns>
-        /// <include file="Docs/LoadTestRunClient.xml" path="doc/members/member[@name='CreateOrUpdateAppComponentsAsync(string,RequestContent,RequestContext)']/*" />
-        public virtual async Task<Response> CreateOrUpdateAppComponentsAsync(string testRunId, RequestContent content, RequestContext context = null)
-        {
-            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
-            Argument.AssertNotNull(content, nameof(content));
-
-            using var scope = ClientDiagnostics.CreateScope("LoadTestRunClient.CreateOrUpdateAppComponents");
-            scope.Start();
-            try
-            {
-                using HttpMessage message = CreateCreateOrUpdateAppComponentsRequest(testRunId, content, context);
-                return await _pipeline.ProcessMessageAsync(message, context).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// [Protocol Method] Associate an app component (collection of azure resources) to a test run
-        /// <list type="bullet">
-        /// <item>
-        /// <description>
-        /// This <see href="https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/ProtocolMethods.md">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios.
-        /// </description>
-        /// </item>
-        /// </list>
-        /// </summary>
-        /// <param name="testRunId"> Unique name for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
-        /// <param name="content"> The content to send as the body of the request. </param>
-        /// <param name="context"> The request context, which can override default behaviors of the client pipeline on a per-call basis. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> or <paramref name="content"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
-        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
-        /// <returns> The response returned from the service. </returns>
-        /// <include file="Docs/LoadTestRunClient.xml" path="doc/members/member[@name='CreateOrUpdateAppComponents(string,RequestContent,RequestContext)']/*" />
         public virtual Response CreateOrUpdateAppComponents(string testRunId, RequestContent content, RequestContext context = null)
         {
-            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
-            Argument.AssertNotNull(content, nameof(content));
-
-            using var scope = ClientDiagnostics.CreateScope("LoadTestRunClient.CreateOrUpdateAppComponents");
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.CreateOrUpdateAppComponents");
             scope.Start();
             try
             {
+                Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+                Argument.AssertNotNull(content, nameof(content));
+
                 using HttpMessage message = CreateCreateOrUpdateAppComponentsRequest(testRunId, content, context);
-                return _pipeline.ProcessMessage(message, context);
+                return Pipeline.ProcessMessage(message, context);
             }
             catch (Exception e)
             {
@@ -637,67 +143,34 @@ namespace Azure.Developer.LoadTesting
         }
 
         /// <summary>
-        /// [Protocol Method] Get associated app component (collection of azure resources) for the given test run.
+        /// [Protocol Method] Add an app component to a test run by providing the resource Id, name and type.
         /// <list type="bullet">
         /// <item>
-        /// <description>
-        /// This <see href="https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/ProtocolMethods.md">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios.
-        /// </description>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
         /// </item>
         /// </list>
         /// </summary>
-        /// <param name="testRunId"> Unique name for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
-        /// <param name="context"> The request context, which can override default behaviors of the client pipeline on a per-call basis. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
+        /// <param name="content"> The content to send as the body of the request. </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> or <paramref name="content"/> is null. </exception>
         /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
         /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
         /// <returns> The response returned from the service. </returns>
-        /// <include file="Docs/LoadTestRunClient.xml" path="doc/members/member[@name='GetAppComponentsAsync(string,RequestContext)']/*" />
-        public virtual async Task<Response> GetAppComponentsAsync(string testRunId, RequestContext context = null)
+        public virtual async Task<Response> CreateOrUpdateAppComponentsAsync(string testRunId, RequestContent content, RequestContext context = null)
         {
-            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
-
-            using var scope = ClientDiagnostics.CreateScope("LoadTestRunClient.GetAppComponents");
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.CreateOrUpdateAppComponents");
             scope.Start();
             try
             {
-                using HttpMessage message = CreateGetAppComponentsRequest(testRunId, context);
-                return await _pipeline.ProcessMessageAsync(message, context).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
+                Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+                Argument.AssertNotNull(content, nameof(content));
 
-        /// <summary>
-        /// [Protocol Method] Get associated app component (collection of azure resources) for the given test run.
-        /// <list type="bullet">
-        /// <item>
-        /// <description>
-        /// This <see href="https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/ProtocolMethods.md">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios.
-        /// </description>
-        /// </item>
-        /// </list>
-        /// </summary>
-        /// <param name="testRunId"> Unique name for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
-        /// <param name="context"> The request context, which can override default behaviors of the client pipeline on a per-call basis. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
-        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
-        /// <returns> The response returned from the service. </returns>
-        /// <include file="Docs/LoadTestRunClient.xml" path="doc/members/member[@name='GetAppComponents(string,RequestContext)']/*" />
-        public virtual Response GetAppComponents(string testRunId, RequestContext context = null)
-        {
-            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
-
-            using var scope = ClientDiagnostics.CreateScope("LoadTestRunClient.GetAppComponents");
-            scope.Start();
-            try
-            {
-                using HttpMessage message = CreateGetAppComponentsRequest(testRunId, context);
-                return _pipeline.ProcessMessage(message, context);
+                using HttpMessage message = CreateCreateOrUpdateAppComponentsRequest(testRunId, content, context);
+                return await Pipeline.ProcessMessageAsync(message, context).ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -710,68 +183,31 @@ namespace Azure.Developer.LoadTesting
         /// [Protocol Method] Configure server metrics for a test run
         /// <list type="bullet">
         /// <item>
-        /// <description>
-        /// This <see href="https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/ProtocolMethods.md">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios.
-        /// </description>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
         /// </item>
         /// </list>
         /// </summary>
-        /// <param name="testRunId"> Unique name for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
         /// <param name="content"> The content to send as the body of the request. </param>
-        /// <param name="context"> The request context, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> or <paramref name="content"/> is null. </exception>
         /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
         /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
         /// <returns> The response returned from the service. </returns>
-        /// <include file="Docs/LoadTestRunClient.xml" path="doc/members/member[@name='CreateOrUpdateServerMetricsConfigAsync(string,RequestContent,RequestContext)']/*" />
-        public virtual async Task<Response> CreateOrUpdateServerMetricsConfigAsync(string testRunId, RequestContent content, RequestContext context = null)
-        {
-            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
-            Argument.AssertNotNull(content, nameof(content));
-
-            using var scope = ClientDiagnostics.CreateScope("LoadTestRunClient.CreateOrUpdateServerMetricsConfig");
-            scope.Start();
-            try
-            {
-                using HttpMessage message = CreateCreateOrUpdateServerMetricsConfigRequest(testRunId, content, context);
-                return await _pipeline.ProcessMessageAsync(message, context).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// [Protocol Method] Configure server metrics for a test run
-        /// <list type="bullet">
-        /// <item>
-        /// <description>
-        /// This <see href="https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/ProtocolMethods.md">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios.
-        /// </description>
-        /// </item>
-        /// </list>
-        /// </summary>
-        /// <param name="testRunId"> Unique name for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
-        /// <param name="content"> The content to send as the body of the request. </param>
-        /// <param name="context"> The request context, which can override default behaviors of the client pipeline on a per-call basis. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> or <paramref name="content"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
-        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
-        /// <returns> The response returned from the service. </returns>
-        /// <include file="Docs/LoadTestRunClient.xml" path="doc/members/member[@name='CreateOrUpdateServerMetricsConfig(string,RequestContent,RequestContext)']/*" />
         public virtual Response CreateOrUpdateServerMetricsConfig(string testRunId, RequestContent content, RequestContext context = null)
         {
-            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
-            Argument.AssertNotNull(content, nameof(content));
-
-            using var scope = ClientDiagnostics.CreateScope("LoadTestRunClient.CreateOrUpdateServerMetricsConfig");
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.CreateOrUpdateServerMetricsConfig");
             scope.Start();
             try
             {
+                Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+                Argument.AssertNotNull(content, nameof(content));
+
                 using HttpMessage message = CreateCreateOrUpdateServerMetricsConfigRequest(testRunId, content, context);
-                return _pipeline.ProcessMessage(message, context);
+                return Pipeline.ProcessMessage(message, context);
             }
             catch (Exception e)
             {
@@ -781,32 +217,34 @@ namespace Azure.Developer.LoadTesting
         }
 
         /// <summary>
-        /// [Protocol Method] List server metrics configuration for the given test run.
+        /// [Protocol Method] Configure server metrics for a test run
         /// <list type="bullet">
         /// <item>
-        /// <description>
-        /// This <see href="https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/ProtocolMethods.md">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios.
-        /// </description>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
         /// </item>
         /// </list>
         /// </summary>
-        /// <param name="testRunId"> Unique name for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
-        /// <param name="context"> The request context, which can override default behaviors of the client pipeline on a per-call basis. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
+        /// <param name="content"> The content to send as the body of the request. </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> or <paramref name="content"/> is null. </exception>
         /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
         /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
         /// <returns> The response returned from the service. </returns>
-        /// <include file="Docs/LoadTestRunClient.xml" path="doc/members/member[@name='GetServerMetricsConfigAsync(string,RequestContext)']/*" />
-        public virtual async Task<Response> GetServerMetricsConfigAsync(string testRunId, RequestContext context = null)
+        public virtual async Task<Response> CreateOrUpdateServerMetricsConfigAsync(string testRunId, RequestContent content, RequestContext context = null)
         {
-            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
-
-            using var scope = ClientDiagnostics.CreateScope("LoadTestRunClient.GetServerMetricsConfig");
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.CreateOrUpdateServerMetricsConfig");
             scope.Start();
             try
             {
-                using HttpMessage message = CreateGetServerMetricsConfigRequest(testRunId, context);
-                return await _pipeline.ProcessMessageAsync(message, context).ConfigureAwait(false);
+                Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+                Argument.AssertNotNull(content, nameof(content));
+
+                using HttpMessage message = CreateCreateOrUpdateServerMetricsConfigRequest(testRunId, content, context);
+                return await Pipeline.ProcessMessageAsync(message, context).ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -816,452 +254,1789 @@ namespace Azure.Developer.LoadTesting
         }
 
         /// <summary>
-        /// [Protocol Method] List server metrics configuration for the given test run.
+        /// [Protocol Method] Delete an existing load test run by providing the testRunId.
         /// <list type="bullet">
         /// <item>
-        /// <description>
-        /// This <see href="https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/ProtocolMethods.md">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios.
-        /// </description>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
         /// </item>
         /// </list>
         /// </summary>
-        /// <param name="testRunId"> Unique name for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
-        /// <param name="context"> The request context, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <param name="testRunId"> Unique test run identifier for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
         /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
         /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
         /// <returns> The response returned from the service. </returns>
-        /// <include file="Docs/LoadTestRunClient.xml" path="doc/members/member[@name='GetServerMetricsConfig(string,RequestContext)']/*" />
-        public virtual Response GetServerMetricsConfig(string testRunId, RequestContext context = null)
+        public virtual Response DeleteTestRun(string testRunId, RequestContext context)
         {
-            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
-
-            using var scope = ClientDiagnostics.CreateScope("LoadTestRunClient.GetServerMetricsConfig");
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.DeleteTestRun");
             scope.Start();
             try
             {
-                using HttpMessage message = CreateGetServerMetricsConfigRequest(testRunId, context);
-                return _pipeline.ProcessMessage(message, context);
+                Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+
+                using HttpMessage message = CreateDeleteTestRunRequest(testRunId, context);
+                return Pipeline.ProcessMessage(message, context);
             }
             catch (Exception e)
             {
                 scope.Failed(e);
                 throw;
             }
+        }
+
+        /// <summary>
+        /// [Protocol Method] Delete an existing load test run by providing the testRunId.
+        /// <list type="bullet">
+        /// <item>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="testRunId"> Unique test run identifier for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        /// <returns> The response returned from the service. </returns>
+        public virtual async Task<Response> DeleteTestRunAsync(string testRunId, RequestContext context)
+        {
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.DeleteTestRun");
+            scope.Start();
+            try
+            {
+                Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+
+                using HttpMessage message = CreateDeleteTestRunRequest(testRunId, context);
+                return await Pipeline.ProcessMessageAsync(message, context).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary> Delete an existing load test run by providing the testRunId. </summary>
+        /// <param name="testRunId"> Unique test run identifier for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        public virtual Response DeleteTestRun(string testRunId, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+
+            return DeleteTestRun(testRunId, cancellationToken.ToRequestContext());
+        }
+
+        /// <summary> Delete an existing load test run by providing the testRunId. </summary>
+        /// <param name="testRunId"> Unique test run identifier for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        public virtual async Task<Response> DeleteTestRunAsync(string testRunId, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+
+            return await DeleteTestRunAsync(testRunId, cancellationToken.ToRequestContext()).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// [Protocol Method] Get associated app component (collection of azure resources) for the given test
+        /// run.
+        /// <list type="bullet">
+        /// <item>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        /// <returns> The response returned from the service. </returns>
+        public virtual Response GetAppComponents(string testRunId, RequestContext context)
+        {
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.GetAppComponents");
+            scope.Start();
+            try
+            {
+                Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+
+                using HttpMessage message = CreateGetAppComponentsRequest(testRunId, context);
+                return Pipeline.ProcessMessage(message, context);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// [Protocol Method] Get associated app component (collection of azure resources) for the given test
+        /// run.
+        /// <list type="bullet">
+        /// <item>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        /// <returns> The response returned from the service. </returns>
+        public virtual async Task<Response> GetAppComponentsAsync(string testRunId, RequestContext context)
+        {
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.GetAppComponents");
+            scope.Start();
+            try
+            {
+                Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+
+                using HttpMessage message = CreateGetAppComponentsRequest(testRunId, context);
+                return await Pipeline.ProcessMessageAsync(message, context).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Get associated app component (collection of azure resources) for the given test
+        /// run.
+        /// </summary>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
+        /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        public virtual Response<TestRunAppComponents> GetAppComponents(string testRunId, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+
+            Response result = GetAppComponents(testRunId, cancellationToken.ToRequestContext());
+            return Response.FromValue((TestRunAppComponents)result, result);
+        }
+
+        /// <summary>
+        /// Get associated app component (collection of azure resources) for the given test
+        /// run.
+        /// </summary>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
+        /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        public virtual async Task<Response<TestRunAppComponents>> GetAppComponentsAsync(string testRunId, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+
+            Response result = await GetAppComponentsAsync(testRunId, cancellationToken.ToRequestContext()).ConfigureAwait(false);
+            return Response.FromValue((TestRunAppComponents)result, result);
+        }
+
+        /// <summary>
+        /// [Protocol Method] Get associated server metrics configuration for the given test run.
+        /// <list type="bullet">
+        /// <item>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        /// <returns> The response returned from the service. </returns>
+        public virtual Response GetServerMetricsConfig(string testRunId, RequestContext context)
+        {
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.GetServerMetricsConfig");
+            scope.Start();
+            try
+            {
+                Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+
+                using HttpMessage message = CreateGetServerMetricsConfigRequest(testRunId, context);
+                return Pipeline.ProcessMessage(message, context);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// [Protocol Method] Get associated server metrics configuration for the given test run.
+        /// <list type="bullet">
+        /// <item>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        /// <returns> The response returned from the service. </returns>
+        public virtual async Task<Response> GetServerMetricsConfigAsync(string testRunId, RequestContext context)
+        {
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.GetServerMetricsConfig");
+            scope.Start();
+            try
+            {
+                Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+
+                using HttpMessage message = CreateGetServerMetricsConfigRequest(testRunId, context);
+                return await Pipeline.ProcessMessageAsync(message, context).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary> Get associated server metrics configuration for the given test run. </summary>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
+        /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        public virtual Response<TestRunServerMetricsConfiguration> GetServerMetricsConfig(string testRunId, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+
+            Response result = GetServerMetricsConfig(testRunId, cancellationToken.ToRequestContext());
+            return Response.FromValue((TestRunServerMetricsConfiguration)result, result);
+        }
+
+        /// <summary> Get associated server metrics configuration for the given test run. </summary>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
+        /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        public virtual async Task<Response<TestRunServerMetricsConfiguration>> GetServerMetricsConfigAsync(string testRunId, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+
+            Response result = await GetServerMetricsConfigAsync(testRunId, cancellationToken.ToRequestContext()).ConfigureAwait(false);
+            return Response.FromValue((TestRunServerMetricsConfiguration)result, result);
+        }
+
+        /// <summary>
+        /// [Protocol Method] Get test run details by test run Id.
+        /// <list type="bullet">
+        /// <item>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="testRunId"> Unique test run identifier for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        /// <returns> The response returned from the service. </returns>
+        public virtual Response GetTestRun(string testRunId, RequestContext context)
+        {
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.GetTestRun");
+            scope.Start();
+            try
+            {
+                Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+
+                using HttpMessage message = CreateGetTestRunRequest(testRunId, context);
+                return Pipeline.ProcessMessage(message, context);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// [Protocol Method] Get test run details by test run Id.
+        /// <list type="bullet">
+        /// <item>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="testRunId"> Unique test run identifier for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        /// <returns> The response returned from the service. </returns>
+        public virtual async Task<Response> GetTestRunAsync(string testRunId, RequestContext context)
+        {
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.GetTestRun");
+            scope.Start();
+            try
+            {
+                Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+
+                using HttpMessage message = CreateGetTestRunRequest(testRunId, context);
+                return await Pipeline.ProcessMessageAsync(message, context).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary> Get test run details by test run Id. </summary>
+        /// <param name="testRunId"> Unique test run identifier for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        public virtual Response<LoadTestRun> GetTestRun(string testRunId, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+
+            Response result = GetTestRun(testRunId, cancellationToken.ToRequestContext());
+            return Response.FromValue((LoadTestRun)result, result);
+        }
+
+        /// <summary> Get test run details by test run Id. </summary>
+        /// <param name="testRunId"> Unique test run identifier for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        public virtual async Task<Response<LoadTestRun>> GetTestRunAsync(string testRunId, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+
+            Response result = await GetTestRunAsync(testRunId, cancellationToken.ToRequestContext()).ConfigureAwait(false);
+            return Response.FromValue((LoadTestRun)result, result);
+        }
+
+        /// <summary>
+        /// [Protocol Method] Get test run file by file name.
+        /// <list type="bullet">
+        /// <item>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="testRunId"> Unique test run identifier for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="fileName"> Name of the file. </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> or <paramref name="fileName"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> or <paramref name="fileName"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        /// <returns> The response returned from the service. </returns>
+        public virtual Response GetTestRunFile(string testRunId, string fileName, RequestContext context)
+        {
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.GetTestRunFile");
+            scope.Start();
+            try
+            {
+                Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+                Argument.AssertNotNullOrEmpty(fileName, nameof(fileName));
+
+                using HttpMessage message = CreateGetTestRunFileRequest(testRunId, fileName, context);
+                return Pipeline.ProcessMessage(message, context);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// [Protocol Method] Get test run file by file name.
+        /// <list type="bullet">
+        /// <item>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="testRunId"> Unique test run identifier for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="fileName"> Name of the file. </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> or <paramref name="fileName"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> or <paramref name="fileName"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        /// <returns> The response returned from the service. </returns>
+        public virtual async Task<Response> GetTestRunFileAsync(string testRunId, string fileName, RequestContext context)
+        {
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.GetTestRunFile");
+            scope.Start();
+            try
+            {
+                Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+                Argument.AssertNotNullOrEmpty(fileName, nameof(fileName));
+
+                using HttpMessage message = CreateGetTestRunFileRequest(testRunId, fileName, context);
+                return await Pipeline.ProcessMessageAsync(message, context).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary> Get test run file by file name. </summary>
+        /// <param name="testRunId"> Unique test run identifier for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="fileName"> Name of the file. </param>
+        /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> or <paramref name="fileName"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> or <paramref name="fileName"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        public virtual Response<TestRunFileInfo> GetTestRunFile(string testRunId, string fileName, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+            Argument.AssertNotNullOrEmpty(fileName, nameof(fileName));
+
+            Response result = GetTestRunFile(testRunId, fileName, cancellationToken.ToRequestContext());
+            return Response.FromValue((TestRunFileInfo)result, result);
+        }
+
+        /// <summary> Get test run file by file name. </summary>
+        /// <param name="testRunId"> Unique test run identifier for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="fileName"> Name of the file. </param>
+        /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> or <paramref name="fileName"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> or <paramref name="fileName"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        public virtual async Task<Response<TestRunFileInfo>> GetTestRunFileAsync(string testRunId, string fileName, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+            Argument.AssertNotNullOrEmpty(fileName, nameof(fileName));
+
+            Response result = await GetTestRunFileAsync(testRunId, fileName, cancellationToken.ToRequestContext()).ConfigureAwait(false);
+            return Response.FromValue((TestRunFileInfo)result, result);
         }
 
         /// <summary>
         /// [Protocol Method] List the dimension values for the given metric dimension name.
         /// <list type="bullet">
         /// <item>
-        /// <description>
-        /// This <see href="https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/ProtocolMethods.md">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios.
-        /// </description>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
         /// </item>
         /// </list>
         /// </summary>
-        /// <param name="testRunId"> Unique name for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
         /// <param name="name"> Dimension name. </param>
-        /// <param name="metricName"> Metric name. </param>
+        /// <param name="metricname"> Metric name. </param>
         /// <param name="metricNamespace"> Metric namespace to query metric definitions for. </param>
-        /// <param name="timeInterval"> The timespan of the query. It is a string with the following format 'startDateTime_ISO/endDateTime_ISO'. </param>
-        /// <param name="interval"> The interval (i.e. timegrain) of the query. Allowed values: "PT5S" | "PT10S" | "PT1M" | "PT5M" | "PT1H". </param>
-        /// <param name="context"> The request context, which can override default behaviors of the client pipeline on a per-call basis. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/>, <paramref name="name"/>, <paramref name="metricName"/>, <paramref name="metricNamespace"/> or <paramref name="timeInterval"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> or <paramref name="name"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <param name="timespan"> The timespan of the query. It is a string with the following format 'startDateTime_ISO/endDateTime_ISO'. </param>
+        /// <param name="interval"> The interval (i.e. timegrain) of the query. </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/>, <paramref name="name"/>, <paramref name="metricname"/>, <paramref name="metricNamespace"/> or <paramref name="timespan"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/>, <paramref name="name"/>, <paramref name="metricname"/>, <paramref name="metricNamespace"/> or <paramref name="timespan"/> is an empty string, and was expected to be non-empty. </exception>
         /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
-        /// <returns> The <see cref="AsyncPageable{T}"/> from the service containing a list of <see cref="BinaryData"/> objects. Details of the body schema for each item in the collection are in the Remarks section below. </returns>
-        /// <include file="Docs/LoadTestRunClient.xml" path="doc/members/member[@name='GetMetricDimensionValuesAsync(string,string,string,string,string,string,RequestContext)']/*" />
-        public virtual AsyncPageable<BinaryData> GetMetricDimensionValuesAsync(string testRunId, string name, string metricName, string metricNamespace, string timeInterval, string interval = null, RequestContext context = null)
+        /// <returns> The response returned from the service. </returns>
+        public virtual Pageable<BinaryData> GetMetricDimensionValues(string testRunId, string name, string metricname, string metricNamespace, string timespan, string interval, RequestContext context)
         {
             Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
             Argument.AssertNotNullOrEmpty(name, nameof(name));
-            Argument.AssertNotNull(metricName, nameof(metricName));
-            Argument.AssertNotNull(metricNamespace, nameof(metricNamespace));
-            Argument.AssertNotNull(timeInterval, nameof(timeInterval));
+            Argument.AssertNotNullOrEmpty(metricname, nameof(metricname));
+            Argument.AssertNotNullOrEmpty(metricNamespace, nameof(metricNamespace));
+            Argument.AssertNotNullOrEmpty(timespan, nameof(timespan));
 
-            HttpMessage FirstPageRequest(int? pageSizeHint) => CreateGetMetricDimensionValuesRequest(testRunId, name, metricName, metricNamespace, timeInterval, interval, context);
-            HttpMessage NextPageRequest(int? pageSizeHint, string nextLink) => CreateGetMetricDimensionValuesNextPageRequest(nextLink, testRunId, name, metricName, metricNamespace, timeInterval, interval, context);
-            return GeneratorPageableHelpers.CreateAsyncPageable(FirstPageRequest, NextPageRequest, e => BinaryData.FromString(e.GetRawText()), ClientDiagnostics, _pipeline, "LoadTestRunClient.GetMetricDimensionValues", "value", "nextLink", context);
+            return new LoadTestRunClientGetMetricDimensionValuesCollectionResult(
+                this,
+                testRunId,
+                name,
+                metricname,
+                metricNamespace,
+                timespan,
+                interval,
+                context);
         }
 
         /// <summary>
         /// [Protocol Method] List the dimension values for the given metric dimension name.
         /// <list type="bullet">
         /// <item>
-        /// <description>
-        /// This <see href="https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/ProtocolMethods.md">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios.
-        /// </description>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
         /// </item>
         /// </list>
         /// </summary>
-        /// <param name="testRunId"> Unique name for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
         /// <param name="name"> Dimension name. </param>
-        /// <param name="metricName"> Metric name. </param>
+        /// <param name="metricname"> Metric name. </param>
         /// <param name="metricNamespace"> Metric namespace to query metric definitions for. </param>
-        /// <param name="timeInterval"> The timespan of the query. It is a string with the following format 'startDateTime_ISO/endDateTime_ISO'. </param>
-        /// <param name="interval"> The interval (i.e. timegrain) of the query. Allowed values: "PT5S" | "PT10S" | "PT1M" | "PT5M" | "PT1H". </param>
-        /// <param name="context"> The request context, which can override default behaviors of the client pipeline on a per-call basis. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/>, <paramref name="name"/>, <paramref name="metricName"/>, <paramref name="metricNamespace"/> or <paramref name="timeInterval"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> or <paramref name="name"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <param name="timespan"> The timespan of the query. It is a string with the following format 'startDateTime_ISO/endDateTime_ISO'. </param>
+        /// <param name="interval"> The interval (i.e. timegrain) of the query. </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/>, <paramref name="name"/>, <paramref name="metricname"/>, <paramref name="metricNamespace"/> or <paramref name="timespan"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/>, <paramref name="name"/>, <paramref name="metricname"/>, <paramref name="metricNamespace"/> or <paramref name="timespan"/> is an empty string, and was expected to be non-empty. </exception>
         /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
-        /// <returns> The <see cref="Pageable{T}"/> from the service containing a list of <see cref="BinaryData"/> objects. Details of the body schema for each item in the collection are in the Remarks section below. </returns>
-        /// <include file="Docs/LoadTestRunClient.xml" path="doc/members/member[@name='GetMetricDimensionValues(string,string,string,string,string,string,RequestContext)']/*" />
-        public virtual Pageable<BinaryData> GetMetricDimensionValues(string testRunId, string name, string metricName, string metricNamespace, string timeInterval, string interval = null, RequestContext context = null)
+        /// <returns> The response returned from the service. </returns>
+        public virtual AsyncPageable<BinaryData> GetMetricDimensionValuesAsync(string testRunId, string name, string metricname, string metricNamespace, string timespan, string interval, RequestContext context)
         {
             Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
             Argument.AssertNotNullOrEmpty(name, nameof(name));
-            Argument.AssertNotNull(metricName, nameof(metricName));
-            Argument.AssertNotNull(metricNamespace, nameof(metricNamespace));
-            Argument.AssertNotNull(timeInterval, nameof(timeInterval));
+            Argument.AssertNotNullOrEmpty(metricname, nameof(metricname));
+            Argument.AssertNotNullOrEmpty(metricNamespace, nameof(metricNamespace));
+            Argument.AssertNotNullOrEmpty(timespan, nameof(timespan));
 
-            HttpMessage FirstPageRequest(int? pageSizeHint) => CreateGetMetricDimensionValuesRequest(testRunId, name, metricName, metricNamespace, timeInterval, interval, context);
-            HttpMessage NextPageRequest(int? pageSizeHint, string nextLink) => CreateGetMetricDimensionValuesNextPageRequest(nextLink, testRunId, name, metricName, metricNamespace, timeInterval, interval, context);
-            return GeneratorPageableHelpers.CreatePageable(FirstPageRequest, NextPageRequest, e => BinaryData.FromString(e.GetRawText()), ClientDiagnostics, _pipeline, "LoadTestRunClient.GetMetricDimensionValues", "value", "nextLink", context);
+            return new LoadTestRunClientGetMetricDimensionValuesAsyncCollectionResult(
+                this,
+                testRunId,
+                name,
+                metricname,
+                metricNamespace,
+                timespan,
+                interval,
+                context);
         }
 
-        internal HttpMessage CreateCreateOrUpdateTestRunRequest(string testRunId, RequestContent content, string oldTestRunId, RequestContext context)
+        /// <summary> List the dimension values for the given metric dimension name. </summary>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
+        /// <param name="name"> Dimension name. </param>
+        /// <param name="metricname"> Metric name. </param>
+        /// <param name="metricNamespace"> Metric namespace to query metric definitions for. </param>
+        /// <param name="timespan"> The timespan of the query. It is a string with the following format 'startDateTime_ISO/endDateTime_ISO'. </param>
+        /// <param name="interval"> The interval (i.e. timegrain) of the query. </param>
+        /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/>, <paramref name="name"/>, <paramref name="metricname"/>, <paramref name="metricNamespace"/> or <paramref name="timespan"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/>, <paramref name="name"/>, <paramref name="metricname"/>, <paramref name="metricNamespace"/> or <paramref name="timespan"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        public virtual Pageable<string> GetMetricDimensionValues(string testRunId, string name, string metricname, string metricNamespace, string timespan, TimeGrain? interval = default, CancellationToken cancellationToken = default)
         {
-            var message = _pipeline.CreateMessage(context, ResponseClassifier200201);
-            var request = message.Request;
-            request.Method = RequestMethod.Patch;
-            var uri = new RawRequestUriBuilder();
-            uri.AppendRaw("https://", false);
-            uri.Reset(_endpoint);
-            uri.AppendPath("/test-runs/", false);
-            uri.AppendPath(testRunId, true);
-            if (oldTestRunId != null)
+            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+            Argument.AssertNotNullOrEmpty(name, nameof(name));
+            Argument.AssertNotNullOrEmpty(metricname, nameof(metricname));
+            Argument.AssertNotNullOrEmpty(metricNamespace, nameof(metricNamespace));
+            Argument.AssertNotNullOrEmpty(timespan, nameof(timespan));
+
+            return new LoadTestRunClientGetMetricDimensionValuesCollectionResultOfT(
+                this,
+                testRunId,
+                name,
+                metricname,
+                metricNamespace,
+                timespan,
+                interval?.ToString(),
+                cancellationToken.ToRequestContext());
+        }
+
+        /// <summary> List the dimension values for the given metric dimension name. </summary>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
+        /// <param name="name"> Dimension name. </param>
+        /// <param name="metricname"> Metric name. </param>
+        /// <param name="metricNamespace"> Metric namespace to query metric definitions for. </param>
+        /// <param name="timespan"> The timespan of the query. It is a string with the following format 'startDateTime_ISO/endDateTime_ISO'. </param>
+        /// <param name="interval"> The interval (i.e. timegrain) of the query. </param>
+        /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/>, <paramref name="name"/>, <paramref name="metricname"/>, <paramref name="metricNamespace"/> or <paramref name="timespan"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/>, <paramref name="name"/>, <paramref name="metricname"/>, <paramref name="metricNamespace"/> or <paramref name="timespan"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        public virtual AsyncPageable<string> GetMetricDimensionValuesAsync(string testRunId, string name, string metricname, string metricNamespace, string timespan, TimeGrain? interval = default, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+            Argument.AssertNotNullOrEmpty(name, nameof(name));
+            Argument.AssertNotNullOrEmpty(metricname, nameof(metricname));
+            Argument.AssertNotNullOrEmpty(metricNamespace, nameof(metricNamespace));
+            Argument.AssertNotNullOrEmpty(timespan, nameof(timespan));
+
+            return new LoadTestRunClientGetMetricDimensionValuesAsyncCollectionResultOfT(
+                this,
+                testRunId,
+                name,
+                metricname,
+                metricNamespace,
+                timespan,
+                interval?.ToString(),
+                cancellationToken.ToRequestContext());
+        }
+
+        /// <summary>
+        /// [Protocol Method] List the metric definitions for a load test run.
+        /// <list type="bullet">
+        /// <item>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
+        /// <param name="metricNamespace"> Metric namespace to query metric definitions for. </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> or <paramref name="metricNamespace"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> or <paramref name="metricNamespace"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        /// <returns> The response returned from the service. </returns>
+        public virtual Response GetMetricDefinitions(string testRunId, string metricNamespace, RequestContext context)
+        {
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.GetMetricDefinitions");
+            scope.Start();
+            try
             {
-                uri.AppendQuery("oldTestRunId", oldTestRunId, true);
+                Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+                Argument.AssertNotNullOrEmpty(metricNamespace, nameof(metricNamespace));
+
+                using HttpMessage message = CreateGetMetricDefinitionsRequest(testRunId, metricNamespace, context);
+                return Pipeline.ProcessMessage(message, context);
             }
-            uri.AppendQuery("api-version", _apiVersion, true);
-            request.Uri = uri;
-            request.Headers.Add("Accept", "application/json");
-            request.Headers.Add("Content-Type", "application/merge-patch+json");
-            request.Content = content;
-            return message;
-        }
-
-        internal HttpMessage CreateGetTestRunRequest(string testRunId, RequestContext context)
-        {
-            var message = _pipeline.CreateMessage(context, ResponseClassifier200);
-            var request = message.Request;
-            request.Method = RequestMethod.Get;
-            var uri = new RawRequestUriBuilder();
-            uri.AppendRaw("https://", false);
-            uri.Reset(_endpoint);
-            uri.AppendPath("/test-runs/", false);
-            uri.AppendPath(testRunId, true);
-            uri.AppendQuery("api-version", _apiVersion, true);
-            request.Uri = uri;
-            request.Headers.Add("Accept", "application/json");
-            return message;
-        }
-
-        internal HttpMessage CreateDeleteTestRunRequest(string testRunId, RequestContext context)
-        {
-            var message = _pipeline.CreateMessage(context, ResponseClassifier204);
-            var request = message.Request;
-            request.Method = RequestMethod.Delete;
-            var uri = new RawRequestUriBuilder();
-            uri.AppendRaw("https://", false);
-            uri.Reset(_endpoint);
-            uri.AppendPath("/test-runs/", false);
-            uri.AppendPath(testRunId, true);
-            uri.AppendQuery("api-version", _apiVersion, true);
-            request.Uri = uri;
-            request.Headers.Add("Accept", "application/json");
-            return message;
-        }
-
-        internal HttpMessage CreateGetTestRunFileRequest(string testRunId, string fileName, RequestContext context)
-        {
-            var message = _pipeline.CreateMessage(context, ResponseClassifier200);
-            var request = message.Request;
-            request.Method = RequestMethod.Get;
-            var uri = new RawRequestUriBuilder();
-            uri.AppendRaw("https://", false);
-            uri.Reset(_endpoint);
-            uri.AppendPath("/test-runs/", false);
-            uri.AppendPath(testRunId, true);
-            uri.AppendPath("/files/", false);
-            uri.AppendPath(fileName, true);
-            uri.AppendQuery("api-version", _apiVersion, true);
-            request.Uri = uri;
-            request.Headers.Add("Accept", "application/json");
-            return message;
-        }
-
-        internal HttpMessage CreateGetTestRunsRequest(string orderby, string search, string testId, DateTimeOffset? executionFrom, DateTimeOffset? executionTo, string status, int? maxpagesize, RequestContext context)
-        {
-            var message = _pipeline.CreateMessage(context, ResponseClassifier200);
-            var request = message.Request;
-            request.Method = RequestMethod.Get;
-            var uri = new RawRequestUriBuilder();
-            uri.AppendRaw("https://", false);
-            uri.Reset(_endpoint);
-            uri.AppendPath("/test-runs", false);
-            if (orderby != null)
+            catch (Exception e)
             {
-                uri.AppendQuery("orderby", orderby, true);
+                scope.Failed(e);
+                throw;
             }
-            if (search != null)
+        }
+
+        /// <summary>
+        /// [Protocol Method] List the metric definitions for a load test run.
+        /// <list type="bullet">
+        /// <item>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
+        /// <param name="metricNamespace"> Metric namespace to query metric definitions for. </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> or <paramref name="metricNamespace"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> or <paramref name="metricNamespace"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        /// <returns> The response returned from the service. </returns>
+        public virtual async Task<Response> GetMetricDefinitionsAsync(string testRunId, string metricNamespace, RequestContext context)
+        {
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.GetMetricDefinitions");
+            scope.Start();
+            try
             {
-                uri.AppendQuery("search", search, true);
+                Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+                Argument.AssertNotNullOrEmpty(metricNamespace, nameof(metricNamespace));
+
+                using HttpMessage message = CreateGetMetricDefinitionsRequest(testRunId, metricNamespace, context);
+                return await Pipeline.ProcessMessageAsync(message, context).ConfigureAwait(false);
             }
-            if (testId != null)
+            catch (Exception e)
             {
-                uri.AppendQuery("testId", testId, true);
+                scope.Failed(e);
+                throw;
             }
-            if (executionFrom != null)
+        }
+
+        /// <summary> List the metric definitions for a load test run. </summary>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
+        /// <param name="metricNamespace"> Metric namespace to query metric definitions for. </param>
+        /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> or <paramref name="metricNamespace"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> or <paramref name="metricNamespace"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        public virtual Response<MetricDefinitions> GetMetricDefinitions(string testRunId, string metricNamespace, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+            Argument.AssertNotNullOrEmpty(metricNamespace, nameof(metricNamespace));
+
+            Response result = GetMetricDefinitions(testRunId, metricNamespace, cancellationToken.ToRequestContext());
+            return Response.FromValue((MetricDefinitions)result, result);
+        }
+
+        /// <summary> List the metric definitions for a load test run. </summary>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
+        /// <param name="metricNamespace"> Metric namespace to query metric definitions for. </param>
+        /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> or <paramref name="metricNamespace"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> or <paramref name="metricNamespace"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        public virtual async Task<Response<MetricDefinitions>> GetMetricDefinitionsAsync(string testRunId, string metricNamespace, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+            Argument.AssertNotNullOrEmpty(metricNamespace, nameof(metricNamespace));
+
+            Response result = await GetMetricDefinitionsAsync(testRunId, metricNamespace, cancellationToken.ToRequestContext()).ConfigureAwait(false);
+            return Response.FromValue((MetricDefinitions)result, result);
+        }
+
+        /// <summary>
+        /// [Protocol Method] List the metric namespaces for a load test run.
+        /// <list type="bullet">
+        /// <item>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        /// <returns> The response returned from the service. </returns>
+        public virtual Response GetMetricNamespaces(string testRunId, RequestContext context)
+        {
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.GetMetricNamespaces");
+            scope.Start();
+            try
             {
-                uri.AppendQuery("executionFrom", executionFrom.Value, "O", true);
+                Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+
+                using HttpMessage message = CreateGetMetricNamespacesRequest(testRunId, context);
+                return Pipeline.ProcessMessage(message, context);
             }
-            if (executionTo != null)
+            catch (Exception e)
             {
-                uri.AppendQuery("executionTo", executionTo.Value, "O", true);
+                scope.Failed(e);
+                throw;
             }
-            if (status != null)
+        }
+
+        /// <summary>
+        /// [Protocol Method] List the metric namespaces for a load test run.
+        /// <list type="bullet">
+        /// <item>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        /// <returns> The response returned from the service. </returns>
+        public virtual async Task<Response> GetMetricNamespacesAsync(string testRunId, RequestContext context)
+        {
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.GetMetricNamespaces");
+            scope.Start();
+            try
             {
-                uri.AppendQuery("status", status, true);
+                Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+
+                using HttpMessage message = CreateGetMetricNamespacesRequest(testRunId, context);
+                return await Pipeline.ProcessMessageAsync(message, context).ConfigureAwait(false);
             }
-            if (maxpagesize != null)
+            catch (Exception e)
             {
-                uri.AppendQuery("maxpagesize", maxpagesize.Value, true);
+                scope.Failed(e);
+                throw;
             }
-            uri.AppendQuery("api-version", _apiVersion, true);
-            request.Uri = uri;
-            request.Headers.Add("Accept", "application/json");
-            return message;
         }
 
-        internal HttpMessage CreateStopTestRunRequest(string testRunId, RequestContext context)
+        /// <summary> List the metric namespaces for a load test run. </summary>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
+        /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        public virtual Response<MetricNamespaces> GetMetricNamespaces(string testRunId, CancellationToken cancellationToken = default)
         {
-            var message = _pipeline.CreateMessage(context, ResponseClassifier200);
-            var request = message.Request;
-            request.Method = RequestMethod.Post;
-            var uri = new RawRequestUriBuilder();
-            uri.AppendRaw("https://", false);
-            uri.Reset(_endpoint);
-            uri.AppendPath("/test-runs/", false);
-            uri.AppendPath(testRunId, true);
-            uri.AppendPath(":stop", false);
-            uri.AppendQuery("api-version", _apiVersion, true);
-            request.Uri = uri;
-            request.Headers.Add("Accept", "application/json");
-            return message;
+            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+
+            Response result = GetMetricNamespaces(testRunId, cancellationToken.ToRequestContext());
+            return Response.FromValue((MetricNamespaces)result, result);
         }
 
-        internal HttpMessage CreateGetMetricNamespacesRequest(string testRunId, RequestContext context)
+        /// <summary> List the metric namespaces for a load test run. </summary>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
+        /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        public virtual async Task<Response<MetricNamespaces>> GetMetricNamespacesAsync(string testRunId, CancellationToken cancellationToken = default)
         {
-            var message = _pipeline.CreateMessage(context, ResponseClassifier200);
-            var request = message.Request;
-            request.Method = RequestMethod.Get;
-            var uri = new RawRequestUriBuilder();
-            uri.AppendRaw("https://", false);
-            uri.Reset(_endpoint);
-            uri.AppendPath("/test-runs/", false);
-            uri.AppendPath(testRunId, true);
-            uri.AppendPath("/metric-namespaces", false);
-            uri.AppendQuery("api-version", _apiVersion, true);
-            request.Uri = uri;
-            request.Headers.Add("Accept", "application/json");
-            return message;
+            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+
+            Response result = await GetMetricNamespacesAsync(testRunId, cancellationToken.ToRequestContext()).ConfigureAwait(false);
+            return Response.FromValue((MetricNamespaces)result, result);
         }
 
-        internal HttpMessage CreateGetMetricDefinitionsRequest(string testRunId, string metricNamespace, RequestContext context)
+        /// <summary>
+        /// [Protocol Method] List the metric values for a load test run.
+        /// <list type="bullet">
+        /// <item>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
+        /// <param name="metricname"> Metric name. </param>
+        /// <param name="metricNamespace"> Metric namespace to query metric definitions for. </param>
+        /// <param name="timespan"> The timespan of the query. It is a string with the following format 'startDateTime_ISO/endDateTime_ISO'. </param>
+        /// <param name="content"> The content to send as the body of the request. </param>
+        /// <param name="aggregation"> The aggregation. </param>
+        /// <param name="interval"> The interval (i.e. timegrain) of the query. </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/>, <paramref name="metricname"/>, <paramref name="metricNamespace"/> or <paramref name="timespan"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/>, <paramref name="metricname"/>, <paramref name="metricNamespace"/> or <paramref name="timespan"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        /// <returns> The response returned from the service. </returns>
+        public virtual Pageable<BinaryData> GetMetrics(string testRunId, string metricname, string metricNamespace, string timespan, RequestContent content, string aggregation = default, string interval = default, RequestContext context = null)
         {
-            var message = _pipeline.CreateMessage(context, ResponseClassifier200);
-            var request = message.Request;
-            request.Method = RequestMethod.Get;
-            var uri = new RawRequestUriBuilder();
-            uri.AppendRaw("https://", false);
-            uri.Reset(_endpoint);
-            uri.AppendPath("/test-runs/", false);
-            uri.AppendPath(testRunId, true);
-            uri.AppendPath("/metric-definitions", false);
-            uri.AppendQuery("metricNamespace", metricNamespace, true);
-            uri.AppendQuery("api-version", _apiVersion, true);
-            request.Uri = uri;
-            request.Headers.Add("Accept", "application/json");
-            return message;
+            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+            Argument.AssertNotNullOrEmpty(metricname, nameof(metricname));
+            Argument.AssertNotNullOrEmpty(metricNamespace, nameof(metricNamespace));
+            Argument.AssertNotNullOrEmpty(timespan, nameof(timespan));
+
+            return new LoadTestRunClientGetMetricsCollectionResult(
+                this,
+                testRunId,
+                metricname,
+                metricNamespace,
+                timespan,
+                content,
+                aggregation,
+                interval,
+                context);
         }
 
-        internal HttpMessage CreateGetMetricsRequest(string testRunId, string metricname, string metricNamespace, string timespan, RequestContent content, string aggregation, string interval, RequestContext context)
+        /// <summary>
+        /// [Protocol Method] List the metric values for a load test run.
+        /// <list type="bullet">
+        /// <item>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
+        /// <param name="metricname"> Metric name. </param>
+        /// <param name="metricNamespace"> Metric namespace to query metric definitions for. </param>
+        /// <param name="timespan"> The timespan of the query. It is a string with the following format 'startDateTime_ISO/endDateTime_ISO'. </param>
+        /// <param name="content"> The content to send as the body of the request. </param>
+        /// <param name="aggregation"> The aggregation. </param>
+        /// <param name="interval"> The interval (i.e. timegrain) of the query. </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/>, <paramref name="metricname"/>, <paramref name="metricNamespace"/> or <paramref name="timespan"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/>, <paramref name="metricname"/>, <paramref name="metricNamespace"/> or <paramref name="timespan"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        /// <returns> The response returned from the service. </returns>
+        public virtual AsyncPageable<BinaryData> GetMetricsAsync(string testRunId, string metricname, string metricNamespace, string timespan, RequestContent content, string aggregation = default, string interval = default, RequestContext context = null)
         {
-            var message = _pipeline.CreateMessage(context, ResponseClassifier200);
-            var request = message.Request;
-            request.Method = RequestMethod.Post;
-            var uri = new RawRequestUriBuilder();
-            uri.AppendRaw("https://", false);
-            uri.Reset(_endpoint);
-            uri.AppendPath("/test-runs/", false);
-            uri.AppendPath(testRunId, true);
-            uri.AppendPath("/metrics", false);
-            uri.AppendQuery("metricname", metricname, true);
-            uri.AppendQuery("metricNamespace", metricNamespace, true);
-            uri.AppendQuery("timespan", timespan, true);
-            if (aggregation != null)
+            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+            Argument.AssertNotNullOrEmpty(metricname, nameof(metricname));
+            Argument.AssertNotNullOrEmpty(metricNamespace, nameof(metricNamespace));
+            Argument.AssertNotNullOrEmpty(timespan, nameof(timespan));
+
+            return new LoadTestRunClientGetMetricsAsyncCollectionResult(
+                this,
+                testRunId,
+                metricname,
+                metricNamespace,
+                timespan,
+                content,
+                aggregation,
+                interval,
+                context);
+        }
+
+        /// <summary> List the metric values for a load test run. </summary>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
+        /// <param name="metricname"> Metric name. </param>
+        /// <param name="metricNamespace"> Metric namespace to query metric definitions for. </param>
+        /// <param name="timespan"> The timespan of the query. It is a string with the following format 'startDateTime_ISO/endDateTime_ISO'. </param>
+        /// <param name="body"> Metric dimension filter . </param>
+        /// <param name="aggregation"> The aggregation. </param>
+        /// <param name="interval"> The interval (i.e. timegrain) of the query. </param>
+        /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/>, <paramref name="metricname"/>, <paramref name="metricNamespace"/> or <paramref name="timespan"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/>, <paramref name="metricname"/>, <paramref name="metricNamespace"/> or <paramref name="timespan"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        public virtual Pageable<TimeSeriesElement> GetMetrics(string testRunId, string metricname, string metricNamespace, string timespan, MetricsFilters body = default, string aggregation = default, TimeGrain? interval = default, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+            Argument.AssertNotNullOrEmpty(metricname, nameof(metricname));
+            Argument.AssertNotNullOrEmpty(metricNamespace, nameof(metricNamespace));
+            Argument.AssertNotNullOrEmpty(timespan, nameof(timespan));
+
+            return new LoadTestRunClientGetMetricsCollectionResultOfT(
+                this,
+                testRunId,
+                metricname,
+                metricNamespace,
+                timespan,
+                body,
+                aggregation,
+                interval?.ToString(),
+                cancellationToken.ToRequestContext());
+        }
+
+        /// <summary> List the metric values for a load test run. </summary>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
+        /// <param name="metricname"> Metric name. </param>
+        /// <param name="metricNamespace"> Metric namespace to query metric definitions for. </param>
+        /// <param name="timespan"> The timespan of the query. It is a string with the following format 'startDateTime_ISO/endDateTime_ISO'. </param>
+        /// <param name="body"> Metric dimension filter . </param>
+        /// <param name="aggregation"> The aggregation. </param>
+        /// <param name="interval"> The interval (i.e. timegrain) of the query. </param>
+        /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/>, <paramref name="metricname"/>, <paramref name="metricNamespace"/> or <paramref name="timespan"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/>, <paramref name="metricname"/>, <paramref name="metricNamespace"/> or <paramref name="timespan"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        public virtual AsyncPageable<TimeSeriesElement> GetMetricsAsync(string testRunId, string metricname, string metricNamespace, string timespan, MetricsFilters body = default, string aggregation = default, TimeGrain? interval = default, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+            Argument.AssertNotNullOrEmpty(metricname, nameof(metricname));
+            Argument.AssertNotNullOrEmpty(metricNamespace, nameof(metricNamespace));
+            Argument.AssertNotNullOrEmpty(timespan, nameof(timespan));
+
+            return new LoadTestRunClientGetMetricsAsyncCollectionResultOfT(
+                this,
+                testRunId,
+                metricname,
+                metricNamespace,
+                timespan,
+                body,
+                aggregation,
+                interval?.ToString(),
+                cancellationToken.ToRequestContext());
+        }
+
+        /// <summary>
+        /// [Protocol Method] Get all test runs for the given filters.
+        /// <list type="bullet">
+        /// <item>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="orderby">
+        /// Sort on the supported fields in (field asc/desc) format. eg: executedDateTime
+        /// asc. Supported fields - executedDateTime
+        /// </param>
+        /// <param name="search">
+        /// Prefix based, case sensitive search on searchable fields - description,
+        /// executedUser. For example, to search for a test run, with description 500 VUs,
+        /// the search parameter can be 500.
+        /// </param>
+        /// <param name="testId"> Unique name of an existing load test. </param>
+        /// <param name="executionFrom"> Start DateTime(RFC 3339 literal format) of test-run execution time filter range. </param>
+        /// <param name="executionTo"> End DateTime(RFC 3339 literal format) of test-run execution time filter range. </param>
+        /// <param name="status"> Comma separated list of test run status. </param>
+        /// <param name="maxPageSize"> Number of results in response. </param>
+        /// <param name="createdByTypes"> Comma separated list of type of entities that have created the test run. </param>
+        /// <param name="testIds"> Comma-separated list of test IDs. If you are using testIds, do not send a value for testId. </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        /// <returns> The response returned from the service. </returns>
+        public virtual Pageable<BinaryData> GetTestRuns(string @orderby, string search, string testId, DateTimeOffset? executionFrom, DateTimeOffset? executionTo, string status, int? maxPageSize, IEnumerable<string> createdByTypes, IEnumerable<string> testIds, RequestContext context)
+        {
+            return new LoadTestRunClientGetTestRunsCollectionResult(
+                this,
+                @orderby,
+                search,
+                testId,
+                executionFrom,
+                executionTo,
+                status,
+                maxPageSize,
+                createdByTypes,
+                testIds,
+                context);
+        }
+
+        /// <summary>
+        /// [Protocol Method] Get all test runs for the given filters.
+        /// <list type="bullet">
+        /// <item>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="orderby">
+        /// Sort on the supported fields in (field asc/desc) format. eg: executedDateTime
+        /// asc. Supported fields - executedDateTime
+        /// </param>
+        /// <param name="search">
+        /// Prefix based, case sensitive search on searchable fields - description,
+        /// executedUser. For example, to search for a test run, with description 500 VUs,
+        /// the search parameter can be 500.
+        /// </param>
+        /// <param name="testId"> Unique name of an existing load test. </param>
+        /// <param name="executionFrom"> Start DateTime(RFC 3339 literal format) of test-run execution time filter range. </param>
+        /// <param name="executionTo"> End DateTime(RFC 3339 literal format) of test-run execution time filter range. </param>
+        /// <param name="status"> Comma separated list of test run status. </param>
+        /// <param name="maxPageSize"> Number of results in response. </param>
+        /// <param name="createdByTypes"> Comma separated list of type of entities that have created the test run. </param>
+        /// <param name="testIds"> Comma-separated list of test IDs. If you are using testIds, do not send a value for testId. </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        /// <returns> The response returned from the service. </returns>
+        public virtual AsyncPageable<BinaryData> GetTestRunsAsync(string @orderby, string search, string testId, DateTimeOffset? executionFrom, DateTimeOffset? executionTo, string status, int? maxPageSize, IEnumerable<string> createdByTypes, IEnumerable<string> testIds, RequestContext context)
+        {
+            return new LoadTestRunClientGetTestRunsAsyncCollectionResult(
+                this,
+                @orderby,
+                search,
+                testId,
+                executionFrom,
+                executionTo,
+                status,
+                maxPageSize,
+                createdByTypes,
+                testIds,
+                context);
+        }
+
+        /// <summary> Get all test runs for the given filters. </summary>
+        /// <param name="orderby">
+        /// Sort on the supported fields in (field asc/desc) format. eg: executedDateTime
+        /// asc. Supported fields - executedDateTime
+        /// </param>
+        /// <param name="search">
+        /// Prefix based, case sensitive search on searchable fields - description,
+        /// executedUser. For example, to search for a test run, with description 500 VUs,
+        /// the search parameter can be 500.
+        /// </param>
+        /// <param name="testId"> Unique name of an existing load test. </param>
+        /// <param name="executionFrom"> Start DateTime(RFC 3339 literal format) of test-run execution time filter range. </param>
+        /// <param name="executionTo"> End DateTime(RFC 3339 literal format) of test-run execution time filter range. </param>
+        /// <param name="status"> Comma separated list of test run status. </param>
+        /// <param name="maxPageSize"> Number of results in response. </param>
+        /// <param name="createdByTypes"> Comma separated list of type of entities that have created the test run. </param>
+        /// <param name="testIds"> Comma-separated list of test IDs. If you are using testIds, do not send a value for testId. </param>
+        /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        public virtual Pageable<LoadTestRun> GetTestRuns(string @orderby = default, string search = default, string testId = default, DateTimeOffset? executionFrom = default, DateTimeOffset? executionTo = default, string status = default, int? maxPageSize = default, IEnumerable<string> createdByTypes = default, IEnumerable<string> testIds = default, CancellationToken cancellationToken = default)
+        {
+            return new LoadTestRunClientGetTestRunsCollectionResultOfT(
+                this,
+                @orderby,
+                search,
+                testId,
+                executionFrom,
+                executionTo,
+                status,
+                maxPageSize,
+                createdByTypes,
+                testIds,
+                cancellationToken.ToRequestContext());
+        }
+
+        /// <summary> Get all test runs for the given filters. </summary>
+        /// <param name="orderby">
+        /// Sort on the supported fields in (field asc/desc) format. eg: executedDateTime
+        /// asc. Supported fields - executedDateTime
+        /// </param>
+        /// <param name="search">
+        /// Prefix based, case sensitive search on searchable fields - description,
+        /// executedUser. For example, to search for a test run, with description 500 VUs,
+        /// the search parameter can be 500.
+        /// </param>
+        /// <param name="testId"> Unique name of an existing load test. </param>
+        /// <param name="executionFrom"> Start DateTime(RFC 3339 literal format) of test-run execution time filter range. </param>
+        /// <param name="executionTo"> End DateTime(RFC 3339 literal format) of test-run execution time filter range. </param>
+        /// <param name="status"> Comma separated list of test run status. </param>
+        /// <param name="maxPageSize"> Number of results in response. </param>
+        /// <param name="createdByTypes"> Comma separated list of type of entities that have created the test run. </param>
+        /// <param name="testIds"> Comma-separated list of test IDs. If you are using testIds, do not send a value for testId. </param>
+        /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        public virtual AsyncPageable<LoadTestRun> GetTestRunsAsync(string @orderby = default, string search = default, string testId = default, DateTimeOffset? executionFrom = default, DateTimeOffset? executionTo = default, string status = default, int? maxPageSize = default, IEnumerable<string> createdByTypes = default, IEnumerable<string> testIds = default, CancellationToken cancellationToken = default)
+        {
+            return new LoadTestRunClientGetTestRunsAsyncCollectionResultOfT(
+                this,
+                @orderby,
+                search,
+                testId,
+                executionFrom,
+                executionTo,
+                status,
+                maxPageSize,
+                createdByTypes,
+                testIds,
+                cancellationToken.ToRequestContext());
+        }
+
+        /// <summary>
+        /// [Protocol Method] Stop test run by test run Id.
+        /// <list type="bullet">
+        /// <item>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="testRunId"> Unique test run identifier for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        /// <returns> The response returned from the service. </returns>
+        public virtual Response StopTestRun(string testRunId, RequestContext context)
+        {
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.StopTestRun");
+            scope.Start();
+            try
             {
-                uri.AppendQuery("aggregation", aggregation, true);
+                Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+
+                using HttpMessage message = CreateStopTestRunRequest(testRunId, context);
+                return Pipeline.ProcessMessage(message, context);
             }
-            if (interval != null)
+            catch (Exception e)
             {
-                uri.AppendQuery("interval", interval, true);
+                scope.Failed(e);
+                throw;
             }
-            uri.AppendQuery("api-version", _apiVersion, true);
-            request.Uri = uri;
-            request.Headers.Add("Accept", "application/json");
-            request.Headers.Add("Content-Type", "application/json");
-            request.Content = content;
-            return message;
         }
 
-        internal HttpMessage CreateGetMetricDimensionValuesRequest(string testRunId, string name, string metricName, string metricNamespace, string timeInterval, string interval, RequestContext context)
+        /// <summary>
+        /// [Protocol Method] Stop test run by test run Id.
+        /// <list type="bullet">
+        /// <item>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="testRunId"> Unique test run identifier for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        /// <returns> The response returned from the service. </returns>
+        public virtual async Task<Response> StopTestRunAsync(string testRunId, RequestContext context)
         {
-            var message = _pipeline.CreateMessage(context, ResponseClassifier200);
-            var request = message.Request;
-            request.Method = RequestMethod.Get;
-            var uri = new RawRequestUriBuilder();
-            uri.AppendRaw("https://", false);
-            uri.Reset(_endpoint);
-            uri.AppendPath("/test-runs/", false);
-            uri.AppendPath(testRunId, true);
-            uri.AppendPath("/metric-dimensions/", false);
-            uri.AppendPath(name, true);
-            uri.AppendPath("/values", false);
-            uri.AppendQuery("metricname", metricName, true);
-            uri.AppendQuery("metricNamespace", metricNamespace, true);
-            uri.AppendQuery("timespan", timeInterval, true);
-            if (interval != null)
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.StopTestRun");
+            scope.Start();
+            try
             {
-                uri.AppendQuery("interval", interval, true);
+                Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+
+                using HttpMessage message = CreateStopTestRunRequest(testRunId, context);
+                return await Pipeline.ProcessMessageAsync(message, context).ConfigureAwait(false);
             }
-            uri.AppendQuery("api-version", _apiVersion, true);
-            request.Uri = uri;
-            request.Headers.Add("Accept", "application/json");
-            return message;
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
         }
 
-        internal HttpMessage CreateCreateOrUpdateAppComponentsRequest(string testRunId, RequestContent content, RequestContext context)
+        /// <summary> Stop test run by test run Id. </summary>
+        /// <param name="testRunId"> Unique test run identifier for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        public virtual Response<LoadTestRun> StopTestRun(string testRunId, CancellationToken cancellationToken = default)
         {
-            var message = _pipeline.CreateMessage(context, ResponseClassifier200201);
-            var request = message.Request;
-            request.Method = RequestMethod.Patch;
-            var uri = new RawRequestUriBuilder();
-            uri.AppendRaw("https://", false);
-            uri.Reset(_endpoint);
-            uri.AppendPath("/test-runs/", false);
-            uri.AppendPath(testRunId, true);
-            uri.AppendPath("/app-components", false);
-            uri.AppendQuery("api-version", _apiVersion, true);
-            request.Uri = uri;
-            request.Headers.Add("Accept", "application/json");
-            request.Headers.Add("Content-Type", "application/merge-patch+json");
-            request.Content = content;
-            return message;
+            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+
+            Response result = StopTestRun(testRunId, cancellationToken.ToRequestContext());
+            return Response.FromValue((LoadTestRun)result, result);
         }
 
-        internal HttpMessage CreateGetAppComponentsRequest(string testRunId, RequestContext context)
+        /// <summary> Stop test run by test run Id. </summary>
+        /// <param name="testRunId"> Unique test run identifier for the load test run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        public virtual async Task<Response<LoadTestRun>> StopTestRunAsync(string testRunId, CancellationToken cancellationToken = default)
         {
-            var message = _pipeline.CreateMessage(context, ResponseClassifier200);
-            var request = message.Request;
-            request.Method = RequestMethod.Get;
-            var uri = new RawRequestUriBuilder();
-            uri.AppendRaw("https://", false);
-            uri.Reset(_endpoint);
-            uri.AppendPath("/test-runs/", false);
-            uri.AppendPath(testRunId, true);
-            uri.AppendPath("/app-components", false);
-            uri.AppendQuery("api-version", _apiVersion, true);
-            request.Uri = uri;
-            request.Headers.Add("Accept", "application/json");
-            return message;
+            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+
+            Response result = await StopTestRunAsync(testRunId, cancellationToken.ToRequestContext()).ConfigureAwait(false);
+            return Response.FromValue((LoadTestRun)result, result);
         }
 
-        internal HttpMessage CreateCreateOrUpdateServerMetricsConfigRequest(string testRunId, RequestContent content, RequestContext context)
+        /// <summary>
+        /// [Protocol Method] Create and start a new test profile run with the given test profile run Id.
+        /// <list type="bullet">
+        /// <item>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="testProfileRunId"> Unique identifier for the test profile run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="content"> The content to send as the body of the request. </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        /// <returns> The response returned from the service. </returns>
+        internal virtual Response CreateOrUpdateTestProfileRun(string testProfileRunId, RequestContent content, RequestContext context = null)
         {
-            var message = _pipeline.CreateMessage(context, ResponseClassifier200201);
-            var request = message.Request;
-            request.Method = RequestMethod.Patch;
-            var uri = new RawRequestUriBuilder();
-            uri.AppendRaw("https://", false);
-            uri.Reset(_endpoint);
-            uri.AppendPath("/test-runs/", false);
-            uri.AppendPath(testRunId, true);
-            uri.AppendPath("/server-metrics-config", false);
-            uri.AppendQuery("api-version", _apiVersion, true);
-            request.Uri = uri;
-            request.Headers.Add("Accept", "application/json");
-            request.Headers.Add("Content-Type", "application/merge-patch+json");
-            request.Content = content;
-            return message;
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.CreateOrUpdateTestProfileRun");
+            scope.Start();
+            try
+            {
+                using HttpMessage message = CreateCreateOrUpdateTestProfileRunRequest(testProfileRunId, content, context);
+                return Pipeline.ProcessMessage(message, context);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
         }
 
-        internal HttpMessage CreateGetServerMetricsConfigRequest(string testRunId, RequestContext context)
+        /// <summary>
+        /// [Protocol Method] Create and start a new test profile run with the given test profile run Id.
+        /// <list type="bullet">
+        /// <item>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="testProfileRunId"> Unique identifier for the test profile run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="content"> The content to send as the body of the request. </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        /// <returns> The response returned from the service. </returns>
+        internal virtual async Task<Response> CreateOrUpdateTestProfileRunAsync(string testProfileRunId, RequestContent content, RequestContext context = null)
         {
-            var message = _pipeline.CreateMessage(context, ResponseClassifier200);
-            var request = message.Request;
-            request.Method = RequestMethod.Get;
-            var uri = new RawRequestUriBuilder();
-            uri.AppendRaw("https://", false);
-            uri.Reset(_endpoint);
-            uri.AppendPath("/test-runs/", false);
-            uri.AppendPath(testRunId, true);
-            uri.AppendPath("/server-metrics-config", false);
-            uri.AppendQuery("api-version", _apiVersion, true);
-            request.Uri = uri;
-            request.Headers.Add("Accept", "application/json");
-            return message;
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.CreateOrUpdateTestProfileRun");
+            scope.Start();
+            try
+            {
+                using HttpMessage message = CreateCreateOrUpdateTestProfileRunRequest(testProfileRunId, content, context);
+                return await Pipeline.ProcessMessageAsync(message, context).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
         }
 
-        internal HttpMessage CreateGetTestRunsNextPageRequest(string nextLink, string orderby, string search, string testId, DateTimeOffset? executionFrom, DateTimeOffset? executionTo, string status, int? maxpagesize, RequestContext context)
+        /// <summary>
+        /// [Protocol Method] Delete an existing load test profile run by providing the test profile run Id.
+        /// <list type="bullet">
+        /// <item>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="testProfileRunId"> Unique identifier for the test profile run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testProfileRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testProfileRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        /// <returns> The response returned from the service. </returns>
+        public virtual Response DeleteTestProfileRun(string testProfileRunId, RequestContext context)
         {
-            var message = _pipeline.CreateMessage(context, ResponseClassifier200);
-            var request = message.Request;
-            request.Method = RequestMethod.Get;
-            var uri = new RawRequestUriBuilder();
-            uri.AppendRaw("https://", false);
-            uri.Reset(_endpoint);
-            uri.AppendRawNextLink(nextLink, false);
-            request.Uri = uri;
-            request.Headers.Add("Accept", "application/json");
-            return message;
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.DeleteTestProfileRun");
+            scope.Start();
+            try
+            {
+                Argument.AssertNotNullOrEmpty(testProfileRunId, nameof(testProfileRunId));
+
+                using HttpMessage message = CreateDeleteTestProfileRunRequest(testProfileRunId, context);
+                return Pipeline.ProcessMessage(message, context);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
         }
 
-        internal HttpMessage CreateGetMetricsNextPageRequest(string nextLink, string testRunId, string metricname, string metricNamespace, string timespan, RequestContent content, string aggregation, string interval, RequestContext context)
+        /// <summary>
+        /// [Protocol Method] Delete an existing load test profile run by providing the test profile run Id.
+        /// <list type="bullet">
+        /// <item>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="testProfileRunId"> Unique identifier for the test profile run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testProfileRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testProfileRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        /// <returns> The response returned from the service. </returns>
+        public virtual async Task<Response> DeleteTestProfileRunAsync(string testProfileRunId, RequestContext context)
         {
-            var message = _pipeline.CreateMessage(context, ResponseClassifier200);
-            var request = message.Request;
-            request.Method = RequestMethod.Get;
-            var uri = new RawRequestUriBuilder();
-            uri.AppendRaw("https://", false);
-            uri.Reset(_endpoint);
-            uri.AppendRawNextLink(nextLink, false);
-            request.Uri = uri;
-            request.Headers.Add("Accept", "application/json");
-            return message;
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.DeleteTestProfileRun");
+            scope.Start();
+            try
+            {
+                Argument.AssertNotNullOrEmpty(testProfileRunId, nameof(testProfileRunId));
+
+                using HttpMessage message = CreateDeleteTestProfileRunRequest(testProfileRunId, context);
+                return await Pipeline.ProcessMessageAsync(message, context).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
         }
 
-        internal HttpMessage CreateGetMetricDimensionValuesNextPageRequest(string nextLink, string testRunId, string name, string metricName, string metricNamespace, string timeInterval, string interval, RequestContext context)
+        /// <summary> Delete an existing load test profile run by providing the test profile run Id. </summary>
+        /// <param name="testProfileRunId"> Unique identifier for the test profile run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testProfileRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testProfileRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        public virtual Response DeleteTestProfileRun(string testProfileRunId, CancellationToken cancellationToken = default)
         {
-            var message = _pipeline.CreateMessage(context, ResponseClassifier200);
-            var request = message.Request;
-            request.Method = RequestMethod.Get;
-            var uri = new RawRequestUriBuilder();
-            uri.AppendRaw("https://", false);
-            uri.Reset(_endpoint);
-            uri.AppendRawNextLink(nextLink, false);
-            request.Uri = uri;
-            request.Headers.Add("Accept", "application/json");
-            return message;
+            Argument.AssertNotNullOrEmpty(testProfileRunId, nameof(testProfileRunId));
+
+            return DeleteTestProfileRun(testProfileRunId, cancellationToken.ToRequestContext());
         }
 
-        private static ResponseClassifier _responseClassifier200201;
-        private static ResponseClassifier ResponseClassifier200201 => _responseClassifier200201 ??= new StatusCodeClassifier(stackalloc ushort[] { 200, 201 });
-        private static ResponseClassifier _responseClassifier200;
-        private static ResponseClassifier ResponseClassifier200 => _responseClassifier200 ??= new StatusCodeClassifier(stackalloc ushort[] { 200 });
-        private static ResponseClassifier _responseClassifier204;
-        private static ResponseClassifier ResponseClassifier204 => _responseClassifier204 ??= new StatusCodeClassifier(stackalloc ushort[] { 204 });
+        /// <summary> Delete an existing load test profile run by providing the test profile run Id. </summary>
+        /// <param name="testProfileRunId"> Unique identifier for the test profile run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testProfileRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testProfileRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        public virtual async Task<Response> DeleteTestProfileRunAsync(string testProfileRunId, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(testProfileRunId, nameof(testProfileRunId));
+
+            return await DeleteTestProfileRunAsync(testProfileRunId, cancellationToken.ToRequestContext()).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// [Protocol Method] Get test profile run details by test profile run Id.
+        /// <list type="bullet">
+        /// <item>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="testProfileRunId"> Unique identifier for the test profile run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testProfileRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testProfileRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        /// <returns> The response returned from the service. </returns>
+        public virtual Response GetTestProfileRun(string testProfileRunId, RequestContext context)
+        {
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.GetTestProfileRun");
+            scope.Start();
+            try
+            {
+                Argument.AssertNotNullOrEmpty(testProfileRunId, nameof(testProfileRunId));
+
+                using HttpMessage message = CreateGetTestProfileRunRequest(testProfileRunId, context);
+                return Pipeline.ProcessMessage(message, context);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// [Protocol Method] Get test profile run details by test profile run Id.
+        /// <list type="bullet">
+        /// <item>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="testProfileRunId"> Unique identifier for the test profile run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testProfileRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testProfileRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        /// <returns> The response returned from the service. </returns>
+        public virtual async Task<Response> GetTestProfileRunAsync(string testProfileRunId, RequestContext context)
+        {
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.GetTestProfileRun");
+            scope.Start();
+            try
+            {
+                Argument.AssertNotNullOrEmpty(testProfileRunId, nameof(testProfileRunId));
+
+                using HttpMessage message = CreateGetTestProfileRunRequest(testProfileRunId, context);
+                return await Pipeline.ProcessMessageAsync(message, context).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary> Get test profile run details by test profile run Id. </summary>
+        /// <param name="testProfileRunId"> Unique identifier for the test profile run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testProfileRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testProfileRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        public virtual Response<TestProfileRun> GetTestProfileRun(string testProfileRunId, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(testProfileRunId, nameof(testProfileRunId));
+
+            Response result = GetTestProfileRun(testProfileRunId, cancellationToken.ToRequestContext());
+            return Response.FromValue((TestProfileRun)result, result);
+        }
+
+        /// <summary> Get test profile run details by test profile run Id. </summary>
+        /// <param name="testProfileRunId"> Unique identifier for the test profile run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testProfileRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testProfileRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        public virtual async Task<Response<TestProfileRun>> GetTestProfileRunAsync(string testProfileRunId, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(testProfileRunId, nameof(testProfileRunId));
+
+            Response result = await GetTestProfileRunAsync(testProfileRunId, cancellationToken.ToRequestContext()).ConfigureAwait(false);
+            return Response.FromValue((TestProfileRun)result, result);
+        }
+
+        /// <summary>
+        /// [Protocol Method] Stop test profile run for the given test profile run Id.
+        /// <list type="bullet">
+        /// <item>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="testProfileRunId"> Unique identifier for the test profile run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testProfileRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testProfileRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        /// <returns> The response returned from the service. </returns>
+        public virtual Response StopTestProfileRun(string testProfileRunId, RequestContext context)
+        {
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.StopTestProfileRun");
+            scope.Start();
+            try
+            {
+                Argument.AssertNotNullOrEmpty(testProfileRunId, nameof(testProfileRunId));
+
+                using HttpMessage message = CreateStopTestProfileRunRequest(testProfileRunId, context);
+                return Pipeline.ProcessMessage(message, context);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// [Protocol Method] Stop test profile run for the given test profile run Id.
+        /// <list type="bullet">
+        /// <item>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="testProfileRunId"> Unique identifier for the test profile run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testProfileRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testProfileRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        /// <returns> The response returned from the service. </returns>
+        public virtual async Task<Response> StopTestProfileRunAsync(string testProfileRunId, RequestContext context)
+        {
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.StopTestProfileRun");
+            scope.Start();
+            try
+            {
+                Argument.AssertNotNullOrEmpty(testProfileRunId, nameof(testProfileRunId));
+
+                using HttpMessage message = CreateStopTestProfileRunRequest(testProfileRunId, context);
+                return await Pipeline.ProcessMessageAsync(message, context).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary> Stop test profile run for the given test profile run Id. </summary>
+        /// <param name="testProfileRunId"> Unique identifier for the test profile run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testProfileRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testProfileRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        public virtual Response<TestProfileRun> StopTestProfileRun(string testProfileRunId, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(testProfileRunId, nameof(testProfileRunId));
+
+            Response result = StopTestProfileRun(testProfileRunId, cancellationToken.ToRequestContext());
+            return Response.FromValue((TestProfileRun)result, result);
+        }
+
+        /// <summary> Stop test profile run for the given test profile run Id. </summary>
+        /// <param name="testProfileRunId"> Unique identifier for the test profile run, must contain only lower-case alphabetic, numeric, underscore or hyphen characters. </param>
+        /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testProfileRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testProfileRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        public virtual async Task<Response<TestProfileRun>> StopTestProfileRunAsync(string testProfileRunId, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(testProfileRunId, nameof(testProfileRunId));
+
+            Response result = await StopTestProfileRunAsync(testProfileRunId, cancellationToken.ToRequestContext()).ConfigureAwait(false);
+            return Response.FromValue((TestProfileRun)result, result);
+        }
+
+        /// <summary>
+        /// [Protocol Method] Get the latest insights for the test run.
+        /// <list type="bullet">
+        /// <item>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        /// <returns> The response returned from the service. </returns>
+        public virtual Response GetLatestTestRunInsights(string testRunId, RequestContext context)
+        {
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.GetLatestTestRunInsights");
+            scope.Start();
+            try
+            {
+                Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+
+                using HttpMessage message = CreateGetLatestTestRunInsightsRequest(testRunId, context);
+                return Pipeline.ProcessMessage(message, context);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// [Protocol Method] Get the latest insights for the test run.
+        /// <list type="bullet">
+        /// <item>
+        /// <description> This <see href="https://aka.ms/azsdk/net/protocol-methods">protocol method</see> allows explicit creation of the request and processing of the response for advanced scenarios. </description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        /// <returns> The response returned from the service. </returns>
+        public virtual async Task<Response> GetLatestTestRunInsightsAsync(string testRunId, RequestContext context)
+        {
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.GetLatestTestRunInsights");
+            scope.Start();
+            try
+            {
+                Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+
+                using HttpMessage message = CreateGetLatestTestRunInsightsRequest(testRunId, context);
+                return await Pipeline.ProcessMessageAsync(message, context).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary> Get the latest insights for the test run. </summary>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
+        /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        public virtual Response<TestRunInsights> GetLatestTestRunInsights(string testRunId, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+
+            Response result = GetLatestTestRunInsights(testRunId, cancellationToken.ToRequestContext());
+            return Response.FromValue((TestRunInsights)result, result);
+        }
+
+        /// <summary> Get the latest insights for the test run. </summary>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
+        /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
+        public virtual async Task<Response<TestRunInsights>> GetLatestTestRunInsightsAsync(string testRunId, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+
+            Response result = await GetLatestTestRunInsightsAsync(testRunId, cancellationToken.ToRequestContext()).ConfigureAwait(false);
+            return Response.FromValue((TestRunInsights)result, result);
+        }
+
+        /// <summary> Generate insights for the test run. </summary>
+        /// <param name="waitUntil"> <see cref="WaitUntil.Completed"/> if the method should wait to return until the long-running operation has completed on the service; <see cref="WaitUntil.Started"/> if it should return after starting the operation. For more information on long-running operations, please see <see href="https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/LongRunningOperations.md"> Azure.Core Long-Running Operation samples</see>. </param>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <returns> The response returned from the service. </returns>
+        public virtual Operation GenerateTestRunInsights(WaitUntil waitUntil, string testRunId, RequestContext context)
+        {
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.GenerateTestRunInsights");
+            scope.Start();
+            try
+            {
+                Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+
+                using HttpMessage message = CreateGenerateTestRunInsightsRequest(testRunId, context);
+                return ProtocolOperationHelpers.ProcessMessage(Pipeline, message, ClientDiagnostics, "LoadTestRunClient.GenerateTestRunInsights", OperationFinalStateVia.OperationLocation, context, waitUntil);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary> Generate insights for the test run. </summary>
+        /// <param name="waitUntil"> <see cref="WaitUntil.Completed"/> if the method should wait to return until the long-running operation has completed on the service; <see cref="WaitUntil.Started"/> if it should return after starting the operation. For more information on long-running operations, please see <see href="https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/LongRunningOperations.md"> Azure.Core Long-Running Operation samples</see>. </param>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
+        /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <returns> The response returned from the service. </returns>
+        public virtual async Task<Operation> GenerateTestRunInsightsAsync(WaitUntil waitUntil, string testRunId, RequestContext context)
+        {
+            using DiagnosticScope scope = ClientDiagnostics.CreateScope("LoadTestRunClient.GenerateTestRunInsights");
+            scope.Start();
+            try
+            {
+                Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+
+                using HttpMessage message = CreateGenerateTestRunInsightsRequest(testRunId, context);
+                return await ProtocolOperationHelpers.ProcessMessageAsync(Pipeline, message, ClientDiagnostics, "LoadTestRunClient.GenerateTestRunInsightsAsync", OperationFinalStateVia.OperationLocation, context, waitUntil).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary> Generate insights for the test run. </summary>
+        /// <param name="waitUntil"> <see cref="WaitUntil.Completed"/> if the method should wait to return until the long-running operation has completed on the service; <see cref="WaitUntil.Started"/> if it should return after starting the operation. For more information on long-running operations, please see <see href="https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/LongRunningOperations.md"> Azure.Core Long-Running Operation samples</see>. </param>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
+        /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        public virtual Operation GenerateTestRunInsights(WaitUntil waitUntil, string testRunId, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+
+            return GenerateTestRunInsights(waitUntil, testRunId, cancellationToken.ToRequestContext());
+        }
+
+        /// <summary> Generate insights for the test run. </summary>
+        /// <param name="waitUntil"> <see cref="WaitUntil.Completed"/> if the method should wait to return until the long-running operation has completed on the service; <see cref="WaitUntil.Started"/> if it should return after starting the operation. For more information on long-running operations, please see <see href="https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/LongRunningOperations.md"> Azure.Core Long-Running Operation samples</see>. </param>
+        /// <param name="testRunId">
+        /// Unique name for the load test run, must contain only lower-case alphabetic,
+        /// numeric, underscore or hyphen characters.
+        /// </param>
+        /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="testRunId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="testRunId"/> is an empty string, and was expected to be non-empty. </exception>
+        public virtual async Task<Operation> GenerateTestRunInsightsAsync(WaitUntil waitUntil, string testRunId, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(testRunId, nameof(testRunId));
+
+            return await GenerateTestRunInsightsAsync(waitUntil, testRunId, cancellationToken.ToRequestContext()).ConfigureAwait(false);
+        }
     }
 }

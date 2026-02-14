@@ -1,5 +1,11 @@
 namespace Azure.Health.Insights.CancerProfiling
 {
+    public partial class AzureHealthInsightsCancerProfilingContext : System.ClientModel.Primitives.ModelReaderWriterContext
+    {
+        internal AzureHealthInsightsCancerProfilingContext() { }
+        public static Azure.Health.Insights.CancerProfiling.AzureHealthInsightsCancerProfilingContext Default { get { throw null; } }
+        protected override bool TryGetTypeBuilderCore(System.Type type, out System.ClientModel.Primitives.ModelReaderWriterTypeBuilder builder) { throw null; }
+    }
     public partial class CancerProfilingClient
     {
         protected CancerProfilingClient() { }
@@ -48,9 +54,7 @@ namespace Azure.Health.Insights.CancerProfiling
         public static Azure.Health.Insights.CancerProfiling.ClinicalDocumentType Procedure { get { throw null; } }
         public static Azure.Health.Insights.CancerProfiling.ClinicalDocumentType Progress { get { throw null; } }
         public bool Equals(Azure.Health.Insights.CancerProfiling.ClinicalDocumentType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.CancerProfiling.ClinicalDocumentType left, Azure.Health.Insights.CancerProfiling.ClinicalDocumentType right) { throw null; }
         public static implicit operator Azure.Health.Insights.CancerProfiling.ClinicalDocumentType (string value) { throw null; }
@@ -92,9 +96,7 @@ namespace Azure.Health.Insights.CancerProfiling
         public static Azure.Health.Insights.CancerProfiling.DocumentContentSourceType Inline { get { throw null; } }
         public static Azure.Health.Insights.CancerProfiling.DocumentContentSourceType Reference { get { throw null; } }
         public bool Equals(Azure.Health.Insights.CancerProfiling.DocumentContentSourceType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.CancerProfiling.DocumentContentSourceType left, Azure.Health.Insights.CancerProfiling.DocumentContentSourceType right) { throw null; }
         public static implicit operator Azure.Health.Insights.CancerProfiling.DocumentContentSourceType (string value) { throw null; }
@@ -112,9 +114,7 @@ namespace Azure.Health.Insights.CancerProfiling
         public static Azure.Health.Insights.CancerProfiling.DocumentType GenomicSequencing { get { throw null; } }
         public static Azure.Health.Insights.CancerProfiling.DocumentType Note { get { throw null; } }
         public bool Equals(Azure.Health.Insights.CancerProfiling.DocumentType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.CancerProfiling.DocumentType left, Azure.Health.Insights.CancerProfiling.DocumentType right) { throw null; }
         public static implicit operator Azure.Health.Insights.CancerProfiling.DocumentType (string value) { throw null; }
@@ -187,9 +187,7 @@ namespace Azure.Health.Insights.CancerProfiling
         public static Azure.Health.Insights.CancerProfiling.OncoPhenotypeInferenceType PathologicStageT { get { throw null; } }
         public static Azure.Health.Insights.CancerProfiling.OncoPhenotypeInferenceType TumorSite { get { throw null; } }
         public bool Equals(Azure.Health.Insights.CancerProfiling.OncoPhenotypeInferenceType other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.CancerProfiling.OncoPhenotypeInferenceType left, Azure.Health.Insights.CancerProfiling.OncoPhenotypeInferenceType right) { throw null; }
         public static implicit operator Azure.Health.Insights.CancerProfiling.OncoPhenotypeInferenceType (string value) { throw null; }
@@ -273,9 +271,7 @@ namespace Azure.Health.Insights.CancerProfiling
         public static Azure.Health.Insights.CancerProfiling.PatientInfoSex Male { get { throw null; } }
         public static Azure.Health.Insights.CancerProfiling.PatientInfoSex Unspecified { get { throw null; } }
         public bool Equals(Azure.Health.Insights.CancerProfiling.PatientInfoSex other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Health.Insights.CancerProfiling.PatientInfoSex left, Azure.Health.Insights.CancerProfiling.PatientInfoSex right) { throw null; }
         public static implicit operator Azure.Health.Insights.CancerProfiling.PatientInfoSex (string value) { throw null; }

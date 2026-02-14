@@ -11,10 +11,27 @@ using System.Text.Json;
 using Azure;
 using Azure.Core;
 
-namespace Encode.Numeric.Models
+namespace Encode.Numeric._Property
 {
     public partial class Uint8AsStringProperty : IJsonModel<Uint8AsStringProperty>
     {
+        internal Uint8AsStringProperty() => throw null;
+
+        protected virtual Uint8AsStringProperty PersistableModelCreateCore(BinaryData data, ModelReaderWriterOptions options) => throw null;
+
+        protected virtual BinaryData PersistableModelWriteCore(ModelReaderWriterOptions options) => throw null;
+
+        BinaryData IPersistableModel<Uint8AsStringProperty>.Write(ModelReaderWriterOptions options) => throw null;
+
+        Uint8AsStringProperty IPersistableModel<Uint8AsStringProperty>.Create(BinaryData data, ModelReaderWriterOptions options) => throw null;
+
+        string IPersistableModel<Uint8AsStringProperty>.GetFormatFromOptions(ModelReaderWriterOptions options) => throw null;
+
+        /// <param name="uint8AsStringProperty"> The <see cref="Uint8AsStringProperty"/> to serialize into <see cref="RequestContent"/>. </param>
+        public static implicit operator RequestContent(Uint8AsStringProperty uint8AsStringProperty) => throw null;
+
+        public static explicit operator Uint8AsStringProperty(Response response) => throw null;
+
         void IJsonModel<Uint8AsStringProperty>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options) => throw null;
 
         protected virtual void JsonModelWriteCore(Utf8JsonWriter writer, ModelReaderWriterOptions options) => throw null;
@@ -22,20 +39,5 @@ namespace Encode.Numeric.Models
         Uint8AsStringProperty IJsonModel<Uint8AsStringProperty>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => throw null;
 
         protected virtual Uint8AsStringProperty JsonModelCreateCore(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => throw null;
-
-        BinaryData IPersistableModel<Uint8AsStringProperty>.Write(ModelReaderWriterOptions options) => throw null;
-
-        protected virtual BinaryData PersistableModelWriteCore(ModelReaderWriterOptions options) => throw null;
-
-        Uint8AsStringProperty IPersistableModel<Uint8AsStringProperty>.Create(BinaryData data, ModelReaderWriterOptions options) => throw null;
-
-        protected virtual Uint8AsStringProperty PersistableModelCreateCore(BinaryData data, ModelReaderWriterOptions options) => throw null;
-
-        string IPersistableModel<Uint8AsStringProperty>.GetFormatFromOptions(ModelReaderWriterOptions options) => throw null;
-
-        /// <param name="uint8AsStringProperty"> The <see cref="Uint8AsStringProperty"/> to serialize into <see cref="RequestContent"/>. </param>
-        public static implicit operator RequestContent(Uint8AsStringProperty uint8AsStringProperty) => throw null;
-
-        public static explicit operator Uint8AsStringProperty(Response result) => throw null;
     }
 }

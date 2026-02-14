@@ -8,12 +8,12 @@ azure-arm: true
 csharp: true
 library-name: HybridCompute
 namespace: Azure.ResourceManager.HybridCompute
-require: https://github.com/Azure/azure-rest-api-specs/blob/0f300277e21972f20b32ffbff96180217875909b/specification/hybridcompute/resource-manager/readme.md
+require: https://github.com/Azure/azure-rest-api-specs/blob/61d38ac4f35086aaafc79f5e7e118fcfb0f7f0e4/specification/hybridcompute/resource-manager/Microsoft.HybridCompute/HybridCompute/readme.md
 tag: package-preview-2024-07
 output-folder: $(this-folder)/Generated
 clear-output-folder: true
 sample-gen:
-  output-folder: $(this-folder)/../samples/Generated
+  output-folder: $(this-folder)/../tests/Generated
   clear-output-folder: true
 skip-csproj: true
 modelerfour:
@@ -72,7 +72,7 @@ prepend-rp-prefix:
   - ExecutionState
   - FirmwareProfile
 
-list-exception: 
+list-exception:
 - /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{baseProvider}/{baseResourceType}/{baseResourceName}/providers/Microsoft.HybridCompute/settings/{settingsResourceName}
 
 rename-mapping:
@@ -201,13 +201,13 @@ directive:
     transform: >-
       return [
           {
-            "$ref": "../../../../../common-types/resource-management/v3/types.json#/parameters/ApiVersionParameter"
+            "$ref": "../../../../../../common-types/resource-management/v3/types.json#/parameters/ApiVersionParameter"
           },
           {
-            "$ref": "../../../../../common-types/resource-management/v3/types.json#/parameters/SubscriptionIdParameter"
+            "$ref": "../../../../../../common-types/resource-management/v3/types.json#/parameters/SubscriptionIdParameter"
           },
           {
-            "$ref": "../../../../../common-types/resource-management/v3/types.json#/parameters/ResourceGroupNameParameter"
+            "$ref": "../../../../../../common-types/resource-management/v3/types.json#/parameters/ResourceGroupNameParameter"
           },
           {
             "name": "machineName",
@@ -260,7 +260,7 @@ directive:
         "default": {
           "description": "Error response describing why the operation failed.",
           "schema": {
-            "$ref": "../../../../../common-types/resource-management/v3/types.json#/definitions/ErrorResponse"
+            "$ref": "../../../../../../common-types/resource-management/v3/types.json#/definitions/ErrorResponse"
           }
         }
       }
@@ -276,7 +276,7 @@ directive:
   # we don't want user to interact with them
   - remove-operation: Settings_Get
   - remove-operation: Settings_Patch
-  # adding it will remove HybridComputeLicenseData resource and create HybridComputeLicensePatch resouce and cause other ESU commands to fail  
+  # adding it will remove HybridComputeLicenseData resource and create HybridComputeLicensePatch resouce and cause other ESU commands to fail
   - remove-operation: Licenses_Update #PATCH
 
 ```

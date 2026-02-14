@@ -7,14 +7,15 @@ using Azure.ResourceManager.NetworkCloud.Models;
 using Azure.ResourceManager.Resources;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Azure.ResourceManager.NetworkCloud.Tests.ScenarioTests
 {
     public class ClusterMetricsConfigurationTests : NetworkCloudManagementTestBase
     {
-        public ClusterMetricsConfigurationTests(bool isAsync, RecordedTestMode mode) : base(isAsync, mode) {}
-        public ClusterMetricsConfigurationTests(bool isAsync) : base(isAsync) {}
+        public ClusterMetricsConfigurationTests(bool isAsync, RecordedTestMode mode) : base(isAsync, mode) { }
+        public ClusterMetricsConfigurationTests(bool isAsync) : base(isAsync) { }
 
         [Test]
         [RecordedTest]
@@ -36,7 +37,7 @@ namespace Azure.ResourceManager.NetworkCloud.Tests.ScenarioTests
                 15
             )
             {
-                EnabledMetrics = {},
+                EnabledMetrics = { },
                 Tags =
                 {
                     ["key1"] = "myvalue1",
@@ -70,7 +71,7 @@ namespace Azure.ResourceManager.NetworkCloud.Tests.ScenarioTests
             Assert.IsNotEmpty(listByCluster);
 
             // Delete
-            var deleteResult = await clusterMetricsConfiguration.DeleteAsync(WaitUntil.Completed);
+            var deleteResult = await clusterMetricsConfiguration.DeleteAsync(WaitUntil.Completed, CancellationToken.None);
             Assert.IsTrue(deleteResult.HasCompleted);
         }
     }

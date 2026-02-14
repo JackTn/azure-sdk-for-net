@@ -32,13 +32,13 @@ namespace Azure.ResourceManager.CosmosDB
 
         CosmosDBSqlContainerThroughputSettingResource IOperationSource<CosmosDBSqlContainerThroughputSettingResource>.CreateResult(Response response, CancellationToken cancellationToken)
         {
-            var data = ScrubId(ModelReaderWriter.Read<ThroughputSettingData>(response.Content));
+            var data = ScrubId(ModelReaderWriter.Read<ThroughputSettingData>(response.Content, ModelReaderWriterOptions.Json, AzureResourceManagerCosmosDBContext.Default));
             return new CosmosDBSqlContainerThroughputSettingResource(_client, data);
         }
 
         async ValueTask<CosmosDBSqlContainerThroughputSettingResource> IOperationSource<CosmosDBSqlContainerThroughputSettingResource>.CreateResultAsync(Response response, CancellationToken cancellationToken)
         {
-            var data = ScrubId(ModelReaderWriter.Read<ThroughputSettingData>(response.Content));
+            var data = ScrubId(ModelReaderWriter.Read<ThroughputSettingData>(response.Content, ModelReaderWriterOptions.Json, AzureResourceManagerCosmosDBContext.Default));
             return await Task.FromResult(new CosmosDBSqlContainerThroughputSettingResource(_client, data)).ConfigureAwait(false);
         }
 
@@ -62,7 +62,6 @@ namespace Azure.ResourceManager.CosmosDB
                 data.Tags,
                 data.Location,
                 data.Resource,
-                data.Identity,
                 null);
         }
 

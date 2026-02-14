@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Azure.Core.Amqp;
 using Azure.Messaging.EventHubs.Amqp;
 using Microsoft.Azure.Amqp;
@@ -102,8 +103,8 @@ namespace Azure.Messaging.EventHubs.Tests
 
             foreach (var key in message.MessageAnnotations.Keys)
             {
-                Assert.That(systemProps.ContainsKey(key), Is.True, $"The delivery annotation key, { key }, should be included.");
-                Assert.That(systemProps[key], Is.EqualTo(message.MessageAnnotations[key]), $"The delivery annotation key, { key }, should match.");
+                Assert.That(systemProps.ContainsKey(key), Is.True, $"The delivery annotation key, {key}, should be included.");
+                Assert.That(systemProps[key], Is.EqualTo(message.MessageAnnotations[key]), $"The delivery annotation key, {key}, should match.");
             }
         }
 
@@ -136,7 +137,7 @@ namespace Azure.Messaging.EventHubs.Tests
 
             foreach (var key in expectedKeys)
             {
-                Assert.That(systemProps.ContainsKey(key), Is.True, $"The key, { key }, was not contained.");
+                Assert.That(systemProps.ContainsKey(key), Is.True, $"The key, {key}, was not contained.");
             }
 
             // Unexpected keys are not returned by ContainsKey.
@@ -147,7 +148,7 @@ namespace Azure.Messaging.EventHubs.Tests
 
             foreach (var key in systemProps.Keys)
             {
-                Assert.That(expectedKeys.Contains(key), $"The key, { key }, was in the properties but is unexpected.");
+                Assert.That(expectedKeys.Contains(key), $"The key, {key}, was in the properties but is unexpected.");
             }
         }
 
@@ -191,9 +192,9 @@ namespace Azure.Messaging.EventHubs.Tests
 
             foreach (var key in message.MessageAnnotations.Keys)
             {
-                Assert.That(systemProps[key], Is.EqualTo(message.MessageAnnotations[key]), $"The message annotation, { key }, did not match when read through the indexer.");
-                Assert.That(systemProps.TryGetValue(key, out var currentValue), Is.True, $"The message annotation, { key }, was not contained when read through TryGetValue.");
-                Assert.That(currentValue, Is.EqualTo(message.MessageAnnotations[key]), $"The message annotation, { key }, did not match when read through TryGetValue.");
+                Assert.That(systemProps[key], Is.EqualTo(message.MessageAnnotations[key]), $"The message annotation, {key}, did not match when read through the indexer.");
+                Assert.That(systemProps.TryGetValue(key, out var currentValue), Is.True, $"The message annotation, {key}, was not contained when read through TryGetValue.");
+                Assert.That(currentValue, Is.EqualTo(message.MessageAnnotations[key]), $"The message annotation, {key}, did not match when read through TryGetValue.");
             }
 
             // Unexpected values are not returned.
@@ -205,8 +206,71 @@ namespace Azure.Messaging.EventHubs.Tests
 
             foreach (var value in systemProps.Values)
             {
-                Assert.That(expectedValues.Contains(value), Is.True, $"The value, { value }, was in the properties but is unexpected.");
+                Assert.That(expectedValues.Contains(value), Is.True, $"The value, {value}, was in the properties but is unexpected.");
             }
+        }
+
+        /// <summary>
+        ///   Validates basic dictionary operation for the normalized enqueue time.
+        /// </summary>
+        ///
+        [Test]
+        public void ValueOperationsNormalizeEnqueuedTime()
+        {
+            var message = CreateEmptydDataBodyMessage();
+            var systemKey = AmqpProperty.EnqueuedTime.ToString();
+
+            var systemProps = new AmqpSystemProperties(message);
+            message.MessageAnnotations.Add(systemKey, new DateTime(2015, 10, 15, 0, 0, 0));
+
+            var expectedValue = message.GetEnqueuedTime(default);
+
+            Assert.That(systemProps[systemKey], Is.EqualTo(expectedValue), "The enqueued time did not match when read through the indexer.");
+            Assert.That(systemProps.TryGetValue(systemKey, out var enqueueTime), Is.True, "The enqueued time was not contained when read through TryGetValue.");
+            Assert.That(enqueueTime, Is.EqualTo(expectedValue), "The enqueued time did not match when read through TryGetValue.");
+
+            // Message annotation values are correct.
+
+            var key = systemProps.Keys.Single();
+            Assert.That(key, Is.EqualTo(systemKey), "The key should be the same as the enqueued time key.");
+            Assert.That(systemProps[key], Is.EqualTo(expectedValue), $"The message annotation, {key}, did not match when read through the indexer.");
+
+            // Value set should contain the enqueued time.
+
+            Assert.That(systemProps.Values.Single(), Is.EqualTo(expectedValue), "The enqueued time did not match when read through the Values set.");
+        }
+
+        /// <summary>
+        ///   Validates basic dictionary operation for the normalized sequence number.
+        /// </summary>
+        ///
+        [Test]
+        [TestCase(12345)]
+        [TestCase(12345L)]
+        [TestCase("12345")]
+        public void ValueOperationsNormalizeSequenceNumber(object sequenceSource)
+        {
+            var message = CreateEmptydDataBodyMessage();
+            var systemKey = AmqpProperty.SequenceNumber.ToString();
+
+            var systemProps = new AmqpSystemProperties(message);
+            message.MessageAnnotations.Add(systemKey, sequenceSource);
+
+            var expectedValue = message.GetSequenceNumber(default);
+
+            Assert.That(systemProps[systemKey], Is.EqualTo(expectedValue), "The sequence number did not match when read through the indexer.");
+            Assert.That(systemProps.TryGetValue(systemKey, out var enqueueTime), Is.True, "The sequence number was not contained when read through TryGetValue.");
+            Assert.That(enqueueTime, Is.EqualTo(expectedValue), "The sequence number did not match when read through TryGetValue.");
+
+            // Message annotation values are correct.
+
+            var key = systemProps.Keys.Single();
+            Assert.That(key, Is.EqualTo(systemKey), "The key should be the same as the sequence number key.");
+            Assert.That(systemProps[key], Is.EqualTo(expectedValue), $"The message annotation, {key}, did not match when read through the indexer.");
+
+            // Value set should contain the sequence number.
+
+            Assert.That(systemProps.Values.Single(), Is.EqualTo(expectedValue), "The sequence number did not match when read through the Values set.");
         }
 
         /// <summary>
@@ -243,10 +307,10 @@ namespace Azure.Messaging.EventHubs.Tests
 
             // Enumerated Values match the expected set.
 
-           foreach (var item in systemProps)
+            foreach (var item in systemProps)
             {
-                Assert.That(expectedItems.ContainsKey(item.Key), Is.True, $"The item with key, { item.Key }, was in the properties but is unexpected.");
-                Assert.That(item.Value, Is.EqualTo(expectedItems[item.Key]), $"The item with key, { item.Key }, did not match the expected value.");
+                Assert.That(expectedItems.ContainsKey(item.Key), Is.True, $"The item with key, {item.Key}, was in the properties but is unexpected.");
+                Assert.That(item.Value, Is.EqualTo(expectedItems[item.Key]), $"The item with key, {item.Key}, did not match the expected value.");
             }
         }
 
@@ -273,7 +337,7 @@ namespace Azure.Messaging.EventHubs.Tests
 
             foreach (var key in systemProps.Keys)
             {
-                Assert.Fail($"The key, { key }, was found in the set that should be empty.");
+                Assert.Fail($"The key, {key}, was found in the set that should be empty.");
             }
         }
 
@@ -301,7 +365,7 @@ namespace Azure.Messaging.EventHubs.Tests
 
             foreach (var value in systemProps.Values)
             {
-                Assert.Fail($"The value, { value }, was found in the set that should be empty.");
+                Assert.Fail($"The value, {value}, was found in the set that should be empty.");
             }
         }
 
@@ -321,9 +385,9 @@ namespace Azure.Messaging.EventHubs.Tests
 
             // Enumerated Values are empty.
 
-           foreach (var item in systemProps)
+            foreach (var item in systemProps)
             {
-                Assert.Fail($"The key, { item.Key }, was found in the set that should be empty.");
+                Assert.Fail($"The key, {item.Key}, was found in the set that should be empty.");
             }
         }
 

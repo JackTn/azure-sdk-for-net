@@ -74,7 +74,7 @@ namespace Azure.ResourceManager.Cdn
         /// <param name="extendedProperties"> Key-Value pair representing migration properties for domains. </param>
         /// <param name="validationProperties"> Values the customer needs to validate domain ownership. </param>
         /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
-        internal FrontDoorCustomDomainData(ResourceIdentifier id, string name, ResourceType resourceType, SystemData systemData, string profileName, FrontDoorCustomDomainHttpsContent tlsSettings, WritableSubResource dnsZone, FrontDoorCustomDomainUpdatePropertiesParametersPreValidatedCustomDomainResourceId preValidatedCustomDomainResource, FrontDoorProvisioningState? provisioningState, FrontDoorDeploymentStatus? deploymentStatus, DomainValidationState? domainValidationState, string hostName, IDictionary<string, string> extendedProperties, DomainValidationProperties validationProperties, IDictionary<string, BinaryData> serializedAdditionalRawData) : base(id, name, resourceType, systemData)
+        internal FrontDoorCustomDomainData(ResourceIdentifier id, string name, ResourceType resourceType, SystemData systemData, string profileName, FrontDoorCustomDomainHttpsContent tlsSettings, WritableSubResource dnsZone, WritableSubResource preValidatedCustomDomainResource, FrontDoorProvisioningState? provisioningState, FrontDoorDeploymentStatus? deploymentStatus, DomainValidationState? domainValidationState, string hostName, IDictionary<string, string> extendedProperties, DomainValidationProperties validationProperties, IDictionary<string, BinaryData> serializedAdditionalRawData) : base(id, name, resourceType, systemData)
         {
             ProfileName = profileName;
             TlsSettings = tlsSettings;
@@ -90,12 +90,15 @@ namespace Azure.ResourceManager.Cdn
         }
 
         /// <summary> The name of the profile which holds the domain. </summary>
+        [WirePath("properties.profileName")]
         public string ProfileName { get; }
         /// <summary> The configuration specifying how to enable HTTPS for the domain - using AzureFrontDoor managed certificate or user's own certificate. If not specified, enabling ssl uses AzureFrontDoor managed certificate by default. </summary>
+        [WirePath("properties.tlsSettings")]
         public FrontDoorCustomDomainHttpsContent TlsSettings { get; set; }
         /// <summary> Resource reference to the Azure DNS zone. </summary>
         internal WritableSubResource DnsZone { get; set; }
         /// <summary> Gets or sets Id. </summary>
+        [WirePath("properties.azureDnsZone.id")]
         public ResourceIdentifier DnsZoneId
         {
             get => DnsZone is null ? default : DnsZone.Id;
@@ -108,30 +111,37 @@ namespace Azure.ResourceManager.Cdn
         }
 
         /// <summary> Resource reference to the Azure resource where custom domain ownership was prevalidated. </summary>
-        internal FrontDoorCustomDomainUpdatePropertiesParametersPreValidatedCustomDomainResourceId PreValidatedCustomDomainResource { get; set; }
-        /// <summary> Resource ID. </summary>
+        internal WritableSubResource PreValidatedCustomDomainResource { get; set; }
+        /// <summary> Gets or sets Id. </summary>
+        [WirePath("properties.preValidatedCustomDomainResourceId.id")]
         public ResourceIdentifier PreValidatedCustomDomainResourceId
         {
             get => PreValidatedCustomDomainResource is null ? default : PreValidatedCustomDomainResource.Id;
             set
             {
                 if (PreValidatedCustomDomainResource is null)
-                    PreValidatedCustomDomainResource = new FrontDoorCustomDomainUpdatePropertiesParametersPreValidatedCustomDomainResourceId();
+                    PreValidatedCustomDomainResource = new WritableSubResource();
                 PreValidatedCustomDomainResource.Id = value;
             }
         }
 
         /// <summary> Provisioning status. </summary>
+        [WirePath("properties.provisioningState")]
         public FrontDoorProvisioningState? ProvisioningState { get; }
         /// <summary> Gets the deployment status. </summary>
+        [WirePath("properties.deploymentStatus")]
         public FrontDoorDeploymentStatus? DeploymentStatus { get; }
         /// <summary> Provisioning substate shows the progress of custom HTTPS enabling/disabling process step by step. DCV stands for DomainControlValidation. </summary>
+        [WirePath("properties.domainValidationState")]
         public DomainValidationState? DomainValidationState { get; }
         /// <summary> The host name of the domain. Must be a domain name. </summary>
+        [WirePath("properties.hostName")]
         public string HostName { get; set; }
         /// <summary> Key-Value pair representing migration properties for domains. </summary>
+        [WirePath("properties.extendedProperties")]
         public IDictionary<string, string> ExtendedProperties { get; }
         /// <summary> Values the customer needs to validate domain ownership. </summary>
+        [WirePath("properties.validationProperties")]
         public DomainValidationProperties ValidationProperties { get; }
     }
 }

@@ -1,28 +1,27 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+extern alias BaseShares;
 extern alias DMBlob;
 extern alias DMShare;
-extern alias BaseShares;
-
 using System;
-using System.Threading.Tasks;
-using Azure.Storage.DataMovement.Tests;
-using Azure.Storage.Blobs;
-using Azure.Storage.Test;
-using BaseShares::Azure.Storage.Files.Shares;
-using Azure.Storage.Test.Shared;
-using Azure.Storage.Blobs.Specialized;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using Azure.Core;
 using Azure.Core.TestFramework;
-using DMShare::Azure.Storage.DataMovement.Files.Shares;
-using DMBlob::Azure.Storage.DataMovement.Blobs;
-using NUnit.Framework;
+using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using Azure.Storage.Blobs.Specialized;
+using Azure.Storage.DataMovement.Tests;
+using Azure.Storage.Test;
+using Azure.Storage.Test.Shared;
+using BaseShares::Azure.Storage.Files.Shares;
 using BaseShares::Azure.Storage.Files.Shares.Models;
+using DMBlob::Azure.Storage.DataMovement.Blobs;
+using DMShare::Azure.Storage.DataMovement.Files.Shares;
+using NUnit.Framework;
 using Metadata = System.Collections.Generic.IDictionary<string, string>;
-using System.Threading;
 
 namespace Azure.Storage.DataMovement.Blobs.Files.Shares.Tests
 {
@@ -197,7 +196,11 @@ namespace Azure.Storage.DataMovement.Blobs.Files.Shares.Tests
             ShareFileClient objectClient,
             TransferPropertiesTestType type = TransferPropertiesTestType.Default)
         {
-            ShareFileStorageResourceOptions options = default;
+            // Blob to Share File does not require checking if the destination requires NFS
+            ShareFileStorageResourceOptions options = new()
+            {
+                SkipProtocolValidation = true,
+            };
             if (type == TransferPropertiesTestType.NewProperties)
             {
                 options = new ShareFileStorageResourceOptions()
@@ -209,7 +212,8 @@ namespace Azure.Storage.DataMovement.Blobs.Files.Shares.Tests
                     FileMetadata = _defaultMetadata,
                     FileCreatedOn = _defaultFileCreatedOn,
                     FileLastWrittenOn = _defaultFileLastWrittenOn,
-                    FileChangedOn = _defaultFileChangedOn
+                    FileChangedOn = _defaultFileChangedOn,
+                    SkipProtocolValidation = true,
                 };
             }
             else if (type == TransferPropertiesTestType.Preserve)
@@ -217,6 +221,7 @@ namespace Azure.Storage.DataMovement.Blobs.Files.Shares.Tests
                 options = new ShareFileStorageResourceOptions()
                 {
                     FilePermissions = true,
+                    SkipProtocolValidation = true,
                 };
             }
             else if (type == TransferPropertiesTestType.NoPreserve)
@@ -230,7 +235,8 @@ namespace Azure.Storage.DataMovement.Blobs.Files.Shares.Tests
                     FileMetadata = default,
                     FileCreatedOn = default,
                     FileLastWrittenOn = default,
-                    FileChangedOn = default
+                    FileChangedOn = default,
+                    SkipProtocolValidation = true,
                 };
             }
             return new ShareFileStorageResource(objectClient, options);

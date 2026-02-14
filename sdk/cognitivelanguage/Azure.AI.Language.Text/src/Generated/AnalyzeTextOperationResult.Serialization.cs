@@ -96,7 +96,7 @@ namespace Azure.AI.Language.Text
                     case "HealthcareLROResults": return HealthcareOperationResult.DeserializeHealthcareOperationResult(element, options);
                     case "KeyPhraseExtractionLROResults": return KeyPhraseExtractionOperationResult.DeserializeKeyPhraseExtractionOperationResult(element, options);
                     case "PiiEntityRecognitionLROResults": return PiiEntityRecognitionOperationResult.DeserializePiiEntityRecognitionOperationResult(element, options);
-                    case "SentimentAnalysisLROResults": return SentimentOperationResult.DeserializeSentimentOperationResult(element, options);
+                    case "SentimentAnalysisLROResults": return SentimentLROResult.DeserializeSentimentLROResult(element, options);
                 }
             }
             return UnknownAnalyzeTextOperationResult.DeserializeUnknownAnalyzeTextOperationResult(element, options);
@@ -109,7 +109,7 @@ namespace Azure.AI.Language.Text
             switch (format)
             {
                 case "J":
-                    return ModelReaderWriter.Write(this, options);
+                    return ModelReaderWriter.Write(this, options, AzureAILanguageTextContext.Default);
                 default:
                     throw new FormatException($"The model {nameof(AnalyzeTextOperationResult)} does not support writing '{options.Format}' format.");
             }

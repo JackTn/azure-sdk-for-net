@@ -10,6 +10,7 @@ using Azure.AI.Language.Conversations.Models;
 using Azure.Core;
 using Azure.Core.Serialization;
 using Azure.Core.TestFramework;
+using Microsoft.VisualBasic;
 using NUnit.Framework;
 
 namespace Azure.AI.Language.Conversations.Tests
@@ -56,7 +57,7 @@ namespace Azure.AI.Language.Conversations.Tests
             Assert.AreEqual("Conversation", (string)conversationalTaskResult.Result.Prediction.ProjectKind);
 
             // assert - top intent
-            Assert.AreEqual("Send", (string)conversationalTaskResult.Result.Prediction.TopIntent);
+            Assert.AreEqual("SendEmail", (string)conversationalTaskResult.Result.Prediction.TopIntent);
 
             // cast prediction
             dynamic conversationPrediction = conversationalTaskResult.Result.Prediction;
@@ -196,7 +197,6 @@ namespace Azure.AI.Language.Conversations.Tests
                 },
                 kind = "Conversation",
             };
-
             Response response = await Client.AnalyzeConversationAsync(RequestContent.Create(data));
 
             // assert - main object
@@ -276,7 +276,7 @@ namespace Azure.AI.Language.Conversations.Tests
                             new TextConversationItem("3", "Agent", "Press the upgrade button please. Then sign in and follow the instructions.")
                         })
                     });
-            List<AnalyzeConversationOperationAction> actions =  new List<AnalyzeConversationOperationAction>
+            List<AnalyzeConversationOperationAction> actions = new List<AnalyzeConversationOperationAction>
                     {
                         new SummarizationOperationAction()
                         {
@@ -324,7 +324,7 @@ namespace Azure.AI.Language.Conversations.Tests
         }
 
         [RecordedTest]
-        [ServiceVersion(Min = ConversationsClientOptions.ServiceVersion.V2024_11_15_Preview)]
+        [ServiceVersion(Min = ConversationsClientOptions.ServiceVersion.V2025_05_15_Preview)]
         public async Task AnalyzeConversationAsync_ConversationPii_WithCharacterMaskPolicy()
         {
             // Arrange: Initialize client and input
@@ -406,13 +406,12 @@ namespace Azure.AI.Language.Conversations.Tests
         }
 
         [RecordedTest]
-        [ServiceVersion(Min = ConversationsClientOptions.ServiceVersion.V2024_11_15_Preview)]
+        [ServiceVersion(Min = ConversationsClientOptions.ServiceVersion.V2025_05_15_Preview)]
         public async Task AnalyzeConversationAsync_ConversationPii_WithEntityMaskPolicy()
         {
             // Arrange: Initialize client and input
             ConversationAnalysisClient client = Client;
             List<string> redactedTexts = new();
-
             // Create an EntityMaskTypePolicyType
             var redactionPolicy = new EntityMaskTypePolicyType();
 
@@ -488,7 +487,7 @@ namespace Azure.AI.Language.Conversations.Tests
         }
 
         [RecordedTest]
-        [ServiceVersion(Min = ConversationsClientOptions.ServiceVersion.V2024_11_15_Preview)]
+        [ServiceVersion(Min = ConversationsClientOptions.ServiceVersion.V2025_05_15_Preview)]
         public async Task AnalyzeConversationAsync_ConversationPii_WithNoMaskPolicy()
         {
             // Arrange: Initialize client and input
@@ -564,6 +563,49 @@ namespace Azure.AI.Language.Conversations.Tests
 
             // Verify the HTTP response is successful
             Assert.That(analyzeConversationOperation.GetRawResponse().Status, Is.EqualTo(200));
+        }
+
+        [RecordedTest]
+        [ServiceVersion(Min = ConversationsClientOptions.ServiceVersion.V2025_05_15_Preview)]
+        public async Task AnalyzeConversationAsync_AIConversation()
+        {
+            // Arrange: Initialize client and input
+            ConversationAnalysisClient client = Client;
+            string projectName = TestEnvironment.ProjectName;
+            string deploymentName = TestEnvironment.DeploymentName;
+
+            AnalyzeConversationInput data = new ConversationalAITask(
+                new ConversationalAIAnalysisInput(
+                    conversations: new TextConversation[] {
+                        new TextConversation(
+                            id: "order",
+                            language: "en-GB",
+                            conversationItems: new TextConversationItem[]
+                            {
+                                new TextConversationItem(id: "1", participantId: "user", text: "Hi"),
+                                new TextConversationItem(id: "2", participantId: "bot", text: "Hello, how can I help you?"),
+                                new TextConversationItem(id: "3", participantId: "user", text: "I would like to book a flight.")
+                            }
+                        )
+                    }),
+                new AIConversationLanguageUnderstandingActionContent(projectName, deploymentName)
+                {
+                    // Use Utf16CodeUnit for strings in .NET.
+                    StringIndexType = StringIndexType.Utf16CodeUnit,
+                });
+
+            Response<AnalyzeConversationActionResult> response = await client.AnalyzeConversationAsync(data);
+            ConversationalAITaskResult ConversationalAITaskResult = response.Value as ConversationalAITaskResult;
+
+            ConversationalAIResult conversationalAIResult = ConversationalAITaskResult.Result;
+
+            IList<ConversationalAIAnalysis> conversations = conversationalAIResult?.Conversations;
+            Assert.That(conversations, Is.Not.Null);
+            Assert.That(conversations.Count, Is.GreaterThan(0));
+
+            ConversationalAIAnalysis conversation = conversations[0];
+            Assert.That(conversation.Id, Is.Not.Null);
+            Assert.That(conversation.Intents, Is.Not.Null);
         }
     }
 }

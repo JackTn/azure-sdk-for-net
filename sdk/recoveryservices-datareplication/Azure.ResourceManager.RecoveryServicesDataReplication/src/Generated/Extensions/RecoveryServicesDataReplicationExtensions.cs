@@ -8,7 +8,9 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Azure;
 using Azure.Core;
+using Azure.ResourceManager;
 using Azure.ResourceManager.RecoveryServicesDataReplication.Mocking;
 using Azure.ResourceManager.RecoveryServicesDataReplication.Models;
 using Azure.ResourceManager.Resources;
@@ -18,49 +20,32 @@ namespace Azure.ResourceManager.RecoveryServicesDataReplication
     /// <summary> A class to add extension methods to Azure.ResourceManager.RecoveryServicesDataReplication. </summary>
     public static partial class RecoveryServicesDataReplicationExtensions
     {
+        /// <param name="client"></param>
         private static MockableRecoveryServicesDataReplicationArmClient GetMockableRecoveryServicesDataReplicationArmClient(ArmClient client)
         {
-            return client.GetCachedClient(client0 => new MockableRecoveryServicesDataReplicationArmClient(client0));
+            return client.GetCachedClient(client0 => new MockableRecoveryServicesDataReplicationArmClient(client0, ResourceIdentifier.Root));
         }
 
-        private static MockableRecoveryServicesDataReplicationResourceGroupResource GetMockableRecoveryServicesDataReplicationResourceGroupResource(ArmResource resource)
+        /// <param name="resourceGroupResource"></param>
+        private static MockableRecoveryServicesDataReplicationResourceGroupResource GetMockableRecoveryServicesDataReplicationResourceGroupResource(ResourceGroupResource resourceGroupResource)
         {
-            return resource.GetCachedClient(client => new MockableRecoveryServicesDataReplicationResourceGroupResource(client, resource.Id));
+            return resourceGroupResource.GetCachedClient(client => new MockableRecoveryServicesDataReplicationResourceGroupResource(client, resourceGroupResource.Id));
         }
 
-        private static MockableRecoveryServicesDataReplicationSubscriptionResource GetMockableRecoveryServicesDataReplicationSubscriptionResource(ArmResource resource)
+        /// <param name="subscriptionResource"></param>
+        private static MockableRecoveryServicesDataReplicationSubscriptionResource GetMockableRecoveryServicesDataReplicationSubscriptionResource(SubscriptionResource subscriptionResource)
         {
-            return resource.GetCachedClient(client => new MockableRecoveryServicesDataReplicationSubscriptionResource(client, resource.Id));
+            return subscriptionResource.GetCachedClient(client => new MockableRecoveryServicesDataReplicationSubscriptionResource(client, subscriptionResource.Id));
         }
 
         /// <summary>
-        /// Gets an object representing a <see cref="DataReplicationDraResource" /> along with the instance operations that can be performed on it but with no data.
-        /// You can use <see cref="DataReplicationDraResource.CreateResourceIdentifier" /> to create a <see cref="DataReplicationDraResource" /> <see cref="ResourceIdentifier" /> from its components.
+        /// Gets an object representing a <see cref="DataReplicationEmailConfigurationResource"/> along with the instance operations that can be performed on it but with no data.
         /// <item>
-        /// <term>Mocking</term>
-        /// <description>To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationArmClient.GetDataReplicationDraResource(ResourceIdentifier)"/> instead.</description>
+        /// <term> Mocking. </term>
+        /// <description> To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationArmClient.GetDataReplicationEmailConfigurationResource(ResourceIdentifier)"/> instead. </description>
         /// </item>
         /// </summary>
-        /// <param name="client"> The <see cref="ArmClient" /> instance the method will execute against. </param>
-        /// <param name="id"> The resource ID of the resource to get. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="client"/> is null. </exception>
-        /// <returns> Returns a <see cref="DataReplicationDraResource"/> object. </returns>
-        public static DataReplicationDraResource GetDataReplicationDraResource(this ArmClient client, ResourceIdentifier id)
-        {
-            Argument.AssertNotNull(client, nameof(client));
-
-            return GetMockableRecoveryServicesDataReplicationArmClient(client).GetDataReplicationDraResource(id);
-        }
-
-        /// <summary>
-        /// Gets an object representing a <see cref="DataReplicationEmailConfigurationResource" /> along with the instance operations that can be performed on it but with no data.
-        /// You can use <see cref="DataReplicationEmailConfigurationResource.CreateResourceIdentifier" /> to create a <see cref="DataReplicationEmailConfigurationResource" /> <see cref="ResourceIdentifier" /> from its components.
-        /// <item>
-        /// <term>Mocking</term>
-        /// <description>To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationArmClient.GetDataReplicationEmailConfigurationResource(ResourceIdentifier)"/> instead.</description>
-        /// </item>
-        /// </summary>
-        /// <param name="client"> The <see cref="ArmClient" /> instance the method will execute against. </param>
+        /// <param name="client"> The <see cref="ArmClient"/> the method will execute against. </param>
         /// <param name="id"> The resource ID of the resource to get. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="client"/> is null. </exception>
         /// <returns> Returns a <see cref="DataReplicationEmailConfigurationResource"/> object. </returns>
@@ -72,128 +57,13 @@ namespace Azure.ResourceManager.RecoveryServicesDataReplication
         }
 
         /// <summary>
-        /// Gets an object representing a <see cref="DataReplicationEventResource" /> along with the instance operations that can be performed on it but with no data.
-        /// You can use <see cref="DataReplicationEventResource.CreateResourceIdentifier" /> to create a <see cref="DataReplicationEventResource" /> <see cref="ResourceIdentifier" /> from its components.
+        /// Gets an object representing a <see cref="DataReplicationVaultResource"/> along with the instance operations that can be performed on it but with no data.
         /// <item>
-        /// <term>Mocking</term>
-        /// <description>To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationArmClient.GetDataReplicationEventResource(ResourceIdentifier)"/> instead.</description>
+        /// <term> Mocking. </term>
+        /// <description> To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationArmClient.GetDataReplicationVaultResource(ResourceIdentifier)"/> instead. </description>
         /// </item>
         /// </summary>
-        /// <param name="client"> The <see cref="ArmClient" /> instance the method will execute against. </param>
-        /// <param name="id"> The resource ID of the resource to get. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="client"/> is null. </exception>
-        /// <returns> Returns a <see cref="DataReplicationEventResource"/> object. </returns>
-        public static DataReplicationEventResource GetDataReplicationEventResource(this ArmClient client, ResourceIdentifier id)
-        {
-            Argument.AssertNotNull(client, nameof(client));
-
-            return GetMockableRecoveryServicesDataReplicationArmClient(client).GetDataReplicationEventResource(id);
-        }
-
-        /// <summary>
-        /// Gets an object representing a <see cref="DataReplicationFabricResource" /> along with the instance operations that can be performed on it but with no data.
-        /// You can use <see cref="DataReplicationFabricResource.CreateResourceIdentifier" /> to create a <see cref="DataReplicationFabricResource" /> <see cref="ResourceIdentifier" /> from its components.
-        /// <item>
-        /// <term>Mocking</term>
-        /// <description>To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationArmClient.GetDataReplicationFabricResource(ResourceIdentifier)"/> instead.</description>
-        /// </item>
-        /// </summary>
-        /// <param name="client"> The <see cref="ArmClient" /> instance the method will execute against. </param>
-        /// <param name="id"> The resource ID of the resource to get. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="client"/> is null. </exception>
-        /// <returns> Returns a <see cref="DataReplicationFabricResource"/> object. </returns>
-        public static DataReplicationFabricResource GetDataReplicationFabricResource(this ArmClient client, ResourceIdentifier id)
-        {
-            Argument.AssertNotNull(client, nameof(client));
-
-            return GetMockableRecoveryServicesDataReplicationArmClient(client).GetDataReplicationFabricResource(id);
-        }
-
-        /// <summary>
-        /// Gets an object representing a <see cref="DataReplicationPolicyResource" /> along with the instance operations that can be performed on it but with no data.
-        /// You can use <see cref="DataReplicationPolicyResource.CreateResourceIdentifier" /> to create a <see cref="DataReplicationPolicyResource" /> <see cref="ResourceIdentifier" /> from its components.
-        /// <item>
-        /// <term>Mocking</term>
-        /// <description>To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationArmClient.GetDataReplicationPolicyResource(ResourceIdentifier)"/> instead.</description>
-        /// </item>
-        /// </summary>
-        /// <param name="client"> The <see cref="ArmClient" /> instance the method will execute against. </param>
-        /// <param name="id"> The resource ID of the resource to get. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="client"/> is null. </exception>
-        /// <returns> Returns a <see cref="DataReplicationPolicyResource"/> object. </returns>
-        public static DataReplicationPolicyResource GetDataReplicationPolicyResource(this ArmClient client, ResourceIdentifier id)
-        {
-            Argument.AssertNotNull(client, nameof(client));
-
-            return GetMockableRecoveryServicesDataReplicationArmClient(client).GetDataReplicationPolicyResource(id);
-        }
-
-        /// <summary>
-        /// Gets an object representing a <see cref="DataReplicationProtectedItemResource" /> along with the instance operations that can be performed on it but with no data.
-        /// You can use <see cref="DataReplicationProtectedItemResource.CreateResourceIdentifier" /> to create a <see cref="DataReplicationProtectedItemResource" /> <see cref="ResourceIdentifier" /> from its components.
-        /// <item>
-        /// <term>Mocking</term>
-        /// <description>To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationArmClient.GetDataReplicationProtectedItemResource(ResourceIdentifier)"/> instead.</description>
-        /// </item>
-        /// </summary>
-        /// <param name="client"> The <see cref="ArmClient" /> instance the method will execute against. </param>
-        /// <param name="id"> The resource ID of the resource to get. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="client"/> is null. </exception>
-        /// <returns> Returns a <see cref="DataReplicationProtectedItemResource"/> object. </returns>
-        public static DataReplicationProtectedItemResource GetDataReplicationProtectedItemResource(this ArmClient client, ResourceIdentifier id)
-        {
-            Argument.AssertNotNull(client, nameof(client));
-
-            return GetMockableRecoveryServicesDataReplicationArmClient(client).GetDataReplicationProtectedItemResource(id);
-        }
-
-        /// <summary>
-        /// Gets an object representing a <see cref="DataReplicationRecoveryPointResource" /> along with the instance operations that can be performed on it but with no data.
-        /// You can use <see cref="DataReplicationRecoveryPointResource.CreateResourceIdentifier" /> to create a <see cref="DataReplicationRecoveryPointResource" /> <see cref="ResourceIdentifier" /> from its components.
-        /// <item>
-        /// <term>Mocking</term>
-        /// <description>To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationArmClient.GetDataReplicationRecoveryPointResource(ResourceIdentifier)"/> instead.</description>
-        /// </item>
-        /// </summary>
-        /// <param name="client"> The <see cref="ArmClient" /> instance the method will execute against. </param>
-        /// <param name="id"> The resource ID of the resource to get. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="client"/> is null. </exception>
-        /// <returns> Returns a <see cref="DataReplicationRecoveryPointResource"/> object. </returns>
-        public static DataReplicationRecoveryPointResource GetDataReplicationRecoveryPointResource(this ArmClient client, ResourceIdentifier id)
-        {
-            Argument.AssertNotNull(client, nameof(client));
-
-            return GetMockableRecoveryServicesDataReplicationArmClient(client).GetDataReplicationRecoveryPointResource(id);
-        }
-
-        /// <summary>
-        /// Gets an object representing a <see cref="DataReplicationReplicationExtensionResource" /> along with the instance operations that can be performed on it but with no data.
-        /// You can use <see cref="DataReplicationReplicationExtensionResource.CreateResourceIdentifier" /> to create a <see cref="DataReplicationReplicationExtensionResource" /> <see cref="ResourceIdentifier" /> from its components.
-        /// <item>
-        /// <term>Mocking</term>
-        /// <description>To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationArmClient.GetDataReplicationReplicationExtensionResource(ResourceIdentifier)"/> instead.</description>
-        /// </item>
-        /// </summary>
-        /// <param name="client"> The <see cref="ArmClient" /> instance the method will execute against. </param>
-        /// <param name="id"> The resource ID of the resource to get. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="client"/> is null. </exception>
-        /// <returns> Returns a <see cref="DataReplicationReplicationExtensionResource"/> object. </returns>
-        public static DataReplicationReplicationExtensionResource GetDataReplicationReplicationExtensionResource(this ArmClient client, ResourceIdentifier id)
-        {
-            Argument.AssertNotNull(client, nameof(client));
-
-            return GetMockableRecoveryServicesDataReplicationArmClient(client).GetDataReplicationReplicationExtensionResource(id);
-        }
-
-        /// <summary>
-        /// Gets an object representing a <see cref="DataReplicationVaultResource" /> along with the instance operations that can be performed on it but with no data.
-        /// You can use <see cref="DataReplicationVaultResource.CreateResourceIdentifier" /> to create a <see cref="DataReplicationVaultResource" /> <see cref="ResourceIdentifier" /> from its components.
-        /// <item>
-        /// <term>Mocking</term>
-        /// <description>To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationArmClient.GetDataReplicationVaultResource(ResourceIdentifier)"/> instead.</description>
-        /// </item>
-        /// </summary>
-        /// <param name="client"> The <see cref="ArmClient" /> instance the method will execute against. </param>
+        /// <param name="client"> The <see cref="ArmClient"/> the method will execute against. </param>
         /// <param name="id"> The resource ID of the resource to get. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="client"/> is null. </exception>
         /// <returns> Returns a <see cref="DataReplicationVaultResource"/> object. </returns>
@@ -205,127 +75,213 @@ namespace Azure.ResourceManager.RecoveryServicesDataReplication
         }
 
         /// <summary>
-        /// Gets an object representing a <see cref="DataReplicationWorkflowResource" /> along with the instance operations that can be performed on it but with no data.
-        /// You can use <see cref="DataReplicationWorkflowResource.CreateResourceIdentifier" /> to create a <see cref="DataReplicationWorkflowResource" /> <see cref="ResourceIdentifier" /> from its components.
+        /// Gets an object representing a <see cref="DataReplicationEventResource"/> along with the instance operations that can be performed on it but with no data.
         /// <item>
-        /// <term>Mocking</term>
-        /// <description>To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationArmClient.GetDataReplicationWorkflowResource(ResourceIdentifier)"/> instead.</description>
+        /// <term> Mocking. </term>
+        /// <description> To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationArmClient.GetDataReplicationEventResource(ResourceIdentifier)"/> instead. </description>
         /// </item>
         /// </summary>
-        /// <param name="client"> The <see cref="ArmClient" /> instance the method will execute against. </param>
+        /// <param name="client"> The <see cref="ArmClient"/> the method will execute against. </param>
         /// <param name="id"> The resource ID of the resource to get. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="client"/> is null. </exception>
-        /// <returns> Returns a <see cref="DataReplicationWorkflowResource"/> object. </returns>
-        public static DataReplicationWorkflowResource GetDataReplicationWorkflowResource(this ArmClient client, ResourceIdentifier id)
+        /// <returns> Returns a <see cref="DataReplicationEventResource"/> object. </returns>
+        public static DataReplicationEventResource GetDataReplicationEventResource(this ArmClient client, ResourceIdentifier id)
         {
             Argument.AssertNotNull(client, nameof(client));
 
-            return GetMockableRecoveryServicesDataReplicationArmClient(client).GetDataReplicationWorkflowResource(id);
+            return GetMockableRecoveryServicesDataReplicationArmClient(client).GetDataReplicationEventResource(id);
         }
 
         /// <summary>
-        /// Gets a collection of DataReplicationFabricResources in the ResourceGroupResource.
+        /// Gets an object representing a <see cref="DataReplicationFabricResource"/> along with the instance operations that can be performed on it but with no data.
         /// <item>
-        /// <term>Mocking</term>
-        /// <description>To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationResourceGroupResource.GetDataReplicationFabrics()"/> instead.</description>
+        /// <term> Mocking. </term>
+        /// <description> To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationArmClient.GetDataReplicationFabricResource(ResourceIdentifier)"/> instead. </description>
         /// </item>
         /// </summary>
-        /// <param name="resourceGroupResource"> The <see cref="ResourceGroupResource" /> instance the method will execute against. </param>
+        /// <param name="client"> The <see cref="ArmClient"/> the method will execute against. </param>
+        /// <param name="id"> The resource ID of the resource to get. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="client"/> is null. </exception>
+        /// <returns> Returns a <see cref="DataReplicationFabricResource"/> object. </returns>
+        public static DataReplicationFabricResource GetDataReplicationFabricResource(this ArmClient client, ResourceIdentifier id)
+        {
+            Argument.AssertNotNull(client, nameof(client));
+
+            return GetMockableRecoveryServicesDataReplicationArmClient(client).GetDataReplicationFabricResource(id);
+        }
+
+        /// <summary>
+        /// Gets an object representing a <see cref="DataReplicationFabricAgentResource"/> along with the instance operations that can be performed on it but with no data.
+        /// <item>
+        /// <term> Mocking. </term>
+        /// <description> To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationArmClient.GetDataReplicationFabricAgentResource(ResourceIdentifier)"/> instead. </description>
+        /// </item>
+        /// </summary>
+        /// <param name="client"> The <see cref="ArmClient"/> the method will execute against. </param>
+        /// <param name="id"> The resource ID of the resource to get. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="client"/> is null. </exception>
+        /// <returns> Returns a <see cref="DataReplicationFabricAgentResource"/> object. </returns>
+        public static DataReplicationFabricAgentResource GetDataReplicationFabricAgentResource(this ArmClient client, ResourceIdentifier id)
+        {
+            Argument.AssertNotNull(client, nameof(client));
+
+            return GetMockableRecoveryServicesDataReplicationArmClient(client).GetDataReplicationFabricAgentResource(id);
+        }
+
+        /// <summary>
+        /// Gets an object representing a <see cref="DataReplicationJobResource"/> along with the instance operations that can be performed on it but with no data.
+        /// <item>
+        /// <term> Mocking. </term>
+        /// <description> To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationArmClient.GetDataReplicationJobResource(ResourceIdentifier)"/> instead. </description>
+        /// </item>
+        /// </summary>
+        /// <param name="client"> The <see cref="ArmClient"/> the method will execute against. </param>
+        /// <param name="id"> The resource ID of the resource to get. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="client"/> is null. </exception>
+        /// <returns> Returns a <see cref="DataReplicationJobResource"/> object. </returns>
+        public static DataReplicationJobResource GetDataReplicationJobResource(this ArmClient client, ResourceIdentifier id)
+        {
+            Argument.AssertNotNull(client, nameof(client));
+
+            return GetMockableRecoveryServicesDataReplicationArmClient(client).GetDataReplicationJobResource(id);
+        }
+
+        /// <summary>
+        /// Gets an object representing a <see cref="DataReplicationPolicyResource"/> along with the instance operations that can be performed on it but with no data.
+        /// <item>
+        /// <term> Mocking. </term>
+        /// <description> To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationArmClient.GetDataReplicationPolicyResource(ResourceIdentifier)"/> instead. </description>
+        /// </item>
+        /// </summary>
+        /// <param name="client"> The <see cref="ArmClient"/> the method will execute against. </param>
+        /// <param name="id"> The resource ID of the resource to get. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="client"/> is null. </exception>
+        /// <returns> Returns a <see cref="DataReplicationPolicyResource"/> object. </returns>
+        public static DataReplicationPolicyResource GetDataReplicationPolicyResource(this ArmClient client, ResourceIdentifier id)
+        {
+            Argument.AssertNotNull(client, nameof(client));
+
+            return GetMockableRecoveryServicesDataReplicationArmClient(client).GetDataReplicationPolicyResource(id);
+        }
+
+        /// <summary>
+        /// Gets an object representing a <see cref="DataReplicationPrivateEndpointConnectionResource"/> along with the instance operations that can be performed on it but with no data.
+        /// <item>
+        /// <term> Mocking. </term>
+        /// <description> To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationArmClient.GetDataReplicationPrivateEndpointConnectionResource(ResourceIdentifier)"/> instead. </description>
+        /// </item>
+        /// </summary>
+        /// <param name="client"> The <see cref="ArmClient"/> the method will execute against. </param>
+        /// <param name="id"> The resource ID of the resource to get. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="client"/> is null. </exception>
+        /// <returns> Returns a <see cref="DataReplicationPrivateEndpointConnectionResource"/> object. </returns>
+        public static DataReplicationPrivateEndpointConnectionResource GetDataReplicationPrivateEndpointConnectionResource(this ArmClient client, ResourceIdentifier id)
+        {
+            Argument.AssertNotNull(client, nameof(client));
+
+            return GetMockableRecoveryServicesDataReplicationArmClient(client).GetDataReplicationPrivateEndpointConnectionResource(id);
+        }
+
+        /// <summary>
+        /// Gets an object representing a <see cref="DataReplicationPrivateEndpointConnectionProxyResource"/> along with the instance operations that can be performed on it but with no data.
+        /// <item>
+        /// <term> Mocking. </term>
+        /// <description> To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationArmClient.GetDataReplicationPrivateEndpointConnectionProxyResource(ResourceIdentifier)"/> instead. </description>
+        /// </item>
+        /// </summary>
+        /// <param name="client"> The <see cref="ArmClient"/> the method will execute against. </param>
+        /// <param name="id"> The resource ID of the resource to get. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="client"/> is null. </exception>
+        /// <returns> Returns a <see cref="DataReplicationPrivateEndpointConnectionProxyResource"/> object. </returns>
+        public static DataReplicationPrivateEndpointConnectionProxyResource GetDataReplicationPrivateEndpointConnectionProxyResource(this ArmClient client, ResourceIdentifier id)
+        {
+            Argument.AssertNotNull(client, nameof(client));
+
+            return GetMockableRecoveryServicesDataReplicationArmClient(client).GetDataReplicationPrivateEndpointConnectionProxyResource(id);
+        }
+
+        /// <summary>
+        /// Gets an object representing a <see cref="DataReplicationPrivateLinkResource"/> along with the instance operations that can be performed on it but with no data.
+        /// <item>
+        /// <term> Mocking. </term>
+        /// <description> To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationArmClient.GetDataReplicationPrivateLinkResource(ResourceIdentifier)"/> instead. </description>
+        /// </item>
+        /// </summary>
+        /// <param name="client"> The <see cref="ArmClient"/> the method will execute against. </param>
+        /// <param name="id"> The resource ID of the resource to get. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="client"/> is null. </exception>
+        /// <returns> Returns a <see cref="DataReplicationPrivateLinkResource"/> object. </returns>
+        public static DataReplicationPrivateLinkResource GetDataReplicationPrivateLinkResource(this ArmClient client, ResourceIdentifier id)
+        {
+            Argument.AssertNotNull(client, nameof(client));
+
+            return GetMockableRecoveryServicesDataReplicationArmClient(client).GetDataReplicationPrivateLinkResource(id);
+        }
+
+        /// <summary>
+        /// Gets an object representing a <see cref="DataReplicationProtectedItemResource"/> along with the instance operations that can be performed on it but with no data.
+        /// <item>
+        /// <term> Mocking. </term>
+        /// <description> To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationArmClient.GetDataReplicationProtectedItemResource(ResourceIdentifier)"/> instead. </description>
+        /// </item>
+        /// </summary>
+        /// <param name="client"> The <see cref="ArmClient"/> the method will execute against. </param>
+        /// <param name="id"> The resource ID of the resource to get. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="client"/> is null. </exception>
+        /// <returns> Returns a <see cref="DataReplicationProtectedItemResource"/> object. </returns>
+        public static DataReplicationProtectedItemResource GetDataReplicationProtectedItemResource(this ArmClient client, ResourceIdentifier id)
+        {
+            Argument.AssertNotNull(client, nameof(client));
+
+            return GetMockableRecoveryServicesDataReplicationArmClient(client).GetDataReplicationProtectedItemResource(id);
+        }
+
+        /// <summary>
+        /// Gets an object representing a <see cref="DataReplicationRecoveryPointResource"/> along with the instance operations that can be performed on it but with no data.
+        /// <item>
+        /// <term> Mocking. </term>
+        /// <description> To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationArmClient.GetDataReplicationRecoveryPointResource(ResourceIdentifier)"/> instead. </description>
+        /// </item>
+        /// </summary>
+        /// <param name="client"> The <see cref="ArmClient"/> the method will execute against. </param>
+        /// <param name="id"> The resource ID of the resource to get. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="client"/> is null. </exception>
+        /// <returns> Returns a <see cref="DataReplicationRecoveryPointResource"/> object. </returns>
+        public static DataReplicationRecoveryPointResource GetDataReplicationRecoveryPointResource(this ArmClient client, ResourceIdentifier id)
+        {
+            Argument.AssertNotNull(client, nameof(client));
+
+            return GetMockableRecoveryServicesDataReplicationArmClient(client).GetDataReplicationRecoveryPointResource(id);
+        }
+
+        /// <summary>
+        /// Gets an object representing a <see cref="DataReplicationExtensionResource"/> along with the instance operations that can be performed on it but with no data.
+        /// <item>
+        /// <term> Mocking. </term>
+        /// <description> To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationArmClient.GetDataReplicationExtensionResource(ResourceIdentifier)"/> instead. </description>
+        /// </item>
+        /// </summary>
+        /// <param name="client"> The <see cref="ArmClient"/> the method will execute against. </param>
+        /// <param name="id"> The resource ID of the resource to get. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="client"/> is null. </exception>
+        /// <returns> Returns a <see cref="DataReplicationExtensionResource"/> object. </returns>
+        public static DataReplicationExtensionResource GetDataReplicationExtensionResource(this ArmClient client, ResourceIdentifier id)
+        {
+            Argument.AssertNotNull(client, nameof(client));
+
+            return GetMockableRecoveryServicesDataReplicationArmClient(client).GetDataReplicationExtensionResource(id);
+        }
+
+        /// <summary>
+        /// Gets a collection of DataReplicationVaults in the <see cref="ResourceGroupResource"/>
+        /// <item>
+        /// <term> Mocking. </term>
+        /// <description> To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationResourceGroupResource.GetDataReplicationVaults()"/> instead. </description>
+        /// </item>
+        /// </summary>
+        /// <param name="resourceGroupResource"> The <see cref="ResourceGroupResource"/> the method will execute against. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="resourceGroupResource"/> is null. </exception>
-        /// <returns> An object representing collection of DataReplicationFabricResources and their operations over a DataReplicationFabricResource. </returns>
-        public static DataReplicationFabricCollection GetDataReplicationFabrics(this ResourceGroupResource resourceGroupResource)
-        {
-            Argument.AssertNotNull(resourceGroupResource, nameof(resourceGroupResource));
-
-            return GetMockableRecoveryServicesDataReplicationResourceGroupResource(resourceGroupResource).GetDataReplicationFabrics();
-        }
-
-        /// <summary>
-        /// Gets the details of the fabric.
-        /// <list type="bullet">
-        /// <item>
-        /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataReplication/replicationFabrics/{fabricName}</description>
-        /// </item>
-        /// <item>
-        /// <term>Operation Id</term>
-        /// <description>Fabric_Get</description>
-        /// </item>
-        /// <item>
-        /// <term>Default Api Version</term>
-        /// <description>2021-02-16-preview</description>
-        /// </item>
-        /// <item>
-        /// <term>Resource</term>
-        /// <description><see cref="DataReplicationFabricResource"/></description>
-        /// </item>
-        /// </list>
-        /// <item>
-        /// <term>Mocking</term>
-        /// <description>To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationResourceGroupResource.GetDataReplicationFabricAsync(string,CancellationToken)"/> instead.</description>
-        /// </item>
-        /// </summary>
-        /// <param name="resourceGroupResource"> The <see cref="ResourceGroupResource" /> instance the method will execute against. </param>
-        /// <param name="fabricName"> The fabric name. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="resourceGroupResource"/> or <paramref name="fabricName"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="fabricName"/> is an empty string, and was expected to be non-empty. </exception>
-        [ForwardsClientCalls]
-        public static async Task<Response<DataReplicationFabricResource>> GetDataReplicationFabricAsync(this ResourceGroupResource resourceGroupResource, string fabricName, CancellationToken cancellationToken = default)
-        {
-            Argument.AssertNotNull(resourceGroupResource, nameof(resourceGroupResource));
-
-            return await GetMockableRecoveryServicesDataReplicationResourceGroupResource(resourceGroupResource).GetDataReplicationFabricAsync(fabricName, cancellationToken).ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// Gets the details of the fabric.
-        /// <list type="bullet">
-        /// <item>
-        /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataReplication/replicationFabrics/{fabricName}</description>
-        /// </item>
-        /// <item>
-        /// <term>Operation Id</term>
-        /// <description>Fabric_Get</description>
-        /// </item>
-        /// <item>
-        /// <term>Default Api Version</term>
-        /// <description>2021-02-16-preview</description>
-        /// </item>
-        /// <item>
-        /// <term>Resource</term>
-        /// <description><see cref="DataReplicationFabricResource"/></description>
-        /// </item>
-        /// </list>
-        /// <item>
-        /// <term>Mocking</term>
-        /// <description>To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationResourceGroupResource.GetDataReplicationFabric(string,CancellationToken)"/> instead.</description>
-        /// </item>
-        /// </summary>
-        /// <param name="resourceGroupResource"> The <see cref="ResourceGroupResource" /> instance the method will execute against. </param>
-        /// <param name="fabricName"> The fabric name. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="resourceGroupResource"/> or <paramref name="fabricName"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="fabricName"/> is an empty string, and was expected to be non-empty. </exception>
-        [ForwardsClientCalls]
-        public static Response<DataReplicationFabricResource> GetDataReplicationFabric(this ResourceGroupResource resourceGroupResource, string fabricName, CancellationToken cancellationToken = default)
-        {
-            Argument.AssertNotNull(resourceGroupResource, nameof(resourceGroupResource));
-
-            return GetMockableRecoveryServicesDataReplicationResourceGroupResource(resourceGroupResource).GetDataReplicationFabric(fabricName, cancellationToken);
-        }
-
-        /// <summary>
-        /// Gets a collection of DataReplicationVaultResources in the ResourceGroupResource.
-        /// <item>
-        /// <term>Mocking</term>
-        /// <description>To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationResourceGroupResource.GetDataReplicationVaults()"/> instead.</description>
-        /// </item>
-        /// </summary>
-        /// <param name="resourceGroupResource"> The <see cref="ResourceGroupResource" /> instance the method will execute against. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="resourceGroupResource"/> is null. </exception>
-        /// <returns> An object representing collection of DataReplicationVaultResources and their operations over a DataReplicationVaultResource. </returns>
+        /// <returns> An object representing collection of DataReplicationVaults and their operations over a DataReplicationVaultResource. </returns>
         public static DataReplicationVaultCollection GetDataReplicationVaults(this ResourceGroupResource resourceGroupResource)
         {
             Argument.AssertNotNull(resourceGroupResource, nameof(resourceGroupResource));
@@ -335,34 +291,15 @@ namespace Azure.ResourceManager.RecoveryServicesDataReplication
 
         /// <summary>
         /// Gets the details of the vault.
-        /// <list type="bullet">
         /// <item>
-        /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataReplication/replicationVaults/{vaultName}</description>
-        /// </item>
-        /// <item>
-        /// <term>Operation Id</term>
-        /// <description>Vault_Get</description>
-        /// </item>
-        /// <item>
-        /// <term>Default Api Version</term>
-        /// <description>2021-02-16-preview</description>
-        /// </item>
-        /// <item>
-        /// <term>Resource</term>
-        /// <description><see cref="DataReplicationVaultResource"/></description>
-        /// </item>
-        /// </list>
-        /// <item>
-        /// <term>Mocking</term>
-        /// <description>To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationResourceGroupResource.GetDataReplicationVaultAsync(string,CancellationToken)"/> instead.</description>
+        /// <term> Mocking. </term>
+        /// <description> To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationResourceGroupResource.GetDataReplicationVaultAsync(string, CancellationToken)"/> instead. </description>
         /// </item>
         /// </summary>
-        /// <param name="resourceGroupResource"> The <see cref="ResourceGroupResource" /> instance the method will execute against. </param>
+        /// <param name="resourceGroupResource"> The <see cref="ResourceGroupResource"/> the method will execute against. </param>
         /// <param name="vaultName"> The vault name. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="resourceGroupResource"/> or <paramref name="vaultName"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="vaultName"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="resourceGroupResource"/> is null. </exception>
         [ForwardsClientCalls]
         public static async Task<Response<DataReplicationVaultResource>> GetDataReplicationVaultAsync(this ResourceGroupResource resourceGroupResource, string vaultName, CancellationToken cancellationToken = default)
         {
@@ -373,34 +310,15 @@ namespace Azure.ResourceManager.RecoveryServicesDataReplication
 
         /// <summary>
         /// Gets the details of the vault.
-        /// <list type="bullet">
         /// <item>
-        /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataReplication/replicationVaults/{vaultName}</description>
-        /// </item>
-        /// <item>
-        /// <term>Operation Id</term>
-        /// <description>Vault_Get</description>
-        /// </item>
-        /// <item>
-        /// <term>Default Api Version</term>
-        /// <description>2021-02-16-preview</description>
-        /// </item>
-        /// <item>
-        /// <term>Resource</term>
-        /// <description><see cref="DataReplicationVaultResource"/></description>
-        /// </item>
-        /// </list>
-        /// <item>
-        /// <term>Mocking</term>
-        /// <description>To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationResourceGroupResource.GetDataReplicationVault(string,CancellationToken)"/> instead.</description>
+        /// <term> Mocking. </term>
+        /// <description> To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationResourceGroupResource.GetDataReplicationVault(string, CancellationToken)"/> instead. </description>
         /// </item>
         /// </summary>
-        /// <param name="resourceGroupResource"> The <see cref="ResourceGroupResource" /> instance the method will execute against. </param>
+        /// <param name="resourceGroupResource"> The <see cref="ResourceGroupResource"/> the method will execute against. </param>
         /// <param name="vaultName"> The vault name. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="resourceGroupResource"/> or <paramref name="vaultName"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="vaultName"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="resourceGroupResource"/> is null. </exception>
         [ForwardsClientCalls]
         public static Response<DataReplicationVaultResource> GetDataReplicationVault(this ResourceGroupResource resourceGroupResource, string vaultName, CancellationToken cancellationToken = default)
         {
@@ -410,174 +328,183 @@ namespace Azure.ResourceManager.RecoveryServicesDataReplication
         }
 
         /// <summary>
-        /// Performs resource deployment validation.
-        /// <list type="bullet">
+        /// Gets a collection of DataReplicationFabrics in the <see cref="ResourceGroupResource"/>
         /// <item>
-        /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataReplication/deployments/{deploymentId}/preflight</description>
-        /// </item>
-        /// <item>
-        /// <term>Operation Id</term>
-        /// <description>DeploymentPreflight</description>
-        /// </item>
-        /// <item>
-        /// <term>Default Api Version</term>
-        /// <description>2021-02-16-preview</description>
-        /// </item>
-        /// </list>
-        /// <item>
-        /// <term>Mocking</term>
-        /// <description>To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationResourceGroupResource.DeploymentPreflight(string,DeploymentPreflightModel,CancellationToken)"/> instead.</description>
+        /// <term> Mocking. </term>
+        /// <description> To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationResourceGroupResource.GetDataReplicationFabrics()"/> instead. </description>
         /// </item>
         /// </summary>
-        /// <param name="resourceGroupResource"> The <see cref="ResourceGroupResource" /> instance the method will execute against. </param>
-        /// <param name="deploymentId"> Deployment Id. </param>
-        /// <param name="body"> Deployment preflight model. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentException"> <paramref name="deploymentId"/> is an empty string, and was expected to be non-empty. </exception>
-        /// <exception cref="ArgumentNullException"> <paramref name="resourceGroupResource"/> or <paramref name="deploymentId"/> is null. </exception>
-        public static async Task<Response<DeploymentPreflightModel>> DeploymentPreflightAsync(this ResourceGroupResource resourceGroupResource, string deploymentId, DeploymentPreflightModel body = null, CancellationToken cancellationToken = default)
+        /// <param name="resourceGroupResource"> The <see cref="ResourceGroupResource"/> the method will execute against. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="resourceGroupResource"/> is null. </exception>
+        /// <returns> An object representing collection of DataReplicationFabrics and their operations over a DataReplicationFabricResource. </returns>
+        public static DataReplicationFabricCollection GetDataReplicationFabrics(this ResourceGroupResource resourceGroupResource)
         {
             Argument.AssertNotNull(resourceGroupResource, nameof(resourceGroupResource));
 
-            return await GetMockableRecoveryServicesDataReplicationResourceGroupResource(resourceGroupResource).DeploymentPreflightAsync(deploymentId, body, cancellationToken).ConfigureAwait(false);
+            return GetMockableRecoveryServicesDataReplicationResourceGroupResource(resourceGroupResource).GetDataReplicationFabrics();
         }
 
         /// <summary>
-        /// Performs resource deployment validation.
-        /// <list type="bullet">
+        /// Gets the details of the fabric.
         /// <item>
-        /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataReplication/deployments/{deploymentId}/preflight</description>
-        /// </item>
-        /// <item>
-        /// <term>Operation Id</term>
-        /// <description>DeploymentPreflight</description>
-        /// </item>
-        /// <item>
-        /// <term>Default Api Version</term>
-        /// <description>2021-02-16-preview</description>
-        /// </item>
-        /// </list>
-        /// <item>
-        /// <term>Mocking</term>
-        /// <description>To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationResourceGroupResource.DeploymentPreflight(string,DeploymentPreflightModel,CancellationToken)"/> instead.</description>
+        /// <term> Mocking. </term>
+        /// <description> To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationResourceGroupResource.GetDataReplicationFabricAsync(string, CancellationToken)"/> instead. </description>
         /// </item>
         /// </summary>
-        /// <param name="resourceGroupResource"> The <see cref="ResourceGroupResource" /> instance the method will execute against. </param>
-        /// <param name="deploymentId"> Deployment Id. </param>
-        /// <param name="body"> Deployment preflight model. </param>
+        /// <param name="resourceGroupResource"> The <see cref="ResourceGroupResource"/> the method will execute against. </param>
+        /// <param name="fabricName"> The fabric name. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentException"> <paramref name="deploymentId"/> is an empty string, and was expected to be non-empty. </exception>
-        /// <exception cref="ArgumentNullException"> <paramref name="resourceGroupResource"/> or <paramref name="deploymentId"/> is null. </exception>
-        public static Response<DeploymentPreflightModel> DeploymentPreflight(this ResourceGroupResource resourceGroupResource, string deploymentId, DeploymentPreflightModel body = null, CancellationToken cancellationToken = default)
+        /// <exception cref="ArgumentNullException"> <paramref name="resourceGroupResource"/> is null. </exception>
+        [ForwardsClientCalls]
+        public static async Task<Response<DataReplicationFabricResource>> GetDataReplicationFabricAsync(this ResourceGroupResource resourceGroupResource, string fabricName, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNull(resourceGroupResource, nameof(resourceGroupResource));
 
-            return GetMockableRecoveryServicesDataReplicationResourceGroupResource(resourceGroupResource).DeploymentPreflight(deploymentId, body, cancellationToken);
+            return await GetMockableRecoveryServicesDataReplicationResourceGroupResource(resourceGroupResource).GetDataReplicationFabricAsync(fabricName, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
-        /// Gets the list of fabrics in the given subscription.
-        /// <list type="bullet">
+        /// Gets the details of the fabric.
         /// <item>
-        /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.DataReplication/replicationFabrics</description>
-        /// </item>
-        /// <item>
-        /// <term>Operation Id</term>
-        /// <description>Fabric_ListBySubscription</description>
-        /// </item>
-        /// <item>
-        /// <term>Default Api Version</term>
-        /// <description>2021-02-16-preview</description>
-        /// </item>
-        /// <item>
-        /// <term>Resource</term>
-        /// <description><see cref="DataReplicationFabricResource"/></description>
-        /// </item>
-        /// </list>
-        /// <item>
-        /// <term>Mocking</term>
-        /// <description>To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationSubscriptionResource.GetDataReplicationFabrics(string,CancellationToken)"/> instead.</description>
+        /// <term> Mocking. </term>
+        /// <description> To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationResourceGroupResource.GetDataReplicationFabric(string, CancellationToken)"/> instead. </description>
         /// </item>
         /// </summary>
-        /// <param name="subscriptionResource"> The <see cref="SubscriptionResource" /> instance the method will execute against. </param>
-        /// <param name="continuationToken"> Continuation token from the previous call. </param>
+        /// <param name="resourceGroupResource"> The <see cref="ResourceGroupResource"/> the method will execute against. </param>
+        /// <param name="fabricName"> The fabric name. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="resourceGroupResource"/> is null. </exception>
+        [ForwardsClientCalls]
+        public static Response<DataReplicationFabricResource> GetDataReplicationFabric(this ResourceGroupResource resourceGroupResource, string fabricName, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(resourceGroupResource, nameof(resourceGroupResource));
+
+            return GetMockableRecoveryServicesDataReplicationResourceGroupResource(resourceGroupResource).GetDataReplicationFabric(fabricName, cancellationToken);
+        }
+
+        /// <summary>
+        /// Performs resource deployment preflight validation.
+        /// <item>
+        /// <term> Mocking. </term>
+        /// <description> To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationResourceGroupResource.PerformDeploymentPreflightValidationAsync(string, DeploymentPreflight, CancellationToken)"/> instead. </description>
+        /// </item>
+        /// </summary>
+        /// <param name="resourceGroupResource"> The <see cref="ResourceGroupResource"/> the method will execute against. </param>
+        /// <param name="deploymentId"> Deployment Id. </param>
+        /// <param name="body"> Deployment preflight model. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="resourceGroupResource"/> is null. </exception>
+        public static async Task<Response<DeploymentPreflight>> PerformDeploymentPreflightValidationAsync(this ResourceGroupResource resourceGroupResource, string deploymentId, DeploymentPreflight body = default, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(resourceGroupResource, nameof(resourceGroupResource));
+
+            return await GetMockableRecoveryServicesDataReplicationResourceGroupResource(resourceGroupResource).PerformDeploymentPreflightValidationAsync(deploymentId, body, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Performs resource deployment preflight validation.
+        /// <item>
+        /// <term> Mocking. </term>
+        /// <description> To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationResourceGroupResource.PerformDeploymentPreflightValidation(string, DeploymentPreflight, CancellationToken)"/> instead. </description>
+        /// </item>
+        /// </summary>
+        /// <param name="resourceGroupResource"> The <see cref="ResourceGroupResource"/> the method will execute against. </param>
+        /// <param name="deploymentId"> Deployment Id. </param>
+        /// <param name="body"> Deployment preflight model. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="resourceGroupResource"/> is null. </exception>
+        public static Response<DeploymentPreflight> PerformDeploymentPreflightValidation(this ResourceGroupResource resourceGroupResource, string deploymentId, DeploymentPreflight body = default, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(resourceGroupResource, nameof(resourceGroupResource));
+
+            return GetMockableRecoveryServicesDataReplicationResourceGroupResource(resourceGroupResource).PerformDeploymentPreflightValidation(deploymentId, body, cancellationToken);
+        }
+
+        /// <summary>
+        /// Gets the list of vaults in the given subscription.
+        /// <item>
+        /// <term> Mocking. </term>
+        /// <description> To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationSubscriptionResource.GetDataReplicationVaultsAsync(CancellationToken)"/> instead. </description>
+        /// </item>
+        /// </summary>
+        /// <param name="subscriptionResource"> The <see cref="SubscriptionResource"/> the method will execute against. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="subscriptionResource"/> is null. </exception>
-        /// <returns> An async collection of <see cref="DataReplicationFabricResource"/> that may take multiple service requests to iterate over. </returns>
-        public static AsyncPageable<DataReplicationFabricResource> GetDataReplicationFabricsAsync(this SubscriptionResource subscriptionResource, string continuationToken = null, CancellationToken cancellationToken = default)
+        /// <returns> A collection of <see cref="DataReplicationVaultResource"/> that may take multiple service requests to iterate over. </returns>
+        public static AsyncPageable<DataReplicationVaultResource> GetDataReplicationVaultsAsync(this SubscriptionResource subscriptionResource, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNull(subscriptionResource, nameof(subscriptionResource));
 
-            return GetMockableRecoveryServicesDataReplicationSubscriptionResource(subscriptionResource).GetDataReplicationFabricsAsync(continuationToken, cancellationToken);
+            return GetMockableRecoveryServicesDataReplicationSubscriptionResource(subscriptionResource).GetDataReplicationVaultsAsync(cancellationToken);
+        }
+
+        /// <summary>
+        /// Gets the list of vaults in the given subscription.
+        /// <item>
+        /// <term> Mocking. </term>
+        /// <description> To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationSubscriptionResource.GetDataReplicationVaults(CancellationToken)"/> instead. </description>
+        /// </item>
+        /// </summary>
+        /// <param name="subscriptionResource"> The <see cref="SubscriptionResource"/> the method will execute against. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="subscriptionResource"/> is null. </exception>
+        /// <returns> A collection of <see cref="DataReplicationVaultResource"/> that may take multiple service requests to iterate over. </returns>
+        public static Pageable<DataReplicationVaultResource> GetDataReplicationVaults(this SubscriptionResource subscriptionResource, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(subscriptionResource, nameof(subscriptionResource));
+
+            return GetMockableRecoveryServicesDataReplicationSubscriptionResource(subscriptionResource).GetDataReplicationVaults(cancellationToken);
         }
 
         /// <summary>
         /// Gets the list of fabrics in the given subscription.
-        /// <list type="bullet">
         /// <item>
-        /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.DataReplication/replicationFabrics</description>
-        /// </item>
-        /// <item>
-        /// <term>Operation Id</term>
-        /// <description>Fabric_ListBySubscription</description>
-        /// </item>
-        /// <item>
-        /// <term>Default Api Version</term>
-        /// <description>2021-02-16-preview</description>
-        /// </item>
-        /// <item>
-        /// <term>Resource</term>
-        /// <description><see cref="DataReplicationFabricResource"/></description>
-        /// </item>
-        /// </list>
-        /// <item>
-        /// <term>Mocking</term>
-        /// <description>To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationSubscriptionResource.GetDataReplicationFabrics(string,CancellationToken)"/> instead.</description>
+        /// <term> Mocking. </term>
+        /// <description> To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationSubscriptionResource.GetDataReplicationFabricsAsync(CancellationToken)"/> instead. </description>
         /// </item>
         /// </summary>
-        /// <param name="subscriptionResource"> The <see cref="SubscriptionResource" /> instance the method will execute against. </param>
-        /// <param name="continuationToken"> Continuation token from the previous call. </param>
+        /// <param name="subscriptionResource"> The <see cref="SubscriptionResource"/> the method will execute against. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="subscriptionResource"/> is null. </exception>
         /// <returns> A collection of <see cref="DataReplicationFabricResource"/> that may take multiple service requests to iterate over. </returns>
-        public static Pageable<DataReplicationFabricResource> GetDataReplicationFabrics(this SubscriptionResource subscriptionResource, string continuationToken = null, CancellationToken cancellationToken = default)
+        public static AsyncPageable<DataReplicationFabricResource> GetDataReplicationFabricsAsync(this SubscriptionResource subscriptionResource, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNull(subscriptionResource, nameof(subscriptionResource));
 
-            return GetMockableRecoveryServicesDataReplicationSubscriptionResource(subscriptionResource).GetDataReplicationFabrics(continuationToken, cancellationToken);
+            return GetMockableRecoveryServicesDataReplicationSubscriptionResource(subscriptionResource).GetDataReplicationFabricsAsync(cancellationToken);
+        }
+
+        /// <summary>
+        /// Gets the list of fabrics in the given subscription.
+        /// <item>
+        /// <term> Mocking. </term>
+        /// <description> To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationSubscriptionResource.GetDataReplicationFabrics(CancellationToken)"/> instead. </description>
+        /// </item>
+        /// </summary>
+        /// <param name="subscriptionResource"> The <see cref="SubscriptionResource"/> the method will execute against. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="subscriptionResource"/> is null. </exception>
+        /// <returns> A collection of <see cref="DataReplicationFabricResource"/> that may take multiple service requests to iterate over. </returns>
+        public static Pageable<DataReplicationFabricResource> GetDataReplicationFabrics(this SubscriptionResource subscriptionResource, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(subscriptionResource, nameof(subscriptionResource));
+
+            return GetMockableRecoveryServicesDataReplicationSubscriptionResource(subscriptionResource).GetDataReplicationFabrics(cancellationToken);
         }
 
         /// <summary>
         /// Checks the resource name availability.
-        /// <list type="bullet">
         /// <item>
-        /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.DataReplication/locations/{location}/checkNameAvailability</description>
-        /// </item>
-        /// <item>
-        /// <term>Operation Id</term>
-        /// <description>CheckNameAvailability</description>
-        /// </item>
-        /// <item>
-        /// <term>Default Api Version</term>
-        /// <description>2021-02-16-preview</description>
-        /// </item>
-        /// </list>
-        /// <item>
-        /// <term>Mocking</term>
-        /// <description>To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationSubscriptionResource.CheckDataReplicationNameAvailability(AzureLocation,DataReplicationNameAvailabilityContent,CancellationToken)"/> instead.</description>
+        /// <term> Mocking. </term>
+        /// <description> To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationSubscriptionResource.CheckDataReplicationNameAvailabilityAsync(AzureLocation, DataReplicationNameAvailabilityContent, CancellationToken)"/> instead. </description>
         /// </item>
         /// </summary>
-        /// <param name="subscriptionResource"> The <see cref="SubscriptionResource" /> instance the method will execute against. </param>
+        /// <param name="subscriptionResource"> The <see cref="SubscriptionResource"/> the method will execute against. </param>
         /// <param name="location"> The name of the Azure region. </param>
         /// <param name="content"> Resource details. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="subscriptionResource"/> is null. </exception>
-        public static async Task<Response<DataReplicationNameAvailabilityResult>> CheckDataReplicationNameAvailabilityAsync(this SubscriptionResource subscriptionResource, AzureLocation location, DataReplicationNameAvailabilityContent content = null, CancellationToken cancellationToken = default)
+        public static async Task<Response<DataReplicationNameAvailabilityResult>> CheckDataReplicationNameAvailabilityAsync(this SubscriptionResource subscriptionResource, AzureLocation location, DataReplicationNameAvailabilityContent content = default, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNull(subscriptionResource, nameof(subscriptionResource));
 
@@ -586,109 +513,21 @@ namespace Azure.ResourceManager.RecoveryServicesDataReplication
 
         /// <summary>
         /// Checks the resource name availability.
-        /// <list type="bullet">
         /// <item>
-        /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.DataReplication/locations/{location}/checkNameAvailability</description>
-        /// </item>
-        /// <item>
-        /// <term>Operation Id</term>
-        /// <description>CheckNameAvailability</description>
-        /// </item>
-        /// <item>
-        /// <term>Default Api Version</term>
-        /// <description>2021-02-16-preview</description>
-        /// </item>
-        /// </list>
-        /// <item>
-        /// <term>Mocking</term>
-        /// <description>To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationSubscriptionResource.CheckDataReplicationNameAvailability(AzureLocation,DataReplicationNameAvailabilityContent,CancellationToken)"/> instead.</description>
+        /// <term> Mocking. </term>
+        /// <description> To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationSubscriptionResource.CheckDataReplicationNameAvailability(AzureLocation, DataReplicationNameAvailabilityContent, CancellationToken)"/> instead. </description>
         /// </item>
         /// </summary>
-        /// <param name="subscriptionResource"> The <see cref="SubscriptionResource" /> instance the method will execute against. </param>
+        /// <param name="subscriptionResource"> The <see cref="SubscriptionResource"/> the method will execute against. </param>
         /// <param name="location"> The name of the Azure region. </param>
         /// <param name="content"> Resource details. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="subscriptionResource"/> is null. </exception>
-        public static Response<DataReplicationNameAvailabilityResult> CheckDataReplicationNameAvailability(this SubscriptionResource subscriptionResource, AzureLocation location, DataReplicationNameAvailabilityContent content = null, CancellationToken cancellationToken = default)
+        public static Response<DataReplicationNameAvailabilityResult> CheckDataReplicationNameAvailability(this SubscriptionResource subscriptionResource, AzureLocation location, DataReplicationNameAvailabilityContent content = default, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNull(subscriptionResource, nameof(subscriptionResource));
 
             return GetMockableRecoveryServicesDataReplicationSubscriptionResource(subscriptionResource).CheckDataReplicationNameAvailability(location, content, cancellationToken);
-        }
-
-        /// <summary>
-        /// Gets the list of vaults in the given subscription.
-        /// <list type="bullet">
-        /// <item>
-        /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.DataReplication/replicationVaults</description>
-        /// </item>
-        /// <item>
-        /// <term>Operation Id</term>
-        /// <description>Vault_ListBySubscription</description>
-        /// </item>
-        /// <item>
-        /// <term>Default Api Version</term>
-        /// <description>2021-02-16-preview</description>
-        /// </item>
-        /// <item>
-        /// <term>Resource</term>
-        /// <description><see cref="DataReplicationVaultResource"/></description>
-        /// </item>
-        /// </list>
-        /// <item>
-        /// <term>Mocking</term>
-        /// <description>To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationSubscriptionResource.GetDataReplicationVaults(string,CancellationToken)"/> instead.</description>
-        /// </item>
-        /// </summary>
-        /// <param name="subscriptionResource"> The <see cref="SubscriptionResource" /> instance the method will execute against. </param>
-        /// <param name="continuationToken"> Continuation token from the previous call. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="subscriptionResource"/> is null. </exception>
-        /// <returns> An async collection of <see cref="DataReplicationVaultResource"/> that may take multiple service requests to iterate over. </returns>
-        public static AsyncPageable<DataReplicationVaultResource> GetDataReplicationVaultsAsync(this SubscriptionResource subscriptionResource, string continuationToken = null, CancellationToken cancellationToken = default)
-        {
-            Argument.AssertNotNull(subscriptionResource, nameof(subscriptionResource));
-
-            return GetMockableRecoveryServicesDataReplicationSubscriptionResource(subscriptionResource).GetDataReplicationVaultsAsync(continuationToken, cancellationToken);
-        }
-
-        /// <summary>
-        /// Gets the list of vaults in the given subscription.
-        /// <list type="bullet">
-        /// <item>
-        /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.DataReplication/replicationVaults</description>
-        /// </item>
-        /// <item>
-        /// <term>Operation Id</term>
-        /// <description>Vault_ListBySubscription</description>
-        /// </item>
-        /// <item>
-        /// <term>Default Api Version</term>
-        /// <description>2021-02-16-preview</description>
-        /// </item>
-        /// <item>
-        /// <term>Resource</term>
-        /// <description><see cref="DataReplicationVaultResource"/></description>
-        /// </item>
-        /// </list>
-        /// <item>
-        /// <term>Mocking</term>
-        /// <description>To mock this method, please mock <see cref="MockableRecoveryServicesDataReplicationSubscriptionResource.GetDataReplicationVaults(string,CancellationToken)"/> instead.</description>
-        /// </item>
-        /// </summary>
-        /// <param name="subscriptionResource"> The <see cref="SubscriptionResource" /> instance the method will execute against. </param>
-        /// <param name="continuationToken"> Continuation token from the previous call. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="subscriptionResource"/> is null. </exception>
-        /// <returns> A collection of <see cref="DataReplicationVaultResource"/> that may take multiple service requests to iterate over. </returns>
-        public static Pageable<DataReplicationVaultResource> GetDataReplicationVaults(this SubscriptionResource subscriptionResource, string continuationToken = null, CancellationToken cancellationToken = default)
-        {
-            Argument.AssertNotNull(subscriptionResource, nameof(subscriptionResource));
-
-            return GetMockableRecoveryServicesDataReplicationSubscriptionResource(subscriptionResource).GetDataReplicationVaults(continuationToken, cancellationToken);
         }
     }
 }

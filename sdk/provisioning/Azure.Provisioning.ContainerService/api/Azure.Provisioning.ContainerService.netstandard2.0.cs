@@ -77,6 +77,12 @@ namespace Azure.Provisioning.ContainerService
             public static readonly string V2024_06_01;
             public static readonly string V2024_07_01;
             public static readonly string V2024_08_01;
+            public static readonly string V2024_09_01;
+            public static readonly string V2024_10_01;
+            public static readonly string V2025_01_01;
+            public static readonly string V2025_02_01;
+            public static readonly string V2025_03_01;
+            public static readonly string V2025_04_01;
         }
     }
     public enum AgentPoolType
@@ -154,7 +160,6 @@ namespace Azure.Provisioning.ContainerService
         public Azure.Provisioning.BicepValue<Azure.Provisioning.ContainerService.WorkloadRuntime> WorkloadRuntime { get { throw null; } set { } }
         protected override void DefineProvisionableProperties() { }
         public static Azure.Provisioning.ContainerService.ContainerServiceAgentPool FromExisting(string bicepIdentifier, string? resourceVersion = null) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override Azure.Provisioning.Primitives.ResourceNameRequirements GetResourceNameRequirements() { throw null; }
         public static partial class ResourceVersions
         {
@@ -208,6 +213,12 @@ namespace Azure.Provisioning.ContainerService
             public static readonly string V2024_06_01;
             public static readonly string V2024_07_01;
             public static readonly string V2024_08_01;
+            public static readonly string V2024_09_01;
+            public static readonly string V2024_10_01;
+            public static readonly string V2025_01_01;
+            public static readonly string V2025_02_01;
+            public static readonly string V2025_03_01;
+            public static readonly string V2025_04_01;
         }
     }
     [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
@@ -225,11 +236,8 @@ namespace Azure.Provisioning.ContainerService
         public static Azure.Provisioning.ContainerService.ContainerServiceBuiltInRole AzureKubernetesServiceRbacReader { get { throw null; } }
         public static Azure.Provisioning.ContainerService.ContainerServiceBuiltInRole AzureKubernetesServiceRbacWriter { get { throw null; } }
         public bool Equals(Azure.Provisioning.ContainerService.ContainerServiceBuiltInRole other) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override bool Equals(object? obj) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public static string GetBuiltInRoleName(Azure.Provisioning.ContainerService.ContainerServiceBuiltInRole value) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override int GetHashCode() { throw null; }
         public static bool operator ==(Azure.Provisioning.ContainerService.ContainerServiceBuiltInRole left, Azure.Provisioning.ContainerService.ContainerServiceBuiltInRole right) { throw null; }
         public static implicit operator Azure.Provisioning.ContainerService.ContainerServiceBuiltInRole (string value) { throw null; }
@@ -335,6 +343,12 @@ namespace Azure.Provisioning.ContainerService
             public static readonly string V2024_06_01;
             public static readonly string V2024_07_01;
             public static readonly string V2024_08_01;
+            public static readonly string V2024_09_01;
+            public static readonly string V2024_10_01;
+            public static readonly string V2025_01_01;
+            public static readonly string V2025_02_01;
+            public static readonly string V2025_03_01;
+            public static readonly string V2025_04_01;
         }
     }
     public partial class ContainerServiceMaintenanceRelativeMonthlySchedule : Azure.Provisioning.Primitives.ProvisionableConstruct
@@ -434,7 +448,6 @@ namespace Azure.Provisioning.ContainerService
         public Azure.Provisioning.Authorization.RoleAssignment CreateRoleAssignment(Azure.Provisioning.ContainerService.ContainerServiceBuiltInRole role, Azure.Provisioning.Roles.UserAssignedIdentity identity) { throw null; }
         protected override void DefineProvisionableProperties() { }
         public static Azure.Provisioning.ContainerService.ContainerServiceManagedCluster FromExisting(string bicepIdentifier, string? resourceVersion = null) { throw null; }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public override Azure.Provisioning.Primitives.ResourceNameRequirements GetResourceNameRequirements() { throw null; }
         public static partial class ResourceVersions
         {
@@ -488,6 +501,12 @@ namespace Azure.Provisioning.ContainerService
             public static readonly string V2024_06_01;
             public static readonly string V2024_07_01;
             public static readonly string V2024_08_01;
+            public static readonly string V2024_09_01;
+            public static readonly string V2024_10_01;
+            public static readonly string V2025_01_01;
+            public static readonly string V2025_02_01;
+            public static readonly string V2025_03_01;
+            public static readonly string V2025_04_01;
         }
     }
     public enum ContainerServiceNetworkMode
@@ -634,6 +653,12 @@ namespace Azure.Provisioning.ContainerService
             public static readonly string V2024_06_01;
             public static readonly string V2024_07_01;
             public static readonly string V2024_08_01;
+            public static readonly string V2024_09_01;
+            public static readonly string V2024_10_01;
+            public static readonly string V2025_01_01;
+            public static readonly string V2025_02_01;
+            public static readonly string V2025_03_01;
+            public static readonly string V2025_04_01;
         }
     }
     public enum ContainerServicePrivateEndpointConnectionProvisioningState
@@ -763,6 +788,12 @@ namespace Azure.Provisioning.ContainerService
             public static readonly string V2024_06_01;
             public static readonly string V2024_07_01;
             public static readonly string V2024_08_01;
+            public static readonly string V2024_09_01;
+            public static readonly string V2024_10_01;
+            public static readonly string V2025_01_01;
+            public static readonly string V2025_02_01;
+            public static readonly string V2025_03_01;
+            public static readonly string V2025_04_01;
         }
     }
     public enum ContainerServiceTrustedAccessRoleBindingProvisioningState

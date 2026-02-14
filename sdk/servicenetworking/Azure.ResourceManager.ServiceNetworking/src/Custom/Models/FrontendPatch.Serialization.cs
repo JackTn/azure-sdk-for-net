@@ -49,7 +49,7 @@ namespace Azure.ResourceManager.ServiceNetworking.Models
                 {
                     writer.WritePropertyName(item.Key);
 #if NET6_0_OR_GREATER
-				writer.WriteRawValue(item.Value);
+                    writer.WriteRawValue(item.Value);
 #else
                     using (JsonDocument document = JsonDocument.Parse(item.Value))
                     {
@@ -115,7 +115,7 @@ namespace Azure.ResourceManager.ServiceNetworking.Models
             switch (format)
             {
                 case "J":
-                    return ModelReaderWriter.Write(this, options);
+                    return ModelReaderWriter.Write(this, options, AzureResourceManagerServiceNetworkingContext.Default);
                 default:
                     throw new FormatException($"The model {nameof(FrontendPatch)} does not support writing '{options.Format}' format.");
             }

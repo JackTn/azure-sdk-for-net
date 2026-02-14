@@ -8,6 +8,7 @@
 using System;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
+using System.Text;
 using System.Text.Json;
 using Azure.Core;
 
@@ -26,7 +27,7 @@ namespace Azure.ResourceManager.Cdn.Models
 
         /// <param name="writer"> The JSON writer. </param>
         /// <param name="options"> The client options for reading and writing models. </param>
-        protected virtual void JsonModelWriteCore(Utf8JsonWriter writer, ModelReaderWriterOptions options)
+        protected override void JsonModelWriteCore(Utf8JsonWriter writer, ModelReaderWriterOptions options)
         {
             var format = options.Format == "W" ? ((IPersistableModel<CacheKeyQueryStringActionProperties>)this).GetFormatFromOptions(options) : options.Format;
             if (format != "J")
@@ -34,8 +35,7 @@ namespace Azure.ResourceManager.Cdn.Models
                 throw new FormatException($"The model {nameof(CacheKeyQueryStringActionProperties)} does not support writing '{format}' format.");
             }
 
-            writer.WritePropertyName("typeName"u8);
-            writer.WriteStringValue(ActionType.ToString());
+            base.JsonModelWriteCore(writer, options);
             writer.WritePropertyName("queryStringBehavior"u8);
             writer.WriteStringValue(QueryStringBehavior.ToString());
             if (Optional.IsDefined(QueryParameters))
@@ -48,21 +48,6 @@ namespace Azure.ResourceManager.Cdn.Models
                 else
                 {
                     writer.WriteNull("queryParameters");
-                }
-            }
-            if (options.Format != "W" && _serializedAdditionalRawData != null)
-            {
-                foreach (var item in _serializedAdditionalRawData)
-                {
-                    writer.WritePropertyName(item.Key);
-#if NET6_0_OR_GREATER
-				writer.WriteRawValue(item.Value);
-#else
-                    using (JsonDocument document = JsonDocument.Parse(item.Value, ModelSerializationExtensions.JsonDocumentOptions))
-                    {
-                        JsonSerializer.Serialize(writer, document.RootElement);
-                    }
-#endif
                 }
             }
         }
@@ -87,18 +72,13 @@ namespace Azure.ResourceManager.Cdn.Models
             {
                 return null;
             }
-            CacheKeyQueryStringActionType typeName = default;
             QueryStringBehavior queryStringBehavior = default;
             string queryParameters = default;
+            DeliveryRuleActionParametersType typeName = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> rawDataDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
             {
-                if (property.NameEquals("typeName"u8))
-                {
-                    typeName = new CacheKeyQueryStringActionType(property.Value.GetString());
-                    continue;
-                }
                 if (property.NameEquals("queryStringBehavior"u8))
                 {
                     queryStringBehavior = new QueryStringBehavior(property.Value.GetString());
@@ -114,13 +94,80 @@ namespace Azure.ResourceManager.Cdn.Models
                     queryParameters = property.Value.GetString();
                     continue;
                 }
+                if (property.NameEquals("typeName"u8))
+                {
+                    typeName = new DeliveryRuleActionParametersType(property.Value.GetString());
+                    continue;
+                }
                 if (options.Format != "W")
                 {
                     rawDataDictionary.Add(property.Name, BinaryData.FromString(property.Value.GetRawText()));
                 }
             }
             serializedAdditionalRawData = rawDataDictionary;
-            return new CacheKeyQueryStringActionProperties(typeName, queryStringBehavior, queryParameters, serializedAdditionalRawData);
+            return new CacheKeyQueryStringActionProperties(typeName, serializedAdditionalRawData, queryStringBehavior, queryParameters);
+        }
+
+        private BinaryData SerializeBicep(ModelReaderWriterOptions options)
+        {
+            StringBuilder builder = new StringBuilder();
+            BicepModelReaderWriterOptions bicepOptions = options as BicepModelReaderWriterOptions;
+            IDictionary<string, string> propertyOverrides = null;
+            bool hasObjectOverride = bicepOptions != null && bicepOptions.PropertyOverrides.TryGetValue(this, out propertyOverrides);
+            bool hasPropertyOverride = false;
+            string propertyOverride = null;
+
+            builder.AppendLine("{");
+
+            hasPropertyOverride = hasObjectOverride && propertyOverrides.TryGetValue(nameof(QueryStringBehavior), out propertyOverride);
+            if (hasPropertyOverride)
+            {
+                builder.Append("  queryStringBehavior: ");
+                builder.AppendLine(propertyOverride);
+            }
+            else
+            {
+                builder.Append("  queryStringBehavior: ");
+                builder.AppendLine($"'{QueryStringBehavior.ToString()}'");
+            }
+
+            hasPropertyOverride = hasObjectOverride && propertyOverrides.TryGetValue(nameof(QueryParameters), out propertyOverride);
+            if (hasPropertyOverride)
+            {
+                builder.Append("  queryParameters: ");
+                builder.AppendLine(propertyOverride);
+            }
+            else
+            {
+                if (Optional.IsDefined(QueryParameters))
+                {
+                    builder.Append("  queryParameters: ");
+                    if (QueryParameters.Contains(Environment.NewLine))
+                    {
+                        builder.AppendLine("'''");
+                        builder.AppendLine($"{QueryParameters}'''");
+                    }
+                    else
+                    {
+                        builder.AppendLine($"'{QueryParameters}'");
+                    }
+                }
+            }
+
+            hasPropertyOverride = hasObjectOverride && propertyOverrides.TryGetValue(nameof(TypeName), out propertyOverride);
+            if (hasPropertyOverride)
+            {
+                builder.Append("  typeName: ");
+                builder.AppendLine(propertyOverride);
+            }
+            else
+            {
+                builder.Append("  typeName: ");
+                builder.AppendLine($"'{TypeName.ToString()}'");
+            }
+
+            builder.AppendLine("}");
+            return BinaryData.FromString(builder.ToString());
         }
 
         BinaryData IPersistableModel<CacheKeyQueryStringActionProperties>.Write(ModelReaderWriterOptions options)
@@ -130,7 +177,9 @@ namespace Azure.ResourceManager.Cdn.Models
             switch (format)
             {
                 case "J":
-                    return ModelReaderWriter.Write(this, options);
+                    return ModelReaderWriter.Write(this, options, AzureResourceManagerCdnContext.Default);
+                case "bicep":
+                    return SerializeBicep(options);
                 default:
                     throw new FormatException($"The model {nameof(CacheKeyQueryStringActionProperties)} does not support writing '{options.Format}' format.");
             }

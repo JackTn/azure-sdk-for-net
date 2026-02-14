@@ -19,7 +19,7 @@ using BaseBlobs::Azure.Storage.Sas;
 using DMBlobs::Azure.Storage.DataMovement.Blobs;
 using Moq;
 using NUnit.Framework;
-using Metadata = System.Collections.Generic.IDictionary<string,string>;
+using Metadata = System.Collections.Generic.IDictionary<string, string>;
 
 namespace Azure.Storage.DataMovement.Blobs.Tests
 {
@@ -32,8 +32,8 @@ namespace Azure.Storage.DataMovement.Blobs.Tests
         private const string DefaultCacheControl = "no-cache";
         private AccessTier DefaultAccessTier = AccessTier.Cold;
 
-    public BlockBlobStorageResourceTests(bool async, BlobClientOptions.ServiceVersion serviceVersion)
-           : base(async, serviceVersion, null /* RecordedTestMode.Record /* to re-record */)
+        public BlockBlobStorageResourceTests(bool async, BlobClientOptions.ServiceVersion serviceVersion)
+               : base(async, serviceVersion, null /* RecordedTestMode.Record /* to re-record */)
         { }
 
         [Test]
@@ -365,6 +365,7 @@ namespace Azure.Storage.DataMovement.Blobs.Tests
             Metadata metadata = DataProvider.BuildMetadata();
             BlockBlobStorageResourceOptions resourceOptions = new()
             {
+                AccessTier = default,
                 CacheControl = default,
                 ContentDisposition = default,
                 ContentEncoding = default,
@@ -382,6 +383,7 @@ namespace Azure.Storage.DataMovement.Blobs.Tests
                 stream,
                 It.Is<BlobUploadOptions>(
                     options =>
+                        options.AccessTier == default &&
                         options.HttpHeaders.ContentType == default &&
                         options.HttpHeaders.ContentEncoding == default &&
                         options.HttpHeaders.ContentLanguage == default &&
@@ -644,8 +646,8 @@ namespace Azure.Storage.DataMovement.Blobs.Tests
             Uri expectedUri,
             Metadata expectedMetdata)
         {
-            AccessTier? expectedAccessTier = resourceOptions.AccessTier != default ? resourceOptions.AccessTier.Value : DefaultAccessTier;
-            string expectedContentDisposition = resourceOptions._isContentDispositionSet  ? resourceOptions.ContentDisposition : DefaultContentDisposition;
+            AccessTier? expectedAccessTier = resourceOptions._isAccessTierSet != default ? resourceOptions.AccessTier.Value : DefaultAccessTier;
+            string expectedContentDisposition = resourceOptions._isContentDispositionSet != default ? resourceOptions.ContentDisposition : DefaultContentDisposition;
             string expectedContentEncoding = resourceOptions._isContentEncodingSet != default ? resourceOptions.ContentEncoding : DefaultContentEncoding;
             string expectedContentLanguage = resourceOptions._isContentLanguageSet != default ? resourceOptions.ContentLanguage : DefaultContentLanguage;
             string expectedContentType = resourceOptions._isContentTypeSet != default ? resourceOptions.ContentType : DefaultContentType;
@@ -761,7 +763,7 @@ namespace Azure.Storage.DataMovement.Blobs.Tests
             Metadata metadata = DataProvider.BuildMetadata();
             BlockBlobStorageResourceOptions resourceOptions = new()
             {
-                ContentLanguage= default
+                ContentLanguage = default
             };
             Mock<BlockBlobClient> destinationMock = await CopyFromUriInternalPreserveAsync(
                 resourceOptions,
@@ -858,6 +860,7 @@ namespace Azure.Storage.DataMovement.Blobs.Tests
             Metadata metadata = DataProvider.BuildMetadata();
             BlockBlobStorageResourceOptions resourceOptions = new()
             {
+                AccessTier = default,
                 CacheControl = default,
                 ContentDisposition = default,
                 ContentEncoding = default,
@@ -874,7 +877,7 @@ namespace Azure.Storage.DataMovement.Blobs.Tests
                 It.Is<BlobSyncUploadFromUriOptions>(
                     options =>
                         options.CopySourceBlobProperties == false &&
-                        options.AccessTier == DefaultAccessTier &&
+                        options.AccessTier == default &&
                         options.HttpHeaders.ContentType == default &&
                         options.HttpHeaders.ContentEncoding == default &&
                         options.HttpHeaders.ContentLanguage == default &&
@@ -1252,13 +1255,13 @@ namespace Azure.Storage.DataMovement.Blobs.Tests
 
             // Act
             StorageResourceItemProperties result = await storageResource.GetPropertiesInternalAsync();
-            AccessTier accessTierResult = (AccessTier) result.RawProperties[DataMovementConstants.ResourceProperties.AccessTier];
-            string contentEncodingResult = (string) result.RawProperties[DataMovementConstants.ResourceProperties.ContentEncoding];
-            string contentDispositionResult = (string) result.RawProperties[DataMovementConstants.ResourceProperties.ContentDisposition];
-            string contentLanguageResult = (string) result.RawProperties[DataMovementConstants.ResourceProperties.ContentLanguage];
-            string contentTypeResult = (string) result.RawProperties[DataMovementConstants.ResourceProperties.ContentType];
-            string cacheControlResult = (string) result.RawProperties[DataMovementConstants.ResourceProperties.CacheControl];
-            Metadata metadataResult = (Metadata) result.RawProperties[DataMovementConstants.ResourceProperties.Metadata];
+            AccessTier accessTierResult = (AccessTier)result.RawProperties[DataMovementConstants.ResourceProperties.AccessTier];
+            string contentEncodingResult = (string)result.RawProperties[DataMovementConstants.ResourceProperties.ContentEncoding];
+            string contentDispositionResult = (string)result.RawProperties[DataMovementConstants.ResourceProperties.ContentDisposition];
+            string contentLanguageResult = (string)result.RawProperties[DataMovementConstants.ResourceProperties.ContentLanguage];
+            string contentTypeResult = (string)result.RawProperties[DataMovementConstants.ResourceProperties.ContentType];
+            string cacheControlResult = (string)result.RawProperties[DataMovementConstants.ResourceProperties.CacheControl];
+            Metadata metadataResult = (Metadata)result.RawProperties[DataMovementConstants.ResourceProperties.Metadata];
 
             // Assert
             Assert.AreEqual(eTag, result.ETag);
@@ -1576,6 +1579,7 @@ namespace Azure.Storage.DataMovement.Blobs.Tests
                 It.IsAny<IEnumerable<string>>(),
                 It.Is<CommitBlockListOptions>(
                     options =>
+                        options.AccessTier == DefaultAccessTier &&
                         options.HttpHeaders.ContentType == DefaultContentType &&
                         options.HttpHeaders.ContentEncoding == DefaultContentEncoding &&
                         options.HttpHeaders.ContentLanguage == DefaultContentLanguage &&
@@ -1602,6 +1606,7 @@ namespace Azure.Storage.DataMovement.Blobs.Tests
             // Act
             BlockBlobStorageResourceOptions resourceOptions = new()
             {
+                AccessTier = default,
                 CacheControl = default,
                 ContentDisposition = default,
                 ContentEncoding = default,
@@ -1618,6 +1623,7 @@ namespace Azure.Storage.DataMovement.Blobs.Tests
                 It.IsAny<IEnumerable<string>>(),
                 It.Is<CommitBlockListOptions>(
                     options =>
+                        options.AccessTier == default &&
                         options.HttpHeaders.ContentType == default &&
                         options.HttpHeaders.ContentEncoding == default &&
                         options.HttpHeaders.ContentLanguage == default &&

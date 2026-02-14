@@ -1,13 +1,16 @@
 # Release History
-## 1.4.1-beta.2 (Unreleased)
+
+## 1.4.1-beta.3 (Unreleased)
 
 ### Features Added
 
-### Breaking Changes
+- Added `ConfidentialLedgerRedirectPolicy` to automatically follow HTTP 307/308 redirects while preserving the Authorization header. Previously, the SDK did not follow redirects by default, and even when redirects were enabled, the Authorization header was stripped on cross-domain redirects between ACL nodes, causing write operations to fail when routed to non-primary nodes.
 
-### Bugs Fixed
+## 1.4.1-beta.2 (2025-04-23)
 
-### Other Changes
+### Features Added
+- Added user defined functions feature.
+- Added tags parameter for CreateLedgerEntry endpoint.
 
 ## 1.4.1-beta.1 (2025-01-27)
 

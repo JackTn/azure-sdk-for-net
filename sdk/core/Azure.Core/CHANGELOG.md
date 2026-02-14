@@ -1,14 +1,113 @@
 # Release History
 
-## 1.46.0-beta.1 (Unreleased)
+## 1.52.0-beta.1 (Unreleased)
 
 ### Features Added
 
+### Bugs Fixed
+
+- Fixed implicit conversion operators to not throw exceptions on null inputs per Framework Design Guidelines. Operators now return safe defaults: `null` for reference types, `default` for value types.
+- Fixed `RequestContent.Dispose()` to be idempotent and thread-safe, preventing `ArrayPool` buffers from being returned multiple times when disposed concurrently or repeatedly.
+
+### Other Changes
+
 ### Breaking Changes
+
+- Added nullability annotations to implicit conversion operator parameters for `Response<T>`, `AzureLocation`, `ContentType`, `ResourceType`, `RequestContent`, and `DynamicData` to indicate that null is a valid input. This change was made because throwing exceptions from implicit conversions violates the [Framework Design Guidelines](https://learn.microsoft.com/dotnet/standard/design-guidelines/operator-overloads).
+- Updated `RequestContent` implicit conversion operators to return nullable `RequestContent?` to accurately reflect that null inputs produce null outputs.
+
+## 1.51.1 (2026-02-04)
+
+### Features Added
+
+- Update the APIs for Microsoft.Extensions.Configuration and Microsoft.Extensions.DependencyInjection to enable Azure.Identity use cases.
+- Updated BCL dependencies to 10.x.
+
+## 1.51.0 (2026-01-29)
+
+### Features Added
+
+- Added core support for Microsoft.Extensions.Configuration and Microsoft.Extensions.DependencyInjection.
+- Implements support for client certificate rotation in the Azure.Core transport layer to enable dynamic token binding scenarios. The changes allow transport instances to be updated with new client certificate configurations at runtime without requiring full pipeline reconstruction.
 
 ### Bugs Fixed
 
+- Fixed `NullReferenceException` when calling `GetHashCode()` on `default(AzureLocation)`.
+
+## 1.50.0 (2025-11-05)
+
+### Acknowledgments
+
+Thank you to our developer community members who helped to make the Azure.Core library better with their contributions to this release:
+
+- Daniel Marbach  _([GitHub](https://github.com/danielmarbach))_
+
+### Features Added
+
+- Adopt System.ClientModel 1.8.0
+
 ### Other Changes
+
+- Several performance and efficiency improvements were made to how request content is created and managed.   _([#52488](https://github.com/Azure/azure-sdk-for-net/pull/52488), a community contribution, courtesy of [danielmarbach](https://github.com/danielmarbach))_
+
+## 1.49.0 (2025-09-22)
+
+### Features Added
+
+- Adopt System.ClientModel 1.7.0
+
+## 1.48.0 (2025-09-09)
+
+### Bugs Fixed
+
+- Fixed an issue that prevented unbranded generated clients from utilizing an instance of `TokenCredential` with APIs that accept `AuthenticationTokenProvider`.
+
+## 1.47.3 (2025-08-20)
+
+### Features Added
+
+- Adopt System.ClientModel 1.6.1
+
+## 1.47.2 (2025-08-11)
+
+### Features Added
+
+- Adopt System.ClientModel 1.6.0
+
+## 1.47.1 (2025-07-15)
+
+### Features Added
+
+- Adopt System.ClientModel 1.5.1
+
+## 1.47.0 (2025-07-09)
+
+### Features Added
+
+- Added `RequestContent.Create<T>(T model, ModelReaderWriterOptions? options = null)` overload that accepts `IPersistableModel<T>` types for improved performance and API consistency with `BinaryContent`.
+- Adopt System.ClientModel 1.5.0
+
+### Other Changes
+
+- Adjusted the options used for JSON serialization to relax encoding rules and reduce the cost and impact. ([#50885](https://github.com/Azure/azure-sdk-for-net/pull/50885))
+
+## 1.46.2 (2025-06-05)
+
+### Features Added
+
+- Adopt System.ClientModel 1.4.2
+
+## 1.46.1 (2025-05-09)
+
+### Features Added
+
+- Adopt System.ClientModel 1.4.1
+
+## 1.46.0 (2025-05-06)
+
+### Features Added
+
+- Adding AzureCoreContext to support AOT compatible reading and writing of types owned by Azure.Core through ModelReaderWriter
 
 ## 1.45.0 (2025-02-11)
 

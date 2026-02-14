@@ -3,13 +3,11 @@
 
 #nullable disable
 
-using System;
-using System.Collections.Generic;
-using Azure.Core;
+using Microsoft.TypeSpec.Generator.Customizations;
 
 namespace Azure.ResourceManager.AgriculturePlatform.Models
 {
     /// <summary> The updatable properties of the AgriServiceResource. </summary>
-    [CodeGenModel("AgriServiceResourceUpdateProperties")]
+    [CodeGenType("AgriServiceResourceUpdateProperties")]
     public partial class AgricultureServicePatchProperties { }
 }

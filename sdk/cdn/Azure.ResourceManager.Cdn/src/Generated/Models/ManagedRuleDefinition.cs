@@ -62,8 +62,10 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> Identifier for the managed rule. </summary>
+        [WirePath("ruleId")]
         public string RuleId { get; }
         /// <summary> Describes the functionality of the managed rule. </summary>
+        [WirePath("description")]
         public string Description { get; }
     }
 }

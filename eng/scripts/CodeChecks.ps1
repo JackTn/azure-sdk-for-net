@@ -98,18 +98,23 @@ try {
 
         Write-Host "Re-generating clients"
         Invoke-Block {
-            & dotnet msbuild $PSScriptRoot\..\service.proj /restore /t:GenerateCode /p:SDKType=$SDKType /p:ServiceDirectory=$ServiceDirectory $diagnosticArguments
+            & dotnet msbuild $PSScriptRoot\..\service.proj /restore /t:GenerateCode /p:SDKType=$SDKType /p:ServiceDirectory=$ServiceDirectory $diagnosticArguments /p:ProjectListOverrideFile=""
         }
     }
 
-    Write-Host "Re-generating snippets"
-    Invoke-Block {
-        & $PSScriptRoot\Update-Snippets.ps1 -ServiceDirectory $ServiceDirectory
-    }
+    if ($ServiceDirectory -ne "tools") {
+        Write-Host "Re-generating snippets"
+        Invoke-Block {
+            & $PSScriptRoot\Update-Snippets.ps1 -ServiceDirectory $ServiceDirectory
+        }
 
-    Write-Host "Re-generating listings"
-    Invoke-Block {
-        & $PSScriptRoot\Export-API.ps1 -ServiceDirectory $ServiceDirectory -SDKType $SDKType -SpellCheckPublicApiSurface:$SpellCheckPublicApiSurface
+        Write-Host "Re-generating listings"
+        Invoke-Block {
+            & $PSScriptRoot\Export-API.ps1 -ServiceDirectory $ServiceDirectory -SDKType $SDKType -SpellCheckPublicApiSurface:$SpellCheckPublicApiSurface
+        }
+    }
+    else {
+        Write-Host "Skipping snippet and API listing generation for tools directory"
     }
 
     Write-Host "Validating installation instructions"
@@ -185,8 +190,8 @@ try {
             LogError `
 "Generated code is not up to date.`
     You may need to rebase on the latest main, `
-    run 'eng\scripts\Update-Snippets.ps1' if you modified sample snippets or other *.md files (https://github.com/Azure/azure-sdk-for-net/blob/main/CONTRIBUTING.md#updating-sample-snippets), `
-    run 'eng\scripts\Export-API.ps1' if you changed public APIs (https://github.com/Azure/azure-sdk-for-net/blob/main/CONTRIBUTING.md#public-api-additions). `
+    run 'eng\scripts\Update-Snippets.ps1 $ServiceDirectory' if you modified sample snippets or other *.md files (https://github.com/Azure/azure-sdk-for-net/blob/main/CONTRIBUTING.md#updating-sample-snippets), `
+    run 'eng\scripts\Export-API.ps1 $ServiceDirectory' if you changed public APIs (https://github.com/Azure/azure-sdk-for-net/blob/main/CONTRIBUTING.md#public-api-additions). `
     run 'dotnet build /t:GenerateCode' to update the generated code and samples.`
     `
 To reproduce this error locally, run 'eng\scripts\CodeChecks.ps1 -ServiceDirectory $ServiceDirectory'."

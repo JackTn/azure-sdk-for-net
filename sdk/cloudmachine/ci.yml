@@ -16,16 +16,6 @@ trigger:
     - eng/common/
 #endif
 
-pr:
-  branches:
-    include:
-    - main
-    - feature/*
-    - hotfix/*
-    - release/*
-  paths:
-    include:
-    - sdk/cloudmachine/
 #if (false)
     # The following paths should only be included in template/ci.yml, and removed from any other SDKs which copy this file.
     # The surrounding conditions should accomplish that when installed with `dotnet new azsdk`.
@@ -33,27 +23,22 @@ pr:
     - eng/common/
 #endif
 
-# Switch to canary to test canary 1es branch. 1es template validation will set this parameter
-# to canary on run.
-parameters:
-- name: oneESTemplateTag
-  type: string
-  default: release
-  values:
-    - release
-
 extends:
   template: /eng/pipelines/templates/stages/archetype-sdk-client.yml
   parameters:
     ServiceDirectory: cloudmachine
-    oneESTemplateTag: ${{ parameters.oneESTemplateTag }}
     ArtifactName: packages
     Artifacts:
     - name: Azure.Projects
       safeName: AzureProjects
     - name: Azure.Projects.Web
       safeName: AzureProjectsWeb
-    - name: Azure.Projects.OpenAI
-      safeName: AzureProjectsOpenAI
+    - name: Azure.Projects.AI
+      safeName: AzureProjectAI
     - name: Azure.Projects.Provisioning
       safeName: AzureProjectsProvisioning
+    - name: Azure.Projects.AI.Foundry
+      safeName: AzureProjectsAIFoundry
+    - name: Azure.Projects.Tsp
+      safeName: AzureProjectsTsp
+

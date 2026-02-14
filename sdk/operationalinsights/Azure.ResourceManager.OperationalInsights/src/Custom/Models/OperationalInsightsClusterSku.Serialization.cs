@@ -35,7 +35,7 @@ namespace Azure.ResourceManager.OperationalInsights.Models
                 {
                     writer.WritePropertyName(item.Key);
 #if NET6_0_OR_GREATER
-				writer.WriteRawValue(item.Value);
+                    writer.WriteRawValue(item.Value);
 #else
                     using (JsonDocument document = JsonDocument.Parse(item.Value))
                     {
@@ -107,7 +107,7 @@ namespace Azure.ResourceManager.OperationalInsights.Models
             switch (format)
             {
                 case "J":
-                    return ModelReaderWriter.Write(this, options);
+                    return ModelReaderWriter.Write(this, options, AzureResourceManagerOperationalInsightsContext.Default);
                 default:
                     throw new FormatException($"The model {nameof(OperationalInsightsClusterSku)} does not support '{options.Format}' format.");
             }

@@ -11,16 +11,29 @@ using System.Text.Json;
 
 namespace Azure.ResourceManager.HardwareSecurityModules
 {
+    /// <summary></summary>
     public partial class CloudHsmClusterPrivateEndpointConnectionResource : IJsonModel<CloudHsmClusterPrivateEndpointConnectionData>
     {
+        private static IJsonModel<CloudHsmClusterPrivateEndpointConnectionData> s_dataDeserializationInstance;
+
+        private static IJsonModel<CloudHsmClusterPrivateEndpointConnectionData> DataDeserializationInstance => s_dataDeserializationInstance ??= new CloudHsmClusterPrivateEndpointConnectionData();
+
+        /// <param name="writer"> The writer to serialize the model to. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
         void IJsonModel<CloudHsmClusterPrivateEndpointConnectionData>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options) => ((IJsonModel<CloudHsmClusterPrivateEndpointConnectionData>)Data).Write(writer, options);
 
-        CloudHsmClusterPrivateEndpointConnectionData IJsonModel<CloudHsmClusterPrivateEndpointConnectionData>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => ((IJsonModel<CloudHsmClusterPrivateEndpointConnectionData>)Data).Create(ref reader, options);
+        /// <param name="reader"> The reader for deserializing the model. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
+        CloudHsmClusterPrivateEndpointConnectionData IJsonModel<CloudHsmClusterPrivateEndpointConnectionData>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options) => DataDeserializationInstance.Create(ref reader, options);
 
-        BinaryData IPersistableModel<CloudHsmClusterPrivateEndpointConnectionData>.Write(ModelReaderWriterOptions options) => ModelReaderWriter.Write(Data, options);
+        /// <param name="options"> The client options for reading and writing models. </param>
+        BinaryData IPersistableModel<CloudHsmClusterPrivateEndpointConnectionData>.Write(ModelReaderWriterOptions options) => ModelReaderWriter.Write<CloudHsmClusterPrivateEndpointConnectionData>(Data, options, AzureResourceManagerHardwareSecurityModulesContext.Default);
 
-        CloudHsmClusterPrivateEndpointConnectionData IPersistableModel<CloudHsmClusterPrivateEndpointConnectionData>.Create(BinaryData data, ModelReaderWriterOptions options) => ModelReaderWriter.Read<CloudHsmClusterPrivateEndpointConnectionData>(data, options);
+        /// <param name="data"> The binary data to be processed. </param>
+        /// <param name="options"> The client options for reading and writing models. </param>
+        CloudHsmClusterPrivateEndpointConnectionData IPersistableModel<CloudHsmClusterPrivateEndpointConnectionData>.Create(BinaryData data, ModelReaderWriterOptions options) => ModelReaderWriter.Read<CloudHsmClusterPrivateEndpointConnectionData>(data, options, AzureResourceManagerHardwareSecurityModulesContext.Default);
 
-        string IPersistableModel<CloudHsmClusterPrivateEndpointConnectionData>.GetFormatFromOptions(ModelReaderWriterOptions options) => ((IPersistableModel<CloudHsmClusterPrivateEndpointConnectionData>)Data).GetFormatFromOptions(options);
+        /// <param name="options"> The client options for reading and writing models. </param>
+        string IPersistableModel<CloudHsmClusterPrivateEndpointConnectionData>.GetFormatFromOptions(ModelReaderWriterOptions options) => DataDeserializationInstance.GetFormatFromOptions(options);
     }
 }

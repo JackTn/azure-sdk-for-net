@@ -61,6 +61,7 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> List of rules. </summary>
+        [WirePath("rules")]
         public IList<CustomRule> Rules { get; }
     }
 }

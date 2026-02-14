@@ -77,6 +77,7 @@ namespace Azure.AI.Language.Text
             {
                 switch (discriminator.GetString())
                 {
+                    case "AddressMetadata": return AddressMetadata.DeserializeAddressMetadata(element, options);
                     case "AgeMetadata": return AgeMetadata.DeserializeAgeMetadata(element, options);
                     case "AreaMetadata": return AreaMetadata.DeserializeAreaMetadata(element, options);
                     case "CurrencyMetadata": return CurrencyMetadata.DeserializeCurrencyMetadata(element, options);
@@ -106,7 +107,7 @@ namespace Azure.AI.Language.Text
             switch (format)
             {
                 case "J":
-                    return ModelReaderWriter.Write(this, options);
+                    return ModelReaderWriter.Write(this, options, AzureAILanguageTextContext.Default);
                 default:
                     throw new FormatException($"The model {nameof(BaseMetadata)} does not support writing '{options.Format}' format.");
             }

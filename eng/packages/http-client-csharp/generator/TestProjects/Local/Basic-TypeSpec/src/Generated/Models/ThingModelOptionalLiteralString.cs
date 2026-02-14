@@ -7,15 +7,13 @@
 
 using System;
 using System.ComponentModel;
-using BasicTypeSpec;
 
-namespace BasicTypeSpec.Models
+namespace BasicTypeSpec
 {
-    /// <summary> The ThingModel_optionalLiteralString. </summary>
+    /// <summary></summary>
     public readonly partial struct ThingModelOptionalLiteralString : IEquatable<ThingModelOptionalLiteralString>
     {
         private readonly string _value;
-        /// <summary> reject. </summary>
         private const string RejectValue = "reject";
 
         /// <summary> Initializes a new instance of <see cref="ThingModelOptionalLiteralString"/>. </summary>
@@ -28,7 +26,7 @@ namespace BasicTypeSpec.Models
             _value = value;
         }
 
-        /// <summary> reject. </summary>
+        /// <summary> Gets the Reject. </summary>
         public static ThingModelOptionalLiteralString Reject { get; } = new ThingModelOptionalLiteralString(RejectValue);
 
         /// <summary> Determines if two <see cref="ThingModelOptionalLiteralString"/> values are the same. </summary>
@@ -45,11 +43,15 @@ namespace BasicTypeSpec.Models
         /// <param name="value"> The value. </param>
         public static implicit operator ThingModelOptionalLiteralString(string value) => new ThingModelOptionalLiteralString(value);
 
-        /// <param name="obj"> The object to compare. </param>
+        /// <summary> Converts a string to a <see cref="ThingModelOptionalLiteralString"/>. </summary>
+        /// <param name="value"> The value. </param>
+        public static implicit operator ThingModelOptionalLiteralString?(string value) => value == null ? null : new ThingModelOptionalLiteralString(value);
+
+        /// <inheritdoc/>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override bool Equals(object obj) => obj is ThingModelOptionalLiteralString other && Equals(other);
 
-        /// <param name="other"> The instance to compare. </param>
+        /// <inheritdoc/>
         public bool Equals(ThingModelOptionalLiteralString other) => string.Equals(_value, other._value, StringComparison.InvariantCultureIgnoreCase);
 
         /// <inheritdoc/>

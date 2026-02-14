@@ -35,7 +35,7 @@ namespace Azure.Messaging.ServiceBus
     public class ServiceBusReceiver : IAsyncDisposable
     {
         /// <summary>The maximum number of messages to delete in a single batch.  This cap is established and enforced by the service.</summary>
-        internal const int MaxDeleteMessageCount = 4000;
+        internal const int MaxDeleteMessageCount = 500;
 
         /// <summary>The set of default options to use for initialization when no explicit options were provided.</summary>
         private static ServiceBusReceiverOptions s_defaultOptions;
@@ -236,7 +236,7 @@ namespace Azure.Messaging.ServiceBus
         /// <param name="queueName">The name of the queue to receive from.</param>
         /// <param name="options">The set of options to use when configuring the receiver.</param>
         protected ServiceBusReceiver(ServiceBusClient client, string queueName, ServiceBusReceiverOptions options) :
-            this(client?.Connection, queueName, false,  options)
+            this(client?.Connection, queueName, false, options)
         {
         }
 
@@ -248,7 +248,7 @@ namespace Azure.Messaging.ServiceBus
         /// <param name="subscriptionName">The subscription to create a receiver for.</param>
         /// <param name="options">The set of options to use when configuring the receiver.</param>
         protected ServiceBusReceiver(ServiceBusClient client, string topicName, string subscriptionName, ServiceBusReceiverOptions options) :
-            this(client?.Connection, EntityNameFormatter.FormatSubscriptionPath(topicName, subscriptionName), false,  options)
+            this(client?.Connection, EntityNameFormatter.FormatSubscriptionPath(topicName, subscriptionName), false, options)
         {
         }
 
@@ -720,13 +720,13 @@ namespace Azure.Messaging.ServiceBus
                 // service call. see: https://github.com/Azure/azure-sdk-for-net/issues/43801
                 if (purgeCount > 0)
                 {
-                   var batchCount = purgeCount;
+                    var batchCount = purgeCount;
 
-                   while (batchCount > 0)
-                   {
-                       batchCount = await DeleteMessagesAsync(MaxDeleteMessageCount, beforeEnqueueTime.Value, cancellationToken).ConfigureAwait(false);
-                       purgeCount += batchCount;
-                   }
+                    while (batchCount > 0)
+                    {
+                        batchCount = await DeleteMessagesAsync(MaxDeleteMessageCount, beforeEnqueueTime.Value, cancellationToken).ConfigureAwait(false);
+                        purgeCount += batchCount;
+                    }
                 }
             }
             catch (Exception exception)

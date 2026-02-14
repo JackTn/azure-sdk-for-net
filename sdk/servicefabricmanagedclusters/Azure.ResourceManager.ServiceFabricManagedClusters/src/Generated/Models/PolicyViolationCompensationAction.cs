@@ -7,50 +7,65 @@
 
 using System;
 using System.ComponentModel;
+using Azure.ResourceManager.ServiceFabricManagedClusters;
 
 namespace Azure.ResourceManager.ServiceFabricManagedClusters.Models
 {
-    /// <summary>
-    /// The compensating action to perform when a Monitored upgrade encounters monitoring policy or health policy violations.
-    /// Rollback specifies that the upgrade will start rolling back automatically.
-    /// Manual indicates that the upgrade will switch to UnmonitoredManual upgrade mode.
-    ///
-    /// </summary>
+    /// <summary> The compensating action to perform when a Monitored upgrade encounters monitoring policy or health policy violations. Invalid indicates the failure action is invalid. Rollback specifies that the upgrade will start rolling back automatically. Manual indicates that the upgrade will switch to UnmonitoredManual upgrade mode. </summary>
     public readonly partial struct PolicyViolationCompensationAction : IEquatable<PolicyViolationCompensationAction>
     {
         private readonly string _value;
+        /// <summary> Indicates that a rollback of the upgrade will be performed by Service Fabric if the upgrade fails. </summary>
+        private const string RollbackValue = "Rollback";
+        /// <summary> Indicates that a manual repair will need to be performed by the administrator if the upgrade fails. Service Fabric will not proceed to the next upgrade domain automatically. </summary>
+        private const string ManualValue = "Manual";
 
         /// <summary> Initializes a new instance of <see cref="PolicyViolationCompensationAction"/>. </summary>
+        /// <param name="value"> The value. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="value"/> is null. </exception>
         public PolicyViolationCompensationAction(string value)
         {
-            _value = value ?? throw new ArgumentNullException(nameof(value));
+            Argument.AssertNotNull(value, nameof(value));
+
+            _value = value;
         }
 
-        private const string RollbackValue = "Rollback";
-        private const string ManualValue = "Manual";
-
-        /// <summary> The upgrade will start rolling back automatically. The value is 0. </summary>
+        /// <summary> Indicates that a rollback of the upgrade will be performed by Service Fabric if the upgrade fails. </summary>
         public static PolicyViolationCompensationAction Rollback { get; } = new PolicyViolationCompensationAction(RollbackValue);
-        /// <summary> The upgrade will switch to UnmonitoredManual upgrade mode. The value is 1. </summary>
+
+        /// <summary> Indicates that a manual repair will need to be performed by the administrator if the upgrade fails. Service Fabric will not proceed to the next upgrade domain automatically. </summary>
         public static PolicyViolationCompensationAction Manual { get; } = new PolicyViolationCompensationAction(ManualValue);
+
         /// <summary> Determines if two <see cref="PolicyViolationCompensationAction"/> values are the same. </summary>
+        /// <param name="left"> The left value to compare. </param>
+        /// <param name="right"> The right value to compare. </param>
         public static bool operator ==(PolicyViolationCompensationAction left, PolicyViolationCompensationAction right) => left.Equals(right);
+
         /// <summary> Determines if two <see cref="PolicyViolationCompensationAction"/> values are not the same. </summary>
+        /// <param name="left"> The left value to compare. </param>
+        /// <param name="right"> The right value to compare. </param>
         public static bool operator !=(PolicyViolationCompensationAction left, PolicyViolationCompensationAction right) => !left.Equals(right);
-        /// <summary> Converts a <see cref="string"/> to a <see cref="PolicyViolationCompensationAction"/>. </summary>
+
+        /// <summary> Converts a string to a <see cref="PolicyViolationCompensationAction"/>. </summary>
+        /// <param name="value"> The value. </param>
         public static implicit operator PolicyViolationCompensationAction(string value) => new PolicyViolationCompensationAction(value);
 
-        /// <inheritdoc />
+        /// <summary> Converts a string to a <see cref="PolicyViolationCompensationAction"/>. </summary>
+        /// <param name="value"> The value. </param>
+        public static implicit operator PolicyViolationCompensationAction?(string value) => value == null ? null : new PolicyViolationCompensationAction(value);
+
+        /// <inheritdoc/>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override bool Equals(object obj) => obj is PolicyViolationCompensationAction other && Equals(other);
-        /// <inheritdoc />
+
+        /// <inheritdoc/>
         public bool Equals(PolicyViolationCompensationAction other) => string.Equals(_value, other._value, StringComparison.InvariantCultureIgnoreCase);
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override int GetHashCode() => _value != null ? StringComparer.InvariantCultureIgnoreCase.GetHashCode(_value) : 0;
-        /// <inheritdoc />
+
+        /// <inheritdoc/>
         public override string ToString() => _value;
     }
 }

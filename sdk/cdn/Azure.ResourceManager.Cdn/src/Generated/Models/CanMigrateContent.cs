@@ -74,6 +74,7 @@ namespace Azure.ResourceManager.Cdn.Models
         /// <summary> Resource reference of the classic cdn profile or classic frontdoor that need to be migrated. </summary>
         internal WritableSubResource ClassicResourceReference { get; }
         /// <summary> Gets or sets Id. </summary>
+        [WirePath("classicResourceReference.id")]
         public ResourceIdentifier ClassicResourceReferenceId
         {
             get => ClassicResourceReference?.Id;

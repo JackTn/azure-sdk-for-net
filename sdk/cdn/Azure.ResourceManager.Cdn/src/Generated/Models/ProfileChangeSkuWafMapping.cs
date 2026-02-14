@@ -77,10 +77,12 @@ namespace Azure.ResourceManager.Cdn.Models
         }
 
         /// <summary> The security policy name. </summary>
+        [WirePath("securityPolicyName")]
         public string SecurityPolicyName { get; }
         /// <summary> The new waf resource for the security policy to use. </summary>
         internal WritableSubResource ChangeToWafPolicy { get; }
         /// <summary> Gets or sets Id. </summary>
+        [WirePath("changeToWafPolicy.id")]
         public ResourceIdentifier ChangeToWafPolicyId
         {
             get => ChangeToWafPolicy?.Id;

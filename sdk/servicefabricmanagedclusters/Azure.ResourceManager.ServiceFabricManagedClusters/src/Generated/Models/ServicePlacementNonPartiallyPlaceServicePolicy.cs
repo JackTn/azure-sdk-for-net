@@ -10,21 +10,19 @@ using System.Collections.Generic;
 
 namespace Azure.ResourceManager.ServiceFabricManagedClusters.Models
 {
-    /// <summary> ServicePlacementNonPartiallyPlaceServicePolicy. </summary>
+    /// <summary> The type of placement policy for a service fabric service. Following are the possible values. </summary>
     public partial class ServicePlacementNonPartiallyPlaceServicePolicy : ManagedServicePlacementPolicy
     {
         /// <summary> Initializes a new instance of <see cref="ServicePlacementNonPartiallyPlaceServicePolicy"/>. </summary>
-        public ServicePlacementNonPartiallyPlaceServicePolicy()
+        public ServicePlacementNonPartiallyPlaceServicePolicy() : base(ServicePlacementPolicyType.NonPartiallyPlaceService)
         {
-            ServicePlacementPolicyType = ServicePlacementPolicyType.NonPartiallyPlaceService;
         }
 
         /// <summary> Initializes a new instance of <see cref="ServicePlacementNonPartiallyPlaceServicePolicy"/>. </summary>
-        /// <param name="servicePlacementPolicyType"> The type of placement policy for a service fabric service. Following are the possible values. </param>
-        /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
-        internal ServicePlacementNonPartiallyPlaceServicePolicy(ServicePlacementPolicyType servicePlacementPolicyType, IDictionary<string, BinaryData> serializedAdditionalRawData) : base(servicePlacementPolicyType, serializedAdditionalRawData)
+        /// <param name="type"></param>
+        /// <param name="additionalBinaryDataProperties"> Keeps track of any properties unknown to the library. </param>
+        internal ServicePlacementNonPartiallyPlaceServicePolicy(ServicePlacementPolicyType @type, IDictionary<string, BinaryData> additionalBinaryDataProperties) : base(@type, additionalBinaryDataProperties)
         {
-            ServicePlacementPolicyType = servicePlacementPolicyType;
         }
     }
 }
